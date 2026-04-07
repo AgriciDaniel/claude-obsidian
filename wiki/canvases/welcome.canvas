@@ -4,7 +4,7 @@
 		{"id":"zone-output","type":"group","x":480,"y":-360,"width":560,"height":560,"color":"6","label":"3 · Your Brain (Vault) Grows"},
 		{"id":"zone-process","type":"group","x":-60,"y":-360,"width":480,"height":560,"color":"2","label":"2 · I Process Everything"},
 		{"id":"gif-workflow","type":"file","file":"wiki/meta/workflow-loop.gif","x":-40,"y":-340,"width":440,"height":440},
-		{"id":"main-title","type":"text","text":"# 🧠 Cosmic Brain\n### Drop anything. I'll build your knowledge base.","x":-340,"y":-620,"width":840,"height":110},
+		{"id":"main-title","type":"text","text":"# 🧠 Claude Obsidian\n### Drop anything. I'll build your knowledge base.","x":-340,"y":-620,"width":840,"height":110},
 		{"id":"sub-title","type":"text","text":"Images · PDFs · Markdown · Transcripts · URLs — drag, drop, or paste. I handle the rest.","x":-340,"y":-500,"width":840,"height":54,"color":"5"},
 		{"id":"text-drop-images","type":"text","text":"## 📸 Paste any image here\n\nHere you can paste any images and I will take care of the rest.","x":-660,"y":-340,"width":520,"height":110,"color":"4"},
 		{"id":"text-drop-pdf","type":"text","text":"## 📄 Or drop PDF & Markdown files\n\nJust easy drag & drop — I'll extract everything.","x":-660,"y":60,"width":520,"height":100,"color":"4"},
