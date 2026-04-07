@@ -39,9 +39,33 @@ PROMPT.md
 *.tmp.*
 Obsidian vault*
 Untitled.canvas
+Untitled *.canvas
+Untitled.base
+*.base
+
+# Scratch canvases and personal vault files
+Banana Images.canvas
+Demo Images.canvas
+*Images.canvas
 
 # Daily notes created by Calendar plugin
 ????-??-??.md
+
+# Video and large media files
+*.mkv
+*.mp4
+*.mov
+*.avi
+
+# Transcripts (copyright — do not commit)
+*Trascipt*.txt
+*Transcript*.txt
+
+# Personal images dropped in vault root
+cosmic code.png
+_attachments/code-genesis.png
+_attachments/neural-voyager.png
+_attachments/the-frontier.png
 
 # Excalidraw drawings (personal, user-specific)
 Excalidraw/
