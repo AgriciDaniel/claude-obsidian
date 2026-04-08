@@ -128,7 +128,8 @@ python3 -c "import json; d=json.load(open('/home/agricidaniel/claude-obsidian/.c
 ```
 
 Check:
-- `owner.email` = `"***REMOVED***"`
+- `owner.name` = `"AgriciDaniel"`
+- `owner.url` = `"https://github.com/AgriciDaniel"` (no email field)
 - `metadata.version` = `"1.2.0"`
 - `plugins[0].name` = `"claude-obsidian"`
 - `plugins[0].source.repo` = `"AgriciDaniel/claude-obsidian"`

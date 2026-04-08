@@ -25,7 +25,7 @@ Full build, audit, polish, and community release of the claude-obsidian plugin +
 ## What Was Built
 
 ### Phase 1 — Critical Fixes
-- `marketplace.json`: version corrected `1.0.0→1.2.0`, email fixed to `***REMOVED***`
+- `marketplace.json`: version corrected `1.0.0→1.2.0`, owner metadata updated
 - `main.canvas`: removed 5 broken file node references (gitignored files that don't exist for community users)
 - `community-plugins.json`: deduplicated from 6→4 canonical entries: `[excalidraw, banners, calendar, thino]`
 
