@@ -1,5 +1,6 @@
 ---
 tags: [tether, progress, phase-1]
+type: meta
 date: 2026-04-13
 status: in-progress
 progress: 60%

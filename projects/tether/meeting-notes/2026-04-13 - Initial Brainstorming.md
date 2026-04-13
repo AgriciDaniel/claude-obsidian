@@ -1,5 +1,6 @@
 ---
 tags: [tether, meeting-notes, brainstorming]
+type: meeting
 date: 2026-04-13
 attendees: [User, Claude]
 status: completed

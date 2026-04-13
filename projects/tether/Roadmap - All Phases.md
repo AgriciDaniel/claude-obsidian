@@ -1,6 +1,9 @@
 ---
 tags: [tether, tasks, roadmap, phases]
+type: meta
 status: active
+created: 2026-04-13
+updated: 2026-04-13
 ---
 
 # Tether Development Roadmap - All Phases

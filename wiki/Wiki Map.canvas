@@ -16,7 +16,7 @@
 		{"id":"lbl-entities","type":"text","text":"**👤 ENTITIES**","x":-960,"y":195,"width":160,"height":40,"color":"6"},
 		{"id":"lbl-sources","type":"text","text":"**📄 SOURCES**","x":-200,"y":-580,"width":160,"height":40,"color":"4"},
 		{"id":"lbl-nav","type":"text","text":"**🗂️ NAVIGATION**","x":-560,"y":-790,"width":190,"height":40,"color":"5"},
-		{"id":"hub","type":"file","file":"wiki/index.md","x":-230,"y":-141,"width":350,"height":2095,"color":"5"}
+		{"id":"hub","type":"file","file":"wiki/index.md","x":-1760,"y":-301,"width":350,"height":2095,"color":"5"}
 	],
 	"edges":[
 		{"id":"e-hub-cidx","fromNode":"hub","fromSide":"right","toNode":"c-idx","toSide":"left","label":"concepts"},

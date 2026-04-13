@@ -1,7 +1,11 @@
 ---
 tags: [knowledge, mobile, location, battery, optimization]
+type: knowledge
 category: best-practices
 difficulty: intermediate
+status: complete
+created: 2026-04-13
+updated: 2026-04-13
 ---
 
 # Battery Optimization Strategies for Location Tracking

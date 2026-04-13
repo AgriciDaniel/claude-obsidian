@@ -4,6 +4,8 @@ tags: [project, mobile, kotlin, location-tracking, open-source]
 status: in-progress
 phase: phase-1
 progress: 60%
+created: 2026-04-13
+updated: 2026-04-13
 ---
 
 # Tether Project Hub

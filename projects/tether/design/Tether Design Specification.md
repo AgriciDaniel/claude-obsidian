@@ -1,3 +1,11 @@
+---
+type: design
+tags: [tether, design, spec, architecture]
+status: complete
+created: 2026-04-13
+updated: 2026-04-13
+---
+
 # Tether Design Specification
 
 **Date:** 2026-04-13  

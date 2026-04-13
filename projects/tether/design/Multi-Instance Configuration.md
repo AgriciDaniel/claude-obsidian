@@ -1,5 +1,6 @@
 ---
 tags: [tether, architecture, federation, multi-instance]
+type: design
 date: 2026-04-13
 status: design-phase
 ---
