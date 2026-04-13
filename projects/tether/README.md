@@ -48,7 +48,7 @@ progress: 60%
 |----------|------|
 | **Design Spec** | [[Tether Design Specification]] |
 | **Current Work** | [[Phase 1 Progress]] |
-| **Next Steps** | [[Phase 1 Remaining Tasks]] |
+| **Complete Roadmap** | [[Roadmap - All Phases]] |
 | **GitHub Repo** | `/home/maku/Documents/GitHub/HomeTether` |
 
 ---
