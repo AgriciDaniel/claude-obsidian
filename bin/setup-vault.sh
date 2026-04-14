@@ -55,6 +55,7 @@ cat > "$OBSIDIAN/app.json" << 'EOF'
     "commands/",
     "hooks/",
     "skills/",
+    ".claude/",
     "_templates/",
     "README.md",
     "CLAUDE.md",
@@ -86,6 +87,10 @@ if [ -f "$EXCALIDRAW/manifest.json" ] && [ ! -f "$EXCALIDRAW/main.js" ]; then
 elif [ -f "$EXCALIDRAW/main.js" ]; then
   echo "✓ Excalidraw main.js already present"
 fi
+
+# ── 6. Sync Claude Code directories ─────────────────────────────────────────
+echo "Linking Claude Code commands and skills..."
+bash "$SCRIPT_DIR/sync-claude.sh"
 
 echo ""
 echo "✓ Setup complete."
