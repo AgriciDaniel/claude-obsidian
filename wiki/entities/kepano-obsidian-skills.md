@@ -11,10 +11,7 @@ tags:
 status: current
 related:
   - "[[LLM Wiki Pattern]]"
-  - "[[cherry-picks]]"
-  - "[[claude-obsidian-ecosystem]]"
 sources:
-  - "[[claude-obsidian-ecosystem-research]]"
 ---
 
 # kepano/obsidian-skills
@@ -54,9 +51,6 @@ This is a direct cherry-pick for claude-obsidian's ingest pipeline.
 
 Works with Claude Code, Codex CLI, and OpenCode out of the box.
 
-## Cherry-Picks for claude-obsidian
+## Relevance to claude-obsidian
 
-- [[cherry-picks#1. URL Ingestion in /wiki-ingest]] (pair with defuddle)
-- [[cherry-picks#3. defuddle Web Cleaning Skill]]
-- [[cherry-picks#12. obsidian-bases Skill (from kepano)]]
-- [[cherry-picks#9. Multi-Agent Compatibility]] (format already compatible)
+claude-obsidian adopted skills directly from this repo: `defuddle`, `obsidian-markdown`, and `obsidian-bases`.

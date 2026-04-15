@@ -42,22 +42,22 @@ Run `/wiki` to scaffold this vault for your own domain and replace this overview
 - [[Andrej Karpathy]] — originated the pattern
 
 **Sources seeded:**
-- [[claude-obsidian-ecosystem-research]] — 16+ projects, 13 cherry-picks identified (2026-04-08)
+- None yet. Drop a file into `.raw/` and run `ingest [filename]`.
 
 ---
 
 ## Current State
 
-- Sources ingested: 2
-- Wiki pages: 26
-- Last activity: 2026-04-08 (v1.4.1 shipped, release session filed)
+- Sources ingested: 0
+- Wiki pages: ~20
+- Status: Clean seed vault, ready for first ingest
 
 ---
 
 ## Canvases
 
-- [[claude-obsidian-presentation]] — Full presentation: hero, overview, skills, architecture, Wiki vs RAG, visual demos (2026-04-07)
-- [[AI Marketing Hub Cover Images Canvas]] — Cover image library for AI Marketing Hub brand assets
+- [[welcome]] — Welcome canvas with overview and quick links
+- [[main]] — Main working canvas
 
 ---
 

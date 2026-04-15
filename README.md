@@ -72,7 +72,9 @@ Open the folder in Obsidian: **Manage Vaults → Open folder as vault → select
 
 Open Claude Code in the same folder. Type `/wiki`.
 
-> `setup-vault.sh` configures `graph.json` (filter + colors), `app.json` (excludes plugin dirs), and `appearance.json` (enables CSS). Run it once before the first Obsidian open. You get the fully pre-configured graph view, color scheme, and wiki structure out of the box.
+> `setup-vault.sh` configures `graph.json` (filter + colors), `app.json` (excludes plugin dirs), `appearance.json` (enables CSS), and symlinks the `skills/` and `commands/` directories to `.claude/` so Claude Code discovers them. Run it once before the first Obsidian open. You get the fully pre-configured graph view, color scheme, and wiki structure out of the box.
+>
+> *Note on updates: If you run `git pull` later to get new skills, the symlinks in `.claude/` will automatically point to the updated files on macOS/Linux. If the links ever break, run `bash bin/sync-claude.sh` to recreate them without overwriting your Obsidian settings.*
 
 ---
 
