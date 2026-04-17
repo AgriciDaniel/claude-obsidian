@@ -11,41 +11,46 @@
             "id": "a31de1b302cdc5cf",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "ATTRIBUTION.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ATTRIBUTION"
             }
           },
           {
-            "id": "1ddf905423a8598d",
+            "id": "b02d48edb863cfcd",
             "type": "leaf",
             "state": {
-              "type": "thino_view",
-              "state": {},
-              "icon": "Memos",
-              "title": "Thino"
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
             }
           },
           {
             "id": "61749825e48e4b66",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "wiki/Wiki Map.canvas",
-                "viewState": {
-                  "x": -413.9875924804161,
-                  "y": 621.2439739591268,
-                  "zoom": -1.292836204863978
-                }
+                "file": "docs/install-guide.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Wiki Map"
+              "icon": "lucide-file",
+              "title": "install-guide"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -118,6 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +133,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for README"
             }
           },
           {
@@ -192,20 +198,29 @@
             "state": {
               "type": "calendar",
               "state": {},
-              "icon": "calendar-with-checkmark",
-              "title": "Calendar"
+              "icon": "lucide-ghost",
+              "title": "calendar"
+            }
+          },
+          {
+            "id": "a2c5334e5fadd756",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
-        ]
+        ],
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:New drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -213,64 +228,67 @@
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "obsidian-memos:Thino": false,
-      "obsidian-memos:Thino Super": false
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "templater-obsidian:Templater": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "61749825e48e4b66",
+  "active": "b02d48edb863cfcd",
   "lastOpenFiles": [
+    "Untitled.base",
+    "WIKI.md",
+    "ATTRIBUTION.md",
+    "wiki/getting-started.md",
+    "wiki/questions/How does the LLM Wiki pattern work.md",
+    "Excalidraw/Drawing 2026-04-17 14.59.57.excalidraw.md",
+    "Excalidraw",
+    "AGENTS.md",
+    "wiki/Wiki Map.canvas",
+    "wiki/canvases/youtube-explainer.canvas",
+    "README.md",
+    "GEMINI.md",
+    "wiki/meta/full-audit-and-system-setup-session.md",
+    "wiki/meta/claude-obsidian-v1.2.0-release-session.md",
+    "wiki/meta/claude-obsidian-cover-16x9.png",
+    "wiki/entities/Andrej Karpathy.md",
+    "wiki/concepts/LLM Wiki Pattern.md",
+    "wiki/concepts/Hot Cache.md",
+    "wiki/concepts/Compounding Knowledge.md",
+    "wiki/concepts/cherry-picks.md",
+    "wiki/comparisons/Wiki vs RAG.md",
+    "wiki/comparisons/claude-obsidian-ecosystem.md",
+    "wiki/canvases/welcome.canvas",
+    "wiki/canvases/main.canvas",
+    "wiki/canvases/claude-obsidian-presentation.canvas",
+    "wiki/concepts/_index.md",
+    "wiki/hot.md",
+    "agents/wiki-lint.md",
+    "agents/wiki-ingest.md",
+    "docs/install-guide.md",
+    "CLAUDE.md",
+    "wiki/index.md",
+    "wiki/overview.md",
+    "docs/install-guide.pdf",
     "wiki/meta/claude-obsidian-cover.gif",
     "README.md.tmp.224546.1775562198004",
     "README.md.tmp.224546.1775562190155",
     "README.md.tmp.224546.1775562092499",
     "wiki/meta/image-example-wiki-map-view.png",
     "wiki/meta/image-example-graph-view.png",
-    "ATTRIBUTION.md",
     "ATTRIBUTION.md.tmp.224546.1775561977773",
-    "wiki/overview.md",
-    "Excalidraw/Drawing 2026-04-07 14.39.09.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-07 14.39.10.excalidraw.md",
     "Untitled 2.canvas",
     "LICENSE",
     "LICENSE.tmp.224546.1775561946460",
-    "2026-04-07.md",
-    "Untitled.base",
-    "docs/install-guide.md",
     "README.md.tmp.224546.1775561616026",
     "wiki/meta/claude-obsidian-gif-cover-16x9.gif",
-    "README.md.tmp.224546.1775561304170",
     "wiki/meta/cover.gif",
-    "wiki/concepts/_index.md",
-    "wiki/canvases/welcome.canvas",
-    "README.md.tmp.224546.1775561084699",
     "wiki/meta/welcome-canvas.gif",
-    "wiki/canvases/main.canvas",
-    "README.md",
-    "wiki/getting-started.md",
     "Demo Images.canvas",
-    "Excalidraw/Drawing 2026-04-07 14.07.42.excalidraw.md",
-    "wiki/concepts/LLM Wiki Pattern.md",
-    "Obsidian vault with Claude Code - full integration and visual organization 2.md",
-    "Excalidraw/Drawing 2026-04-07 14.07.42_0.excalidraw.md",
     "_attachments/the-frontier.png",
     "_attachments/neural-voyager.png",
     "_attachments/code-genesis.png",
-    "wiki/concepts/Hot Cache.md",
-    "wiki/concepts/Compounding Knowledge.md",
-    "wiki/entities/_index.md",
-    "wiki/entities/Andrej Karpathy.md",
-    "wiki/questions/How does the LLM Wiki pattern work.md",
-    "wiki/hot.md",
-    "wiki/index.md",
-    "wiki/log.md",
-    "wiki/Wiki Map.canvas",
     "Banana Images.canvas",
     "Untitled 1.canvas",
-    "Excalidraw/Drawing 2026-04-07 13.52.12.excalidraw.md",
-    "Untitled.canvas",
-    "Excalidraw/Drawing 2026-04-07 13.51.04.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-07 13.51.12.excalidraw.md",
-    "wiki/comparisons/Wiki vs RAG.md",
-    "projects/visual-vault/design-ideas.canvas"
+    "Untitled.canvas"
   ]
 }

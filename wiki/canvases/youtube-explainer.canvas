@@ -1,251 +1,61 @@
 {
-  "nodes": [
-    {
-      "id": "zone-1", "type": "group", "label": "Beat 1 — Hook",
-      "x": 0, "y": 0, "width": 1920, "height": 1080, "color": "1"
-    },
-    {
-      "id": "z1-gif", "type": "file", "file": "claude-obsidian-gif-cover-16x9.gif",
-      "x": 20, "y": 20, "width": 960, "height": 540
-    },
-    {
-      "id": "z1-hook", "type": "text",
-      "text": "# Your AI forgets everything.\n\nEvery new chat starts from zero.\n\nYou re-explain the same context.\nAgain. And again.\n\n> [!warning] The real cost\n> Tokens burned. Momentum lost.\n> Good answers buried in chat history.",
-      "x": 1000, "y": 20, "width": 900, "height": 540, "color": "1"
-    },
-    {
-      "id": "z1-bridge", "type": "text",
-      "text": "## What if Claude just... knew?\n\nAnd got smarter every session?\n\nThat is what **claude-obsidian** does.",
-      "x": 20, "y": 580, "width": 1880, "height": 480, "color": "3"
-    },
-    {
-      "id": "z1-ref", "type": "text",
-      "text": "## SCRIPT — Beat 1: Hook (0:00–0:35)\n\n**Opening line:** \"Your AI forgets everything. Every single chat starts from zero.\"\n\n**Show:** animated GIF playing. Let it loop 2-3x.\n\n**Say:**\n- \"You know the feeling. You explain your project, your stack, your goals. Every. Single. Time.\"\n- \"What if Claude just knew? And got smarter every session?\"\n- \"That is what claude-obsidian does. Let me show you.\"\n\n**Transition:** pan down to Beat 2",
-      "x": 1960, "y": 0, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-2", "type": "group", "label": "Beat 2 — How it works",
-      "x": 0, "y": 1180, "width": 1920, "height": 1080, "color": "3"
-    },
-    {
-      "id": "z2-title", "type": "text",
-      "text": "# A wiki Claude writes for itself.",
-      "x": 20, "y": 1200, "width": 1880, "height": 80, "color": "3"
-    },
-    {
-      "id": "z2-img-a", "type": "file", "file": "_attachments/youtube/how-it-works.png",
-      "x": 20, "y": 1300, "width": 940, "height": 528
-    },
-    {
-      "id": "z2-img-b", "type": "file", "file": "_attachments/youtube/how-it-works-B.png",
-      "x": 980, "y": 1300, "width": 920, "height": 528
-    },
-    {
-      "id": "z2-flow-a", "type": "text",
-      "text": "## 💬 You chat\n\nAsk questions.\nWork on projects.\nExplore ideas.",
-      "x": 20, "y": 1848, "width": 580, "height": 192, "color": "5"
-    },
-    {
-      "id": "z2-flow-b", "type": "text",
-      "text": "## 📄 Claude files it\n\nPicks the note type.\nWrites wikilinks.\nUpdates the index.",
-      "x": 620, "y": 1848, "width": 580, "height": 192, "color": "4"
-    },
-    {
-      "id": "z2-flow-c", "type": "text",
-      "text": "## 💬 Next session\n\nClaude reads the wiki first.\nZero re-explaining.\nSmarter from the start.",
-      "x": 1220, "y": 1848, "width": 680, "height": 192, "color": "5"
-    },
-    {
-      "id": "z2-layers", "type": "text",
-      "text": "> [!tip] Key idea\n> **🔥 hot.md** — ~500 words, loaded every session automatically. Nearly free.\n> **🗂️ index.md** — full map of every page. Read when hot.md is not enough.\n> **📚 wiki/ pages** — the real knowledge. Only the relevant pages get read each session.",
-      "x": 20, "y": 2060, "width": 1880, "height": 180
-    },
-    {
-      "id": "z2-ref", "type": "text",
-      "text": "## SCRIPT — Beat 2: How it works (0:35–1:30)\n\n**Opening line:** \"Here is how it works.\"\n\n**Show:** the three-layer diagram image on the right\n\n**Say:**\n- \"claude-obsidian turns Obsidian into a wiki that Claude writes for itself.\"\n- \"Every chat you have, the good stuff gets filed. Next session Claude reads it first.\"\n- \"Three layers: hot.md loads every session — about 500 words, nearly free. Then index.md for the full map. Then individual wiki pages, only the ones that matter.\"\n- \"You stay in budget. The wiki keeps growing.\"\n\n**Show:** open wiki/hot.md — show it is small and focused\n\n**Transition:** \"So how do you actually build this wiki? Three commands.\"\n\n**Files to show:** `wiki/hot.md`, `wiki/index.md`",
-      "x": 1960, "y": 1180, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-3", "type": "group", "label": "Beat 3 — /save",
-      "x": 0, "y": 2360, "width": 1920, "height": 1080, "color": "4"
-    },
-    {
-      "id": "z3-title", "type": "text",
-      "text": "# /save — File the conversation into the wiki.",
-      "x": 20, "y": 2380, "width": 1880, "height": 80, "color": "4"
-    },
-    {
-      "id": "z3-img-a", "type": "file", "file": "_attachments/youtube/save-A.png",
-      "x": 20, "y": 2480, "width": 940, "height": 530
-    },
-    {
-      "id": "z3-img-b", "type": "file", "file": "_attachments/youtube/save-B.png",
-      "x": 980, "y": 2480, "width": 920, "height": 530
-    },
-    {
-      "id": "z3-bullets", "type": "text",
-      "text": "## What it does\n\n- Reads the full current chat\n- Picks the right note type: concept, question, source, or decision\n- Writes frontmatter and wikilinks automatically\n- Files the note in the correct wiki folder\n- Updates index.md, the session log, and hot.md\n\n> [!tip] Result\n> Good answers stop disappearing.",
-      "x": 20, "y": 3030, "width": 920, "height": 390
-    },
-    {
-      "id": "z3-example", "type": "text",
-      "text": "> [!example] Try it\n> `/save`\n>\n> or just: *save this as a concept note*\n\nClaude picks the type, writes the note,\nfiles it, and cross-links it. One command.",
-      "x": 960, "y": 3030, "width": 940, "height": 390, "color": "4"
-    },
-    {
-      "id": "z3-ref", "type": "text",
-      "text": "## SCRIPT — Beat 3: /save (1:30–2:45)\n\n**Opening line:** \"Command one: /save.\"\n\n**Show:** type `/save` in the terminal while on a chat with good content\n\n**Say:**\n- \"One command. Claude reads the whole conversation.\"\n- \"It picks the right note type — concept, question, decision, source. Writes frontmatter. Adds wikilinks to related pages. Files it in the right folder.\"\n- \"It also updates the index and the hot cache, so next session it's already loaded.\"\n- \"Good answers stop disappearing.\"\n\n**Show:** the new note open in Obsidian — show frontmatter and wikilinks\n\n**Transition:** \"But what if you want Claude to go do the research for you?\"\n\n**Files to show:** fresh page in `wiki/concepts/`\n**Skill source:** `skills/save/SKILL.md`",
-      "x": 1960, "y": 2360, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-4", "type": "group", "label": "Beat 4 — /autoresearch",
-      "x": 0, "y": 3540, "width": 1920, "height": 1080, "color": "4"
-    },
-    {
-      "id": "z4-title", "type": "text",
-      "text": "# /autoresearch — Autonomous research loop.",
-      "x": 20, "y": 3560, "width": 1880, "height": 80, "color": "4"
-    },
-    {
-      "id": "z4-img-a", "type": "file", "file": "_attachments/youtube/autoresearch-A.png",
-      "x": 20, "y": 3660, "width": 940, "height": 530
-    },
-    {
-      "id": "z4-img-b", "type": "file", "file": "_attachments/youtube/autoresearch-B.png",
-      "x": 980, "y": 3660, "width": 920, "height": 530
-    },
-    {
-      "id": "z4-bullets", "type": "text",
-      "text": "## What it does\n\n- Breaks the topic into 3 to 5 research angles\n- Runs web searches and fetches the best sources\n- Extracts claims, entities, and concepts\n- Runs a second pass to fill in the gaps it noticed\n- Files a synthesis page + source pages + concept pages, all cross-linked\n\n> [!tip] Result\n> Research that becomes a wiki, not a tab graveyard.",
-      "x": 20, "y": 4210, "width": 920, "height": 390
-    },
-    {
-      "id": "z4-example", "type": "text",
-      "text": "> [!example] Try it\n> `/autoresearch LLM wiki pattern`\n>\n> Output: 5 to 15 wiki pages, cross-linked, with citations.\n\nClaude works autonomously.\nYou get coffee.",
-      "x": 960, "y": 4210, "width": 940, "height": 390, "color": "4"
-    },
-    {
-      "id": "z4-ref", "type": "text",
-      "text": "## SCRIPT — Beat 4: /autoresearch (2:45–4:15)\n\n**Opening line:** \"Command two: /autoresearch. This one feels like magic.\"\n\n**Show:** type `/autoresearch claude-obsidian best practices` — let it start running\n\n**Say:**\n- \"It breaks the topic into research angles. Searches the web. Fetches real sources. Pulls out the key claims.\"\n- \"Then it runs a second pass to fill in the gaps it noticed the first time.\"\n- \"End result: 5 to 15 wiki pages. Cross-linked. With citations. In about 3 minutes.\"\n- \"You do not get a chat bubble that disappears. You get a permanent knowledge base.\"\n\n**Show:** Obsidian sidebar filling up with new pages while it runs\n\n**Transition:** \"And the third command is what you are actually watching right now.\"\n\n**Files to show:** `wiki/sources/`, `wiki/concepts/`\n**Skill source:** `skills/autoresearch/SKILL.md`",
-      "x": 1960, "y": 3540, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-5", "type": "group", "label": "Beat 5 — /canvas",
-      "x": 0, "y": 4720, "width": 1920, "height": 1080, "color": "4"
-    },
-    {
-      "id": "z5-title", "type": "text",
-      "text": "# /canvas — The visual layer of the wiki.",
-      "x": 20, "y": 4740, "width": 1880, "height": 80, "color": "4"
-    },
-    {
-      "id": "z5-img-a", "type": "file", "file": "_attachments/youtube/canvas-A.png",
-      "x": 20, "y": 4840, "width": 940, "height": 530
-    },
-    {
-      "id": "z5-img-b", "type": "file", "file": "_attachments/youtube/canvas-B.png",
-      "x": 980, "y": 4840, "width": 920, "height": 530
-    },
-    {
-      "id": "z5-bullets", "type": "text",
-      "text": "## What it does\n\n- Creates infinite visual boards inside Obsidian\n- Drops in images, text cards, PDFs, and wiki notes\n- Positions nodes automatically inside named zones\n- Uses JSON Canvas 1.0 — open standard, portable and future-proof\n- Pairs with /banana for AI-generated images on any beat\n\n> [!key-insight] Meta moment\n> This canvas you are watching right now was built with /canvas.",
-      "x": 20, "y": 5390, "width": 920, "height": 390
-    },
-    {
-      "id": "z5-example", "type": "text",
-      "text": "> [!example] Try it\n> `/canvas new youtube-video`\n> `/canvas add note LLM Wiki Pattern`\n> `/canvas add image _attachments/youtube/save-A.png`\n\nInstant visual board.\nObsidian-native. Shareable.",
-      "x": 960, "y": 5390, "width": 940, "height": 390, "color": "4"
-    },
-    {
-      "id": "z5-ref", "type": "text",
-      "text": "## SCRIPT — Beat 5: /canvas (4:15–5:30)\n\n**Opening line:** \"Command three: /canvas. And what you are watching right now is it.\"\n\n**Show:** zoom out on this full canvas — let them see all 7 zones laid out\n\n**Say:**\n- \"This is /canvas. It gives the wiki a visual layer.\"\n- \"Drop in images, text cards, wiki notes, PDFs. Claude positions everything automatically.\"\n- \"You can build explainers, mood boards, project maps, video scripts — like this one.\"\n- \"This canvas? Every zone, every node — built with /canvas.\"\n\n**Show live:** type `/canvas add note LLM Wiki Pattern` — watch a node appear\n\n**Transition:** \"So that is the three commands. Let me quickly show you how the memory system behind them works.\"\n\n**Skill source:** `skills/canvas/SKILL.md`",
-      "x": 1960, "y": 4720, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-6", "type": "group", "label": "Beat 6 — Under the hood",
-      "x": 0, "y": 5900, "width": 1920, "height": 1080, "color": "3"
-    },
-    {
-      "id": "z6-title", "type": "text",
-      "text": "# Under the hood — why token cost stays low as the wiki grows.",
-      "x": 20, "y": 5920, "width": 1880, "height": 80, "color": "3"
-    },
-    {
-      "id": "z6-graph", "type": "file", "file": "image-example-graph-view.png",
-      "x": 20, "y": 6020, "width": 920, "height": 518
-    },
-    {
-      "id": "z6-wikimap", "type": "file", "file": "image-example-wiki-map-view.png",
-      "x": 960, "y": 6020, "width": 940, "height": 518
-    },
-    {
-      "id": "z6-hot", "type": "text",
-      "text": "## 🔥 hot.md\nLoaded automatically every session.\n~500 words. Near-zero token cost.\nRecent context. What is coming next.",
-      "x": 20, "y": 6558, "width": 600, "height": 200, "color": "1"
-    },
-    {
-      "id": "z6-index", "type": "text",
-      "text": "## 🗂️ index.md\nOne-line summary of every wiki page.\nRead when hot.md is not enough.\nThe full map, compactly.",
-      "x": 640, "y": 6558, "width": 620, "height": 200, "color": "3"
-    },
-    {
-      "id": "z6-pages", "type": "text",
-      "text": "## 📚 wiki/ pages\nConcepts. Sources. Decisions. People.\nOnly the relevant pages get read.\nDeep knowledge, on demand.",
-      "x": 1280, "y": 6558, "width": 620, "height": 200, "color": "4"
-    },
-    {
-      "id": "z6-insight", "type": "text",
-      "text": "> [!key-insight] The wiki can grow to thousands of pages. Your token cost per session barely moves.",
-      "x": 20, "y": 6778, "width": 1880, "height": 162
-    },
-    {
-      "id": "z6-ref", "type": "text",
-      "text": "## SCRIPT — Beat 6: Under the hood (5:30–6:30)\n\n**Opening line:** \"So how does Claude actually remember things without blowing your token budget?\"\n\n**Show:** pan across — graph view left, wiki map right, three layers below\n\n**Say:**\n- \"Three layers. That is the whole system.\"\n- \"hot.md loads every session — about 500 words. Recent context. Nearly free.\"\n- \"index.md is the full map: one line per page. Claude reads it when hot.md is not enough.\"\n- \"Then the actual wiki pages — only the ones that matter for that session.\"\n- \"The wiki can grow to thousands of pages. Your bill barely moves.\"\n\n**Show:** `wiki/hot.md` and `wiki/index.md` briefly\n\n**Transition:** pan down to install",
-      "x": 1960, "y": 5900, "width": 600, "height": 1080, "color": "6"
-    },
-
-    {
-      "id": "zone-7", "type": "group", "label": "Beat 7 — Install + CTA",
-      "x": 0, "y": 7080, "width": 1920, "height": 1080, "color": "5"
-    },
-    {
-      "id": "z7-title", "type": "text",
-      "text": "# Install in 2 lines — Free. Open source. Works with Claude Code today.",
-      "x": 20, "y": 7100, "width": 1880, "height": 80, "color": "5"
-    },
-    {
-      "id": "z7-gif", "type": "file", "file": "claude-obsidian-gif-1x1.gif",
-      "x": 20, "y": 7200, "width": 480, "height": 480
-    },
-    {
-      "id": "z7-cover", "type": "file", "file": "claude-obsidian-cover-16x9.png",
-      "x": 520, "y": 7200, "width": 1380, "height": 480
-    },
-    {
-      "id": "z7-cmd", "type": "text",
-      "text": "```bash\nclaude plugin marketplace add AgriciDaniel/claude-obsidian\nclaude plugin install claude-obsidian@claude-obsidian-marketplace\n```",
-      "x": 20, "y": 7700, "width": 920, "height": 160
-    },
-    {
-      "id": "z7-links", "type": "text",
-      "text": "## Links\n\n- **GitHub**: github.com/AgriciDaniel/claude-obsidian\n- **Community**: skool.com/ai-marketing-hub (free tier)\n- **Website**: agricidaniel.com\n\n> [!tip] Subscribe\n> More Claude Code builds every week.",
-      "x": 960, "y": 7700, "width": 940, "height": 440, "color": "5"
-    },
-    {
-      "id": "z7-ref", "type": "text",
-      "text": "## SCRIPT — Beat 7: Install + CTA (6:30–8:00)\n\n**Opening line:** \"Installing takes literally two lines.\"\n\n**Show:** terminal — type both install commands live, slowly\n\n**Say:**\n- \"Copy these two lines. Paste. Done.\"\n- \"claude-obsidian is free, open source, and works with Claude Code right now.\"\n- \"GitHub link is in the description. Come join the Skool community — free tier, live sessions every week.\"\n- \"If this was useful, hit subscribe. I build with Claude Code every week.\"\n\n**End:** let the animated GIF loop while you close out.\n\n**Do NOT rush this beat.**",
-      "x": 1960, "y": 7080, "width": 600, "height": 1080, "color": "6"
-    }
-  ],
-  "edges": [
-    {"id": "e-flow-ab", "fromNode": "z2-flow-a", "fromSide": "right", "toNode": "z2-flow-b", "toSide": "left", "fromEnd": "none", "toEnd": "arrow"},
-    {"id": "e-flow-bc", "fromNode": "z2-flow-b", "fromSide": "right", "toNode": "z2-flow-c", "toSide": "left", "fromEnd": "none", "toEnd": "arrow"},
-    {"id": "e-hot-index", "fromNode": "z6-hot", "fromSide": "right", "toNode": "z6-index", "toSide": "left", "fromEnd": "none", "toEnd": "arrow"},
-    {"id": "e-index-pages", "fromNode": "z6-index", "fromSide": "right", "toNode": "z6-pages", "toSide": "left", "fromEnd": "none", "toEnd": "arrow"}
-  ]
+	"nodes":[
+		{"id":"zone-1","type":"group","label":"Beat 1 — Hook","x":0,"y":0,"width":1920,"height":1080,"color":"1"},
+		{"id":"z1-gif","type":"file","file":"claude-obsidian-gif-cover-16x9.gif","x":20,"y":20,"width":960,"height":540},
+		{"id":"z1-hook","type":"text","text":"# Your AI forgets everything.\n\nEvery new chat starts from zero.\n\nYou re-explain the same context.\nAgain. And again.\n\n> [!warning] The real cost\n> Tokens burned. Momentum lost.\n> Good answers buried in chat history.","x":1000,"y":20,"width":900,"height":540,"color":"1"},
+		{"id":"z1-bridge","type":"text","text":"## What if Claude just... knew?\n\nAnd got smarter every session?\n\nThat is what **claude-obsidian** does.","x":20,"y":580,"width":1880,"height":480,"color":"3"},
+		{"id":"z1-ref","type":"text","text":"## SCRIPT — Beat 1: Hook (0:00–0:35)\n\n**Opening line:** \"Your AI forgets everything. Every single chat starts from zero.\"\n\n**Show:** animated GIF playing. Let it loop 2-3x.\n\n**Say:**\n- \"You know the feeling. You explain your project, your stack, your goals. Every. Single. Time.\"\n- \"What if Claude just knew? And got smarter every session?\"\n- \"That is what claude-obsidian does. Let me show you.\"\n\n**Transition:** pan down to Beat 2","x":1960,"y":0,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-2","type":"group","label":"Beat 2 — How it works","x":0,"y":1180,"width":1920,"height":1080,"color":"3"},
+		{"id":"z2-title","type":"text","text":"# A wiki Claude writes for itself.","x":20,"y":1200,"width":1880,"height":80,"color":"3"},
+		{"id":"z2-img-a","type":"file","file":"_attachments/youtube/how-it-works.png","x":20,"y":1300,"width":940,"height":528},
+		{"id":"z2-img-b","type":"file","file":"_attachments/youtube/how-it-works-B.png","x":980,"y":1300,"width":920,"height":528},
+		{"id":"z2-flow-a","type":"text","text":"## 💬 You chat\n\nAsk questions.\nWork on projects.\nExplore ideas.","x":20,"y":1848,"width":580,"height":192,"color":"5"},
+		{"id":"z2-flow-b","type":"text","text":"## 📄 Claude files it\n\nPicks the note type.\nWrites wikilinks.\nUpdates the index.","x":620,"y":1848,"width":580,"height":192,"color":"4"},
+		{"id":"z2-flow-c","type":"text","text":"## 💬 Next session\n\nClaude reads the wiki first.\nZero re-explaining.\nSmarter from the start.","x":1220,"y":1848,"width":680,"height":192,"color":"5"},
+		{"id":"z2-layers","type":"text","text":"> [!tip] Key idea\n> **🔥 hot.md** — ~500 words, loaded every session automatically. Nearly free.\n> **🗂️ index.md** — full map of every page. Read when hot.md is not enough.\n> **📚 wiki/ pages** — the real knowledge. Only the relevant pages get read each session.","x":20,"y":2060,"width":1880,"height":180},
+		{"id":"z2-ref","type":"text","text":"## SCRIPT — Beat 2: How it works (0:35–1:30)\n\n**Opening line:** \"Here is how it works.\"\n\n**Show:** the three-layer diagram image on the right\n\n**Say:**\n- \"claude-obsidian turns Obsidian into a wiki that Claude writes for itself.\"\n- \"Every chat you have, the good stuff gets filed. Next session Claude reads it first.\"\n- \"Three layers: hot.md loads every session — about 500 words, nearly free. Then index.md for the full map. Then individual wiki pages, only the ones that matter.\"\n- \"You stay in budget. The wiki keeps growing.\"\n\n**Show:** open wiki/hot.md — show it is small and focused\n\n**Transition:** \"So how do you actually build this wiki? Three commands.\"\n\n**Files to show:** `wiki/hot.md`, `wiki/index.md`","x":1960,"y":1180,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-3","type":"group","label":"Beat 3 — /save","x":0,"y":2360,"width":1920,"height":1080,"color":"4"},
+		{"id":"z3-title","type":"text","text":"# /save — File the conversation into the wiki.","x":20,"y":2380,"width":1880,"height":80,"color":"4"},
+		{"id":"z3-img-a","type":"file","file":"_attachments/youtube/save-A.png","x":20,"y":2480,"width":940,"height":530},
+		{"id":"z3-img-b","type":"file","file":"_attachments/youtube/save-B.png","x":980,"y":2480,"width":920,"height":530},
+		{"id":"z3-bullets","type":"text","text":"## What it does\n\n- Reads the full current chat\n- Picks the right note type: concept, question, source, or decision\n- Writes frontmatter and wikilinks automatically\n- Files the note in the correct wiki folder\n- Updates index.md, the session log, and hot.md\n\n> [!tip] Result\n> Good answers stop disappearing.","x":20,"y":3030,"width":920,"height":390},
+		{"id":"z3-example","type":"text","text":"> [!example] Try it\n> `/save`\n>\n> or just: *save this as a concept note*\n\nClaude picks the type, writes the note,\nfiles it, and cross-links it. One command.","x":960,"y":3030,"width":940,"height":390,"color":"4"},
+		{"id":"z3-ref","type":"text","text":"## SCRIPT — Beat 3: /save (1:30–2:45)\n\n**Opening line:** \"Command one: /save.\"\n\n**Show:** type `/save` in the terminal while on a chat with good content\n\n**Say:**\n- \"One command. Claude reads the whole conversation.\"\n- \"It picks the right note type — concept, question, decision, source. Writes frontmatter. Adds wikilinks to related pages. Files it in the right folder.\"\n- \"It also updates the index and the hot cache, so next session it's already loaded.\"\n- \"Good answers stop disappearing.\"\n\n**Show:** the new note open in Obsidian — show frontmatter and wikilinks\n\n**Transition:** \"But what if you want Claude to go do the research for you?\"\n\n**Files to show:** fresh page in `wiki/concepts/`\n**Skill source:** `skills/save/SKILL.md`","x":1960,"y":2360,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-4","type":"group","label":"Beat 4 — /autoresearch","x":0,"y":3540,"width":1920,"height":1080,"color":"4"},
+		{"id":"z4-title","type":"text","text":"# /autoresearch — Autonomous research loop.","x":20,"y":3560,"width":1880,"height":80,"color":"4"},
+		{"id":"z4-img-a","type":"file","file":"_attachments/youtube/autoresearch-A.png","x":20,"y":3660,"width":940,"height":530},
+		{"id":"z4-img-b","type":"file","file":"_attachments/youtube/autoresearch-B.png","x":980,"y":3660,"width":920,"height":530},
+		{"id":"z4-bullets","type":"text","text":"## What it does\n\n- Breaks the topic into 3 to 5 research angles\n- Runs web searches and fetches the best sources\n- Extracts claims, entities, and concepts\n- Runs a second pass to fill in the gaps it noticed\n- Files a synthesis page + source pages + concept pages, all cross-linked\n\n> [!tip] Result\n> Research that becomes a wiki, not a tab graveyard.","x":20,"y":4210,"width":920,"height":390},
+		{"id":"z4-example","type":"text","text":"> [!example] Try it\n> `/autoresearch LLM wiki pattern`\n>\n> Output: 5 to 15 wiki pages, cross-linked, with citations.\n\nClaude works autonomously.\nYou get coffee.","x":960,"y":4210,"width":940,"height":390,"color":"4"},
+		{"id":"z4-ref","type":"text","text":"## SCRIPT — Beat 4: /autoresearch (2:45–4:15)\n\n**Opening line:** \"Command two: /autoresearch. This one feels like magic.\"\n\n**Show:** type `/autoresearch claude-obsidian best practices` — let it start running\n\n**Say:**\n- \"It breaks the topic into research angles. Searches the web. Fetches real sources. Pulls out the key claims.\"\n- \"Then it runs a second pass to fill in the gaps it noticed the first time.\"\n- \"End result: 5 to 15 wiki pages. Cross-linked. With citations. In about 3 minutes.\"\n- \"You do not get a chat bubble that disappears. You get a permanent knowledge base.\"\n\n**Show:** Obsidian sidebar filling up with new pages while it runs\n\n**Transition:** \"And the third command is what you are actually watching right now.\"\n\n**Files to show:** `wiki/sources/`, `wiki/concepts/`\n**Skill source:** `skills/autoresearch/SKILL.md`","x":1960,"y":3540,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-5","type":"group","label":"Beat 5 — /canvas","x":0,"y":4720,"width":1920,"height":1080,"color":"4"},
+		{"id":"z5-title","type":"text","text":"# /canvas — The visual layer of the wiki.","x":20,"y":4740,"width":1880,"height":80,"color":"4"},
+		{"id":"z5-img-a","type":"file","file":"_attachments/youtube/canvas-A.png","x":20,"y":4840,"width":940,"height":530},
+		{"id":"z5-img-b","type":"file","file":"_attachments/youtube/canvas-B.png","x":980,"y":4840,"width":920,"height":530},
+		{"id":"z5-bullets","type":"text","text":"## What it does\n\n- Creates infinite visual boards inside Obsidian\n- Drops in images, text cards, PDFs, and wiki notes\n- Positions nodes automatically inside named zones\n- Uses JSON Canvas 1.0 — open standard, portable and future-proof\n- Pairs with /banana for AI-generated images on any beat\n\n> [!key-insight] Meta moment\n> This canvas you are watching right now was built with /canvas.","x":20,"y":5390,"width":920,"height":390},
+		{"id":"z5-example","type":"text","text":"> [!example] Try it\n> `/canvas new youtube-video`\n> `/canvas add note LLM Wiki Pattern`\n> `/canvas add image _attachments/youtube/save-A.png`\n\nInstant visual board.\nObsidian-native. Shareable.","x":960,"y":5390,"width":940,"height":390,"color":"4"},
+		{"id":"z5-ref","type":"text","text":"## SCRIPT — Beat 5: /canvas (4:15–5:30)\n\n**Opening line:** \"Command three: /canvas. And what you are watching right now is it.\"\n\n**Show:** zoom out on this full canvas — let them see all 7 zones laid out\n\n**Say:**\n- \"This is /canvas. It gives the wiki a visual layer.\"\n- \"Drop in images, text cards, wiki notes, PDFs. Claude positions everything automatically.\"\n- \"You can build explainers, mood boards, project maps, video scripts — like this one.\"\n- \"This canvas? Every zone, every node — built with /canvas.\"\n\n**Show live:** type `/canvas add note LLM Wiki Pattern` — watch a node appear\n\n**Transition:** \"So that is the three commands. Let me quickly show you how the memory system behind them works.\"\n\n**Skill source:** `skills/canvas/SKILL.md`","x":1960,"y":4720,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-6","type":"group","label":"Beat 6 — Under the hood","x":0,"y":5900,"width":1920,"height":1080,"color":"3"},
+		{"id":"z6-title","type":"text","text":"# Under the hood — why token cost stays low as the wiki grows.","x":20,"y":5920,"width":1880,"height":80,"color":"3"},
+		{"id":"z6-graph","type":"file","file":"image-example-graph-view.png","x":20,"y":6020,"width":920,"height":518},
+		{"id":"z6-wikimap","type":"file","file":"image-example-wiki-map-view.png","x":960,"y":6020,"width":940,"height":518},
+		{"id":"z6-hot","type":"text","text":"## 🔥 hot.md\nLoaded automatically every session.\n~500 words. Near-zero token cost.\nRecent context. What is coming next.","x":20,"y":6558,"width":600,"height":200,"color":"1"},
+		{"id":"z6-index","type":"text","text":"## 🗂️ index.md\nOne-line summary of every wiki page.\nRead when hot.md is not enough.\nThe full map, compactly.","x":640,"y":6558,"width":620,"height":200,"color":"3"},
+		{"id":"z6-pages","type":"text","text":"## 📚 wiki/ pages\nConcepts. Sources. Decisions. People.\nOnly the relevant pages get read.\nDeep knowledge, on demand.","x":1280,"y":6558,"width":620,"height":200,"color":"4"},
+		{"id":"z6-insight","type":"text","text":"> [!key-insight] The wiki can grow to thousands of pages. Your token cost per session barely moves.","x":20,"y":6778,"width":1880,"height":162},
+		{"id":"z6-ref","type":"text","text":"## SCRIPT — Beat 6: Under the hood (5:30–6:30)\n\n**Opening line:** \"So how does Claude actually remember things without blowing your token budget?\"\n\n**Show:** pan across — graph view left, wiki map right, three layers below\n\n**Say:**\n- \"Three layers. That is the whole system.\"\n- \"hot.md loads every session — about 500 words. Recent context. Nearly free.\"\n- \"index.md is the full map: one line per page. Claude reads it when hot.md is not enough.\"\n- \"Then the actual wiki pages — only the ones that matter for that session.\"\n- \"The wiki can grow to thousands of pages. Your bill barely moves.\"\n\n**Show:** `wiki/hot.md` and `wiki/index.md` briefly\n\n**Transition:** pan down to install","x":1960,"y":5900,"width":600,"height":1080,"color":"6"},
+		{"id":"zone-7","type":"group","label":"Beat 7 — Install + CTA","x":0,"y":7080,"width":1920,"height":1080,"color":"5"},
+		{"id":"z7-title","type":"text","text":"# Install in 2 lines — Free. Open source. Works with Claude Code today.","x":20,"y":7100,"width":1880,"height":80,"color":"5"},
+		{"id":"z7-gif","type":"file","file":"claude-obsidian-gif-1x1.gif","x":20,"y":7200,"width":480,"height":480},
+		{"id":"z7-cover","type":"file","file":"claude-obsidian-cover-16x9.png","x":520,"y":7200,"width":1380,"height":480},
+		{"id":"z7-cmd","type":"text","text":"```bash\nclaude plugin marketplace add AgriciDaniel/claude-obsidian\nclaude plugin install claude-obsidian@claude-obsidian-marketplace\n```","x":20,"y":7700,"width":920,"height":160},
+		{"id":"z7-links","type":"text","text":"## Links\n\n- **GitHub**: github.com/AgriciDaniel/claude-obsidian\n- **Community**: skool.com/ai-marketing-hub (free tier)\n- **Website**: agricidaniel.com\n\n> [!tip] Subscribe\n> More Claude Code builds every week.","x":960,"y":7700,"width":940,"height":440,"color":"5"},
+		{"id":"z7-ref","type":"text","text":"## SCRIPT — Beat 7: Install + CTA (6:30–8:00)\n\n**Opening line:** \"Installing takes literally two lines.\"\n\n**Show:** terminal — type both install commands live, slowly\n\n**Say:**\n- \"Copy these two lines. Paste. Done.\"\n- \"claude-obsidian is free, open source, and works with Claude Code right now.\"\n- \"GitHub link is in the description. Come join the Skool community — free tier, live sessions every week.\"\n- \"If this was useful, hit subscribe. I build with Claude Code every week.\"\n\n**End:** let the animated GIF loop while you close out.\n\n**Do NOT rush this beat.**","x":1960,"y":7080,"width":600,"height":1080,"color":"6"}
+	],
+	"edges":[
+		{"id":"e-flow-ab","fromNode":"z2-flow-a","fromSide":"right","toNode":"z2-flow-b","toSide":"left","fromEnd":"none","toEnd":"arrow"},
+		{"id":"e-flow-bc","fromNode":"z2-flow-b","fromSide":"right","toNode":"z2-flow-c","toSide":"left","fromEnd":"none","toEnd":"arrow"},
+		{"id":"e-hot-index","fromNode":"z6-hot","fromSide":"right","toNode":"z6-index","toSide":"left","fromEnd":"none","toEnd":"arrow"},
+		{"id":"e-index-pages","fromNode":"z6-index","fromSide":"right","toNode":"z6-pages","toSide":"left","fromEnd":"none","toEnd":"arrow"}
+	]
 }

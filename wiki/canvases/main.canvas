@@ -1,72 +1,12 @@
 {
-	"nodes": [
-		{
-			"id": "zone-wiki-pages-1744033999",
-			"type": "group",
-			"x": -400,
-			"y": 320,
-			"width": 1000,
-			"height": 320,
-			"color": "2",
-			"label": "Wiki Pages"
-		},
-		{
-			"id": "zone-default",
-			"type": "group",
-			"x": -400,
-			"y": -140,
-			"width": 800,
-			"height": 400,
-			"color": "4",
-			"label": "General"
-		},
-		{
-			"id": "note-llm-wiki-1744033901",
-			"type": "file",
-			"file": "wiki/concepts/LLM Wiki Pattern.md",
-			"x": 80,
-			"y": -120,
-			"width": 300,
-			"height": 100
-		},
-		{
-			"id": "text-insight-1744033945",
-			"type": "text",
-			"text": "## Key insight\n\nKnowledge compounds like interest.\nEvery ingest enriches 8–15 pages.",
-			"x": 80,
-			"y": 0,
-			"width": 300,
-			"height": 220,
-			"color": "5"
-		},
-		{
-			"id": "484d32f71e442aa0",
-			"type": "file",
-			"file": "Cosmic Brain Cover.png",
-			"x": -360,
-			"y": 360,
-			"width": 400,
-			"height": 206
-		},
-		{
-			"id": "a8f6d861b3c08664",
-			"type": "file",
-			"file": "Cosmic Brain Clean.gif",
-			"x": 80,
-			"y": 360,
-			"width": 400,
-			"height": 206
-		},
-		{
-			"id": "title",
-			"type": "text",
-			"text": "# Visual Reference\n\nDrop images, PDFs, and notes here.",
-			"x": -440,
-			"y": -360,
-			"width": 400,
-			"height": 120,
-			"color": "6"
-		}
+	"nodes":[
+		{"id":"zone-wiki-pages-1744033999","type":"group","x":-400,"y":320,"width":1000,"height":320,"color":"2","label":"Wiki Pages"},
+		{"id":"zone-default","type":"group","x":-400,"y":-140,"width":800,"height":400,"color":"4","label":"General"},
+		{"id":"note-llm-wiki-1744033901","type":"file","file":"wiki/concepts/LLM Wiki Pattern.md","x":80,"y":-120,"width":300,"height":100},
+		{"id":"text-insight-1744033945","type":"text","text":"## Key insight\n\nKnowledge compounds like interest.\nEvery ingest enriches 8–15 pages.","x":80,"y":0,"width":300,"height":220,"color":"5"},
+		{"id":"484d32f71e442aa0","type":"file","file":"Cosmic Brain Cover.png","x":-360,"y":360,"width":400,"height":206},
+		{"id":"a8f6d861b3c08664","type":"file","file":"Cosmic Brain Clean.gif","x":80,"y":360,"width":400,"height":206},
+		{"id":"title","type":"text","text":"# Visual Reference\n\nDrop images, PDFs, and notes here.","x":-440,"y":-360,"width":400,"height":120,"color":"6"}
 	],
-	"edges": []
+	"edges":[]
 }

@@ -1,0 +1,47 @@
+/* Sets all the text color to red! */
+
+div.obsidian-local-rest-api-settings div.api-key-display {
+  margin-bottom: 20px;
+}
+div.obsidian-local-rest-api-settings div.api-key-display pre {
+  font-size: 0.8em;
+  padding: 10px 20px;
+  background-color: var(--background-modifier-cover);
+  font-family: monospace;
+  user-select: all;
+}
+
+div.obsidian-local-rest-api-settings div.setting-item-control {
+  min-width: 50%;
+}
+
+div.obsidian-local-rest-api-settings textarea {
+  width: 100%;
+}
+
+div.obsidian-local-rest-api-settings div.certificate-expired {
+  padding: 10px 20px;
+  border: 2px solid #ff0000;
+}
+
+div.obsidian-local-rest-api-settings div.certificate-expiring-soon {
+  padding: 10px 20px;
+  border: 2px solid #ffff00;
+}
+
+div.obsidian-local-rest-api-settings div.certificate-regeneration-recommended {
+  padding: 10px 20px;
+  border: 2px solid #ffff00;
+}
+
+div.obsidian-local-rest-api-settings table.api-urls tr {
+  width: 100%;
+}
+
+div.obsidian-local-rest-api-settings table.api-urls th, div.obsidian-local-rest-api-settings table.api-urls td {
+  padding: 5px 25px;
+}
+
+div.obsidian-local-rest-api-settings table.api-urls tr.disabled td.name, div.obsidian-local-rest-api-settings table.api-urls tr.disabled td.url {
+  text-decoration: line-through;
+}
