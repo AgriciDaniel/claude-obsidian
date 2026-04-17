@@ -6,18 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
+            "command": "HOT=\"${CLAUDE_PROJECT_DIR:-$PWD}/wiki/hot.md\"; [ -f \"$HOT\" ] && command -v jq >/dev/null && jq -n --rawfile ctx \"$HOT\" '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:$ctx}}' || true"
           }
         ]
       }
