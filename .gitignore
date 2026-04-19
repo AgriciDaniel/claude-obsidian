@@ -33,6 +33,9 @@ node_modules/
 .env.local
 *.local.md
 
+# Private dev docs — not for public repo
+.sai_docs/
+
 # Personal files dropped into vault root by Obsidian (don't commit these)
 WIKI*.md
 PROMPT.md
