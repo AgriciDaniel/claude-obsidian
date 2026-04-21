@@ -1,0 +1,25 @@
+{
+  "sources": {
+    ".raw/claude-obsidian-ecosystem-research.md": {
+      "hash": "1a5e5c95cbc5bb693119a0334ee066ec",
+      "ingested_at": "2026-04-08",
+      "pages_created": [
+        "wiki/sources/claude-obsidian-ecosystem-research.md",
+        "wiki/comparisons/claude-obsidian-ecosystem.md",
+        "wiki/concepts/cherry-picks.md",
+        "wiki/entities/Ar9av-obsidian-wiki.md",
+        "wiki/entities/Nexus-claudesidian-mcp.md",
+        "wiki/entities/ballred-obsidian-claude-pkm.md",
+        "wiki/entities/rvk7895-llm-knowledge-bases.md",
+        "wiki/entities/kepano-obsidian-skills.md",
+        "wiki/entities/Claudian-YishenTu.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md",
+        "wiki/overview.md"
+      ]
+    }
+  }
+}

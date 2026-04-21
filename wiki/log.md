@@ -25,6 +25,20 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-04-20] ingest | Instagram saved posts (9 posts, 70 images)
+- Source: `.raw/instagram images/` (outside vault, 9 carousel posts)
+- Accounts: @soulfulnomadmomma, EYES•IN, (Foreign) x2, Jessian Titus, @Investments, [sei] x3
+- Pages created: [[Initiatory Passage]], [[Inner Alchemy and Shadow Work]], [[Boredom Is the New IQ]], [[What Is Life]], [[Life Advice Principles]], [[Anthony Bourdain]], [[David Gilmour]], [[soulfulnomadmomma-instagram]], [[eyes-in-instagram]], [[sei-instagram]]
+- Key theme: Spiritual/consciousness content (threshold time, shadow work) + practical philosophy ([sei] life advice, boredom, great minds)
+- Note: Jessian Titus (@karma/spiritual memes) and @Investments (Benjamin Franklin quote) not given dedicated pages — minor single-image content; quotes captured in related concept pages
+
+## [2026-04-20] scaffold | D + E + F vault structure added
+- Mode: Personal Second Brain (D) + Research (E) + Book/Course (F)
+- Folders created: goals, learning, people, areas, resources, papers, thesis, gaps, characters, themes, timeline, synthesis
+- Templates created: goal, learning, person, area, resource, paper, thesis, gap, character, theme, timeline, synthesis
+- CSS: vault-colors.css updated with color rules for all 12 new folders
+- Index: updated with D/E/F section headers
+
 ## [2026-04-08] save | claude-obsidian v1.4 Release Session
 - Type: session
 - Location: wiki/meta/claude-obsidian-v1.4-release-session.md

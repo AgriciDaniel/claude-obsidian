@@ -27,6 +27,24 @@
 /* ── People & orgs — purple ── */
 .nav-folder-title[data-path^="wiki/entities"]    { color: var(--cb-purple); }
 
+/* ── Mode D: Second Brain — warm tones ── */
+.nav-folder-title[data-path^="wiki/goals"]       { color: #f0a500; }   /* amber  */
+.nav-folder-title[data-path^="wiki/learning"]    { color: #4ec9b0; }   /* teal   */
+.nav-folder-title[data-path^="wiki/people"]      { color: #c586c0; }   /* purple */
+.nav-folder-title[data-path^="wiki/areas"]       { color: #dcdcaa; }   /* yellow */
+.nav-folder-title[data-path^="wiki/resources"]   { color: #9cdcfe; }   /* sky    */
+
+/* ── Mode E: Research — cool tones ── */
+.nav-folder-title[data-path^="wiki/papers"]      { color: #4fc1ff; }   /* blue   */
+.nav-folder-title[data-path^="wiki/thesis"]      { color: #4ec9b0; }   /* teal   */
+.nav-folder-title[data-path^="wiki/gaps"]        { color: #d16969; }   /* red    */
+
+/* ── Mode F: Book/Course — warm gold ── */
+.nav-folder-title[data-path^="wiki/characters"]  { color: #ce9178; }   /* orange */
+.nav-folder-title[data-path^="wiki/themes"]      { color: #f0a500; }   /* amber  */
+.nav-folder-title[data-path^="wiki/timeline"]    { color: #dcdcaa; }   /* yellow */
+.nav-folder-title[data-path^="wiki/synthesis"]   { color: #b5cea8; }   /* sage   */
+
 /* ── De-emphasized ── */
 .nav-folder-title[data-path=".raw"]              { color: var(--cb-dim); opacity: 0.55; }
 .nav-folder-title[data-path="_templates"]        { color: var(--cb-dim); opacity: 0.55; }
