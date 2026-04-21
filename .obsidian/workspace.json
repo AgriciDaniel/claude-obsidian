@@ -18,34 +18,20 @@
             }
           },
           {
-            "id": "1ddf905423a8598d",
-            "type": "leaf",
-            "state": {
-              "type": "thino_view",
-              "state": {},
-              "icon": "Memos",
-              "title": "Thino"
-            }
-          },
-          {
             "id": "61749825e48e4b66",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "wiki/Wiki Map.canvas",
-                "viewState": {
-                  "x": -413.9875924804161,
-                  "y": 621.2439739591268,
-                  "zoom": -1.292836204863978
-                }
+                "file": "CLAUDE.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Wiki Map"
+              "icon": "lucide-file",
+              "title": "CLAUDE"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -185,16 +171,6 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
-          },
-          {
-            "id": "20a272e103b5d792",
-            "type": "leaf",
-            "state": {
-              "type": "calendar",
-              "state": {},
-              "icon": "calendar-with-checkmark",
-              "title": "Calendar"
-            }
           }
         ]
       }
@@ -205,7 +181,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:New drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -214,11 +189,20 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "obsidian-memos:Thino": false,
-      "obsidian-memos:Thino Super": false
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "obsidian-memos:Thino Super": false,
+      "templater-obsidian:Templater": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "61749825e48e4b66",
+  "active": "a31de1b302cdc5cf",
   "lastOpenFiles": [
+    "CLAUDE.md",
+    "wiki/questions/How does the LLM Wiki pattern work.md",
+    "AGENTS.md",
+    "README.md",
+    "wiki/Wiki Map.canvas",
+    "wiki/sources/claude-obsidian-ecosystem-research.md",
     "wiki/meta/claude-obsidian-cover.gif",
     "README.md.tmp.224546.1775562198004",
     "README.md.tmp.224546.1775562190155",
@@ -245,7 +229,6 @@
     "README.md.tmp.224546.1775561084699",
     "wiki/meta/welcome-canvas.gif",
     "wiki/canvases/main.canvas",
-    "README.md",
     "wiki/getting-started.md",
     "Demo Images.canvas",
     "Excalidraw/Drawing 2026-04-07 14.07.42.excalidraw.md",
@@ -259,18 +242,14 @@
     "wiki/concepts/Compounding Knowledge.md",
     "wiki/entities/_index.md",
     "wiki/entities/Andrej Karpathy.md",
-    "wiki/questions/How does the LLM Wiki pattern work.md",
     "wiki/hot.md",
     "wiki/index.md",
     "wiki/log.md",
-    "wiki/Wiki Map.canvas",
     "Banana Images.canvas",
     "Untitled 1.canvas",
     "Excalidraw/Drawing 2026-04-07 13.52.12.excalidraw.md",
     "Untitled.canvas",
     "Excalidraw/Drawing 2026-04-07 13.51.04.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-07 13.51.12.excalidraw.md",
-    "wiki/comparisons/Wiki vs RAG.md",
     "projects/visual-vault/design-ideas.canvas"
   ]
 }
