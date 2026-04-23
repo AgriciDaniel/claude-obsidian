@@ -47,7 +47,7 @@ Four dragon-curve properties map onto memory-system patterns already validated i
 | Dragon curve property | Memory analogue | Strength of analogy |
 |---|---|---|
 | Paper-folding recursion: `D_{n+1} = D_n · R · swap(reverse(D_n))` | Hierarchical rollup / materialized summary with exponential fanout | Loose. Shares exponential batch structure, not compaction semantics. |
-| Turn derivable from bits of `n` (regular paperfolding sequence, OEIS A014577) | Content-addressable page addresses as organizational convention | Loose. Deterministic addressing is useful independent of the dragon. |
+| Turn derivable from bits of `n` (regular paperfolding sequence, OEIS A014577) | Deterministic page addresses as organizational convention (MVP is a creation-order counter, not a true content hash) | Loose. Deterministic addressing is useful independent of the dragon. |
 | Tiling / no self-intersection | Canonical-home coverage: one concept, one page | Medium. Dedup lint enforces this mechanically. |
 | Boundary dim ≈ 1.523627 vs interior dim 2 | Agent attention weighted toward frontier pages | Aesthetic. The fractal dimension number does no load-bearing work. |
 
