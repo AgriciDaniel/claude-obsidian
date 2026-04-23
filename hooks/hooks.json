@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -d .git ] && git add wiki/ .raw/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
+            "command": "[ -d .git ] && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
           }
         ]
       }

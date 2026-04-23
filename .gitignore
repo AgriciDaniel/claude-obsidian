@@ -88,5 +88,8 @@ claude-obsidian-archive/
 # User-specific attachments
 _attachments/
 
-# DragonScale address allocator runtime lockfile (flock artifact; counter.txt is tracked)
+# DragonScale runtime lockfiles and local caches (flock + embedding cache; state files like counter.txt and thresholds.json ARE tracked)
 .vault-meta/.address.lock
+.vault-meta/.tiling.lock
+.vault-meta/tiling-cache.json
+.vault-meta/tiling-cache.*.tmp
