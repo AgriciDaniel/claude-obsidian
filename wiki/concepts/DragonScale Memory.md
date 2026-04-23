@@ -122,7 +122,7 @@ Format: `c-<6-digit-counter>`. `c-` means "creation-order counter." Zero-padded.
 The tiling property says the same concept should live in one canonical page. Enforce it with an embedding-based dedup check in `wiki-lint`.
 
 **Procedure (calibrated, not a guess):**
-1. Compute embeddings for every page. Default model: local `nomic-embed-text` via ollama on `http://127.0.0.1:11434` (local compute; no cost if ollama stays on localhost, but the script supports a remote override under `--allow-remote-ollama` where API costs could apply).
+1. Compute embeddings for every page. Default model: local `nomic-embed-text` via ollama on `http://127.0.0.1:11434`. Cost: local hardware time only (no API fees). The script supports a remote override under `--allow-remote-ollama`; remote endpoints may incur provider API fees.
 2. Compute pairwise cosine similarities for all page pairs.
 3. **Calibration** (one-time, before first use): label 50-100 in-vault page pairs as duplicate/near/distinct; find the thresholds that optimize target precision for each band.
 4. **Default bands** (used before calibration, then refined):
