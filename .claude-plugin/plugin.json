@@ -1,7 +1,7 @@
 {
   "name": "claude-obsidian",
-  "version": "1.5.0",
-  "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Based on Andrej Karpathy's LLM Wiki pattern. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, and embedding-based semantic tiling lint.",
+  "version": "1.6.0",
+  "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Based on Andrej Karpathy's LLM Wiki pattern. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection.",
   "author": {
     "name": "AgriciDaniel",
     "url": "https://github.com/AgriciDaniel"
