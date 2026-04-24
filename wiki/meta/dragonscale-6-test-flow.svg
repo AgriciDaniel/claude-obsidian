@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" font-family="Space Grotesk, system-ui, -apple-system, sans-serif">
+  <rect width="900" height="300" fill="#0A0A0A"/>
+  <text x="450" y="36" fill="#F5F5F0" font-size="17" font-weight="700" text-anchor="middle">v1.6.0 end-to-end validation: six tests, all green</text>
+  <text x="450" y="56" fill="#888888" font-size="11" text-anchor="middle">Teams orchestration, codex gpt-5.4 for sub-agents, chair for integration</text>
+
+  <!-- Horizontal flow, 6 nodes evenly spaced -->
+  <!-- Centers at x = 90, 225, 360, 495, 630, 765; y = 150 -->
+  <!-- Connecting lines -->
+  <g stroke="#2D2D2D" stroke-width="1.5" fill="none">
+    <line x1="132" y1="150" x2="183" y2="150"/>
+    <line x1="267" y1="150" x2="318" y2="150"/>
+    <line x1="402" y1="150" x2="453" y2="150"/>
+    <line x1="537" y1="150" x2="588" y2="150"/>
+    <line x1="672" y1="150" x2="723" y2="150"/>
+  </g>
+
+  <!-- T0 -->
+  <g>
+    <circle cx="90" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="90" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T0</text>
+    <text x="90" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">ollama</text>
+    <text x="90" y="172" fill="#888888" font-size="9" text-anchor="middle">pull model</text>
+    <text x="90" y="218" fill="#888888" font-size="10" text-anchor="middle">nomic-embed-text</text>
+    <text x="90" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">274 MB, 15 s</text>
+  </g>
+
+  <!-- T1 -->
+  <g>
+    <circle cx="225" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="225" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T1</text>
+    <text x="225" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">M1</text>
+    <text x="225" y="172" fill="#888888" font-size="9" text-anchor="middle">dry-run k=3</text>
+    <text x="225" y="218" fill="#888888" font-size="10" text-anchor="middle">DRY-RUN OK</text>
+    <text x="225" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">8 children, no em-dashes</text>
+  </g>
+
+  <!-- T2 -->
+  <g>
+    <circle cx="360" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="360" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T2</text>
+    <text x="360" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">M2</text>
+    <text x="360" y="172" fill="#888888" font-size="9" text-anchor="middle">allocate</text>
+    <text x="360" y="218" fill="#888888" font-size="10" text-anchor="middle">counter 2 to 3</text>
+    <text x="360" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">c-000002 reserved</text>
+  </g>
+
+  <!-- T3 -->
+  <g>
+    <circle cx="495" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="495" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T3</text>
+    <text x="495" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">M3</text>
+    <text x="495" y="172" fill="#888888" font-size="9" text-anchor="middle">full tiling</text>
+    <text x="495" y="218" fill="#888888" font-size="10" text-anchor="middle">41 scanned, 21 embedded</text>
+    <text x="495" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">0 errors, 15 review pairs</text>
+  </g>
+
+  <!-- T4 -->
+  <g>
+    <circle cx="630" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="630" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T4</text>
+    <text x="630" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">M1</text>
+    <text x="630" y="172" fill="#888888" font-size="9" text-anchor="middle">commit</text>
+    <text x="630" y="218" fill="#888888" font-size="10" text-anchor="middle">fold committed</text>
+    <text x="630" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">115 lines, 8 children</text>
+  </g>
+
+  <!-- T6 -->
+  <g>
+    <circle cx="765" cy="150" r="42" fill="#111111" stroke="#16a34a" stroke-width="2"/>
+    <text x="765" y="140" fill="#16a34a" font-size="10" font-weight="700" text-anchor="middle">T6</text>
+    <text x="765" y="158" fill="#F5F5F0" font-size="14" font-weight="700" text-anchor="middle">M4</text>
+    <text x="765" y="172" fill="#888888" font-size="9" text-anchor="middle">autoresearch</text>
+    <text x="765" y="218" fill="#888888" font-size="10" text-anchor="middle">3 pages filed</text>
+    <text x="765" y="232" fill="#6a6a6a" font-size="9" text-anchor="middle">6 URLs fetched, sourced</text>
+  </g>
+
+  <!-- Verdict strip -->
+  <g>
+    <rect x="300" y="262" width="300" height="24" rx="12" fill="#16a34a" fill-opacity="0.15" stroke="#16a34a" stroke-width="1"/>
+    <text x="450" y="279" fill="#4ADE80" font-size="11" font-weight="700" text-anchor="middle">ACCEPT  ·  make test green (74+ assertions)</text>
+  </g>
+</svg>
