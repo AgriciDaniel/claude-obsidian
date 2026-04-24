@@ -6,22 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
-          },
-          {
-            "type": "prompt",
-            "prompt": "If a vault is configured for this session (check CLAUDE.md for VAULT_PATH or a wiki/ folder in the current directory), silently read wiki/hot.md to restore recent context. If wiki/hot.md does not exist, do nothing. This is a non-vault session. Do not announce this. Do not report what you read. Just have the context available."
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Hook-injected context does not survive context compaction. If wiki/hot.md exists in the current directory, silently re-read it now to restore the hot cache. Do not announce this."
+            "command": "HOT=\"${CLAUDE_PROJECT_DIR:-$PWD}/wiki/hot.md\"; [ -f \"$HOT\" ] && command -v jq >/dev/null && jq -n --rawfile ctx \"$HOT\" '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:$ctx}}' || true"
           }
         ]
       }
