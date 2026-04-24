@@ -13,11 +13,11 @@ related:
   - "[[hot]]"
 ---
 
-# Boundary Frontier Snapshot — 2026-04-24
+# Boundary Frontier Snapshot (2026-04-24)
 
 Navigation: [[index]] | [[log]] | [[DragonScale Memory]]
 
-First end-to-end run of DragonScale Mechanism 4 (`scripts/boundary-score.py`) against this vault. Generated from `./scripts/boundary-score.py --json` at 2026-04-24T08:49:16Z.
+First end-to-end run of DragonScale Mechanism 4 (`scripts/boundary-score.py`) against this vault. Generated from `./scripts/boundary-score.py --json --top 7` at 2026-04-24T08:49:16Z.
 
 ## What this is
 
