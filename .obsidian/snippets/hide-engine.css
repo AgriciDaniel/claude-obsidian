@@ -1,0 +1,17 @@
+/* Hide engine folders and root files from file explorer */
+.nav-folder:has(> .nav-folder-title[data-path="agents"]),
+.nav-folder:has(> .nav-folder-title[data-path="bin"]),
+.nav-folder:has(> .nav-folder-title[data-path="commands"]),
+.nav-folder:has(> .nav-folder-title[data-path="docs"]),
+.nav-folder:has(> .nav-folder-title[data-path="hooks"]),
+.nav-folder:has(> .nav-folder-title[data-path="skills"]),
+.nav-folder:has(> .nav-folder-title[data-path="_templates"]),
+.nav-folder:has(> .nav-folder-title[data-path="wiki/meta"]),
+.nav-file:has(> .nav-file-title[data-path="CLAUDE.md"]),
+.nav-file:has(> .nav-file-title[data-path="GEMINI.md"]),
+.nav-file:has(> .nav-file-title[data-path="AGENTS.md"]),
+.nav-file:has(> .nav-file-title[data-path="WIKI.md"]),
+.nav-file:has(> .nav-file-title[data-path="README.md"]),
+.nav-file:has(> .nav-file-title[data-path="LICENSE"]) {
+  display: none !important;
+}
