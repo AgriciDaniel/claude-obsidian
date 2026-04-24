@@ -152,7 +152,7 @@ A placeholder email `[scrubbed-email]` (which the user confirmed does not exist 
 
 **Verification**: grep across all refs, all blobs, all commit messages returned zero matches for the scrubbed email string. GitHub release bodies checked for same: both v1.1 and v1.4.0 release pages clean.
 
-**Caveat for other clones**: history rewrite means every commit hash changed. Any other machine or private `community` remote at `avalonreset-pro/claude-obsidian` that has the repo still contains the old history. Those need `git fetch && git reset --hard origin/main` or a force push to clean up.
+**Caveat for other clones**: history rewrite means every commit hash changed. Any other machine or private `community` remote that has the repo still contains the old history. Those need `git fetch && git reset --hard origin/main` or a force push to clean up.
 
 ## v1.4.1: Plugin Install Command Hotfix
 
