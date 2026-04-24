@@ -73,5 +73,5 @@ related:
 
 ## Files for Reference
 - Plan: `~/.claude/plans/smooth-popping-pebble.md`
-- CHANGELOG: v1.9.0 entry in `/home/agricidaniel/Desktop/Claude-SEO/CHANGELOG.md`
-- Contributors: `/home/agricidaniel/Desktop/Claude-SEO/CONTRIBUTORS.md`
+- CHANGELOG: v1.9.0 entry in `~/Desktop/Claude-SEO/CHANGELOG.md`
+- Contributors: `~/Desktop/Claude-SEO/CONTRIBUTORS.md`
