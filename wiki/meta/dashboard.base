@@ -1,69 +1,62 @@
 filters:
   and:
     - file.inFolder("wiki")
-    - 'file.ext == "md"'
-
+    - file.ext == "md"
 formulas:
-  age_days: '(now() - file.mtime).days'
-
+  age_days: (now() - file.mtime).days
 properties:
   type:
-    displayName: "Type"
+    displayName: Type
   status:
-    displayName: "Status"
+    displayName: Status
   updated:
-    displayName: "Updated"
+    displayName: Updated
   formula.age_days:
-    displayName: "Days Since Edit"
-
+    displayName: Days Since Edit
 views:
   - type: table
-    name: "Recent Activity"
-    limit: 15
+    name: Recent Activity
+    groupBy:
+      property: type
+      direction: ASC
     order:
       - file.name
       - type
       - status
       - updated
       - formula.age_days
-    groupBy:
-      property: type
-      direction: ASC
-
+    limit: 15
   - type: list
-    name: "Seed Pages (Need Development)"
+    name: Seed Pages (Need Development)
     filters:
       and:
-        - 'status == "seed"'
+        - status == "seed"
     order:
       - file.name
       - updated
-
   - type: list
-    name: "Entities Missing Sources"
+    name: Entities Missing Sources
     filters:
       and:
         - file.inFolder("wiki/entities")
         - or:
-            - '!sources'
-            - 'sources.length == 0'
+            - "!sources"
+            - sources.length == 0
     order:
       - file.name
-
   - type: list
-    name: "Open Questions"
+    name: Open Questions
     filters:
       and:
         - file.inFolder("wiki/questions")
         - or:
-            - 'status == "developing"'
-            - 'status == "seed"'
+            - status == "developing"
+            - status == "seed"
     order:
       - file.name
       - updated
-
   - type: table
-    name: "Comparisons"
+    name: Comparisons
     filters:
       and:
         - file.inFolder("wiki/comparisons")
@@ -71,16 +64,15 @@ views:
       - file.name
       - verdict
       - updated
-
   - type: table
-    name: "Sources"
-    limit: 10
+    name: Sources
     filters:
       and:
         - file.inFolder("wiki/sources")
-        - 'type == "source"'
+        - type == "source"
     order:
       - file.name
       - author
       - date_published
       - updated
+    limit: 10

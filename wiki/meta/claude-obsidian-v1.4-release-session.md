@@ -133,7 +133,7 @@ The user-facing feedback was clear: "make it proper and natural". The scrubbed p
 
 ## Security: Email Removal and Git History Rewrite
 
-A placeholder email `daniel@avalonreset.pro` (which the user confirmed does not exist as a real address) was in `marketplace.json` plus two docs. Removed from working tree first, then rewrote git history to scrub it from all commits.
+A placeholder email `[scrubbed-email]` (which the user confirmed does not exist as a real address) was in `marketplace.json` plus two docs. Removed from working tree first, then rewrote git history to scrub it from all commits.
 
 **Tool**: `git filter-repo` (available at `~/.pyenv/versions/3.12.4/bin/git-filter-repo`).
 
