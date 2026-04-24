@@ -142,7 +142,7 @@ A placeholder email `[scrubbed-email]` (which the user confirmed does not exist 
 1. `git filter-repo --replace-text /tmp/email-replacements.txt --force` scrubs blob contents across all commits.
 2. `git filter-repo --replace-message /tmp/email-msg-replacements.txt --force` scrubs commit messages. The first pass caught 3 occurrences in file contents but missed 1 occurrence in a commit subject line. The second pass caught that.
 
-**Replacement string**: `daniel@avalonreset.pro==>***REMOVED***`
+**Replacement string**: `[scrubbed-email]==>***REMOVED***`
 
 **Post-rewrite actions**:
 - Re-added the `origin` remote that filter-repo removes for safety
