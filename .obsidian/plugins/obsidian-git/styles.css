@@ -1,0 +1,710 @@
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.git-signs-gutter {
+    .cm-gutterElement {
+        /* Needed to align the sign properly for different line heigts. Such as
+         * when having a heading or list item.
+         */
+        padding-top: 0 !important;
+    }
+}
+
+.workspace-leaf-content[data-type="git-view"] .button-border {
+    border: 2px solid var(--interactive-accent);
+    border-radius: var(--radius-s);
+}
+
+.workspace-leaf-content[data-type="git-view"] .view-content {
+    padding-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+}
+
+.workspace-leaf-content[data-type="git-history-view"] .view-content {
+    padding-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+}
+
+.loading {
+    overflow: hidden;
+}
+
+.loading > svg {
+    animation: 2s linear infinite loading;
+    transform-origin: 50% 50%;
+    display: inline-block;
+}
+
+.obsidian-git-center {
+    margin: auto;
+    text-align: center;
+    width: 50%;
+}
+
+.obsidian-git-textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.obsidian-git-disabled {
+    opacity: 0.5;
+}
+
+.obsidian-git-center-button {
+    display: block;
+    margin: 20px auto;
+}
+
+.tooltip.mod-left {
+    overflow-wrap: break-word;
+}
+
+.tooltip.mod-right {
+    overflow-wrap: break-word;
+}
+
+/* Limits the scrollbar to the view body */
+.git-view {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+}
+
+/* Re-enable wrapping of nav buttns to prevent overflow on smaller screens #*/
+.workspace-drawer .git-view .nav-buttons-container {
+    flex-wrap: wrap;
+}
+
+.git-tools {
+    display: flex;
+    margin-left: auto;
+}
+.git-tools .type {
+    padding-left: var(--size-2-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 11px;
+}
+
+.git-tools .type[data-type="M"] {
+    color: orange;
+}
+.git-tools .type[data-type="D"] {
+    color: red;
+}
+.git-tools .buttons {
+    display: flex;
+}
+.git-tools .buttons > * {
+    padding: 0 0;
+    height: auto;
+}
+
+.workspace-leaf-content[data-type="git-view"] .tree-item-self,
+.workspace-leaf-content[data-type="git-history-view"] .tree-item-self {
+    align-items: center;
+}
+
+.workspace-leaf-content[data-type="git-view"]
+    .tree-item-self:hover
+    .clickable-icon,
+.workspace-leaf-content[data-type="git-history-view"]
+    .tree-item-self:hover
+    .clickable-icon {
+    color: var(--icon-color-hover);
+}
+
+/* Highlight an item as active if it's diff is currently opened */
+.is-active .git-tools .buttons > * {
+    color: var(--nav-item-color-active);
+}
+
+.git-author {
+    color: var(--text-accent);
+}
+
+.git-date {
+    color: var(--text-accent);
+}
+
+.git-ref {
+    color: var(--text-accent);
+}
+
+/* ====== diff2html ======
+The following styles are adapted from the obsidian-version-history plugin by
+@kometenstaub https://github.com/kometenstaub/obsidian-version-history-diff/blob/main/src/styles.scss
+which itself is adapted from the diff2html library with the following original license:
+
+   	https://github.com/rtfpessoa/diff2html/blob/master/LICENSE.md
+
+	Copyright 2014-2016 Rodrigo Fernandes https://rtfpessoa.github.io/
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+	documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+	rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+	persons to whom the Software is furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+	Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+	WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+	COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+.theme-dark,
+.theme-light {
+    --git-delete-bg: #ff475040;
+    --git-delete-hl: #96050a75;
+    --git-insert-bg: #68d36840;
+    --git-insert-hl: #23c02350;
+    --git-change-bg: #ffd55840;
+    --git-selected: #3572b0;
+
+    --git-delete: #c33;
+    --git-insert: #399839;
+    --git-change: #d0b44c;
+    --git-move: #3572b0;
+}
+
+.git-diff {
+    .d2h-d-none {
+        display: none;
+    }
+    .d2h-wrapper {
+        text-align: left;
+        border-radius: 0.25em;
+        overflow: auto;
+    }
+    .d2h-file-header.d2h-file-header {
+        background-color: var(--background-secondary);
+        border-bottom: 1px solid var(--background-modifier-border);
+        font-family:
+            Source Sans Pro,
+            Helvetica Neue,
+            Helvetica,
+            Arial,
+            sans-serif;
+        height: 35px;
+        padding: 5px 10px;
+    }
+    .d2h-file-header,
+    .d2h-file-stats {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    .d2h-file-header {
+        display: none;
+    }
+    .d2h-file-stats {
+        font-size: 14px;
+        margin-left: auto;
+    }
+    .d2h-lines-added {
+        border: 1px solid var(--color-green);
+        border-radius: 5px 0 0 5px;
+        color: var(--color-green);
+        padding: 2px;
+        text-align: right;
+        vertical-align: middle;
+    }
+    .d2h-lines-deleted {
+        border: 1px solid var(--color-red);
+        border-radius: 0 5px 5px 0;
+        color: var(--color-red);
+        margin-left: 1px;
+        padding: 2px;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .d2h-file-name-wrapper {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        font-size: 15px;
+        width: 100%;
+    }
+    .d2h-file-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--text-normal);
+        font-size: var(--h5-size);
+    }
+    .d2h-file-wrapper {
+        border: 1px solid var(--background-secondary-alt);
+        border-radius: 3px;
+        margin-bottom: 1em;
+        max-height: 100%;
+    }
+    .d2h-file-collapse {
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        border: 1px solid var(--background-secondary-alt);
+        border-radius: 3px;
+        cursor: pointer;
+        display: none;
+        font-size: 12px;
+        justify-content: flex-end;
+        padding: 4px 8px;
+    }
+    .d2h-file-collapse.d2h-selected {
+        background-color: var(--git-selected);
+    }
+    .d2h-file-collapse-input {
+        margin: 0 4px 0 0;
+    }
+    .d2h-diff-table {
+        border-collapse: collapse;
+        font-family: var(--font-monospace);
+        font-size: var(--code-size);
+        width: 100%;
+    }
+    .d2h-files-diff {
+        width: 100%;
+    }
+    .d2h-file-diff {
+        /*
+		overflow-y: scroll;
+		*/
+        border-radius: 5px;
+        font-size: var(--font-text-size);
+        line-height: var(--line-height-normal);
+    }
+    .d2h-file-side-diff {
+        display: inline-block;
+        margin-bottom: -8px;
+        margin-right: -4px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        width: 50%;
+    }
+    .d2h-code-line {
+        padding-left: 6em;
+        padding-right: 1.5em;
+    }
+    .d2h-code-line,
+    .d2h-code-side-line {
+        display: inline-block;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        white-space: nowrap;
+        width: 100%;
+    }
+    .d2h-code-side-line {
+        /* needed to be changed */
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    .d2h-code-line-ctn {
+        word-wrap: normal;
+        background: none;
+        display: inline-block;
+        padding: 0;
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+        vertical-align: middle;
+        width: 100%;
+        /* only works for line-by-line */
+        white-space: pre-wrap;
+    }
+    .d2h-code-line del,
+    .d2h-code-side-line del {
+        background-color: var(--git-delete-hl);
+        color: var(--text-normal);
+    }
+    .d2h-code-line del,
+    .d2h-code-line ins,
+    .d2h-code-side-line del,
+    .d2h-code-side-line ins {
+        border-radius: 0.2em;
+        display: inline-block;
+        margin-top: -1px;
+        text-decoration: none;
+        vertical-align: middle;
+    }
+    .d2h-code-line ins,
+    .d2h-code-side-line ins {
+        background-color: var(--git-insert-hl);
+        text-align: left;
+    }
+    .d2h-code-line-prefix {
+        word-wrap: normal;
+        background: none;
+        display: inline;
+        padding: 0;
+        white-space: pre;
+    }
+    .line-num1 {
+        float: left;
+    }
+    .line-num1,
+    .line-num2 {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        /*
+		padding: 0 0.5em;
+		*/
+        text-overflow: ellipsis;
+        width: 2.5em;
+        padding-left: 0;
+    }
+    .line-num2 {
+        float: right;
+    }
+    .d2h-code-linenumber {
+        background-color: var(--background-primary);
+        border: solid var(--background-modifier-border);
+        border-width: 0 1px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: var(--text-faint);
+        cursor: pointer;
+        display: inline-block;
+        position: absolute;
+        text-align: right;
+        width: 5.5em;
+    }
+    .d2h-code-linenumber:after {
+        content: "\200b";
+    }
+    .d2h-code-side-linenumber {
+        background-color: var(--background-primary);
+        border: solid var(--background-modifier-border);
+        border-width: 0 1px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: var(--text-faint);
+        cursor: pointer;
+        overflow: hidden;
+        padding: 0 0.5em;
+        text-align: right;
+        text-overflow: ellipsis;
+        width: 4em;
+        /* needed to be changed */
+        display: table-cell;
+        position: relative;
+    }
+    .d2h-code-side-linenumber:after {
+        content: "\200b";
+    }
+    .d2h-code-side-emptyplaceholder,
+    .d2h-emptyplaceholder {
+        background-color: var(--background-primary);
+        border-color: var(--background-modifier-border);
+    }
+    .d2h-code-line-prefix,
+    .d2h-code-linenumber,
+    .d2h-code-side-linenumber,
+    .d2h-emptyplaceholder {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .d2h-code-linenumber,
+    .d2h-code-side-linenumber {
+        direction: rtl;
+    }
+    .d2h-del {
+        background-color: var(--git-delete-bg);
+        border-color: var(--git-delete-hl);
+    }
+    .d2h-ins {
+        background-color: var(--git-insert-bg);
+        border-color: var(--git-insert-hl);
+    }
+    .d2h-info {
+        background-color: var(--background-primary);
+        border-color: var(--background-modifier-border);
+        color: var(--text-faint);
+    }
+    .d2h-del,
+    .d2h-ins,
+    .d2h-file-diff .d2h-change {
+        color: var(--text-normal);
+    }
+    .d2h-file-diff .d2h-del.d2h-change {
+        background-color: var(--git-change-bg);
+    }
+    .d2h-file-diff .d2h-ins.d2h-change {
+        background-color: var(--git-insert-bg);
+    }
+    .d2h-file-list-wrapper {
+        a {
+            text-decoration: none;
+            cursor: default;
+            -webkit-user-drag: none;
+        }
+
+        svg {
+            display: none;
+        }
+    }
+    .d2h-file-list-header {
+        text-align: left;
+    }
+    .d2h-file-list-title {
+        display: none;
+    }
+    .d2h-file-list-line {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        text-align: left;
+    }
+    .d2h-file-list {
+    }
+    .d2h-file-list > li {
+        border-bottom: 1px solid var(--background-modifier-border);
+        margin: 0;
+        padding: 5px 10px;
+    }
+    .d2h-file-list > li:last-child {
+        border-bottom: none;
+    }
+    .d2h-file-switch {
+        cursor: pointer;
+        display: none;
+        font-size: 10px;
+    }
+    .d2h-icon {
+        fill: currentColor;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    .d2h-deleted {
+        color: var(--git-delete);
+    }
+    .d2h-added {
+        color: var(--git-insert);
+    }
+    .d2h-changed {
+        color: var(--git-change);
+    }
+    .d2h-moved {
+        color: var(--git-move);
+    }
+    .d2h-tag {
+        background-color: var(--background-secondary);
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        font-size: 10px;
+        margin-left: 5px;
+        padding: 0 2px;
+    }
+    .d2h-deleted-tag {
+        border: 1px solid var(--git-delete);
+    }
+    .d2h-added-tag {
+        border: 1px solid var(--git-insert);
+    }
+    .d2h-changed-tag {
+        border: 1px solid var(--git-change);
+    }
+    .d2h-moved-tag {
+        border: 1px solid var(--git-move);
+    }
+
+    /* needed for line-by-line*/
+
+    .d2h-diff-tbody {
+        position: relative;
+    }
+}
+
+/* ====================== Line Authoring Information ====================== */
+
+.cm-gutterElement.obs-git-blame-gutter {
+    /* Add background color to spacing inbetween and around the gutter for better aesthetics */
+    border-width: 0px 2px 0.2px 2px;
+    border-style: solid;
+    border-color: var(--background-secondary);
+    background-color: var(--background-secondary);
+}
+
+.cm-gutterElement.obs-git-blame-gutter > div,
+.line-author-settings-preview {
+    /* delegate text color to settings */
+    color: var(--obs-git-gutter-text);
+    font-family: monospace;
+    height: 100%; /* ensure, that age-based background color occupies entire parent */
+    text-align: right;
+    padding: 0px 6px 0px 6px;
+    white-space: pre; /* Keep spaces and do not collapse them. */
+}
+
+@media (max-width: 800px) {
+    /* hide git blame gutter not to superpose text */
+    .cm-gutterElement.obs-git-blame-gutter {
+        display: none;
+    }
+}
+
+.git-unified-diff-view,
+.git-split-diff-view .cm-deletedLine .cm-changedText {
+    background-color: #ee443330;
+}
+
+.git-unified-diff-view,
+.git-split-diff-view .cm-insertedLine .cm-changedText {
+    background-color: #22bb2230;
+}
+
+.git-obscure-prompt[git-is-obscured="true"] #git-show-password:after {
+    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>');
+}
+
+.git-obscure-prompt[git-is-obscured="false"] #git-show-password:after {
+    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-eye-off"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"></path><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"></path><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"></path><path d="m2 2 20 20"></path></svg>');
+}
+
+/* Override styling of Codemirror merge view "collapsed lines" indicator */
+.git-split-diff-view .ͼ2 .cm-collapsedLines {
+    background: var(--interactive-normal);
+    border-radius: var(--radius-m);
+    color: var(--text-accent);
+    font-size: var(--font-small);
+    padding: var(--size-4-1) var(--size-4-1);
+}
+.git-split-diff-view .ͼ2 .cm-collapsedLines:hover {
+    background: var(--interactive-hover);
+    color: var(--text-accent-hover);
+}
+
+.git-signs-gutter {
+    .cm-gutterElement {
+        display: grid;
+    }
+}
+
+.git-gutter-marker:hover {
+    border-radius: 2px;
+}
+
+.git-gutter-marker.git-add {
+    background-color: var(--color-green);
+    justify-self: center;
+    height: inherit;
+    width: 0.2rem;
+}
+
+.git-gutter-marker.git-change {
+    background-color: var(--color-yellow);
+    justify-self: center;
+    height: inherit;
+    width: 0.2rem;
+}
+
+.git-gutter-marker.git-changedelete {
+    color: var(--color-yellow);
+    font-weight: var(--font-bold);
+    font-size: 1rem;
+    justify-self: center;
+    height: inherit;
+}
+
+.git-gutter-marker.git-delete {
+    background-color: var(--color-red);
+    height: 0.2rem;
+    width: 0.8rem;
+    align-self: end;
+}
+
+.git-gutter-marker.git-topdelete {
+    background-color: var(--color-red);
+    height: 0.2rem;
+    width: 0.8rem;
+    align-self: start;
+}
+
+div:hover > .git-gutter-marker.git-change {
+    width: 0.6rem;
+}
+
+div:hover > .git-gutter-marker.git-add {
+    width: 0.6rem;
+}
+
+div:hover > .git-gutter-marker.git-delete {
+    height: 0.6rem;
+}
+
+div:hover > .git-gutter-marker.git-topdelete {
+    height: 0.6rem;
+}
+
+div:hover > .git-gutter-marker.git-changedelete {
+    font-weight: var(--font-bold);
+}
+
+.git-gutter-marker.staged {
+    opacity: 0.5;
+}
+
+.git-diff {
+    .cm-merge-revert {
+        width: 4em;
+    }
+    /* Ensure that merge revert markers are positioned correctly */
+    .cm-merge-revert > * {
+        position: absolute;
+        background-color: var(--background-secondary);
+        display: flex;
+    }
+}
+
+/* Prevent shifting of the editor when git signs gutter is the only gutter present */
+.cm-gutters.cm-gutters-before:has(> .git-signs-gutter:only-child) {
+    margin-inline-end: 0;
+    .git-signs-gutter {
+        margin-inline-start: -1rem;
+    }
+}
+
+.git-changes-status-bar-colored {
+    .git-add {
+        color: var(--color-green);
+    }
+    .git-change {
+        color: var(--color-yellow);
+    }
+    .git-delete {
+        color: var(--color-red);
+    }
+}
+
+.git-changes-status-bar .git-add {
+    margin-right: 0.3em;
+}
+
+.git-changes-status-bar .git-change {
+    margin-right: 0.3em;
+}

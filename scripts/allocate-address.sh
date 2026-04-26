@@ -32,10 +32,24 @@ mkdir -p "$(dirname "$COUNTER_FILE")" || {
 }
 
 # Acquire exclusive lock with 5-second timeout. Release automatically on scope exit.
-exec 9>"$LOCK_FILE"
-if ! flock -x -w 5 9; then
-  echo "ERR: could not acquire address allocator lock within 5s" >&2
-  exit 1
+if command -v flock >/dev/null 2>&1; then
+  exec 9>"$LOCK_FILE"
+  if ! flock -x -w 5 9; then
+    echo "ERR: could not acquire address allocator lock within 5s" >&2
+    exit 1
+  fi
+else
+  # Fallback for systems without util-linux flock (e.g. Git Bash on Windows). mkdir is atomic.
+  LOCK_DIR="${LOCK_FILE}.d"
+  DEADLINE=$(( $(date +%s) + 5 ))
+  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+    if [ "$(date +%s)" -ge "$DEADLINE" ]; then
+      echo "ERR: could not acquire address allocator lock within 5s" >&2
+      exit 1
+    fi
+    sleep 0.1
+  done
+  trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
 fi
 
 scan_max_c_address() {
