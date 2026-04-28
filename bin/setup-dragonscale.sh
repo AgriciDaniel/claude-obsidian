@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # setup-dragonscale.sh — opt-in installer for DragonScale Memory.
 #
-# Provisions the runtime files that the wiki-ingest and wiki-lint skills
-# feature-detect. Safe to re-run (idempotent).
+# Installs missing dependencies (python) and provisions the runtime files
+# that the wiki-ingest and wiki-lint skills feature-detect.
+# Safe to re-run (idempotent). Cross-platform: all locking is handled by
+# Python (no flock binary required).
 #
 # Does NOT install ollama or pull any embedding model. Those are
 # prerequisites for Mechanism 3 (semantic tiling) and are the user's
-# responsibility. Mechanism 1 (fold) and Mechanism 2 (addresses) have no
-# external prerequisites.
+# responsibility.
 #
 # Usage:
 #   bash bin/setup-dragonscale.sh [optional: /path/to/vault]
@@ -20,14 +21,71 @@ VAULT="${1:-$(dirname "$SCRIPT_DIR")}"
 echo "Setting up DragonScale Memory at: $VAULT"
 cd "$VAULT"
 
+# ── 0. Install missing dependencies ─────────────────────────────────────────
+
+install_python() {
+  local os
+  os="$(uname -s)"
+  case "$os" in
+    MINGW*|MSYS*|CYGWIN*)
+      echo "  Python not found. Installing on Windows..."
+      if command -v choco >/dev/null 2>&1; then
+        choco install python3 -y --no-progress 2>&1 | tail -3
+      elif command -v winget >/dev/null 2>&1; then
+        winget install --id Python.Python.3.12 --accept-source-agreements --accept-package-agreements 2>&1 | tail -3
+      else
+        echo "ERR: no package manager found. Install Python from https://python.org" >&2
+        return 1
+      fi
+      ;;
+    Darwin*)
+      if command -v brew >/dev/null 2>&1; then
+        brew install python3 2>&1 | tail -3
+      else
+        echo "ERR: homebrew not found. Install Python via: brew install python3" >&2
+        return 1
+      fi
+      ;;
+    Linux*)
+      if command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get install -y python3 2>&1 | tail -3
+      elif command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y python3 2>&1 | tail -3
+      elif command -v pacman >/dev/null 2>&1; then
+        sudo pacman -S --noconfirm python 2>&1 | tail -3
+      else
+        echo "ERR: no supported package manager found. Install Python manually." >&2
+        return 1
+      fi
+      ;;
+  esac
+}
+
+echo "Checking dependencies..."
+
+# python (required for all DragonScale mechanisms)
+if ! command -v python >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then
+  install_python
+  if ! command -v python >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then
+    echo "WARN: python install may require a new shell session to take effect." >&2
+    echo "      Mechanism 3 (tiling) and 4 (boundary-score) will not work until python is on PATH." >&2
+  else
+    echo "OK  python installed: $(command -v python || command -v python3)"
+  fi
+else
+  echo "OK  python: $(command -v python || command -v python3)"
+fi
+
+echo ""
+
 # ── 1. Verify required artifacts that ship with the plugin ───────────────────
-for required in "scripts/allocate-address.sh" "scripts/tiling-check.py" "skills/wiki-fold/SKILL.md"; do
+for required in "scripts/allocate-address.py" "scripts/tiling-check.py" "scripts/_lock.py" "skills/wiki-fold/SKILL.md"; do
   if [ ! -e "$required" ]; then
     echo "ERR: missing $required. Reinstall the claude-obsidian plugin." >&2
     exit 1
   fi
 done
-chmod +x scripts/allocate-address.sh scripts/tiling-check.py
+chmod +x scripts/allocate-address.py scripts/tiling-check.py 2>/dev/null || true
 
 # ── 2. Provision .vault-meta/ ─────────────────────────────────────────────────
 mkdir -p .vault-meta
@@ -99,11 +157,12 @@ fi
 # ── 5. Sanity checks ──────────────────────────────────────────────────────────
 echo ""
 echo "Sanity checks:"
-NEXT=$(./scripts/allocate-address.sh --peek 2>&1 | tail -1)
+PYTHON_CMD=$(command -v python || command -v python3)
+NEXT=$("$PYTHON_CMD" ./scripts/allocate-address.py --peek 2>&1 | tail -1)
 echo "  next address: c-$(printf '%06d' $NEXT)"
 
-PYTHON=$(command -v python3 || echo "not installed")
-echo "  python3:      $PYTHON"
+PYTHON=$(command -v python || command -v python3 || echo "not installed")
+echo "  python:       $PYTHON"
 
 if command -v curl >/dev/null 2>&1; then
   if curl -sS --max-time 2 http://localhost:11434/api/version >/dev/null 2>&1; then

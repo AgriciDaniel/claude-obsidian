@@ -163,7 +163,7 @@ Add one node per domain page. Connect domains that have significant cross-refere
 **Opt-in feature.** Address Validation runs only if the vault is using DragonScale, detected by:
 
 ```bash
-if [ -x ./scripts/allocate-address.sh ] && [ -f ./.vault-meta/address-counter.txt ]; then
+if [ -f ./scripts/allocate-address.py ] && [ -f ./.vault-meta/address-counter.txt ]; then
   DRAGONSCALE_ADDRESSES=1
 else
   DRAGONSCALE_ADDRESSES=0
@@ -197,7 +197,7 @@ Before validating anything, classify the page:
 
 2. **Uniqueness check**: no two pages share the same address value. Report both paths.
 
-3. **Counter consistency**: `./scripts/allocate-address.sh --peek` returns the next counter value. Every observed `c-NNNNNN` must satisfy `NNNNNN < peek_value`. Violation = counter drift.
+3. **Counter consistency**: `./scripts/allocate-address.py --peek` returns the next counter value. Every observed `c-NNNNNN` must satisfy `NNNNNN < peek_value`. Violation = counter drift.
 
 4. **Post-rollout enforcement**: every page classified as "post-rollout (must have address)" that LACKS the `address:` field is a lint **error**, not informational. This prevents the silent-regression path where a new page skips address assignment.
 
@@ -222,7 +222,7 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 ```markdown
 ## Address Validation
 
-- Counter state: `$(./scripts/allocate-address.sh --peek)`
+- Counter state: `$(./scripts/allocate-address.py --peek)`
 - Highest c- address observed: c-XXXXXX
 - Post-rollout pages checked: N (X passing, Y errors)
 - Legacy pages pending backfill: M
@@ -230,8 +230,8 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 ### Errors
 - [[Page Name]]: invalid address format `{value}`. Expected `c-NNNNNN` or `l-NNNNNN`.
 - [[Page A]] and [[Page B]] share address `c-000042`.
-- [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `./scripts/allocate-address.sh` and add to frontmatter.
-- [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `./scripts/allocate-address.sh --rebuild`.
+- [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `./scripts/allocate-address.py` and add to frontmatter.
+- [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `./scripts/allocate-address.py --rebuild`.
 - `.raw/.manifest.json` maps `wiki/foo.md` -> `c-000010` but page frontmatter has `c-000012`. Resolve mismatch.
 
 ### Pending backfill (informational)
@@ -298,7 +298,7 @@ If you place a real concept under `wiki/meta/` it will be excluded by path regar
 - Computes one embedding per included page via the ollama `nomic-embed-text` model by default.
 - Caches embeddings at `.vault-meta/tiling-cache.json`, keyed on `sha256(model + body)` so model drift auto-invalidates. Frontmatter is not part of the hash or the embedding input — pure frontmatter edits (tag changes, status bumps) do not trigger recomputation.
 - Orphans are GC'd: when a cached page path no longer exists on disk, its entry is dropped on save.
-- Concurrent-safe: exclusive flock on `.vault-meta/.tiling.lock` around cache I/O; per-PID temp file for atomic writes.
+- Concurrent-safe: exclusive file lock on `.vault-meta/.tiling.lock` around cache I/O; per-PID temp file for atomic writes.
 
 ### Security posture
 
