@@ -38,9 +38,9 @@ You will be given:
 
 ## DragonScale address assignment (opt-in, single-writer)
 
-If the vault has adopted DragonScale Mechanism 2 (detected by `[ -x ./scripts/allocate-address.sh ] && [ -d ./.vault-meta ]`):
+If the vault has adopted DragonScale Mechanism 2 (detected by `[ -f ./scripts/allocate-address.py ] && [ -d ./.vault-meta ]`):
 
-- **Parallel ingest sub-agents MUST NOT call `scripts/allocate-address.sh` directly.** The allocator is flock-guarded for atomicity, but the `.raw/.manifest.json` `address_map` update pattern assumes single-writer semantics.
+- **Parallel ingest sub-agents MUST NOT call `scripts/allocate-address.py` directly.** The allocator is lock-guarded for atomicity, but the `.raw/.manifest.json` `address_map` update pattern assumes single-writer semantics.
 - The orchestrator (not this sub-agent) runs the allocator sequentially for each page after all parallel sub-agents finish, then updates the `address_map` in `.raw/.manifest.json` and writes addresses into frontmatter.
 - Sub-agents write pages WITHOUT the `address:` field. The orchestrator backfills addresses in a post-pass.
 
@@ -52,7 +52,7 @@ If the vault has NOT adopted DragonScale, ignore this section and create pages w
 - Update `wiki/index.md` or `wiki/log.md` (the orchestrator does this after all agents finish)
 - Update `wiki/hot.md` (the orchestrator does this at the end)
 - Create duplicate pages
-- Call `scripts/allocate-address.sh` from inside a parallel sub-agent (single-writer rule above)
+- Call `scripts/allocate-address.py` from inside a parallel sub-agent (single-writer rule above)
 
 ## Output Format
 

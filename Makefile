@@ -6,7 +6,7 @@
 help:
 	@echo "claude-obsidian developer targets:"
 	@echo "  make test              Run all DragonScale tests"
-	@echo "  make test-address     scripts/allocate-address.sh tests (shell)"
+	@echo "  make test-address     scripts/allocate-address.py tests (python)"
 	@echo "  make test-tiling      scripts/tiling-check.py tests (python, no ollama required)"
 	@echo "  make test-boundary    scripts/boundary-score.py tests (python, no prereqs)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
@@ -17,8 +17,8 @@ test: test-address test-tiling test-boundary
 	@echo "All tests passed."
 
 test-address:
-	@echo "=== test_allocate_address.sh ==="
-	@bash tests/test_allocate_address.sh
+	@echo "=== test_allocate_address.py ==="
+	@python3 tests/test_allocate_address.py
 
 test-tiling:
 	@echo "=== test_tiling_check.py ==="

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """tiling-check.py — DragonScale Mechanism 3: semantic tiling lint.
 
 Computes per-page embeddings via a local ollama instance and reports
@@ -27,7 +27,6 @@ Usage:
 """
 
 import argparse
-import fcntl
 import hashlib
 import json
 import math
@@ -39,6 +38,9 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lock import file_lock
 
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "nomic-embed-text"
@@ -160,22 +162,7 @@ def cosine(a: list[float], b: list[float]) -> float:
     return dot / (na * nb)
 
 
-def _lock_cache():
-    META_DIR.mkdir(exist_ok=True)
-    fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
-    try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
-    except OSError:
-        os.close(fd)
-        raise
-    return fd
-
-
-def _unlock_cache(fd: int) -> None:
-    try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
-    finally:
-        os.close(fd)
+    # Locking is now handled by _lock.file_lock context manager (cross-platform).
 
 
 def load_cache(current_model: str) -> dict:
@@ -268,8 +255,7 @@ def run_check(
 
     thresholds = load_thresholds()
 
-    lock_fd = _lock_cache()
-    try:
+    with file_lock(CACHE_LOCK):
         cache = (load_cache(model) if not rebuild
                  else {"version": 1, "model": model, "embeddings": {}})
 
@@ -343,8 +329,6 @@ def run_check(
             del cache["embeddings"][k]
 
         save_cache(cache)
-    finally:
-        _unlock_cache(lock_fd)
 
     review = thresholds["bands"]["review"]
     error_ = thresholds["bands"]["error"]
