@@ -13,6 +13,8 @@ allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch
 
 # autoresearch: Autonomous Research Loop
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/`, `.raw/`, `.vault-meta/` live) and `$CLAUDE_PLUGIN_ROOT` (where `scripts/` lives). All `wiki/` paths below are relative to `VAULT_ROOT`. All `scripts/` paths are relative to `$CLAUDE_PLUGIN_ROOT`.
+
 You are a research agent. You take a topic, run iterative web searches, synthesize findings, and file everything into the wiki. The user gets wiki pages, not a chat response.
 
 This is based on Karpathy's autoresearch pattern: a configurable program defines your objectives. You run the loop until depth is reached. Output goes into the knowledge base.
@@ -40,7 +42,7 @@ When `/autoresearch` is invoked WITHOUT a topic AND the vault has adopted Dragon
 Feature detection (shell):
 
 ```bash
-if [ -x ./scripts/boundary-score.py ] && [ -d ./.vault-meta ] && command -v python3 >/dev/null 2>&1; then
+if [ -x "$CLAUDE_PLUGIN_ROOT/scripts/boundary-score.py" ] && [ -d "$VAULT_ROOT/.vault-meta" ] && command -v python3 >/dev/null 2>&1; then
   BOUNDARY_MODE=1
 else
   BOUNDARY_MODE=0
@@ -49,7 +51,7 @@ fi
 
 When `BOUNDARY_MODE=1`:
 
-1. Run `./scripts/boundary-score.py --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
+1. Run `python "$CLAUDE_PLUGIN_ROOT/scripts/boundary-score.py" --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
 2. **Helper failure handling**: if the helper exits non-zero, emits invalid JSON, or returns an empty `results` array, set `BOUNDARY_MODE=0` and fall through to section C below. Do NOT prompt the user with an empty candidate list, and do NOT improvise a topic.
 3. Present the candidate list to the user: "Your top frontier pages are: [list]. Research which one? (1-5, or type a topic to override, or say 'cancel' to be asked normally.)"
 4. If the user picks 1-5, use the selected page's title as the topic.

@@ -5,6 +5,8 @@ description: "Rollup of wiki log entries into meta-pages. Reads the last 2^k ent
 
 # wiki-fold: Extractive Log Rollup
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/` lives). All `wiki/` paths below are relative to `VAULT_ROOT`.
+
 Implements a bounded subset of Mechanism 1 from [[DragonScale Memory]]: flat fold over raw `wiki/log.md` entries. Fold-of-folds (hierarchical level-stacking) is **out of scope for this skill**; see "Scope boundary" below.
 
 A fold is **additive**: child log entries and their referenced pages are never modified, moved, or deleted. A fold is **extractive**: every outcome and theme in the output must be traceable to a specific child log entry. No invented facts, no synthesis beyond what the child entries support.

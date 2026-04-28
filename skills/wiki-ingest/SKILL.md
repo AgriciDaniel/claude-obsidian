@@ -5,6 +5,8 @@ description: "Ingest sources into the Obsidian wiki vault. Reads a source, extra
 
 # wiki-ingest: Source Ingestion
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/`, `.raw/`, `.vault-meta/` live) and `$CLAUDE_PLUGIN_ROOT` (where `scripts/` lives). All `wiki/` and `.raw/` paths below are relative to `VAULT_ROOT`. All `scripts/` paths are relative to `$CLAUDE_PLUGIN_ROOT`.
+
 Read the source. Write the wiki. Cross-reference everything. A single source typically touches 8-15 wiki pages.
 
 **Syntax standard**: Write all Obsidian Markdown using proper Obsidian Flavored Markdown. Wikilinks as `[[Note Name]]`, callouts as `> [!type] Title`, embeds as `![[file]]`, properties as YAML frontmatter. If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-markdown skill for Obsidian syntax reference. Otherwise, follow the guidance in this skill.
@@ -191,7 +193,7 @@ Do not silently overwrite old claims. Flag and let the user decide.
 **Feature detection (run at start of every ingest)**:
 
 ```bash
-if [ -x ./scripts/allocate-address.sh ] && [ -d ./.vault-meta ]; then
+if [ -x "$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" ] && [ -d "$VAULT_ROOT/.vault-meta" ]; then
   DRAGONSCALE_ADDRESSES=1
 else
   DRAGONSCALE_ADDRESSES=0
@@ -219,7 +221,7 @@ Rollout baseline: **2026-04-23** (Phase 2 ship date). Pages with `created:` >= t
 Address allocation is delegated to an atomic Bash helper. The helper uses `flock` on `.vault-meta/.address.lock` to prevent read-use-increment races and recovers the counter by scanning existing frontmatter if the counter file is missing.
 
 ```bash
-ADDR=$(./scripts/allocate-address.sh)
+ADDR=$("$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh")
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
@@ -227,13 +229,13 @@ ADDR=$(./scripts/allocate-address.sh)
 
 ### Helper modes
 
-- `./scripts/allocate-address.sh` — atomically reserves and returns the next address.
-- `./scripts/allocate-address.sh --peek` — prints the next value without reserving (safe, read-only).
-- `./scripts/allocate-address.sh --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
+- `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh"` — atomically reserves and returns the next address.
+- `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" --peek` — prints the next value without reserving (safe, read-only).
+- `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
 
 ### Assignment procedure (per new page)
 
-1. Before writing a new non-meta page, call `./scripts/allocate-address.sh` and capture the output.
+1. Before writing a new non-meta page, call `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh"` and capture the output.
 2. Include `address: c-XXXXXX` in the page's frontmatter.
 3. Record the path-to-address mapping in `.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
 

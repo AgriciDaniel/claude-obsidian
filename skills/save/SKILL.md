@@ -12,6 +12,8 @@ allowed-tools: Read Write Edit Glob Grep
 
 # save: File Conversations Into the Wiki
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/` lives). All `wiki/` paths below are relative to `VAULT_ROOT`.
+
 Good answers and insights shouldn't disappear into chat history. This skill takes what was just discussed and files it as a permanent wiki page.
 
 The wiki compounds. Save often.
