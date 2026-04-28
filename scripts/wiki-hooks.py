@@ -111,9 +111,9 @@ def _normalize(path_str: str, base: Optional[Path] = None,
         _t("_normalize: empty path_str, returning None")
         return None
     try:
-        expanded = os.path.expanduser(path_str)
+        expanded = os.path.expandvars(os.path.expanduser(path_str))
         raw = Path(expanded)
-        _t(f"_normalize: input={path_str!r} expanduser={expanded!r} is_absolute={raw.is_absolute()} base={base}")
+        _t(f"_normalize: input={path_str!r} expanded={expanded!r} is_absolute={raw.is_absolute()} base={base}")
         if not raw.is_absolute() and base is not None:
             raw = base / raw
             _t(f"_normalize: joined with base -> {raw}")
@@ -449,7 +449,7 @@ def cmd_stop(_ctx: dict) -> int:
 def cmd_init(args: argparse.Namespace) -> int:
     raw = args.vault
     try:
-        target = Path(os.path.expanduser(raw)).resolve()
+        target = Path(os.path.expandvars(os.path.expanduser(raw))).resolve()
     except (OSError, RuntimeError) as e:
         print(f"wiki-hooks init: invalid path: {e}", file=sys.stderr)
         return 2

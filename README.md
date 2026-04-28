@@ -154,6 +154,19 @@ When you need context not already in this project:
 Do NOT read the wiki for general coding questions or tasks unrelated to [domain].
 ```
 
+Alternatively (or in addition), set `CLAUDE_OBSIDIAN_VAULT` in your project's `.claude/settings.json`. The hooks dispatcher picks this up automatically, no CLAUDE.md edit needed:
+
+```jsonc
+// .claude/settings.json
+{
+  "env": {
+    "CLAUDE_OBSIDIAN_VAULT": "~/path/to/vault"
+  }
+}
+```
+
+Both `~` and `$HOME` are expanded. An absolute path works too.
+
 Your executive assistant, coding projects, and content workflows all draw from the same knowledge base.
 
 ---
