@@ -6,33 +6,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/wiki-hooks.py\" session-start"
           },
           {
-            "type": "prompt",
-            "prompt": "If a vault is configured for this session (check CLAUDE.md for VAULT_PATH or a wiki/ folder in the current directory), silently read wiki/hot.md to restore recent context. If wiki/hot.md does not exist, do nothing. This is a non-vault session. Do not announce this. Do not report what you read. Just have the context available."
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/scripts/debug-env.sh\""
           }
         ]
       }
     ],
+
     "PostCompact": [
       {
         "matcher": "",
         "hooks": [
           {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/wiki-hooks.py\" post-compact"
+          },
+          {
             "type": "prompt",
             "prompt": "Hook-injected context does not survive context compaction. If wiki/hot.md exists in the current directory, silently re-read it now to restore the hot cache. Do not announce this."
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -d .git ] && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
           }
         ]
       }
@@ -43,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$PWD\" && [ -d wiki ] && [ -d .git ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && echo 'WIKI_CHANGED: Wiki pages were modified this session. Please update wiki/hot.md with a brief summary of what changed (under 500 words). Use the hot cache format: Last Updated, Key Recent Facts, Recent Changes, Active Threads. Keep it factual. Overwrite the file completely. It is a cache, not a journal.' || true"
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/wiki-hooks.py\" stop"
           }
         ]
       }

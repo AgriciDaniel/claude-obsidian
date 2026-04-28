@@ -6,6 +6,8 @@ allowed-tools: Read Glob Grep
 
 # wiki-query: Query the Wiki
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/`, `.raw/` live). All `wiki/` paths below are relative to `VAULT_ROOT`.
+
 The wiki has already done the synthesis work. Read strategically, answer precisely, and file good answers back so the knowledge compounds.
 
 ---

@@ -9,6 +9,8 @@ description: >
 
 # wiki-lint: Wiki Health Check
 
+> **Vault resolution**: The vault and plugin are separate directories. Before using any paths, read `skills/wiki/references/vault-resolution.md` to resolve `VAULT_ROOT` (where `wiki/`, `.raw/`, `.vault-meta/` live) and `$CLAUDE_PLUGIN_ROOT` (where `scripts/` lives). All `wiki/` and `.vault-meta/` paths below are relative to `VAULT_ROOT`. All `scripts/` paths are relative to `$CLAUDE_PLUGIN_ROOT`.
+
 Run lint after every 10-15 ingests, or weekly. Ask before auto-fixing anything. Output a lint report to `wiki/meta/lint-report-YYYY-MM-DD.md`.
 
 ---
@@ -163,7 +165,7 @@ Add one node per domain page. Connect domains that have significant cross-refere
 **Opt-in feature.** Address Validation runs only if the vault is using DragonScale, detected by:
 
 ```bash
-if [ -x ./scripts/allocate-address.sh ] && [ -f ./.vault-meta/address-counter.txt ]; then
+if [ -x "$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" ] && [ -f "$VAULT_ROOT/.vault-meta/address-counter.txt" ]; then
   DRAGONSCALE_ADDRESSES=1
 else
   DRAGONSCALE_ADDRESSES=0
@@ -197,7 +199,7 @@ Before validating anything, classify the page:
 
 2. **Uniqueness check**: no two pages share the same address value. Report both paths.
 
-3. **Counter consistency**: `./scripts/allocate-address.sh --peek` returns the next counter value. Every observed `c-NNNNNN` must satisfy `NNNNNN < peek_value`. Violation = counter drift.
+3. **Counter consistency**: `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" --peek` returns the next counter value. Every observed `c-NNNNNN` must satisfy `NNNNNN < peek_value`. Violation = counter drift.
 
 4. **Post-rollout enforcement**: every page classified as "post-rollout (must have address)" that LACKS the `address:` field is a lint **error**, not informational. This prevents the silent-regression path where a new page skips address assignment.
 
@@ -222,7 +224,7 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 ```markdown
 ## Address Validation
 
-- Counter state: `$(./scripts/allocate-address.sh --peek)`
+- Counter state: `$("$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" --peek)`
 - Highest c- address observed: c-XXXXXX
 - Post-rollout pages checked: N (X passing, Y errors)
 - Legacy pages pending backfill: M
@@ -230,8 +232,8 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 ### Errors
 - [[Page Name]]: invalid address format `{value}`. Expected `c-NNNNNN` or `l-NNNNNN`.
 - [[Page A]] and [[Page B]] share address `c-000042`.
-- [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `./scripts/allocate-address.sh` and add to frontmatter.
-- [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `./scripts/allocate-address.sh --rebuild`.
+- [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh"` and add to frontmatter.
+- [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `"$CLAUDE_PLUGIN_ROOT/scripts/allocate-address.sh" --rebuild`.
 - `.raw/.manifest.json` maps `wiki/foo.md` -> `c-000010` but page frontmatter has `c-000012`. Resolve mismatch.
 
 ### Pending backfill (informational)
@@ -247,8 +249,8 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 ### Detection and delegation
 
 ```bash
-if [ -x ./scripts/tiling-check.py ] && command -v python3 >/dev/null 2>&1; then
-  ./scripts/tiling-check.py --peek > /tmp/tiling-peek.json 2>/dev/null
+if [ -x "$CLAUDE_PLUGIN_ROOT/scripts/tiling-check.py" ] && command -v python3 >/dev/null 2>&1; then
+  python "$CLAUDE_PLUGIN_ROOT/scripts/tiling-check.py" --peek > /tmp/tiling-peek.json 2>/dev/null
   PEEK_EXIT=$?
   case $PEEK_EXIT in
     0)  TILING_READY=1 ;;                                  # ready
@@ -270,7 +272,7 @@ Inspect `/tmp/tiling-peek.json` (structured diagnostics: script path, python int
 When `TILING_READY=1`:
 
 ```bash
-./scripts/tiling-check.py --report wiki/meta/tiling-report-YYYY-MM-DD.md
+python "$CLAUDE_PLUGIN_ROOT/scripts/tiling-check.py" --report "$VAULT_ROOT/wiki/meta/tiling-report-YYYY-MM-DD.md"
 REPORT_EXIT=$?
 case $REPORT_EXIT in
   0)  echo "tiling report written" ;;
