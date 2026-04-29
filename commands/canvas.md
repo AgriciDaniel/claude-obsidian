@@ -1,21 +1,21 @@
 ---
-description: Open, create, or update a visual canvas — add images, text, PDFs, wiki pages, and banana-generated assets to Obsidian canvas files.
+description: ビジュアルキャンバスを開く・作成・更新 — 画像、テキスト、PDF、wiki ページ、banana 生成アセットを Obsidian キャンバスファイルに追加。応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。
 ---
 
-Read the `canvas` skill. Then run the operation matching the user's command.
+`canvas` スキルを読む。次にユーザーのコマンドにマッチする操作を実行。
 
-| Command | What it does |
+| コマンド | 動作 |
 |---------|-------------|
-| `/canvas` | Status check — report node counts, list zones, open instructions |
-| `/canvas new [name]` | Create a new named canvas in wiki/canvases/ |
-| `/canvas add image [path]` | Add image to canvas (download if URL, copy if outside vault) |
-| `/canvas add text [content]` | Add a text card to the canvas |
-| `/canvas add pdf [path]` | Add a PDF document node |
-| `/canvas add note [page]` | Add a wiki page as a linked card |
-| `/canvas zone [name] [color]` | Add a new labeled zone group |
-| `/canvas list` | List all canvases with node counts |
-| `/canvas from banana` | Find recent generated images and add them |
+| `/canvas` | ステータス確認 — ノード数を報告、ゾーン一覧、操作説明 |
+| `/canvas new [name]` | wiki/canvases/ に新しい名前付きキャンバスを作成 |
+| `/canvas add image [path]` | キャンバスに画像追加(URL ならダウンロード、Vault 外ならコピー) |
+| `/canvas add text [content]` | キャンバスにテキストカードを追加 |
+| `/canvas add pdf [path]` | PDF 文書ノードを追加 |
+| `/canvas add note [page]` | wiki ページをリンクカードとして追加 |
+| `/canvas zone [name] [color]` | 新しいラベル付きゾーングループを追加 |
+| `/canvas list` | 全キャンバスをノード数とともに一覧 |
+| `/canvas from banana` | 直近の生成画像を見つけて追加 |
 
-Default canvas: `wiki/canvases/main.canvas`
+デフォルトキャンバス: `wiki/canvases/main.canvas`
 
-If the canvas file does not exist, create it before adding anything.
+キャンバスファイルが存在しない場合、何かを追加する前に作成。

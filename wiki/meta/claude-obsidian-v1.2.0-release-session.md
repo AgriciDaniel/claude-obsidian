@@ -1,8 +1,11 @@
 ---
 type: session
-title: "claude-obsidian v1.2.0 Release Session"
+title: "claude-obsidian v1.2.0 リリースセッション"
 created: 2026-04-07
 updated: 2026-04-07
+aliases:
+  - claude-obsidian-v1.2.0-release-session
+  - "claude-obsidian v1.2.0 リリースセッション"
 tags:
   - session
   - release
@@ -16,101 +19,101 @@ related:
   - "[[LLM Wiki Pattern]]"
 ---
 
-# claude-obsidian v1.2.0 Release Session
+# claude-obsidian v1.2.0 リリースセッション
 
-Full build, audit, polish, and community release of the claude-obsidian plugin + vault kit. Previously named `cosmic-brain`.
-
----
-
-## What Was Built
-
-### Phase 1 — Critical Fixes
-- `marketplace.json`: version corrected `1.0.0→1.2.0`, owner metadata updated
-- `main.canvas`: removed 5 broken file node references (gitignored files that don't exist for community users)
-- `community-plugins.json`: deduplicated from 6→4 canonical entries: `[excalidraw, banners, calendar, thino]`
-
-### Phase 2 — Vault Onboarding
-- `wiki/getting-started.md`: new onboarding page inside the vault (3-step quick start, hot cache explanation, command reference, navigation links)
-- `wiki/index.md`: Entities, Questions, Comparisons sections populated with existing seed pages
-- `wiki/meta/dashboard.md`: Dataview queries fixed — was querying `answer_quality` and `confidence` fields that don't exist in seed pages; replaced with `status` and `updated`
-- `CLAUDE.md`: placeholder text replaced with actual vault description
-- `wiki/canvases/welcome.canvas`: CTA node added pointing to getting-started and `/wiki`
-
-### Phase 3 — README + Docs
-- README: complete pre-installed plugins table, CSS snippets section, Banner usage section, file structure updated
-- `bin/setup-vault.sh`: success message now lists all 4 pre-installed plugins and 3 CSS snippets
-
-### Phase 4 — PDF Install Guide
-- `docs/install-guide.md`: full printable install guide (prerequisites, 3 install options, first steps, command reference, plugin guide, MCP setup, troubleshooting)
-- `docs/install-guide.pdf`: 159KB, generated via `npx md-to-pdf`
-
-### Phase 5 — Version Bump
-- `plugin.json` and `marketplace.json` bumped to `1.2.0`
+claude-obsidianプラグイン+vaultキットの完全なビルド、監査、磨き上げ、コミュニティリリース。以前は`cosmic-brain`という名称だった。
 
 ---
 
-## Rename: cosmic-brain → claude-obsidian
+## 構築内容
 
-Full project rename executed:
-- GitHub repos renamed: `AgriciDaniel/cosmic-brain` → `AgriciDaniel/claude-obsidian` (public), `avalonreset-pro/cosmic-brain` → `avalonreset-pro/claude-obsidian` (private)
-- Local directory: `~/cosmic-brain/` → `~/claude-obsidian/`
-- All text references updated across 14 files via sed
-- `wiki/meta/cosmic-brain-cover.gif` renamed to `wiki/meta/claude-obsidian-cover.gif`
+### フェーズ1:重要修正
+- `marketplace.json`:バージョンを`1.0.0→1.2.0`に修正、オーナーメタデータを更新
+- `main.canvas`:壊れたファイルノード参照5件を削除(コミュニティユーザーには存在しないgitignore対象ファイル)
+- `community-plugins.json`:6→4の正規エントリへ重複排除:`[excalidraw, banners, calendar, thino]`
+
+### フェーズ2:Vaultオンボーディング
+- `wiki/getting-started.md`:vault内に新たなオンボーディングページを作成(3ステップのクイックスタート、ホットキャッシュの説明、コマンドリファレンス、ナビゲーションリンク)
+- `wiki/index.md`:Entities、Questions、Comparisonsの各セクションに既存のシードページを記載
+- `wiki/meta/dashboard.md`:Dataviewクエリを修正:シードページに存在しない`answer_quality`と`confidence`フィールドをクエリしていた。`status`と`updated`に置換
+- `CLAUDE.md`:プレースホルダーを実際のvault説明に置換
+- `wiki/canvases/welcome.canvas`:getting-startedと`/wiki`を指すCTAノードを追加
+
+### フェーズ3:README + ドキュメント
+- README:プリインストールプラグイン表を完全化、CSSスニペットセクション、Bannerの利用方法セクション、ファイル構成を更新
+- `bin/setup-vault.sh`:成功メッセージで4つのプリインストールプラグインと3つのCSSスニペットすべてを列挙
+
+### フェーズ4:PDFインストールガイド
+- `docs/install-guide.md`:印刷可能な完全インストールガイド(前提条件、3つのインストールオプション、初回セットアップ、コマンドリファレンス、プラグインガイド、MCPセットアップ、トラブルシューティング)
+- `docs/install-guide.pdf`:159KB、`npx md-to-pdf`で生成
+
+### フェーズ5:バージョンバンプ
+- `plugin.json`と`marketplace.json`を`1.2.0`にバンプ
 
 ---
 
-## Legal & Security
+## リネーム: cosmic-brain → claude-obsidian
 
-### Security Audit
-- No API keys, tokens, or secrets found in any tracked file
-- No private keys or certificates
-- All credential references in docs are placeholder values
-- Excalidraw `main.js` correctly NOT tracked despite audit agent claiming otherwise
-
-### Legal Fixes
-- `LICENSE`: MIT license file created (was declared in plugin.json but file was missing)
-- `ITS-Dataview-Cards.css` + `ITS-Image-Adjustments.css`: GPL-2.0 attribution headers added
-
-### .gitignore Tightened
-Added rules to prevent future accidental commits of: video files (`*.mkv`, `*.mp4`), transcripts, scratch canvases (`Untitled *.canvas`, `*Images.canvas`), and personal images in vault root.
+プロジェクト全体のリネームを実行:
+- GitHubリポジトリのリネーム:`AgriciDaniel/cosmic-brain` → `AgriciDaniel/claude-obsidian`(公開)、`avalonreset-pro/cosmic-brain` → `avalonreset-pro/claude-obsidian`(非公開)
+- ローカルディレクトリ:`~/cosmic-brain/` → `~/claude-obsidian/`
+- 14ファイルにわたるテキスト参照をすべてsedで更新
+- `wiki/meta/cosmic-brain-cover.gif`を`wiki/meta/claude-obsidian-cover.gif`にリネーム
 
 ---
 
-## Visual / README
+## 法務とセキュリティ
 
-### GIFs and Images
-- New Claude Obsidian branded assets added (16x9 cover GIF, 1x1 GIF, static PNGs)
-- Compressed: `gif-cover-16x9.gif` 2.6MB→1.3MB (50%), `gif-1x1.gif` 2.6MB→848KB (68%) — via FFmpeg palette optimization, scaled to 960px/640px, 15fps, 128-color palette
-- Example screenshots added: `image-example-graph-view.png`, `image-example-wiki-map-view.png`
+### セキュリティ監査
+- 追跡ファイルにAPIキー、トークン、シークレットは見つからず
+- 秘密鍵や証明書も無し
+- ドキュメント内の資格情報参照はすべてプレースホルダー値
+- Excalidrawの`main.js`は監査エージェントの主張に反し、正しく追跡対象外となっていた
 
-### README Structure (top to bottom)
-1. `claude-obsidian-gif-cover-16x9.gif` — header
-2. Description text
-3. `welcome-canvas.gif` — What It Does demo (full width)
-4. Descriptive paragraphs
-5. `image-example-graph-view.png` + `image-example-wiki-map-view.png` — side by side screenshots
+### 法務修正
+- `LICENSE`:MITライセンスファイルを作成(plugin.jsonでは宣言されていたがファイルが欠落していた)
+- `ITS-Dataview-Cards.css` + `ITS-Image-Adjustments.css`:GPL-2.0表記ヘッダーを追加
+
+### .gitignoreの厳格化
+動画ファイル(`*.mkv`、`*.mp4`)、トランスクリプト、スクラッチキャンバス(`Untitled *.canvas`、`*Images.canvas`)、vaultルート内の個人画像が誤って今後コミットされるのを防ぐルールを追加。
+
+---
+
+## ビジュアル/README
+
+### GIFと画像
+- 新しいClaude Obsidianブランド資産を追加(16x9カバーGIF、1x1 GIF、静的PNG)
+- 圧縮:`gif-cover-16x9.gif` 2.6MB→1.3MB(50%)、`gif-1x1.gif` 2.6MB→848KB(68%):FFmpegパレット最適化、960px/640pxにスケール、15fps、128色パレットによる
+- サンプルスクリーンショットを追加:`image-example-graph-view.png`、`image-example-wiki-map-view.png`
+
+### README構成(上から下)
+1. `claude-obsidian-gif-cover-16x9.gif`:ヘッダー
+2. 説明文
+3. `welcome-canvas.gif`:What It Doesのデモ(全幅)
+4. 説明的な段落
+5. `image-example-graph-view.png` + `image-example-wiki-map-view.png`:横並びのスクリーンショット
 6. Quick Start → Commands → Cross-Project → Six Modes → What Gets Created → MCP → Plugins → CSS Snippets → Banner → File Structure → AutoResearch → Seed Vault
-7. `wiki-graph-grow.gif` + `workflow-loop.gif` — bottom of Seed Vault section
+7. `wiki-graph-grow.gif` + `workflow-loop.gif`:Seed Vaultセクション末尾
 
 ---
 
-## Repository State
+## リポジトリ状態
 
-| Repo | Visibility | URL |
+| リポジトリ | 公開範囲 | URL |
 |------|-----------|-----|
-| AgriciDaniel/claude-obsidian | Public | https://github.com/AgriciDaniel/claude-obsidian |
-| avalonreset-pro/claude-obsidian | Private | https://github.com/avalonreset-pro/claude-obsidian |
+| AgriciDaniel/claude-obsidian | 公開 | https://github.com/AgriciDaniel/claude-obsidian |
+| avalonreset-pro/claude-obsidian | 非公開 | https://github.com/avalonreset-pro/claude-obsidian |
 
-Community install command: `claude plugin install github:AgriciDaniel/claude-obsidian`
+コミュニティ向けインストールコマンド: `claude plugin install github:AgriciDaniel/claude-obsidian`
 
-Future updates: `git push origin main && git push community main`
+今後の更新: `git push origin main && git push community main`
 
 ---
 
-## Key Decisions
+## 主要な意思決定
 
-- **Rename to claude-obsidian**: clearer branding, immediately communicates the Claude + Obsidian pairing
-- **avalonreset-pro repo is private**: community members only, not public
-- **Excalidraw main.js excluded from git**: 8MB downloaded by `setup-vault.sh` at setup time
-- **Bundled plugin redistribution**: acceptable — all 4 plugins are publicly distributed through Obsidian's community plugin system
-- **GIF compression strategy**: palette reduction (256→128 colors) + resolution scaling gives 50-68% savings with no visible quality loss at GitHub's rendering width
+- **claude-obsidianへのリネーム**:より明確なブランディング、Claude+Obsidianのペアリングを直ちに伝える
+- **avalonreset-proリポジトリは非公開**:コミュニティメンバー専用、公開しない
+- **Excalidrawのmain.jsはgit管理外**:`setup-vault.sh`がセットアップ時に8MBをダウンロード
+- **同梱プラグインの再配布**:許容できる:4つのプラグインすべてがObsidianコミュニティプラグインシステム経由で公開配布されている
+- **GIF圧縮戦略**:パレット縮小(256→128色)+解像度スケーリングで、GitHubのレンダリング幅では視覚的劣化なしに50〜68%節約

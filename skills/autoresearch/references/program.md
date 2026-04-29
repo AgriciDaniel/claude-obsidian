@@ -1,75 +1,77 @@
-# Research Program
+# リサーチプログラム
 
-This file configures the autoresearch loop. Edit it to match your domain and research style. The autoresearch skill reads it before every run.
+このファイルは autoresearch ループを設定する。ドメインとリサーチスタイルに合わせて編集する。autoresearch スキルは毎回の実行前に読む。
 
----
-
-## Search Objectives
-
-Default objectives for every research session:
-
-- Find authoritative sources (prefer: .edu, peer-reviewed papers, official documentation, primary sources, established publications)
-- Extract key entities (people, organizations, products, tools)
-- Extract key concepts and frameworks
-- Note contradictions between sources
-- Identify open questions and research gaps
-- Prefer sources from the last 2 years unless the topic is foundational
+> **言語ルール**: ファイリングされるすべてのページ・要約・引用は日本語で書く(プロジェクト CLAUDE.md の言語ポリシー参照)。Web ソースは元言語のまま参照可だが、抽出して wiki に書くときは日本語化する。
 
 ---
 
-## Confidence Scoring
+## 検索目的
 
-Label every claim with confidence when filing:
+各リサーチセッションのデフォルト目的:
 
-- **high**: multiple independent authoritative sources agree
-- **medium**: single good source, or sources partially agree
-- **low**: speculation, opinion pieces, single informal source, or claim not verified
-
-Always note the source date for factual claims. Mark claims from sources older than 3 years as potentially stale.
-
----
-
-## Loop Constraints
-
-- Max search rounds per topic: **3**
-- Max wiki pages created per session: **15**
-- Max sources fetched per round: **5**
-- If max pages is reached before the loop completes: file what you have, note what was skipped in Open Questions
+- 権威あるソースを見つける(優先: .edu、査読済み論文、公式ドキュメント、一次資料、定評ある出版物)
+- 主要エンティティを抽出(人物、組織、製品、ツール)
+- 主要概念とフレームワークを抽出
+- ソース間の矛盾を記録
+- 未解決の問いとリサーチギャップを特定
+- トピックが基礎的でない限り、過去 2 年以内のソースを優先
 
 ---
 
-## Output Style
+## 信頼度スコアリング
 
-- Declarative, present tense
-- Cite every non-obvious claim: `(Source: [[Page]])`
-- Short pages: under 200 lines. Split if longer.
-- No hedging language ("it seems", "perhaps", "might be")
-- Flag uncertainty explicitly: `> [!gap] This claim needs verification.`
+ファイリング時に各主張に信頼度ラベル:
 
----
+- **high**: 複数の独立した権威あるソースが一致
+- **medium**: 単一の良ソース、または部分的に一致するソース
+- **low**: 推測、意見、単一の非公式ソース、未検証の主張
 
-## Domain Notes
-
-[Add domain-specific instructions here. Examples:]
-
-For AI/tech research:
-- Prefer: arXiv, official GitHub repos, official product documentation, Hacker News discussions with high karma
-- Note: LLM benchmarks are often gamed: treat leaderboard claims as low confidence unless independently verified
-
-For business/market research:
-- Prefer: company filings, Crunchbase, Bloomberg, verified industry reports
-- Flag: press releases as low confidence without independent verification
-
-For medical/health research:
-- Prefer: PubMed, Cochrane reviews, peer-reviewed clinical trials
-- Always note: sample size, study type (RCT vs observational), and recency
+事実主張には常にソース日付を記録。3 年以上古いソースからの主張は古い可能性ありとマーク。
 
 ---
 
-## Exclusions
+## ループ制約
 
-Do not cite as high-confidence sources:
-- Reddit posts or forums (use as pointers to primary sources only)
-- Social media posts
-- Undated web pages
-- Sources that don't cite their own claims
+- トピックあたり最大検索ラウンド数: **3**
+- セッションあたり最大作成 wiki ページ数: **15**
+- ラウンドあたり最大取得ソース数: **5**
+- ループ完了前に最大ページに達したら: 持っているものをファイリングし、スキップしたものを「未解決の問い」に記録
+
+---
+
+## 出力スタイル
+
+- 平叙、現在形、日本語
+- 自明でない主張はすべて引用: `(出典: [[Page]])`
+- 短いページ: 200 行以下。長くなれば分割。
+- ぼやかす言葉(「〜のようだ」「もしかすると」「〜かもしれない」)は使わない
+- 不確実性を明示的にフラグ: `> [!gap] この主張は検証が必要。`
+
+---
+
+## ドメインノート
+
+[ドメイン固有の指示はここに追加。例:]
+
+AI / 技術リサーチ向け:
+- 優先: arXiv、公式 GitHub リポジトリ、公式製品ドキュメント、Hacker News の高 karma ディスカッション
+- 注意: LLM ベンチマークはしばしばゲームされる: リーダーボードの主張は独立検証が無い限り低信頼度として扱う
+
+ビジネス / 市場リサーチ向け:
+- 優先: 企業提出書類、Crunchbase、Bloomberg、検証済み業界レポート
+- フラグ: プレスリリースは独立検証なしでは低信頼度
+
+医療 / 健康リサーチ向け:
+- 優先: PubMed、Cochrane レビュー、査読済み臨床試験
+- 必ず記録: サンプルサイズ、研究タイプ(RCT vs 観察)、新しさ
+
+---
+
+## 除外
+
+high-confidence ソースとして引用しない:
+- Reddit 投稿やフォーラム(一次出典へのポインタとしてのみ使用)
+- ソーシャルメディア投稿
+- 日付の無い Web ページ
+- 自身の主張を引用しないソース

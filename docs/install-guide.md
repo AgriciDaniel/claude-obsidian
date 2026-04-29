@@ -1,35 +1,37 @@
-# claude-obsidian — Install Guide
+# claude-obsidian — インストールガイド(日本語ローカライズ版)
 
-**Claude + Obsidian Knowledge Companion**
-Version 1.6.0 · [github.com/AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
+**Claude + Obsidian ナレッジコンパニオン**
+バージョン 1.6.0 · [github.com/AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
 
-> **Optional: DragonScale Memory extension.** If you want flat extractive log folds, deterministic page addresses, semantic tiling lint, and boundary-first autoresearch topic selection, run `bash bin/setup-dragonscale.sh` after the base install. Extra prerequisites beyond the base: `flock` (standard on Linux; available via `util-linux` on macOS) and `python3` (for the tiling and boundary helpers). Optional: `ollama` with `nomic-embed-text` pulled if you want the semantic tiling lint (Mechanism 3 only; it no-ops gracefully when ollama or the model is unavailable). The boundary-first scorer (Mechanism 4) needs only `python3`, no ollama. See [`docs/dragonscale-guide.md`](./dragonscale-guide.md) for the user-facing guide, `wiki/concepts/DragonScale Memory.md` for the full spec, and `CHANGELOG.md` for what shipped in 1.6.0.
+> 🇯🇵 **このフォークは日本語ローカライズ版です。** チャット応答・ウィキ書き込み・ログ・要約はすべて日本語で行われます。ファイル名・スキル名・コードは英語のままで上流プラグインと完全互換です。詳細は `CLAUDE.md` の言語ポリシー参照。
 
----
-
-## What is claude-obsidian?
-
-claude-obsidian is a Claude Code plugin + Obsidian vault that builds and maintains a persistent, compounding knowledge base. Every source you add gets processed into cross-referenced wiki pages. Every question you ask pulls from everything that has been read. Knowledge compounds like interest.
-
-Built on Andrej Karpathy's LLM Wiki pattern.
+> **任意: DragonScale Memory 拡張。** フラットな抽出的 log fold、決定論的ページアドレス、セマンティックタイリング lint、境界優先 autoresearch トピック選択が欲しい場合、ベースインストール後に `bash bin/setup-dragonscale.sh` を実行。ベースに加えて追加前提: `flock`(Linux 標準、macOS では `util-linux` 経由)と `python3`(タイリング・境界ヘルパー用)。任意: `ollama` と `nomic-embed-text` の pull(セマンティックタイリング lint(Mechanism 3 のみ)が必要なら。ollama またはモデルが利用不可なら正常に no-op)。境界優先スコアラ(Mechanism 4)は `python3` のみ必要、ollama 不要。詳細は [`docs/dragonscale-guide.md`](./dragonscale-guide.md)、フル仕様は `wiki/concepts/DragonScale Memory.md`、1.6.0 の変更内容は `CHANGELOG.md` 参照。
 
 ---
 
-## Prerequisites
+## claude-obsidian とは?
 
-| Tool | How to get it | Notes |
+claude-obsidian は Claude Code プラグイン + Obsidian Vault で、永続的に成長するナレッジベースを構築・維持します。投入したソースは相互参照付きの wiki ページに処理されます。投げた質問はそれまで読んだすべてから回答を引き出します。知識は複利のように積み上がります。
+
+Andrej Karpathy の LLM Wiki パターンに基づきます。
+
+---
+
+## 前提
+
+| ツール | 取得方法 | 備考 |
 |------|--------------|-------|
-| **Claude Code** | `npm install -g @anthropic-ai/claude-code` | Free tier available |
-| **Obsidian** | [obsidian.md](https://obsidian.md) | Free |
-| **Git** | Pre-installed on most systems | For Option 1 |
+| **Claude Code** | `npm install -g @anthropic-ai/claude-code` | 無料プランあり |
+| **Obsidian** | [obsidian.md](https://obsidian.md) | 無料 |
+| **Git** | ほとんどのシステムにプリインストール | オプション 1 用 |
 
 ---
 
-## Installation
+## インストール
 
-### Option 1 — Clone as vault (recommended)
+### オプション 1 — Vault としてクローン(推奨)
 
-Full setup in under 2 minutes.
+完全セットアップが 2 分以内。
 
 ```bash
 git clone https://github.com/AgriciDaniel/claude-obsidian
@@ -37,150 +39,150 @@ cd claude-obsidian
 bash bin/setup-vault.sh
 ```
 
-Then in Obsidian: **Manage Vaults → Open folder as vault → select `claude-obsidian/`**
+その後 Obsidian で: **Vault を管理 → フォルダを Vault として開く → `claude-obsidian/` を選択**
 
-Open Claude Code in the same folder and type `/wiki`.
+同じフォルダで Claude Code を開き `/wiki` を入力。
 
-### Option 2: Install as Claude Code plugin
+### オプション 2: Claude Code プラグインとしてインストール
 
-Plugin installation in Claude Code is a two-step process. First add the marketplace catalog, then install the plugin from it.
+Claude Code でのプラグインインストールは 2 ステップ。まずマーケットプレイスを追加し、次にそこからプラグインをインストール。
 
 ```bash
-# Step 1: add the marketplace
+# ステップ 1: マーケットプレイスを追加
 claude plugin marketplace add AgriciDaniel/claude-obsidian
 
-# Step 2: install the plugin
+# ステップ 2: プラグインをインストール
 claude plugin install claude-obsidian@claude-obsidian-marketplace
 ```
 
-Verify the install:
+インストール確認:
 ```bash
 claude plugin list
 ```
 
-In any Claude Code session: type `/wiki` and Claude walks you through vault setup.
+任意の Claude Code セッションで `/wiki` を入力すれば Claude が Vault セットアップを案内。
 
-### Option 3 — Add to an existing vault
+### オプション 3 — 既存の Vault に追加
 
-Copy `WIKI.md` from this repo into your vault root. Then paste into Claude:
+このリポジトリの `WIKI.md` を Vault のルートにコピー。次に Claude に貼り付け:
 
 ```
-Read WIKI.md in this project. Then:
-1. Check if Obsidian is installed. If not, install it.
-2. Check if the Local REST API plugin is running on port 27124.
-3. Configure the MCP server.
-4. Ask me ONE question: "What is this vault for?"
-Then scaffold the full wiki structure.
+このプロジェクトの WIKI.md を読んで。次に:
+1. Obsidian がインストール済みか確認、未インストールなら入れる。
+2. Local REST API プラグインがポート 27124 で動いているか確認。
+3. MCP サーバを構成。
+4. ひとつだけ質問: 「この Vault は何のため?」
+そしてウィキ構造を足場として作る。
 ```
 
 ---
 
-## First Steps
+## 最初のステップ
 
-### 1. Scaffold the vault
+### 1. Vault の足場
 
-Type `/wiki` in Claude Code. Claude will:
-- Detect your vault mode (website, GitHub, business, personal, research, or book/course)
-- Create the folder structure and core wiki pages
-- Set up `wiki/index.md`, `wiki/hot.md`, `wiki/log.md`, and `wiki/overview.md`
+Claude Code で `/wiki` を入力。Claude は:
+- Vault モードを検出(website、GitHub、business、personal、research、または book/course)
+- フォルダ構造とコア wiki ページを作成
+- `wiki/index.md`、`wiki/hot.md`、`wiki/log.md`、`wiki/overview.md` をセットアップ
 
-### 2. Drop your first source
+### 2. 最初のソースを投入
 
-Put any document into `.raw/`:
-- PDFs, markdown files, transcripts, articles, URLs
+任意の文書を `.raw/` に配置:
+- PDF、Markdown ファイル、トランスクリプト、記事、URL
 
-Tell Claude: `ingest [filename]`
+Claude に伝える: `[ファイル名] を取り込んで`(英語の `ingest [filename]` も同等)
 
-Claude reads the source and creates 8–15 cross-referenced wiki pages.
+Claude はソースを読み 8〜15 の相互参照付き wiki ページを日本語で作成。
 
-### 3. Ask questions
+### 3. 質問する
 
 ```
-what do you know about [topic]?
+[トピック] について何を知ってる?
 ```
 
-Claude reads the hot cache, scans the index, drills into relevant pages, and gives a synthesized answer — citing specific wiki pages, not training data.
+Claude はホットキャッシュを読み、index をスキャンし、関連ページに踏み込み、合成回答を返す — 学習データではなく特定の wiki ページを引用して。
 
 ---
 
-## Commands Reference
+## コマンドリファレンス
 
-| Command | What Claude does |
+| コマンド | Claude の動作 |
 |---------|-----------------|
-| `/wiki` | Setup check, scaffold, or continue where you left off |
-| `ingest [file]` | Read source, create 8–15 wiki pages, update index and log |
-| `ingest all of these` | Batch process multiple sources, then cross-reference |
-| `what do you know about X?` | Read index → relevant pages → synthesize answer |
-| `/save` | File the current conversation as a wiki note |
-| `/save [name]` | Save with a specific title |
-| `/autoresearch [topic]` | Autonomous research loop: search, fetch, synthesize, file |
-| `/canvas` | Open or create a visual canvas |
-| `/canvas add image [path]` | Add an image to the canvas |
-| `/canvas add text [content]` | Add a markdown text card |
-| `/canvas add pdf [path]` | Add a PDF document |
-| `/canvas add note [page]` | Pin a wiki page as a linked card |
-| `lint the wiki` | Health check: orphans, dead links, gaps |
-| `update hot cache` | Refresh `hot.md` with latest context summary |
+| `/wiki` | セットアップ確認、足場、または続きから再開 |
+| `[ファイル] を取り込んで` / `ingest [file]` | ソースを読み、8〜15 ページ作成、index と log 更新 |
+| `これら全部を取り込んで` | 複数ソースをバッチ処理し、相互参照 |
+| `X について何を知ってる?` | index → 関連ページ → 回答合成 |
+| `/save` | 現在の会話を wiki ノートとして保存 |
+| `/save [name]` | 特定タイトルで保存 |
+| `/autoresearch [topic]` | 自律リサーチループ: 検索・取得・合成・保存 |
+| `/canvas` | ビジュアルキャンバスを開く・作成 |
+| `/canvas add image [path]` | キャンバスに画像追加 |
+| `/canvas add text [content]` | Markdown テキストカード追加 |
+| `/canvas add pdf [path]` | PDF 文書追加 |
+| `/canvas add note [page]` | wiki ページをリンクカードとしてピン |
+| `wiki を lint して` | 健全性チェック: 孤立、デッドリンク、ギャップ |
+| `ホットキャッシュを更新` | 最新コンテキスト要約で `hot.md` をリフレッシュ |
 
 ---
 
-## Plugins (pre-installed)
+## プラグイン(プリインストール)
 
-Enable in **Settings → Community Plugins**:
+**設定 → コミュニティプラグイン** で有効化:
 
-| Plugin | Purpose |
+| プラグイン | 用途 |
 |--------|---------|
-| **Calendar** | Right-sidebar calendar with word count and task dots |
-| **Thino** | Quick memo capture panel |
-| **Excalidraw** | Freehand drawing, image annotation |
-| **Banners** | Header images via `banner:` frontmatter |
+| **Calendar** | 単語数・タスクドット付きの右サイドバーカレンダー |
+| **Thino** | クイックメモキャプチャパネル |
+| **Excalidraw** | 手描き、画像注釈 |
+| **Banners** | `banner:` frontmatter によるヘッダー画像 |
 
-Also install from Community Plugins:
+別途コミュニティプラグインから:
 
-| Plugin | Purpose |
+| プラグイン | 用途 |
 |--------|---------|
-| **Dataview** | Powers the dashboard queries |
-| **Templater** | Auto-fills frontmatter from templates |
-| **Obsidian Git** | Auto-commits vault every 15 minutes |
+| **Dataview** | ダッシュボードクエリの動力源 |
+| **Templater** | テンプレートから frontmatter を自動補完 |
+| **Obsidian Git** | 15 分ごとに自動コミット |
 
 ---
 
-## CSS Snippets
+## CSS スニペット
 
-Three snippets are auto-enabled by `setup-vault.sh`:
+3 つのスニペットが `setup-vault.sh` で自動有効化:
 
-| Snippet | Effect |
+| スニペット | 効果 |
 |---------|--------|
-| `vault-colors` | Color-codes wiki folders in the file explorer |
-| `ITS-Dataview-Cards` | Turns Dataview queries into visual card grids |
-| `ITS-Image-Adjustments` | Fine-grained image sizing — append `\|100` to embeds |
+| `vault-colors` | wiki フォルダをファイルエクスプローラで色分け |
+| `ITS-Dataview-Cards` | Dataview クエリをビジュアルカードグリッド化 |
+| `ITS-Image-Adjustments` | 細かな画像サイズ調整 — 埋め込みに `\|100` を付加 |
 
 ---
 
-## Six Wiki Modes
+## 6 つのウィキモード
 
-| Mode | Use when |
+| モード | 適用 |
 |------|---------|
-| **A: Website** | Sitemap, content audit, SEO wiki |
-| **B: GitHub** | Codebase map, architecture wiki |
-| **C: Business** | Project wiki, competitive intelligence |
-| **D: Personal** | Second brain, goals, journal synthesis |
-| **E: Research** | Papers, concepts, thesis |
-| **F: Book/Course** | Chapter tracker, course notes |
+| **A: Website** | サイトマップ、コンテンツ監査、SEO ウィキ |
+| **B: GitHub** | コードベースマップ、アーキテクチャウィキ |
+| **C: Business** | プロジェクトウィキ、競合インテリジェンス |
+| **D: Personal** | セカンドブレイン、目標、ジャーナル合成 |
+| **E: Research** | 論文、概念、論文執筆 |
+| **F: Book/Course** | 章管理、コースノート |
 
-Modes can be combined.
+モードは組み合わせ可能。
 
 ---
 
-## MCP Setup (Optional)
+## MCP セットアップ(任意)
 
-MCP lets Claude read and write vault notes directly without copy-paste.
+MCP は Claude がコピペなしで Vault ノートを直接読み書きできるようにする。
 
-**Option A — REST API:**
+**オプション A — REST API:**
 
-1. Install the **Local REST API** plugin in Obsidian
-2. Copy your API key
-3. Run:
+1. Obsidian に **Local REST API** プラグインをインストール
+2. API キーをコピー
+3. 実行:
 
 ```bash
 claude mcp add-json obsidian-vault '{
@@ -196,7 +198,7 @@ claude mcp add-json obsidian-vault '{
 }' --scope user
 ```
 
-**Option B — Filesystem (no plugin needed):**
+**オプション B — ファイルシステム(プラグイン不要):**
 
 ```bash
 claude mcp add-json obsidian-vault '{
@@ -208,45 +210,45 @@ claude mcp add-json obsidian-vault '{
 
 ---
 
-## Troubleshooting
+## トラブルシューティング
 
-| Problem | Fix |
+| 問題 | 解決 |
 |---------|-----|
-| `/wiki` says "not found" | Make sure `claude-obsidian` plugin is enabled: `claude plugin list` |
-| Graph colors reset after closing Obsidian | Open Graph view → gear → Color groups → re-add once. Permanent after that. |
-| Excalidraw not loading | Run `bash bin/setup-vault.sh` to download `main.js` (8MB, not in git) |
-| Dashboard shows no results | Install the **Dataview** plugin from Community Plugins |
-| Hot cache not loading at session start | Check hooks: `claude hooks list` — SessionStart hook should be present |
+| `/wiki` が「見つからない」と言う | `claude-obsidian` プラグインが有効化されているか確認: `claude plugin list` |
+| Obsidian を閉じたらグラフ色がリセット | グラフビュー → 歯車 → カラーグループ → 一度だけ追加し直す。以後は永続化。 |
+| Excalidraw がロードしない | `bash bin/setup-vault.sh` を実行して `main.js`(8MB、git 外)をダウンロード |
+| ダッシュボードに何も表示されない | コミュニティプラグインから **Dataview** をインストール |
+| セッション開始時にホットキャッシュがロードされない | hook を確認: `claude hooks list` — SessionStart hook が存在するべき |
 
 ---
 
-## Cross-Project Power Move
+## クロスプロジェクト活用
 
-Point any Claude Code project at this vault. Add to that project's `CLAUDE.md`:
+任意の Claude Code プロジェクトをこの Vault に向ける。向こうのプロジェクトの `CLAUDE.md` に追記:
 
 ```markdown
-## Wiki Knowledge Base
-Path: ~/path/to/claude-obsidian
+## ウィキナレッジベース
+パス: ~/path/to/claude-obsidian
 
-When you need context not in this project:
-1. Read wiki/hot.md first (recent context cache)
-2. If not enough, read wiki/index.md
-3. If you need domain details, read the relevant wiki page
+このプロジェクトに無いコンテキストが必要なとき:
+1. まず wiki/hot.md(直近コンテキストキャッシュ)を読む
+2. 足りなければ wiki/index.md を読む
+3. ドメイン詳細が必要なら関連 wiki ページを読む
 
-Do NOT read the wiki for general coding questions.
+一般的なコーディング質問には wiki を読まない。
 ```
 
-Your executive assistant, coding projects, and content workflows all draw from the same knowledge base.
+エグゼクティブアシスタント、コーディングプロジェクト、コンテンツワークフローのすべてが同じナレッジベースから引き出せる。
 
 ---
 
-## Support
+## サポート
 
 - **GitHub**: [github.com/AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
 - **Issues**: [github.com/AgriciDaniel/claude-obsidian/issues](https://github.com/AgriciDaniel/claude-obsidian/issues)
-- **Community**: [AI Marketing Hub on Skool](https://skool.com)
+- **コミュニティ**: [AI Marketing Hub on Skool](https://skool.com)
 
 ---
 
-*Built by [AgriciDaniel](https://github.com/AgriciDaniel) / AI Marketing Hub*
-*Based on Andrej Karpathy's LLM Wiki pattern*
+*作: [AgriciDaniel](https://github.com/AgriciDaniel) / AI Marketing Hub*
+*Andrej Karpathy の LLM Wiki パターンに基づく。日本語ローカライズ追加。*

@@ -1,8 +1,9 @@
 ---
 type: entity
-title: "Andrej Karpathy"
+title: "アンドレイ・カーパシー"
+aliases: ["Andrej Karpathy", "アンドレイ・カーパシー"]
 entity_type: person
-role: "AI researcher, educator, founder"
+role: "AI研究者、教育者、創業者"
 first_mentioned: "[[LLM Wiki Pattern]]"
 created: 2026-04-07
 updated: 2026-04-07
@@ -18,30 +19,30 @@ related:
 sources:
 ---
 
-# Andrej Karpathy
+# アンドレイ・カーパシー
 
-AI researcher and educator. Former Director of AI at Tesla, founding member of OpenAI. Known for deep learning education (Neural Networks: Zero to Hero series, micrograd, nanoGPT) and for publishing practical AI patterns.
-
----
-
-## Key Contributions to This Wiki
-
-Karpathy originated the [[LLM Wiki Pattern]] — the idea of using LLMs to build and maintain a persistent, compounding knowledge base rather than re-deriving knowledge from raw documents on every query.
-
-He published the idea as an "idea file" — intentionally abstract, designed to be copy-pasted into a Claude Code or similar session and built out collaboratively. The claude-obsidian plugin is a production implementation of this pattern.
-
-His framing: "The wiki is a persistent, compounding artifact. The cross-references are already there. The contradictions have already been flagged. The synthesis already reflects everything you've read."
+AI研究者であり教育者。元TeslaのAIディレクターであり、OpenAIの創設メンバー。深層学習の教育(Neural Networks: Zero to Heroシリーズ、micrograd、nanoGPT)と、実践的なAIパターンの公開で知られる。
 
 ---
 
-## Notable Quote
+## 本ウィキへの主な貢献
 
-"I thought that I had to reach for fancy RAG, but the LLM has been pretty good at auto-maintaining index files and brief summaries of all documents and reads all the important related data fairly easily at this small scale."
+カーパシーは [[LLM Wiki Pattern]] を提唱した。すなわち、毎回のクエリで生のドキュメントから知識を再導出するのではなく、LLMを使って永続的かつ累積的に成長する知識ベースを構築・維持するという考え方である。
+
+彼はこのアイデアを「アイデアファイル」として公開した。意図的に抽象的に書かれており、Claude Codeなどのセッションにコピーペーストして共同で発展させていけるよう設計されている。claude-obsidianプラグインは、このパターンの実運用版実装である。
+
+彼の表現を借りれば:「ウィキは永続的かつ累積的に成長する成果物だ。クロスリファレンスはすでに張られている。矛盾はすでにフラグが立てられている。シンセシスはあなたが読んだすべてをすでに反映している。」
 
 ---
 
-## Connections
+## 注目すべき引用
 
-- [[LLM Wiki Pattern]] — his core contribution to knowledge management
-- [[Compounding Knowledge]] — the central insight he articulated
-- claude-obsidian plugin — this repo is a production implementation of his pattern
+「派手なRAGに手を出さなければと思っていたが、LLMはこの程度のスケールであればインデックスファイルや全ドキュメントの簡潔なサマリーを自動でメンテナンスし、関連する重要データを難なく読み込んでくれる。」
+
+---
+
+## 関連リンク
+
+- [[LLM Wiki Pattern]] — 知識管理への中核的貢献
+- [[Compounding Knowledge]] — 彼が言語化した中心的な洞察
+- claude-obsidianプラグイン — 本リポジトリは彼のパターンの実運用版実装

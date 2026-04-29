@@ -1,8 +1,8 @@
-# REST API Quick Reference
+# REST API クイックリファレンス
 
-Use these commands when MCP tools are not available. Requires the Local REST API plugin running in Obsidian (port 27124).
+MCP ツールが利用できないときに使う。Obsidian で Local REST API プラグインが稼働中(ポート 27124)である必要あり。
 
-Set your key before running any command:
+実行前にキーをセット:
 ```bash
 API="https://127.0.0.1:27124"
 KEY="your-api-key-here"
@@ -10,7 +10,7 @@ KEY="your-api-key-here"
 
 ---
 
-## Read a file
+## ファイル読み取り
 
 ```bash
 curl -sk \
@@ -20,7 +20,7 @@ curl -sk \
 
 ---
 
-## Create or replace a file
+## ファイル作成または上書き
 
 ```bash
 curl -sk -X PUT \
@@ -30,32 +30,32 @@ curl -sk -X PUT \
   "$API/vault/wiki/entities/Name.md"
 ```
 
-Or with inline content:
+インライン内容で:
 ```bash
 curl -sk -X PUT \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: text/markdown" \
-  --data "# Page Title
+  --data "# ページタイトル
 
-Content here." \
+ここに内容。" \
   "$API/vault/wiki/concepts/Name.md"
 ```
 
 ---
 
-## Append to a file
+## ファイル末尾に追記
 
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: text/markdown" \
-  --data "- New log entry" \
+  --data "- 新ログエントリ" \
   "$API/vault/wiki/log.md"
 ```
 
 ---
 
-## Patch a frontmatter field
+## frontmatter フィールドの patch
 
 ```bash
 curl -sk -X PATCH \
@@ -70,14 +70,14 @@ curl -sk -X PATCH \
 
 ---
 
-## Append content under a heading
+## 見出し配下に内容を追記
 
 ```bash
 curl -sk -X PATCH \
   -H "Authorization: Bearer $KEY" \
   -H "Operation: append" \
   -H "Target-Type: heading" \
-  -H "Target: Connections" \
+  -H "Target: 関連" \
   -H "Content-Type: text/markdown" \
   --data "- [[New Page]]" \
   "$API/vault/wiki/entities/Name.md"
@@ -85,16 +85,16 @@ curl -sk -X PATCH \
 
 ---
 
-## Search
+## 検索
 
-Simple keyword search:
+シンプルなキーワード検索:
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
-  "$API/search/simple/?query=machine+learning"
+  "$API/search/simple/?query=機械学習"
 ```
 
-Dataview query:
+Dataview クエリ:
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
@@ -105,7 +105,7 @@ curl -sk -X POST \
 
 ---
 
-## List all tags
+## 全タグ一覧
 
 ```bash
 curl -sk \
@@ -115,7 +115,7 @@ curl -sk \
 
 ---
 
-## List files in a folder
+## フォルダ内のファイル一覧
 
 ```bash
 curl -sk \

@@ -1,6 +1,6 @@
 ---
 type: meta
-title: "Concepts Index"
+title: "概念インデックス"
 updated: 2026-04-07
 tags:
   - meta
@@ -8,6 +8,10 @@ tags:
   - concept
 domain: knowledge-management
 status: evergreen
+aliases:
+  - "_index"
+  - "Concepts Index"
+  - "概念インデックス"
 related:
   - "[[index]]"
   - "[[dashboard]]"
@@ -20,24 +24,24 @@ related:
   - "[[Compounding Knowledge]]"
 ---
 
-# Concepts Index
+# 概念インデックス
 
-Navigation: [[index]] | [[entities/_index|Entities]] | [[sources/_index|Sources]]
+ナビゲーション: [[index]] | [[entities/_index|エンティティ]] | [[sources/_index|ソース]]
 
-All concept pages — ideas, patterns, and frameworks extracted from sources.
-
----
-
-## Knowledge Management
-
-- [[LLM Wiki Pattern]] — the core architecture for persistent, compounding knowledge bases
-- [[Hot Cache]] — ~500-word session context file, updated after every ingest
-- [[Compounding Knowledge]] — why the wiki grows more valuable over time, unlike RAG
-- [[DragonScale Memory]] — memory-layer spec: fold operator, deterministic page addresses, semantic tiling, boundary-first autoresearch (status: shipped v0.4, all four mechanisms opt-in)
-- [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object (developing)
-- [[Source-First Synthesis]]: provenance discipline for LLM wiki layers (developing)
-- [[Query-Time Retrieval]]: query synthesis with citations, complementary to Obsidian search (developing)
+すべての概念ページ。ソースから抽出されたアイデア、パターン、フレームワーク。
 
 ---
 
-## Add new concepts here as they are extracted from sources.
+## 知識管理
+
+- [[LLM Wiki Pattern]]: 永続的かつ複利で増える知識ベースのコアアーキテクチャ
+- [[Hot Cache]]: 約 500 語のセッションコンテキストファイル、各 ingest 後に更新
+- [[Compounding Knowledge]]: Wiki が時間とともに価値を増す理由(RAG との対比)
+- [[DragonScale Memory]]: メモリ層仕様。fold オペレータ、決定論的ページアドレス、セマンティックタイリング、境界優先の autoresearch(ステータス: v0.4 出荷済み、4 つのメカニズムすべてオプトイン)
+- [[Persistent Wiki Artifact]]: LLM のメモリオブジェクトとしての永続的 Markdown ページ(developing)
+- [[Source-First Synthesis]]: LLM Wiki 層のための来歴規律(developing)
+- [[Query-Time Retrieval]]: 引用付きクエリ合成、Obsidian 検索の補完(developing)
+
+---
+
+## ソースから抽出された新しい概念はここに追加する。

@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "SEO Drift Monitoring"
+title: "SEO ドリフト監視"
 created: 2026-04-14
 updated: 2026-04-14
 tags:
@@ -9,35 +9,38 @@ tags:
   - monitoring
   - change-detection
 status: evergreen
+aliases:
+  - "SEO Drift Monitoring"
+  - "SEO ドリフト監視"
 related:
   - "[[Claude SEO]]"
   - "[[Pro Hub Challenge]]"
 ---
 
-# SEO Drift Monitoring
+# SEO ドリフト監視
 
-"Git for SEO" — captures baselines of SEO-critical page elements, then diffs against current state to detect regressions. Contributed to [[Claude SEO]] v1.9.0 by Dan Colta.
+「SEO のための Git」。SEO に重要なページ要素のベースラインをキャプチャし、現在の状態と差分を取って退行を検出する。Dan Colta により [[Claude SEO]] v1.9.0 へ貢献された。
 
-## What It Tracks
+## 追跡対象
 
-17 comparison rules across 3 severity levels:
+3 つの重要度レベルにわたる 17 の比較ルール。
 
-| Severity | Examples |
+| 重要度 | 例 |
 |----------|----------|
-| CRITICAL | Schema removed, canonical changed, noindex added, H1 removed |
-| WARNING | Title changed, CWV regression >20%, meta description changed |
-| INFO | H2 structure changed, content hash changed, image count changed |
+| CRITICAL | スキーマ削除、canonical 変更、noindex 追加、H1 削除 |
+| WARNING | タイトル変更、CWV の 20% 超退行、メタディスクリプション変更 |
+| INFO | H2 構造変更、コンテンツハッシュ変更、画像数変更 |
 
-## Architecture
+## アーキテクチャ
 
-- **SQLite persistence** at `~/.cache/claude-seo/drift/baselines.db`
-- **4 Python scripts**: `drift_baseline.py` (capture), `drift_compare.py` (diff), `drift_report.py` (HTML report), `drift_history.py` (timeline)
-- **Security-hardened**: uses only `fetch_page.py` for URL fetching (SSRF-protected). Original submission had a curl fallback that bypassed SSRF protection — completely removed during integration.
+- **SQLite 永続化**: `~/.cache/claude-seo/drift/baselines.db`
+- **4 つの Python スクリプト**: `drift_baseline.py`(キャプチャ)、`drift_compare.py`(差分)、`drift_report.py`(HTML レポート)、`drift_history.py`(タイムライン)
+- **セキュリティ強化**: URL 取得には `fetch_page.py` のみを使用(SSRF 保護)。元の応募には SSRF 保護を回避する curl フォールバックがあり、統合時に完全に削除した。
 
-## Commands
+## コマンド
 
 ```
-/seo drift baseline <url>    # Capture current state
-/seo drift compare <url>     # Compare against baseline
-/seo drift history <url>     # Show all checks over time
+/seo drift baseline <url>    # 現在の状態をキャプチャ
+/seo drift compare <url>     # ベースラインと比較
+/seo drift history <url>     # 全チェックを時系列で表示
 ```

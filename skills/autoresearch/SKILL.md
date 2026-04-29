@@ -1,43 +1,49 @@
 ---
 name: autoresearch
 description: >
-  Autonomous iterative research loop. Takes a topic, runs web searches, fetches sources,
-  synthesizes findings, and files everything into the wiki as structured pages.
-  Based on Karpathy's autoresearch pattern: program.md configures objectives and constraints,
-  the loop runs until depth is reached, output goes directly into the knowledge base.
-  Triggers on: "/autoresearch", "autoresearch", "research [topic]", "deep dive into [topic]",
-  "investigate [topic]", "find everything about [topic]", "research and file",
-  "go research", "build a wiki on".
+  自律的な反復リサーチループ。トピックを受け取り、Web 検索を実行し、ソースを取得し、
+  発見を合成して、すべてを構造化ページとしてウィキにファイリング。
+  Karpathy の autoresearch パターンに基づく: program.md で目的と制約を設定し、
+  深さに達するまでループを実行、出力は直接ナレッジベースに入る。
+  生成するページ・要約・レポートは日本語で書く(プロジェクト CLAUDE.md の言語ポリシー参照)。
+  トリガー(日本語): /autoresearch、自動リサーチ、[トピック] をリサーチ、
+  [トピック] を深掘り、[トピック] を調査、[トピック] について全部調べて、
+  リサーチしてファイル化、自律リサーチ、[テーマ] のウィキを作って。
+  Triggers (English): "/autoresearch", "autoresearch", "research [topic]",
+  "deep dive into [topic]", "investigate [topic]", "find everything about [topic]",
+  "research and file", "go research", "build a wiki on".
 allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch
 ---
 
-# autoresearch: Autonomous Research Loop
+# autoresearch: 自律リサーチループ
 
-You are a research agent. You take a topic, run iterative web searches, synthesize findings, and file everything into the wiki. The user gets wiki pages, not a chat response.
+あなたはリサーチエージェント。トピックを受け取り、反復的な Web 検索を実行し、発見を合成し、すべてを wiki にファイリングする。ユーザーが受け取るのはチャット応答ではなく wiki ページ。
 
-This is based on Karpathy's autoresearch pattern: a configurable program defines your objectives. You run the loop until depth is reached. Output goes into the knowledge base.
+これは Karpathy の autoresearch パターンに基づく: 設定可能なプログラムが目的を定義し、深さに達するまでループを実行、出力はナレッジベースへ。
 
----
-
-## Before Starting
-
-Read `references/program.md` to load the research objectives and constraints. This file is user-configurable. It defines what sources to prefer, how to score confidence, and any domain-specific constraints.
+> **言語ルール**: 生成するすべてのページ本文・要約・log エントリは日本語。Web ソースは英語のままでも良いが、抽出して wiki に書き込むときは日本語化する。frontmatter キーと列挙値、ファイル名、wikilink ターゲットは英語のまま。
 
 ---
 
-## Topic Selection
+## 開始前
 
-Three paths to a topic:
+`references/program.md` を読んでリサーチ目的と制約をロード。このファイルはユーザー設定可能で、優先するソース、信頼度のスコアリング方法、ドメイン固有の制約を定義する。
 
-### A. Explicit topic (always respected)
-When the user says `/autoresearch [topic]` or "research X", use the given topic verbatim and skip the sections below.
+---
 
-### B. Boundary-first selection (agenda control, opt-in)
-**This is agenda control, not pure memory.** DragonScale Memory.md Mechanism 4 labels this mechanism as such because it shapes which direction the research agent moves next. Users who want a strict memory-layer subset should omit this path entirely.
+## トピック選択
 
-When `/autoresearch` is invoked WITHOUT a topic AND the vault has adopted DragonScale, default to surfacing the frontier of the vault as a set of candidate topics the user can accept, override, or decline.
+トピックに到達する 3 つの経路:
 
-Feature detection (shell):
+### A. 明示的トピック(常に尊重)
+ユーザーが `/autoresearch [トピック]` または「X をリサーチ」と言った場合、そのトピックを文字通り使い、下のセクションをスキップ。
+
+### B. 境界優先選択(アジェンダ制御、オプトイン)
+**これはアジェンダ制御であり、純粋な記憶ではない。** DragonScale Memory.md の Mechanism 4 はこのメカニズムをそう分類している。なぜならリサーチエージェントが次にどの方向に動くかを形作るから。厳密な記憶レイヤのサブセットだけを使いたいユーザーはこの経路を完全に省略すべき。
+
+`/autoresearch` がトピック無しで呼ばれ、Vault が DragonScale を採用済みのとき、Vault のフロンティアを候補トピック群として表示するのがデフォルト。ユーザーは受け入れ、上書き、または辞退できる。
+
+機能検出(shell):
 
 ```bash
 if [ -x ./scripts/boundary-score.py ] && [ -d ./.vault-meta ] && command -v python3 >/dev/null 2>&1; then
@@ -47,77 +53,78 @@ else
 fi
 ```
 
-When `BOUNDARY_MODE=1`:
+`BOUNDARY_MODE=1` のとき:
 
-1. Run `./scripts/boundary-score.py --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
-2. **Helper failure handling**: if the helper exits non-zero, emits invalid JSON, or returns an empty `results` array, set `BOUNDARY_MODE=0` and fall through to section C below. Do NOT prompt the user with an empty candidate list, and do NOT improvise a topic.
-3. Present the candidate list to the user: "Your top frontier pages are: [list]. Research which one? (1-5, or type a topic to override, or say 'cancel' to be asked normally.)"
-4. If the user picks 1-5, use the selected page's title as the topic.
-5. If the user types free text, use that.
-6. If the user cancels or does not choose, fall through to C.
+1. `./scripts/boundary-score.py --json --top 5` を実行。`boundary_score = (出次数 - 入次数) * 鮮度重み` の上位 5 フロンティアページを返す。
+2. **ヘルパー失敗処理**: ヘルパーが non-zero で終了する、不正な JSON を出力する、または空の `results` 配列を返す場合、`BOUNDARY_MODE=0` に設定し、下のセクション C にフォールスルー。空の候補リストでユーザーに尋ねず、即興でトピックを作らない。
+3. 候補リストをユーザーに提示: 「あなたのトップフロンティアページは: [リスト]。どれをリサーチしますか?(1〜5、トピックを入力して上書き、または『キャンセル』で通常質問)」
+4. ユーザーが 1〜5 を選んだら、選ばれたページのタイトルをトピックとして使う。
+5. ユーザーがフリーテキストを入力したらそれを使う。
+6. ユーザーがキャンセルまたは選択しなかったら C へフォールスルー。
 
-The boundary score is a heuristic, not an objective measure of what SHOULD be researched. The user always has the option to type a free-text topic to override the surfaced candidates.
+境界スコアはヒューリスティックであり、何を **すべき** リサーチかの客観的尺度ではない。ユーザーは常に表示された候補を上書きするフリーテキストトピックを入力する選択肢を持つ。
 
-**Link-resolution semantics**: the boundary helper uses **filename-stem wikilink resolution only**. `[[Foo]]` is counted as an edge to `Foo.md` anywhere in the vault. Aliases declared via frontmatter `aliases:` are **not** parsed. Folder-qualified links (e.g. `[[notes/Foo]]`) are resolved by stem only. This matches default Obsidian behavior for unique filenames but does not implement full Obsidian alias resolution.
+**リンク解決のセマンティクス**: 境界ヘルパーは **ファイル名ステムの wikilink 解決のみ** を使う。`[[Foo]]` は Vault 内のどこでも `Foo.md` へのエッジとしてカウント。frontmatter `aliases:` で宣言されたエイリアスは **解析されない**。フォルダ修飾リンク(例 `[[notes/Foo]]`)はステムのみで解決される。一意なファイル名に対するデフォルトの Obsidian 動作と一致するが、完全な Obsidian エイリアス解決を実装するわけではない。
 
-### C. User-chosen (default when B is unavailable)
-When `BOUNDARY_MODE=0` or the user declined every frontier pick, ask: "What topic should I research?"
+### C. ユーザー選択(B が利用不可のときのデフォルト)
+`BOUNDARY_MODE=0` またはユーザーがすべてのフロンティア候補を辞退したとき、質問: 「どのトピックをリサーチしますか?」
 
 ---
 
-## Research Loop
+## リサーチループ
 
 ```
-Input: topic (from Topic Selection, above)
+入力: トピック(上のトピック選択から)
 
-Round 1. Broad search
-1. Decompose topic into 3-5 distinct search angles
-2. For each angle: run 2-3 WebSearch queries
-3. For top 2-3 results per angle: WebFetch the page
-4. Extract from each: key claims, entities, concepts, open questions
+ラウンド 1. 広範な検索
+1. トピックを 3〜5 の異なる検索アングルに分解
+2. 各アングル: WebSearch クエリを 2〜3 件実行
+3. アングルごとに上位 2〜3 件: ページを WebFetch
+4. 各ページから抽出: 主要主張、エンティティ、概念、未解決の問い
 
-Round 2. Gap fill
-5. Identify what's missing or contradicted from Round 1
-6. Run targeted searches for each gap (max 5 queries)
-7. Fetch top results for each gap
+ラウンド 2. ギャップ補完
+5. ラウンド 1 で欠けたもの・矛盾したものを特定
+6. 各ギャップに対しターゲット検索(最大 5 クエリ)
+7. 各ギャップの上位結果を取得
 
-Round 3. Synthesis check (optional, if gaps remain)
-8. If major contradictions or missing pieces still exist: one more targeted pass
-9. Otherwise: proceed to filing
+ラウンド 3. 合成チェック(任意、ギャップが残る場合)
+8. 大きな矛盾や欠片がまだ存在するなら: もう 1 ラウンドのターゲットパス
+9. それ以外: ファイリングへ進む
 
-Max rounds: 3 (as set in program.md). Stop when depth is reached or max rounds hit.
+最大ラウンド: 3(program.md で設定)。深さに達するか最大ラウンドに当たったら停止。
 ```
 
 ---
 
-## Filing Results
+## 結果のファイリング
 
-After research is complete, create these pages:
+リサーチ完了後、以下のページを作成:
 
-**wiki/sources/**. One page per major reference found
-- Use source frontmatter (type, source_type, author, date_published, url, confidence, key_claims)
-- Body: summary of the source, what it contributes to the topic
+**wiki/sources/**。見つかった主要参照ごとに 1 ページ
+- ソース frontmatter を使用(type, source_type, author, date_published, url, confidence, key_claims)
+- 本文(日本語): ソースの要約、トピックへの貢献内容
 
-**wiki/concepts/**. One page per significant concept extracted
-- Only create a page if the concept is substantive enough to stand alone
-- Check the index first: update existing concept pages rather than creating duplicates
+**wiki/concepts/**。抽出された重要概念ごとに 1 ページ
+- 単独で成立するほど実体のある概念のみページ化
+- まず index を確認: 重複作成ではなく既存概念ページを更新
 
-**wiki/entities/**. One page per significant person, org, or product identified
-- Check the index first: update existing entity pages
+**wiki/entities/**。特定された重要な人物・組織・製品ごとに 1 ページ
+- まず index を確認: 既存エンティティページを更新
 
-**wiki/questions/**. One synthesis page titled "Research: [Topic]"
-- This is the master synthesis. Everything comes together here.
-- Sections: Overview, Key Findings, Entities, Concepts, Contradictions, Open Questions, Sources
-- Full frontmatter with related links to all pages created in this session
+**wiki/questions/**。「Research: [トピック]」というタイトルの合成ページ 1 つ
+- これがマスター合成。すべてがここに集まる
+- セクション: 概要、主要発見、エンティティ、概念、矛盾、未解決の問い、ソース
+- 本セッションで作成された全ページへの related リンクを含む完全な frontmatter
 
 ---
 
-## Synthesis Page Structure
+## 合成ページの構造
 
 ```markdown
 ---
 type: synthesis
-title: "Research: [Topic]"
+title: "リサーチ: [トピック]"
+aliases: ["Research: [Topic]"]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags:
@@ -125,89 +132,89 @@ tags:
   - [topic-tag]
 status: developing
 related:
-  - "[[Every page created in this session]]"
+  - "[[このセッションで作成された全ページ]]"
 sources:
   - "[[wiki/sources/Source 1]]"
   - "[[wiki/sources/Source 2]]"
 ---
 
-# Research: [Topic]
+# リサーチ: [トピック]
 
-## Overview
-[2-3 sentence summary of what was found]
+## 概要
+[発見の 2〜3 文の要約]
 
-## Key Findings
-- Finding 1 (Source: [[Source Page]])
-- Finding 2 (Source: [[Source Page]])
+## 主要な発見
+- 発見 1(出典: [[Source Page]])
+- 発見 2(出典: [[Source Page]])
 - ...
 
-## Key Entities
-- [[Entity Name]]: role/significance
+## 重要なエンティティ
+- [[Entity Name]]: 役割・重要性
 
-## Key Concepts
-- [[Concept Name]]: one-line definition
+## 重要な概念
+- [[Concept Name]]: 一行定義
 
-## Contradictions
-- [[Source A]] says X. [[Source B]] says Y. [Brief note on which is more credible and why]
+## 矛盾
+- [[Source A]] は X と言う。[[Source B]] は Y と言う。[どちらがより信頼できるかと理由の簡単なメモ]
 
-## Open Questions
-- [Question that research didn't fully answer]
-- [Gap that needs more sources]
+## 未解決の問い
+- [リサーチが完全に答えなかった問い]
+- [追加ソースが必要なギャップ]
 
-## Sources
-- [[Source 1]]: author, date
-- [[Source 2]]: author, date
+## 出典
+- [[Source 1]]: 著者、日付
+- [[Source 2]]: 著者、日付
 ```
 
 ---
 
-## After Filing
+## ファイリング後
 
-1. Update `wiki/index.md`. Add all new pages to the right sections
-2. Append to `wiki/log.md` (at the TOP):
+1. `wiki/index.md` を更新。すべての新ページを正しいセクションに追加
+2. `wiki/log.md` の TOP に追記:
    ```
-   ## [YYYY-MM-DD] autoresearch | [Topic]
-   - Rounds: N
-   - Sources found: N
-   - Pages created: [[Page 1]], [[Page 2]], ...
-   - Synthesis: [[Research: Topic]]
-   - Key finding: [one sentence]
+   ## [YYYY-MM-DD] autoresearch | [トピック]
+   - ラウンド数: N
+   - 発見されたソース数: N
+   - 作成ページ: [[Page 1]], [[Page 2]], ...
+   - 合成: [[リサーチ: トピック]]
+   - 主な発見: [一文]
    ```
-3. Update `wiki/hot.md` with the research summary
+3. `wiki/hot.md` をリサーチ要約で更新
 
 ---
 
-## Report to User
+## ユーザーへの報告
 
-After filing everything:
+すべてファイリング後:
 
 ```
-Research complete: [Topic]
+リサーチ完了: [トピック]
 
-Rounds: N | Searches: N | Pages created: N
+ラウンド数: N | 検索数: N | 作成ページ数: N
 
-Created:
-  wiki/questions/Research: [Topic].md (synthesis)
+作成:
+  wiki/questions/Research: [Topic].md(合成)
   wiki/sources/[Source 1].md
   wiki/concepts/[Concept 1].md
   wiki/entities/[Entity 1].md
 
-Key findings:
-- [Finding 1]
-- [Finding 2]
-- [Finding 3]
+主な発見:
+- [発見 1]
+- [発見 2]
+- [発見 3]
 
-Open questions filed: N
+ファイル化された未解決の問い: N
 ```
 
 ---
 
-## Constraints
+## 制約
 
-Follow the limits in `references/program.md`:
-- Max rounds (default: 3)
-- Max pages per session (default: 15)
-- Confidence scoring rules
-- Source preference rules
+`references/program.md` の制限に従う:
+- 最大ラウンド数(デフォルト: 3)
+- セッションあたり最大ページ数(デフォルト: 15)
+- 信頼度スコアリングルール
+- ソース優先ルール
 
-If a constraint conflicts with completeness, respect the constraint and note what was left out in the Open Questions section.
+制約が完全性と衝突したら制約を尊重し、何が残されたかを「未解決の問い」セクションにメモする。

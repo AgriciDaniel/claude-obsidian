@@ -1,25 +1,27 @@
 ---
 name: canvas
-description: "Visual layer of the wiki. Add images, text cards, PDFs, and wiki pages to Obsidian canvas files with auto-positioning inside zones. Integrates with /banana for image capture. Triggers on: /canvas, canvas new, canvas add image, canvas add text, canvas add pdf, canvas add note, canvas zone, canvas list, canvas from banana, add to canvas, put this on the canvas, open canvas, create canvas."
+description: "ウィキのビジュアルレイヤ。画像、テキストカード、PDF、wiki ページを Obsidian のキャンバスファイルにゾーン内自動配置で追加する。/banana(画像生成)とも連携。応答とラベルは日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。トリガー(日本語): /canvas、キャンバス新規、キャンバスに画像追加、キャンバスにテキスト追加、キャンバスに PDF 追加、キャンバスにノート追加、キャンバスゾーン、キャンバス一覧、banana からキャンバスへ、キャンバスに追加、これをキャンバスに、キャンバスを開く、キャンバスを作成。Triggers (English): /canvas, canvas new, canvas add image, canvas add text, canvas add pdf, canvas add note, canvas zone, canvas list, canvas from banana, add to canvas, put this on the canvas, open canvas, create canvas."
 allowed-tools: Read Write Edit Glob Grep
 ---
 
-# canvas: Visual Reference Layer
+# canvas: ビジュアルリファレンスレイヤ
 
-The three knowledge capture layers:
-- `/save` → text synthesis (wiki/questions/, wiki/concepts/)
-- `/autoresearch` → structured knowledge (wiki/sources/, wiki/concepts/)
-- `/canvas` → visual references (wiki/canvases/)
+3 つの知識キャプチャレイヤ:
+- `/save` → テキスト合成(wiki/questions/, wiki/concepts/)
+- `/autoresearch` → 構造化知識(wiki/sources/, wiki/concepts/)
+- `/canvas` → ビジュアル参照(wiki/canvases/)
 
-A canvas is a JSON file Obsidian renders as an infinite visual board. This skill reads and writes canvas JSON directly. Read `references/canvas-spec.md` for the full format reference before making any edits. This spec aligns with the [JSON Canvas open standard](https://jsoncanvas.org/). If the kepano/obsidian-skills plugin is installed, its json-canvas skill is the authoritative canvas spec reference. Otherwise, use the guidance below.
+キャンバスは Obsidian が無限のビジュアルボードとしてレンダリングする JSON ファイルです。このスキルはキャンバス JSON を直接読み書きします。任意の編集前に `references/canvas-spec.md` で完全な形式リファレンスを読んでください。この仕様は [JSON Canvas オープン標準](https://jsoncanvas.org/) に準拠します。kepano/obsidian-skills プラグインがインストールされている場合、その json-canvas スキルが正規のキャンバス仕様リファレンスです。なければ下のガイダンスに従います。
+
+> **言語ルール**: グループ・ラベル・テキストノードの表示テキストは日本語で書く。ファイルパス・ID・JSON キーは英語のまま。
 
 ---
 
-## Default Canvas
+## デフォルトキャンバス
 
 `wiki/canvases/main.canvas`
 
-If it does not exist, create it:
+存在しなければ作成:
 
 ```json
 {
@@ -27,13 +29,13 @@ If it does not exist, create it:
     {
       "id": "title",
       "type": "text",
-      "text": "# Visual Reference\n\nDrop images, PDFs, and notes here.",
+      "text": "# ビジュアルリファレンス\n\n画像、PDF、ノートをここに置く。",
       "x": -400, "y": -300, "width": 400, "height": 120, "color": "6"
     },
     {
       "id": "zone-default",
       "type": "group",
-      "label": "General",
+      "label": "全般",
       "x": -400, "y": -140, "width": 800, "height": 400, "color": "4"
     }
   ],
@@ -43,85 +45,85 @@ If it does not exist, create it:
 
 ---
 
-## Operations
+## 操作
 
-### open / status (`/canvas` with no args)
+### open / status(`/canvas` 引数なし)
 
-1. Check if `wiki/canvases/main.canvas` exists.
-2. If yes: read it, count nodes by type, list all group node labels (zone names).
-   Report: "Canvas has N nodes: X images, Y text cards, Z wiki pages. Zones: [list]"
-3. If no: create it with the starter structure above.
-   Report: "Created main.canvas with a General zone."
-4. Tell user: "Open `wiki/canvases/main.canvas` in Obsidian to view."
-
----
-
-### new (`/canvas new [name]`)
-
-1. Slugify the name: lowercase, spaces → hyphens, strip special chars.
-2. Create `wiki/canvases/[slug].canvas` with the starter structure, title updated to `# [Name]`.
-3. Add entry to `wiki/overview.md` under a "## Canvases" subsection (append after the Current State section). Do not modify `wiki/index.md`. It uses a fixed section schema (Domains, Entities, Concepts, Sources, Questions, Comparisons).
-4. Report: "Created wiki/canvases/[slug].canvas"
+1. `wiki/canvases/main.canvas` の存在を確認。
+2. あれば: 読み、タイプ別ノード数を数え、すべてのグループノードラベル(ゾーン名)をリスト化。
+   報告: 「キャンバスには N 個のノード: 画像 X、テキスト Y、wiki ページ Z。ゾーン: [list]」
+3. なければ: 上のスタータ構造で作成。
+   報告: 「全般ゾーン付きで main.canvas を作成しました。」
+4. ユーザーに伝える: 「Obsidian で `wiki/canvases/main.canvas` を開いて確認してください。」
 
 ---
 
-### add image (`/canvas add image [path or url]`)
+### new(`/canvas new [name]`)
 
-**Resolve the image:**
-- If URL (starts with `http`): download with `curl -sL [url] -o _attachments/images/canvas/[filename]`
-  Derive filename from URL path, or use `img-[timestamp].jpg` if unclear.
-- If local path outside vault: `cp [path] _attachments/images/canvas/`
-- If already vault-relative: use as-is.
-
-Create `_attachments/images/canvas/` if it doesn't exist.
-
-**Detect aspect ratio:**
-Use `python3 -c "from PIL import Image; img=Image.open('[path]'); print(img.width, img.height)"` or `identify -format '%w %h' [path]`.
-See `references/canvas-spec.md` for the full aspect ratio → canvas size table (7 ratios including 4:3, 3:4, ultra-wide). Do not use an inline table here. The spec is the single source of truth for sizing.
-
-**Position using auto-layout** (see Auto-Positioning section below).
-
-**Append node to canvas JSON and write.**
-
-Report: "Added [filename] to [zone] zone at position ([x], [y])."
+1. 名前をスラッグ化: 小文字、空白 → ハイフン、特殊文字を除去(英語スラッグ)。
+2. `wiki/canvases/[slug].canvas` をスタータ構造で作成、タイトルを `# [Name](日本語可)` に更新。
+3. `wiki/overview.md` の「## キャンバス」サブセクション(現状セクションの後ろに追加)にエントリを追加。`wiki/index.md` は変更しない。固定セクションスキーマ(ドメイン、エンティティ、概念、ソース、質問、比較)を使用しているため。
+4. 報告: 「wiki/canvases/[slug].canvas を作成しました」
 
 ---
 
-### add text (`/canvas add text [content]`)
+### add image(`/canvas add image [path or url]`)
 
-Create a text node:
+**画像を解決:**
+- URL の場合(`http` で始まる): `curl -sL [url] -o _attachments/images/canvas/[filename]` でダウンロード
+  ファイル名は URL パスから導出、不明なら `img-[timestamp].jpg` を使用。
+- Vault 外のローカルパスの場合: `cp [path] _attachments/images/canvas/`
+- すでに Vault 相対の場合: そのまま使用。
+
+`_attachments/images/canvas/` が無ければ作成。
+
+**アスペクト比を検出:**
+`python3 -c "from PIL import Image; img=Image.open('[path]'); print(img.width, img.height)"` または `identify -format '%w %h' [path]` を使用。
+完全なアスペクト比 → キャンバスサイズ表(4:3, 3:4, ウルトラワイドを含む 7 比率)は `references/canvas-spec.md` 参照。ここにインライン表は置かない。仕様がサイズ決定の単一情報源。
+
+**自動レイアウトで配置**(下の自動配置セクション参照)。
+
+**ノードをキャンバス JSON に追記して書き込む。**
+
+報告: 「[filename] を [zone] ゾーンの位置 ([x], [y]) に追加しました。」
+
+---
+
+### add text(`/canvas add text [content]`)
+
+テキストノードを作成:
 ```json
 {
   "id": "text-[timestamp]",
   "type": "text",
-  "text": "[content]",
+  "text": "[内容(日本語可)]",
   "x": [auto], "y": [auto],
   "width": 300, "height": 120,
   "color": "4"
 }
 ```
 
-Position using auto-layout. Write and report.
+自動レイアウトで配置。書き込んで報告。
 
 ---
 
-### add pdf (`/canvas add pdf [path]`)
+### add pdf(`/canvas add pdf [path]`)
 
-Same as add image. Obsidian renders PDFs natively as file nodes.
-- Copy to `_attachments/pdfs/canvas/` if outside vault.
-- Fixed size: width=400, height=520.
-- Report page count if you can determine it.
+add image と同じ。Obsidian は PDF をネイティブにファイルノードとしてレンダリング。
+- Vault 外なら `_attachments/pdfs/canvas/` にコピー。
+- 固定サイズ: width=400, height=520。
+- 判別できればページ数を報告。
 
 ---
 
-### add note (`/canvas add note [wiki-page]`)
+### add note(`/canvas add note [wiki-page]`)
 
-1. Search `wiki/` for a file matching the page name (case-insensitive, partial match ok).
-2. Use the vault-relative path as the `file` field.
-   - Use `"type": "file"` (not `"type": "link"`): `.md` files use file nodes, not link nodes.
-   - `"type": "link"` takes a `url: "https://..."`: it is for web URLs only.
-3. Create a file node: width=300, height=100.
-4. Position using auto-layout.
+1. `wiki/` でページ名にマッチするファイルを検索(大文字小文字無視、部分一致 OK)。
+2. Vault 相対パスを `file` フィールドに使用。
+   - `"type": "file"` を使う(`"type": "link"` ではなく): `.md` ファイルはファイルノードを使い、リンクノードではない。
+   - `"type": "link"` は `url: "https://..."` を取る: Web URL 専用。
+3. ファイルノードを作成: width=300, height=100。
+4. 自動レイアウトで配置。
 
 ```json
 {
@@ -135,17 +137,17 @@ Same as add image. Obsidian renders PDFs natively as file nodes.
 
 ---
 
-### zone (`/canvas zone [name] [color]`)
+### zone(`/canvas zone [name] [color]`)
 
-1. Read canvas JSON.
-2. Find max_y: `max(node.y + node.height for all nodes) + 60`. Use 280 if no nodes (leaves room above the starter title node).
-3. Create a group node:
+1. キャンバス JSON を読む。
+2. max_y を求める: `max(node.y + node.height for all nodes) + 60`。ノード無しなら 280(スタータタイトルノードの上にスペースを残す)。
+3. グループノードを作成:
 
 ```json
 {
   "id": "zone-[slug]",
   "type": "group",
-  "label": "[name]",
+  "label": "[name(日本語可)]",
   "x": -400,
   "y": [max_y],
   "width": 1000,
@@ -154,60 +156,60 @@ Same as add image. Obsidian renders PDFs natively as file nodes.
 }
 ```
 
-Valid colors: `"1"`=red `"2"`=orange `"3"`=yellow `"4"`=green `"5"`=cyan `"6"`=purple
+有効な色: `"1"`=赤 `"2"`=オレンジ `"3"`=黄 `"4"`=緑 `"5"`=シアン `"6"`=紫
 
-Write and report.
+書き込んで報告。
 
 ---
 
-### list (`/canvas list`)
+### list(`/canvas list`)
 
 1. `glob wiki/canvases/*.canvas`
-2. For each canvas: read JSON, count nodes by type.
-3. Report:
+2. 各キャンバス: JSON を読み、タイプ別ノード数をカウント。
+3. 報告:
 
 ```
-wiki/canvases/main.canvas      . 14 nodes (8 images, 3 text, 2 file, 1 group)
-wiki/canvases/design-ideas.canvas. 42 nodes (30 images, 4 text, 8 groups)
+wiki/canvases/main.canvas      . 14 ノード(画像 8、テキスト 3、ファイル 2、グループ 1)
+wiki/canvases/design-ideas.canvas. 42 ノード(画像 30、テキスト 4、グループ 8)
 ```
 
 ---
 
-### from banana (`/canvas from banana`) (if the banana-claude plugin is installed)
+### from banana(`/canvas from banana`)(banana-claude プラグインがあれば)
 
-1. Check `wiki/canvases/.recent-images.txt` first (session log of newly written images).
-2. If not found or empty: use `find` with correct precedence (parentheses required. Without them `-newer` only binds to the last `-name` clause):
+1. まず `wiki/canvases/.recent-images.txt`(セッションで新規書き込みされた画像のログ)を確認。
+2. 見つからない・空の場合: `find` を正しい優先順位で使用(かっこ必須。無いと `-newer` は最後の `-name` 句にしか紐づかない):
    ```bash
    python3 -c "import time,os; open('/tmp/ten-min-ago','w').close(); os.utime('/tmp/ten-min-ago',(time.time()-600,time.time()-600))"
    find _attachments/images -newer /tmp/ten-min-ago \( -name "*.png" -o -name "*.jpg" \)
    ```
-   Note: `/banana` is an optional external skill not shipped in this plugin. If the user has it installed, the `.recent-images.txt` log will be populated. If not, the `find` command above is the fallback.
-3. If still none: show the 5 most recently modified images.
-4. Present list: "Found N recent images: [list]. Add to canvas? Which zone? (zone name / 'new [name]' / 'skip')"
-5. On confirmation: add each using the add image logic.
+   注: `/banana` はこのプラグインに同梱されない外部スキル。ユーザーがインストールしていれば `.recent-images.txt` ログが populate される。なければ上の `find` コマンドがフォールバック。
+3. それでも無ければ: 直近変更された 5 件の画像を表示。
+4. リスト提示: 「直近の画像が N 件見つかりました: [リスト]。キャンバスに追加しますか?どのゾーンに?(ゾーン名 / 'new [名前]' / 'スキップ')」
+5. 確認後: add image ロジックで各画像を追加。
 
 ---
 
-## Auto-Positioning Algorithm
+## 自動配置アルゴリズム
 
-Read `references/canvas-spec.md` for the full coordinate system.
+完全な座標系は `references/canvas-spec.md` を参照。
 
 ```python
 def next_position(canvas_nodes, target_zone_label, new_w, new_h):
-    # Find zone group node
+    # ゾーングループノードを探す
     zone = next((n for n in canvas_nodes
                  if n.get('type') == 'group'
                  and n.get('label') == target_zone_label), None)
 
     if zone is None:
-        # No zone: place below all content
+        # ゾーン無し: 全コンテンツの下に配置
         max_y = max((n['y'] + n.get('height', 0) for n in canvas_nodes), default=-140)
         return -400, max_y + 60
 
     zx, zy = zone['x'], zone['y']
     zw, zh = zone['width'], zone['height']
 
-    # Nodes inside this zone
+    # このゾーン内のノード
     inside = [n for n in canvas_nodes
               if n.get('type') != 'group'
               and zx <= n['x'] < zx + zw
@@ -220,59 +222,57 @@ def next_position(canvas_nodes, target_zone_label, new_w, new_h):
     next_x = rightmost_x + 40
 
     if next_x + new_w > zx + zw:
-        # New row
+        # 新しい行
         max_row_y = max(n['y'] + n.get('height', 0) for n in inside)
         return zx + 20, max_row_y + 20
 
-    # Same row: align to the top of all existing nodes in the zone
+    # 同じ行: ゾーン内既存ノードのトップに揃える
     current_row_y = min(n['y'] for n in inside)
     return next_x, current_row_y
 ```
 
 ---
 
-## ID Generation
+## ID 生成
 
-Read the canvas, collect all existing IDs. Never reuse one.
+キャンバスを読み、既存 ID をすべて収集。再利用しない。
 
-Safe ID pattern: `[type]-[content-slug]-[full-unix-timestamp]`
+安全な ID パターン: `[type]-[content-slug]-[full-unix-timestamp]`
 
-Use the full Unix timestamp (10 digits) to avoid collisions in batch operations.
+バッチ操作での衝突を避けるためフル Unix タイムスタンプ(10 桁)を使用。
 
-Examples: `img-cover-1744032823`, `text-note-1744032845`, `zone-branding-1744032901`
+例: `img-cover-1744032823`, `text-note-1744032845`, `zone-branding-1744032901`
 
-If a collision is detected (ID already exists in the canvas), append `-2`, `-3`, etc.
-
----
-
-## Session Log (optional hook)
-
-If `wiki/canvases/.recent-images.txt` exists, append any new image path written to `_attachments/images/` during this session (one path per line, keep last 20).
-
-`/canvas from banana` reads this file first, making it instant without filesystem search.
+衝突を検出したら(キャンバスに既存)、`-2`, `-3` などを末尾に追加。
 
 ---
 
-## Banana Integration (if the banana-claude plugin is installed)
+## セッションログ(任意の hook)
 
-After any `/banana` run in the same session, if the user says "add to canvas" or "put on canvas", treat it as `/canvas from banana`.
+`wiki/canvases/.recent-images.txt` が存在すれば、本セッション中に `_attachments/images/` に書き込まれた新画像パスを追記(1 行 1 パス、直近 20 件保持)。
 
-When `/banana` finishes generating images, suggest:
-> "Add generated images to canvas? Run `/canvas from banana`"
+`/canvas from banana` はまずこのファイルを読むため、ファイルシステム検索なしで瞬時。
 
 ---
 
-## Summary
+## Banana 連携(banana-claude プラグイン導入時)
 
-1. Read canvas-spec.md before editing any canvas JSON.
-2. Always read the canvas file before writing. Parse existing nodes to avoid ID collisions and calculate auto-positions.
-3. Create `_attachments/images/canvas/` for downloaded/copied images.
-4. Update `wiki/index.md` when creating new canvases.
-5. Report position and zone after every add operation.
+同セッションでの `/banana` 実行後、ユーザーが「キャンバスに追加」「put on canvas」と言ったら `/canvas from banana` として扱う。
 
-## See Also
+`/banana` が画像生成を完了したら提案:
+> 「生成された画像をキャンバスに追加しますか?`/canvas from banana` を実行」
 
-For standalone visual production (12 templates, 6 layout algorithms, AI generation,
-presentations), see [claude-canvas](https://github.com/AgriciDaniel/claude-canvas).
-This skill handles wiki-scoped visual boards. claude-canvas handles full-featured
-canvas orchestration for any project.
+---
+
+## 要約
+
+1. キャンバス JSON 編集前に必ず canvas-spec.md を読む。
+2. 書き込み前に必ずキャンバスファイルを読む。既存ノードを解析して ID 衝突を避け、自動配置を計算。
+3. ダウンロード/コピーした画像用に `_attachments/images/canvas/` を作成。
+4. 新規キャンバス作成時は `wiki/index.md` を更新。
+5. 各 add 操作後に位置とゾーンを報告。
+
+## 関連
+
+スタンドアロンのビジュアル制作(12 テンプレート、6 レイアウトアルゴリズム、AI 生成、プレゼン)については [claude-canvas](https://github.com/AgriciDaniel/claude-canvas) を参照。
+このスキルは wiki スコープのビジュアルボードを扱う。claude-canvas は任意プロジェクト向けのフル機能キャンバスオーケストレーションを提供する。

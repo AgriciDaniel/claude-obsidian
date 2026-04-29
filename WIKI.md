@@ -1,29 +1,31 @@
-# WIKI.md — LLM Wiki Schema
+# WIKI.md — LLM ウィキスキーマ
 
-> If you are using the claude-obsidian plugin, the skills handle everything here automatically.
-> This file is the reference document. Read it to understand how the system works.
-> Based on Andrej Karpathy's LLM Wiki pattern.
-
----
-
-## What This Is
-
-You are maintaining a persistent, compounding wiki inside an Obsidian vault. You don't just answer questions. You build and maintain a structured knowledge base that gets richer with every source added and every question asked. The human curates sources and asks questions. You do all the writing, cross-referencing, filing, and maintenance.
-
-The wiki is the product. Chat is just the interface.
-
-The key difference from RAG: the wiki is a persistent artifact. Cross-references are already there. Contradictions have been flagged. Synthesis already reflects everything that was read. Knowledge compounds like interest.
+> claude-obsidian プラグインを使っている場合、ここで説明するすべてはスキルが自動的に処理します。
+> このファイルはリファレンス文書です。仕組みを理解するために読んでください。
+> Andrej Karpathy の LLM Wiki パターンに基づきます。
 
 ---
 
-## 0 — Bootstrap: First-Run Setup
+## これは何か
 
-On first run in any new project, execute these steps in order. Skip any step already done.
+あなたは Obsidian Vault 内の永続的に成長するウィキを維持しています。質問に答えるだけではありません。ソースが追加され質問が投げられるたびに豊かになっていく構造化ナレッジベースを構築・維持します。人間はソースのキュレーションと質問を担当します。書く・相互参照する・ファイリングする・メンテナンスする、すべてあなたの役目です。
 
-### 0.1 Check Obsidian Installation
+ウィキこそが成果物です。チャットは単なるインターフェース。
+
+RAG との決定的な違い: ウィキは永続的なアーティファクトです。相互参照はすでに張られている。矛盾はすでにフラグされている。合成はすでに読んだすべてを反映している。知識は複利のように積み上がります。
+
+> **言語ポリシー:** すべての本文・要約・ログ・チャット応答は日本語で書く。ファイル名・wikilink ターゲット・frontmatter のキーは英語のまま(プロジェクト `CLAUDE.md` 参照)。
+
+---
+
+## 0 — ブートストラップ: 初回セットアップ
+
+新規プロジェクトでの初回実行時、以下を順に実施してください。完了済みのステップはスキップ。
+
+### 0.1 Obsidian インストール確認
 
 ```bash
-# Linux: check flatpak first, then PATH
+# Linux: flatpak を先に、次に PATH を確認
 flatpak list 2>/dev/null | grep -i obsidian && echo "FOUND via flatpak" || \
 which obsidian 2>/dev/null && echo "FOUND in PATH" || echo "NOT FOUND"
 
@@ -34,7 +36,7 @@ ls /Applications/Obsidian.app 2>/dev/null && echo "FOUND" || echo "NOT FOUND"
 Test-Path "$env:LOCALAPPDATA\Obsidian" && echo "FOUND" || echo "NOT FOUND"
 ```
 
-If not installed:
+未インストールの場合:
 
 ```bash
 # Linux (Flatpak)
@@ -46,37 +48,37 @@ brew install --cask obsidian
 # Windows (winget)
 winget install Obsidian.Obsidian
 
-# All platforms: https://obsidian.md/download
+# 全プラットフォーム共通: https://obsidian.md/download
 ```
 
-After installing: Obsidian > Manage Vaults > Open Folder as Vault > select vault directory.
+インストール後: Obsidian → Vault を管理 → フォルダを Vault として開く → Vault ディレクトリを選択。
 
-If no package manager is available, tell the user: "Download Obsidian from https://obsidian.md — install it, create a vault, and tell me the path."
+パッケージマネージャが使えない場合、ユーザーに伝える: 「https://obsidian.md からダウンロードしてインストールし、Vault を作成してパスを教えてください。」
 
-### 0.2 Vault Location
+### 0.2 Vault の場所
 
-Ask for the vault path or use the default:
+Vault のパスを尋ねるか、デフォルトを使用:
 
 ```
 VAULT_PATH=~/Documents/Obsidian Vault
 ```
 
-Verify: `ls "$VAULT_PATH/.obsidian" 2>/dev/null`
+確認: `ls "$VAULT_PATH/.obsidian" 2>/dev/null`
 
-### 0.3 Install the Local REST API Plugin
+### 0.3 Local REST API プラグインのインストール
 
-Guide the user (you cannot do this programmatically):
+ユーザーを案内(プログラム的にはできない):
 
-1. Obsidian > Settings > Community Plugins > Turn off Restricted Mode
-2. Browse > Search "Local REST API" > Install > Enable
-3. Settings > Local REST API > Copy the API key
-4. Plugin runs on `https://127.0.0.1:27124` (self-signed cert)
+1. Obsidian → 設定 → コミュニティプラグイン → 制限モードをオフ
+2. ブラウズ → 「Local REST API」を検索 → インストール → 有効化
+3. 設定 → Local REST API → API キーをコピー
+4. プラグインは `https://127.0.0.1:27124` で稼働(自己署名証明書)
 
-Test: `curl -sk -H "Authorization: Bearer <KEY>" https://127.0.0.1:27124/`
+テスト: `curl -sk -H "Authorization: Bearer <KEY>" https://127.0.0.1:27124/`
 
-### 0.4 Configure MCP Server
+### 0.4 MCP サーバの構成
 
-**Option A: mcp-obsidian (REST API based, most popular)**
+**オプション A: mcp-obsidian(REST API ベース、最も一般的)**
 
 ```bash
 claude mcp add-json obsidian-vault '{
@@ -92,7 +94,7 @@ claude mcp add-json obsidian-vault '{
 }' --scope user
 ```
 
-**Option B: MCPVault (filesystem based, no plugin needed)**
+**オプション B: MCPVault(ファイルシステムベース、プラグイン不要)**
 
 ```bash
 claude mcp add-json obsidian-vault '{
@@ -102,130 +104,132 @@ claude mcp add-json obsidian-vault '{
 }' --scope user
 ```
 
-**Option C: Direct REST API via curl** — always works, no MCP needed. See Section 11.
+**オプション C: curl で直接 REST API を叩く** — どんな環境でも動く、MCP 不要。第 11 節参照。
 
-Use `--scope user` so the vault is available across all projects.
+`--scope user` を使うと全プロジェクトで Vault が利用可能になります。
 
-**Verify:**
+**確認:**
 
 ```bash
-claude mcp list               # confirm server appears
-claude mcp get obsidian-vault # confirm path is correct
+claude mcp list               # サーバが表示されるか
+claude mcp get obsidian-vault # パスが正しいか
 ```
 
-In a Claude Code session, type `/mcp` to check connection status.
+Claude Code セッションで `/mcp` を入力して接続状態を確認。
 
-### 0.5 Recommended Plugins
+### 0.5 推奨プラグイン
 
-Install via Settings > Community Plugins > Browse:
+設定 → コミュニティプラグイン → ブラウズ:
 
-| Plugin | Why |
+| プラグイン | 理由 |
 |--------|-----|
-| **Dataview** | Query vault as a database. Powers dashboards. |
-| **Templater** | Auto-populate frontmatter on note creation. |
-| **Obsidian Git** | Auto-commit every 15 minutes. Protects against data loss. |
-| **Iconize** | Visual folder icons. |
-| **Minimal Theme** | Best dark theme for dense information display. |
+| **Dataview** | Vault を DB として検索。ダッシュボードの動力源。 |
+| **Templater** | ノート作成時に frontmatter を自動補完。 |
+| **Obsidian Git** | 15 分ごとに自動コミット。データロスから保護。 |
+| **Iconize** | フォルダのビジュアルアイコン。 |
+| **Minimal Theme** | 高密度情報表示に最適なダークテーマ。 |
 
-Optional: Smart Connections (semantic search), QuickAdd (macros), Folder Notes (clickable folders).
+任意: Smart Connections(セマンティック検索)、QuickAdd(マクロ)、Folder Notes(クリック可能なフォルダ)。
 
-Also install the **Obsidian Web Clipper** browser extension. It converts web articles to markdown and sends them to `.raw/` in one click. Available for Chrome, Firefox, and Safari.
+ブラウザ拡張の **Obsidian Web Clipper** もインストール推奨。Web 記事を Markdown に変換し `.raw/` にワンクリックで送れます。Chrome / Firefox / Safari 対応。
 
 ---
 
-## 1 — Architecture
+## 1 — アーキテクチャ
 
 ```
 vault/
-├── .raw/                   # Layer 1: immutable source documents
+├── .raw/                   # 第 1 層: 不変のソース文書
 │   ├── articles/
 │   ├── transcripts/
 │   ├── screenshots/
 │   ├── data/
 │   └── assets/
 │
-├── wiki/                   # Layer 2: LLM-generated knowledge base
-│   ├── index.md            # master catalog of all wiki pages
-│   ├── log.md              # chronological record of all operations
-│   ├── hot.md              # hot cache: recent context summary (~500 words)
-│   ├── overview.md         # executive summary of the entire wiki
-│   ├── sources/            # one summary page per raw source
-│   ├── entities/           # people, orgs, products, repos
+├── wiki/                   # 第 2 層: LLM 生成のナレッジベース
+│   ├── index.md            # 全 wiki ページのマスターカタログ
+│   ├── log.md              # 全操作の時系列記録
+│   ├── hot.md              # ホットキャッシュ: 直近コンテキスト要約(約 500 語)
+│   ├── overview.md         # ウィキ全体のエグゼクティブサマリー
+│   ├── sources/            # 生ソース 1 件につき 1 ページの要約
+│   ├── entities/           # 人物・組織・製品・リポジトリ
 │   │   └── _index.md
-│   ├── concepts/           # ideas, patterns, frameworks
+│   ├── concepts/           # アイデア・パターン・フレームワーク
 │   │   └── _index.md
-│   ├── domains/            # top-level topic areas
+│   ├── domains/            # トップレベルのトピック領域
 │   │   └── _index.md
-│   ├── comparisons/        # side-by-side analyses
-│   ├── questions/          # filed answers to user queries
-│   └── meta/               # dashboards, lint reports, conventions
+│   ├── comparisons/        # 並列分析
+│   ├── questions/          # ユーザー質問への回答ファイル
+│   └── meta/               # ダッシュボード、lint レポート、規約
 │
-├── _templates/             # Templater templates
-├── _attachments/           # images and PDFs referenced by wiki pages
+├── _templates/             # Templater テンプレート
+├── _attachments/           # wiki ページが参照する画像・PDF
 │
-├── WIKI.md                 # Layer 3: this file
-└── .obsidian/              # Obsidian config (auto-managed)
+├── WIKI.md                 # 第 3 層: このファイル
+└── .obsidian/              # Obsidian 設定(自動管理)
 ```
 
-### Rules
+### ルール
 
-- `.raw/` is read-only. Never modify source files.
-- `wiki/` is yours. Create, update, rename, delete freely.
-- Every wiki page has frontmatter. No exceptions.
-- Wikilinks over paths. Use `[[Page Name]]` not `[text](path/to/file.md)`.
-- Atomic notes. One concept per page. If it covers two things, split it.
-- Update, don't duplicate. If a page exists, update it.
+- `.raw/` は読み取り専用。ソースファイルを書き換えてはいけない。
+- `wiki/` はあなたのもの。自由に作成・更新・改名・削除できる。
+- すべての wiki ページに frontmatter がある。例外なし。
+- パスより wikilink。`[[Page Name]]` を使い、`[text](path/to/file.md)` は使わない。
+- アトミックノート。1 ページ 1 概念。2 つ扱うなら分割。
+- 重複を作らない。既存ページがあれば更新する。
 
 ---
 
-## 2 — Hot Cache
+## 2 — ホットキャッシュ
 
-`wiki/hot.md` is a ~500-word summary of the most recent context. It exists so that other projects pointing at this vault can get recent context without crawling the full wiki.
+`wiki/hot.md` は直近コンテキストの約 500 語の要約です。この Vault を参照する他プロジェクトが、フル wiki をクロールせずに直近文脈を取得できるように存在します。
 
-Update hot.md after every ingest, after any significant query exchange, and at the end of every session.
+更新タイミング: 毎回の取り込み後、重要な質問のやり取り後、毎セッション終了時。
 
-Format:
+書式:
 
 ```markdown
 ---
 type: meta
-title: "Hot Cache"
+title: "ホットキャッシュ"
+aliases: ["Hot Cache"]
 updated: 2026-04-07T14:30:00
 ---
 
-# Recent Context
+# 直近のコンテキスト
 
-## Last Updated
-2026-04-07 — Ingested 3 new YouTube transcripts
+## 最終更新
+2026-04-07 — YouTube トランスクリプト 3 本を取り込み
 
-## Key Recent Facts
-- [Most important recent takeaway]
-- [Second most important]
+## 重要な最近の事実
+- 一番大事な点
+- 二番目
 
-## Recent Changes
-- Created: [[New Page 1]], [[New Page 2]]
-- Updated: [[Existing Page]] (added section on X)
-- Flagged: Contradiction between [[Page A]] and [[Page B]] on topic Y
+## 最近の変更
+- 作成: [[New Page 1]], [[New Page 2]]
+- 更新: [[Existing Page]](X についてのセクションを追記)
+- フラグ: トピック Y について [[Page A]] と [[Page B]] の矛盾を検出
 
-## Active Threads
-- User is currently researching [topic]
-- Open question: [thing still being investigated]
+## 進行中のスレッド
+- ユーザーが現在リサーチ中: [トピック]
+- 未解決の問い: [調査継続中の事項]
 ```
 
-Keep it under 500 words. It is a cache, not a journal. Overwrite it completely each time.
+500 語以下に収めること。これはキャッシュであってジャーナルではない。毎回完全に上書きする。
 
 ---
 
-## 3 — Frontmatter Schema
+## 3 — Frontmatter スキーマ
 
-Every wiki page starts with flat YAML frontmatter. No nested objects. Obsidian's Properties UI doesn't support them.
+すべての wiki ページはフラットな YAML frontmatter で始まる。ネストオブジェクトは禁止(Obsidian の Properties UI が対応していない)。
 
-### Universal fields (every page):
+### 共通フィールド(全ページ):
 
 ```yaml
 ---
 type: <source|entity|concept|domain|comparison|question|overview|meta>
-title: "Human-Readable Title"
+title: "人間が読むタイトル"
+aliases: ["English Filename", "日本語表示名"]
 created: 2026-04-07
 updated: 2026-04-07
 tags:
@@ -239,339 +243,343 @@ sources:
 ---
 ```
 
-### Type-specific additions:
+> `type:`、`status:` の値は英語の列挙値のまま(Obsidian Bases / DataView クエリ互換のため)。`title:` 値や本文は日本語で書く。`aliases:` には英語ファイル名と日本語表示名の両方を入れる。
 
-**source**: `source_type`, `author`, `date_published`, `url`, `confidence` (high|medium|low), `key_claims` (list)
+### タイプ別追加フィールド:
 
-**entity**: `entity_type` (person|organization|product|repository|place), `role`, `first_mentioned`
+**source**: `source_type`, `author`, `date_published`, `url`, `confidence`(high|medium|low), `key_claims`(リスト)
 
-**concept**: `complexity` (basic|intermediate|advanced), `domain`, `aliases` (list)
+**entity**: `entity_type`(person|organization|product|repository|place), `role`, `first_mentioned`
 
-**comparison**: `subjects` (list of wikilinks), `dimensions` (list), `verdict` (one line)
+**concept**: `complexity`(basic|intermediate|advanced), `domain`, `aliases`(リスト)
 
-**question**: `question` (the original query), `answer_quality` (draft|solid|definitive)
+**comparison**: `subjects`(wikilink のリスト), `dimensions`(リスト), `verdict`(1 行)
+
+**question**: `question`(元のクエリ), `answer_quality`(draft|solid|definitive)
 
 ---
 
-## 4 — Operations
+## 4 — 操作
 
-### 4.1 SCAFFOLD — First-Run Structure
+### 4.1 SCAFFOLD — 初回構造構築
 
-Trigger: user describes what the vault is for.
+トリガー: ユーザーが Vault の用途を説明する。
 
-1. Determine the wiki mode (see modes table below and full mode details in Section 4.1a).
-2. Ask one question: "What is this vault for?"
-3. Create full folder structure under `wiki/`.
-4. Create a domain page + `_index.md` sub-index for each domain.
-5. Create `wiki/overview.md`, `wiki/index.md`, `wiki/log.md`, `wiki/hot.md`.
-6. Create `_templates/` with templates for each note type.
-7. Apply visual customization (Section 7). Create `.obsidian/snippets/vault-colors.css`.
-8. Create vault CLAUDE.md (template in Section 4.1b).
-9. Initialize git (Section 8).
-10. Present the structure and ask: "Want to adjust anything before we start?"
+1. ウィキモードを判別(下のモード表と 4.1a の詳細参照)。
+2. 質問を 1 つだけ: 「この Vault は何のため?」
+3. `wiki/` 配下にフォルダ構造を作成。
+4. 各ドメインに対しドメインページ + `_index.md` のサブインデックスを作成。
+5. `wiki/overview.md`, `wiki/index.md`, `wiki/log.md`, `wiki/hot.md` を作成。
+6. `_templates/` に各ノートタイプのテンプレートを配置。
+7. ビジュアルカスタマイズを適用(第 7 節)。`.obsidian/snippets/vault-colors.css` を作成。
+8. Vault の CLAUDE.md を作成(4.1b のテンプレート)。
+9. git を初期化(第 8 節)。
+10. 構造を提示し、「始める前に調整したい点はありますか?」と尋ねる。
 
-**Mode selection:**
+**モード選択:**
 
-| User says | Best mode |
+| ユーザー入力 | 最適モード |
 |-----------|----------|
-| "my website", "sitemap", "content audit" | A: Website |
-| "my repo", "codebase map", "architecture wiki" | B: GitHub |
-| "my business", "project wiki", "competitive intel" | C: Business |
-| "second brain", "goals", "journal", "my life" | D: Personal |
-| "research topic", "papers", "deep dive" | E: Research |
-| "book I'm reading", "course notes", "chapter tracker" | F: Book/Course |
+| 「自分のサイト」「サイトマップ」「コンテンツ監査」 | A: Website |
+| 「自分のリポジトリ」「コードベースマップ」「アーキテクチャウィキ」 | B: GitHub |
+| 「自分のビジネス」「プロジェクトウィキ」「競合分析」 | C: Business |
+| 「セカンドブレイン」「目標」「ジャーナル」「自分の人生」 | D: Personal |
+| 「リサーチトピック」「論文」「深掘り」 | E: Research |
+| 「読んでる本」「コースノート」「章管理」 | F: Book/Course |
 
-You can combine modes. "GitHub repo + research on the AI approach" uses Mode B folders plus Mode E papers/ folder.
+モードは組み合わせ可能。「GitHub リポジトリ + AI アプローチに関するリサーチ」ならモード B のフォルダ + モード E の papers/ を併用。
 
-### 4.1a — The Six Wiki Modes
+### 4.1a — 6 つのウィキモード
 
-**Mode A: Website / Sitemap**
+**モード A: Website / Sitemap**
 
 ```
 vault/
-├── .raw/              # crawl exports, analytics, GSC data
+├── .raw/              # クロールエクスポート、解析、GSC データ
 ├── wiki/
-│   ├── pages/         # one note per URL
-│   ├── structure/     # site architecture, nav hierarchy
-│   ├── audits/        # content gaps, redirect needs
-│   ├── keywords/      # keyword clusters, target page assignments
-│   └── entities/      # brand, authors, topic hubs
+│   ├── pages/         # URL 1 件につき 1 ノート
+│   ├── structure/     # サイトアーキテクチャ、ナビ階層
+│   ├── audits/        # コンテンツのギャップ、リダイレクト要件
+│   ├── keywords/      # キーワードクラスタ、ターゲットページ割当
+│   └── entities/      # ブランド、執筆者、トピックハブ
 ```
 
-Frontmatter for pages/: `url`, `status` (live|redirect|404|stub|no-index), `h1`, `meta_description`, `word_count`, `has_schema`, `indexed`, `canonical`, `internal_links_in`, `internal_links_out`, `last_crawled`
+pages/ の frontmatter: `url`, `status`(live|redirect|404|stub|no-index), `h1`, `meta_description`, `word_count`, `has_schema`, `indexed`, `canonical`, `internal_links_in`, `internal_links_out`, `last_crawled`
 
-Key pages: `[[Site Overview]]`, `[[Navigation Structure]]`, `[[Content Gaps]]`, `[[Redirect Map]]`, `[[Keyword Clusters]]`
+主要ページ: `[[Site Overview]]`, `[[Navigation Structure]]`, `[[Content Gaps]]`, `[[Redirect Map]]`, `[[Keyword Clusters]]`
 
 ---
 
-**Mode B: GitHub / Repository**
+**モード B: GitHub / Repository**
 
 ```
 vault/
-├── .raw/              # README, git log exports, code dumps
+├── .raw/              # README、git log エクスポート、コードダンプ
 ├── wiki/
-│   ├── modules/       # one note per module / package / service
-│   ├── components/    # reusable components
-│   ├── decisions/     # Architecture Decision Records
-│   ├── dependencies/  # external deps, versions, risk
-│   └── flows/         # data flows, request paths, auth flows
+│   ├── modules/       # モジュール / パッケージ / サービス 1 件につき 1 ノート
+│   ├── components/    # 再利用可能コンポーネント
+│   ├── decisions/     # アーキテクチャ決定記録(ADR)
+│   ├── dependencies/  # 外部依存、バージョン、リスク
+│   └── flows/         # データフロー、リクエストパス、認証フロー
 ```
 
-Frontmatter for modules/: `path`, `status` (active|deprecated|experimental|planned), `language`, `purpose`, `maintainer`, `depends_on`, `used_by`, `linked_issues`
+modules/ の frontmatter: `path`, `status`(active|deprecated|experimental|planned), `language`, `purpose`, `maintainer`, `depends_on`, `used_by`, `linked_issues`
 
-Key pages: `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`
+主要ページ: `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`
 
 ---
 
-**Mode C: Business / Project**
+**モード C: Business / Project**
 
 ```
 vault/
-├── .raw/              # meeting transcripts, Slack exports, docs
+├── .raw/              # 会議トランスクリプト、Slack エクスポート、ドキュメント
 ├── wiki/
-│   ├── stakeholders/  # people, companies, decision-makers
-│   ├── decisions/     # key decisions with rationale and date
-│   ├── deliverables/  # milestones, outputs, status
-│   ├── intel/         # competitor analysis, market research
-│   └── comms/         # synthesized meeting notes
+│   ├── stakeholders/  # 人物、企業、意思決定者
+│   ├── decisions/     # 重要な決定とその根拠・日付
+│   ├── deliverables/  # マイルストーン、成果物、ステータス
+│   ├── intel/         # 競合分析、市場調査
+│   └── comms/         # 合成された会議メモ
 ```
 
-Frontmatter for decisions/: `status` (active|pending|done|blocked|superseded), `priority` (1-5), `date`, `owner`, `due_date`, `context`
+decisions/ の frontmatter: `status`(active|pending|done|blocked|superseded), `priority`(1-5), `date`, `owner`, `due_date`, `context`
 
-Key pages: `[[Project Overview]]`, `[[Stakeholder Map]]`, `[[Decision Log]]`, `[[Competitor Landscape]]`
+主要ページ: `[[Project Overview]]`, `[[Stakeholder Map]]`, `[[Decision Log]]`, `[[Competitor Landscape]]`
 
 ---
 
-**Mode D: Personal / Second Brain**
+**モード D: Personal / Second Brain**
 
 ```
 vault/
-├── .raw/              # journal entries, articles, voice transcripts
+├── .raw/              # ジャーナル、記事、音声トランスクリプト
 ├── wiki/
-│   ├── goals/         # personal and professional goals
-│   ├── learning/      # concepts being mastered
-│   ├── people/        # relationships, shared context
-│   ├── areas/         # life areas: health, finances, career
-│   └── resources/     # books, courses, tools
+│   ├── goals/         # 個人および専門分野の目標
+│   ├── learning/      # 習得中の概念
+│   ├── people/        # 関係性、共通文脈
+│   ├── areas/         # 人生の領域: 健康、財政、キャリア
+│   └── resources/     # 書籍、コース、ツール
 ├── _meta/
-│   └── hot-cache.md   # ~500 words of active context
+│   └── hot-cache.md   # アクティブコンテキスト約 500 語
 ```
 
-Frontmatter for goals/: `area` (health|career|finance|creative|relationships|growth), `priority`, `target_date`, `progress` (0-100)
+goals/ の frontmatter: `area`(health|career|finance|creative|relationships|growth), `priority`, `target_date`, `progress`(0-100)
 
-Key pages: `[[North Star]]`, `[[Weekly Review Template]]`, `[[Annual Goals]]`
+主要ページ: `[[North Star]]`, `[[Weekly Review Template]]`, `[[Annual Goals]]`
 
 ---
 
-**Mode E: Research**
+**モード E: Research**
 
 ```
 vault/
-├── .raw/              # PDFs, web clips, raw notes
+├── .raw/              # PDF、Web クリップ、生メモ
 ├── wiki/
-│   ├── papers/        # paper summaries with key claims
-│   ├── concepts/      # extracted concepts, models, frameworks
-│   ├── entities/      # people, organizations, datasets
-│   ├── thesis/        # evolving synthesis
-│   └── gaps/          # open questions, contradictions
+│   ├── papers/        # 主要主張つきの論文要約
+│   ├── concepts/      # 抽出された概念、モデル、フレームワーク
+│   ├── entities/      # 人物、組織、データセット
+│   ├── thesis/        # 進化中の合成
+│   └── gaps/          # 未解決の問い、矛盾
 ```
 
-Frontmatter for papers/: `year`, `authors`, `venue`, `key_claim`, `methodology`, `contradicts`, `supports`
+papers/ の frontmatter: `year`, `authors`, `venue`, `key_claim`, `methodology`, `contradicts`, `supports`
 
-Key pages: `[[Research Overview]]`, `[[Key Claims Map]]`, `[[Open Questions]]`, `[[Methodology Comparison]]`
+主要ページ: `[[Research Overview]]`, `[[Key Claims Map]]`, `[[Open Questions]]`, `[[Methodology Comparison]]`
 
 ---
 
-**Mode F: Book / Course**
+**モード F: Book / Course**
 
 ```
 vault/
-├── .raw/              # chapter notes, highlights, exercises
+├── .raw/              # 章メモ、ハイライト、演習
 ├── wiki/
-│   ├── characters/    # characters, personas, experts
-│   ├── themes/        # major themes with evidence
-│   ├── concepts/      # domain-specific terms
-│   ├── timeline/      # structure, sequence, chapter map
-│   └── synthesis/     # your own takeaways and applications
+│   ├── characters/    # 登場人物、ペルソナ、専門家
+│   ├── themes/        # 根拠つきの主要テーマ
+│   ├── concepts/      # ドメイン固有用語
+│   ├── timeline/      # 構造、順序、章マップ
+│   └── synthesis/     # 自分なりの気づきと応用
 ```
 
-Frontmatter for concepts/: `source_chapters`, `first_appearance`
+concepts/ の frontmatter: `source_chapters`, `first_appearance`
 
-Key pages: `[[Book Overview]]`, `[[Theme Map]]`, `[[Character / Expert Index]]`, `[[My Takeaways]]`
+主要ページ: `[[Book Overview]]`, `[[Theme Map]]`, `[[Character / Expert Index]]`, `[[My Takeaways]]`
 
-### 4.1b — Vault CLAUDE.md Template
+### 4.1b — Vault CLAUDE.md テンプレート
 
-Create this in the vault root when scaffolding a new project vault:
+新規プロジェクト Vault 足場時、Vault ルートに作成:
 
 ```markdown
-# [WIKI NAME] — LLM Wiki
+# [WIKI NAME] — LLM ウィキ
 
-Mode: [MODE A/B/C/D/E/F]
-Purpose: [ONE SENTENCE]
-Owner: [NAME]
-Created: YYYY-MM-DD
+モード: [MODE A/B/C/D/E/F]
+目的: [一文]
+所有者: [名前]
+作成日: YYYY-MM-DD
 
-## Structure
+## 構造
 
-[PASTE THE FOLDER MAP FROM THE CHOSEN MODE]
+[選んだモードのフォルダマップを貼る]
 
-## Conventions
+## 規約
 
-- All notes use YAML frontmatter: type, status, created, updated, tags (minimum)
-- Wikilinks use [[Note Name]] format — filenames are unique, no paths needed
-- .raw/ contains source documents — never modify them
-- wiki/index.md is the master catalog — update on every ingest
-- wiki/log.md is append-only — new entries go at the TOP, never edit past entries
+- 全ノートは YAML frontmatter を持つ: type, status, created, updated, tags(最低限)
+- wikilink は [[Note Name]] 形式 — ファイル名は一意なのでパス不要
+- .raw/ はソース文書 — 絶対に書き換えない
+- wiki/index.md はマスターカタログ — 取り込みごとに更新
+- wiki/log.md は追記専用 — 新エントリは TOP に、過去エントリは編集しない
 
-## Operations
+## 操作
 
-- Ingest: drop source in .raw/, say "ingest [filename]"
-- Query: ask any question — Claude reads index first, then drills in
-- Lint: say "lint the wiki" to run a health check
+- 取り込み: .raw/ にソースを置き、「[ファイル名] を取り込んで」
+- 質問: 自由に質問 — Claude は index を読み、関連ページに踏み込む
+- lint: 「wiki を lint して」で健全性チェック
 ```
 
-### 4.2 INGEST — Single Source
+### 4.2 INGEST — 単一ソース
 
-Trigger: user drops a file into `.raw/` or pastes content.
+トリガー: ユーザーが `.raw/` にファイルを置く、もしくは内容を貼り付ける。
 
-1. Read the source completely.
-2. Discuss key takeaways with the user. Skip if user says "just ingest it."
-3. Create source summary in `wiki/sources/`.
-4. Create or update entity pages for every person/org/product/repo mentioned.
-5. Create or update concept pages for significant ideas.
-6. Update relevant domain pages and their `_index.md` sub-indexes.
-7. Update `wiki/overview.md` if the big picture changed.
-8. Update `wiki/index.md`. Add entries for all new pages.
-9. Update `wiki/hot.md` with this ingest's context.
-10. Append to `wiki/log.md` (new entries at the TOP):
+1. ソースを完全に読む。
+2. 主要な気づきをユーザーと議論。「とにかく取り込んで」と言われたらスキップ。
+3. `wiki/sources/` に要約ページを作成。
+4. 言及されたすべての人物・組織・製品・リポジトリのエンティティページを作成または更新。
+5. 重要なアイデアの概念ページを作成または更新。
+6. 関連ドメインページとそれらの `_index.md` サブインデックスを更新。
+7. 全体像が変わったら `wiki/overview.md` を更新。
+8. `wiki/index.md` を更新。新ページのエントリを追加。
+9. `wiki/hot.md` をこの取り込みのコンテキストで更新。
+10. `wiki/log.md` の **先頭** に追記:
     ```markdown
-    ## [2026-04-07] ingest | Source Title
-    - Source: `.raw/articles/filename.md`
-    - Summary: [[Source Title]]
-    - Pages created: [[Page 1]], [[Page 2]]
-    - Pages updated: [[Page 3]], [[Page 4]]
-    - Key insight: One sentence on what is new.
+    ## [2026-04-07] ingest | ソースタイトル
+    - ソース: `.raw/articles/filename.md`
+    - 要約ページ: [[Source Title]]
+    - 作成: [[Page 1]], [[Page 2]]
+    - 更新: [[Page 3]], [[Page 4]]
+    - 主な発見: 新たに分かったことを 1 文で。
     ```
-11. Check for contradictions. Flag with `> [!contradiction]` callouts on both pages.
+11. 矛盾チェック。両ページに `> [!contradiction]` callout でフラグ。
 
-A single source typically touches 8-15 wiki pages.
+1 件のソースは通常 8〜15 ページに影響を与える。
 
-### 4.3 INGEST — Batch Mode
+### 4.3 INGEST — バッチモード
 
-Trigger: user drops multiple files or says "ingest all of these."
+トリガー: ユーザーが複数ファイルを投入、または「これら全部を取り込んで」と指示。
 
-1. List all files to process. Confirm with user.
-2. Process each source following the single ingest flow. Defer cross-referencing.
-3. After all sources: cross-reference pass. Look for connections between new sources.
-4. Update index, hot cache, and log once at the end, not per source.
-5. Report: "Processed N sources. Created X pages, updated Y pages. Key connections: ..."
+1. 処理対象ファイルをリスト化。ユーザーに確認。
+2. 単一取り込みフローで各ソースを処理。相互参照は後回し。
+3. 全ソース処理後: 相互参照パス。新ソース間の関連を探す。
+4. index、ホットキャッシュ、log を最後に 1 回だけ更新(各ソースごとではなく)。
+5. 報告: 「N 件処理しました。X ページ作成、Y ページ更新。主な接続: ...」
 
-Batch ingest is less interactive. For 30+ sources, check in after every 10.
+バッチ取り込みは対話性が低い。30 件以上なら 10 件ごとに進捗確認。
 
-### 4.4 QUERY — Answering Questions
+### 4.4 QUERY — 質問への回答
 
-1. Read `wiki/hot.md` first. It may have the answer.
-2. Read `wiki/index.md` to find relevant pages.
-3. Read those pages (3-5 typically, 10+ is too many).
-4. Synthesize the answer in chat. Cite with wikilinks.
-5. Offer to file as a wiki page in `wiki/questions/`.
-6. If the question reveals a gap: "I don't have enough on X. Want to find a source?"
+1. まず `wiki/hot.md` を読む。回答が含まれているかも。
+2. `wiki/index.md` を読み、関連ページを特定。
+3. それらを読む(通常 3〜5 件、10 件以上は読みすぎ)。
+4. チャットで回答を合成。wikilink で引用。
+5. `wiki/questions/` に保存するか提案。
+6. 質問でギャップが見えた: 「X についての情報が足りません。ソースを探しますか?」
 
-### 4.5 LINT — Health Check
+### 4.5 LINT — 健全性チェック
 
-Trigger: user says "lint" or every 10-20 ingests.
+トリガー: ユーザーが「lint」と言うか、10〜20 件取り込みごと。
 
-Checks: orphan pages, dead links, stale claims, missing pages for mentioned concepts, missing cross-references, frontmatter gaps, empty sections.
+チェック項目: 孤立ページ、デッドリンク、古い主張、言及された概念のページ欠落、欠けた相互参照、frontmatter のギャップ、空セクション。
 
-Output: `wiki/meta/lint-report-YYYY-MM-DD.md`. Ask before auto-fixing.
+出力: `wiki/meta/lint-report-YYYY-MM-DD.md`。自動修正前に確認を取る。
 
 ---
 
-## 5 — Index and Sub-Indexes
+## 5 — Index とサブインデックス
 
-### wiki/index.md (Master)
+### wiki/index.md(マスター)
 
 ```markdown
 ---
 type: meta
-title: "Wiki Index"
+title: "ウィキ索引"
+aliases: ["Wiki Index"]
 updated: 2026-04-07
 ---
-# Wiki Index
+# ウィキ索引
 
-## Domains
-- [[Domain Name]] — description (N sources)
+## ドメイン
+- [[Domain Name]] — 説明(N 件のソース)
 
-## Entities
-- [[Entity Name]] — role (first: [[Source]])
+## エンティティ
+- [[Entity Name]] — 役割(初出: [[Source]])
 
-## Concepts
-- [[Concept Name]] — definition (status: developing)
+## 概念
+- [[Concept Name]] — 定義(ステータス: developing)
 
-## Sources
-- [[Source Title]] — author, date, type
+## ソース
+- [[Source Title]] — 著者、日付、種別
 
-## Questions
-- [[Question Title]] — answer summary
+## 質問
+- [[Question Title]] — 回答要約
 ```
 
-### Domain Sub-Indexes
+### ドメインサブインデックス
 
-Each domain folder gets a `_index.md` with a catalog of just that domain's pages.
+各ドメインフォルダに、そのドメインのページのみカタログ化した `_index.md` を置く。
 
 ```markdown
 ---
 type: meta
-title: "Entities Index"
+title: "エンティティ索引"
+aliases: ["Entities Index"]
 updated: 2026-04-07
 ---
-# Entities
+# エンティティ
 
-## People
-- [[Person Name]] — role, org
+## 人物
+- [[Person Name]] — 役割、所属
 
-## Organizations
-- [[Org Name]] — what they do
+## 組織
+- [[Org Name]] — 何をしているか
 ```
 
 ### wiki/log.md
 
-Append-only. New entries go at the TOP. Each entry: `## [YYYY-MM-DD] operation | title`
+追記専用。新エントリは TOP に。各エントリ: `## [YYYY-MM-DD] operation | title`
 
-Parse recent entries:
+直近エントリの解析:
 ```bash
 grep "^## \[" wiki/log.md | head -10
 ```
 
 ---
 
-## 6 — Cross-Project Referencing
+## 6 — クロスプロジェクト参照
 
-Any Claude Code project can read your wiki without duplicating context.
+任意の Claude Code プロジェクトはコンテキスト重複なしであなたの wiki を読める。
 
-In another project's CLAUDE.md, add:
+向こうのプロジェクトの CLAUDE.md に追記:
 
 ```markdown
-## Wiki Knowledge Base
-Path: ~/Documents/Obsidian Vault
+## ウィキナレッジベース
+パス: ~/Documents/Obsidian Vault
 
-When you need context not already in this project:
-1. Read wiki/hot.md first (recent context, ~500 words)
-2. If not enough, read wiki/index.md (full catalog)
-3. If you need domain specifics, read wiki/<domain>/_index.md
-4. Only then read individual wiki pages
+このプロジェクトに無いコンテキストが必要なとき:
+1. まず wiki/hot.md(直近コンテキスト約 500 語)を読む
+2. 足りなければ wiki/index.md(全カタログ)を読む
+3. ドメイン詳細が必要なら wiki/<domain>/_index.md
+4. その上で個別 wiki ページを読む
 
-Do NOT read the wiki for general coding questions, things already in this
-project's context, or tasks unrelated to [your domain].
+一般的なコーディング質問やこのプロジェクトに既にあるコンテキスト、
+[ドメイン] と無関係な作業には wiki を読まない。
 ```
 
-This keeps token usage low. Hot cache costs ~500 tokens. Index costs ~1000 tokens. Individual pages cost 100-300 tokens each.
+これでトークン使用量が低く保たれる。ホットキャッシュ約 500 トークン、index 約 1000 トークン、個別ページ各 100〜300 トークン。
 
 ---
 
-## 7 — Visual Customization
+## 7 — ビジュアルカスタマイズ
 
-Apply during scaffold. Create `.obsidian/snippets/vault-colors.css`:
+足場時に適用。`.obsidian/snippets/vault-colors.css` を作成:
 
 ```css
 :root {
@@ -595,24 +603,24 @@ Apply during scaffold. Create `.obsidian/snippets/vault-colors.css`:
 .callout[data-callout='stale']         { --callout-color: 128, 128, 128; --callout-icon: lucide-clock; }
 ```
 
-Enable: Settings > Appearance > CSS Snippets > refresh > toggle on.
+有効化: 設定 → 外観 → CSS スニペット → リフレッシュ → 有効化。
 
-### Graph View Groups
+### グラフビューのグループ
 
-Set in Graph View settings:
+グラフビュー設定で:
 
-| Query | Color |
+| クエリ | 色 |
 |-------|-------|
-| `path:wiki/domains` | Blue |
-| `path:wiki/entities` | Purple |
-| `path:wiki/concepts` | Yellow |
-| `path:wiki/sources` | Orange |
-| `path:wiki/questions` | Green |
-| `path:.raw` | Gray (dimmed) |
+| `path:wiki/domains` | 青 |
+| `path:wiki/entities` | 紫 |
+| `path:wiki/concepts` | 黄 |
+| `path:wiki/sources` | オレンジ |
+| `path:wiki/questions` | 緑 |
+| `path:.raw` | グレー(薄く) |
 
 ---
 
-## 8 — Git Setup
+## 8 — Git セットアップ
 
 ```bash
 cd "$VAULT_PATH"
@@ -629,32 +637,33 @@ EOF
 git add -A && git commit -m "Initial vault scaffold"
 ```
 
-Enable Obsidian Git: Settings > Obsidian Git > Auto backup interval > 15 minutes.
+Obsidian Git を有効化: 設定 → Obsidian Git → Auto backup interval → 15 分。
 
 ---
 
-## 9 — Dataview Dashboards
+## 9 — Dataview ダッシュボード
 
-Create in `wiki/meta/dashboard.md` after scaffold:
+足場後 `wiki/meta/dashboard.md` に作成:
 
 ````markdown
 ---
 type: meta
-title: "Dashboard"
+title: "ダッシュボード"
+aliases: ["Dashboard"]
 ---
-# Wiki Dashboard
+# ウィキダッシュボード
 
-## Recent Activity
+## 最近の活動
 ```dataview
 TABLE type, status, updated FROM "wiki" SORT updated DESC LIMIT 15
 ```
 
-## Seed Pages (Need Development)
+## シードページ(育成が必要)
 ```dataview
 LIST FROM "wiki" WHERE status = "seed" SORT updated ASC
 ```
 
-## Entities Missing Sources
+## ソース未紐付けのエンティティ
 ```dataview
 LIST FROM "wiki/entities" WHERE !sources OR length(sources) = 0
 ```
@@ -662,36 +671,36 @@ LIST FROM "wiki/entities" WHERE !sources OR length(sources) = 0
 
 ---
 
-## 10 — Context Window Management
+## 10 — コンテキストウィンドウ管理
 
-Read the minimum needed:
+必要最小限を読む:
 
-- Read `hot.md` first. It may already have what you need.
-- Read `index.md` second. Find relevant pages, don't scan everything.
-- Read domain sub-indexes for focused lookups.
-- Read only 3-5 pages per query. 10+ is too many.
-- Use search for keyword lookups. Don't scan full pages looking for a word.
-- Use PATCH for surgical edits. Never re-read and rewrite a whole file to change one field.
-- Keep wiki pages short. 100-300 lines max. Split long pages.
-- Don't paste wiki content into chat unless the user asks. Reference by wikilink.
+- まず `hot.md`。すでに必要な情報があるかも。
+- 次に `index.md`。関連ページを特定。全部スキャンしない。
+- 焦点を絞った検索にはドメインサブインデックスを使う。
+- 1 質問あたり 3〜5 ページのみ。10 件以上は読みすぎ。
+- キーワード検索には search を使う。1 単語のためにフルページをスキャンしない。
+- 外科的編集には PATCH を使う。1 フィールドの変更でファイル全体を読み直して書き直さない。
+- wiki ページは短く保つ。最大 100〜300 行。長くなったら分割。
+- ユーザーに頼まれない限り wiki 内容をチャットに貼らない。wikilink で参照する。
 
 ---
 
-## 11 — REST API Quick Reference
+## 11 — REST API クイックリファレンス
 
-Set these before running any command:
+実行前にセット:
 
 ```bash
 API="https://127.0.0.1:27124"
 KEY="your-api-key-here"
 ```
 
-**Read a file:**
+**ファイル読み取り:**
 ```bash
 curl -sk -H "Authorization: Bearer $KEY" "$API/vault/wiki/index.md"
 ```
 
-**Create or replace a file:**
+**ファイル作成または上書き:**
 ```bash
 curl -sk -X PUT \
   -H "Authorization: Bearer $KEY" \
@@ -700,16 +709,16 @@ curl -sk -X PUT \
   "$API/vault/wiki/entities/Name.md"
 ```
 
-**Append to a file:**
+**ファイル末尾追記:**
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: text/markdown" \
-  --data "- New item" \
+  --data "- 新項目" \
   "$API/vault/wiki/log.md"
 ```
 
-**Patch a frontmatter field:**
+**Frontmatter の特定フィールドを更新:**
 ```bash
 curl -sk -X PATCH \
   -H "Authorization: Bearer $KEY" \
@@ -719,24 +728,24 @@ curl -sk -X PATCH \
   "$API/vault/wiki/concepts/Name.md"
 ```
 
-**Append under a heading:**
+**見出し配下に追記:**
 ```bash
 curl -sk -X PATCH \
   -H "Authorization: Bearer $KEY" \
   -H "Operation: append" -H "Target-Type: heading" \
-  -H "Target: Connections" -H "Content-Type: text/markdown" \
+  -H "Target: 関連" -H "Content-Type: text/markdown" \
   --data "- [[New Page]]" \
   "$API/vault/wiki/entities/Name.md"
 ```
 
-**Search:**
+**検索:**
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
-  "$API/search/simple/?query=machine+learning"
+  "$API/search/simple/?query=機械学習"
 ```
 
-**Dataview query:**
+**Dataview クエリ:**
 ```bash
 curl -sk -X POST \
   -H "Authorization: Bearer $KEY" \
@@ -747,65 +756,65 @@ curl -sk -X POST \
 
 ---
 
-## 12 — Vault CLAUDE.md Template
+## 12 — Vault CLAUDE.md テンプレート
 
-When creating a wiki for a new project (not this plugin), create a CLAUDE.md at the vault root:
+新規プロジェクト用にウィキを作るとき(このプラグインではなく)、Vault ルートに CLAUDE.md を作成:
 
 ```markdown
-# [WIKI NAME] — LLM Wiki
+# [WIKI NAME] — LLM ウィキ
 
-Mode: [MODE A/B/C/D/E/F]
-Purpose: [ONE SENTENCE]
-Owner: [NAME]
-Created: YYYY-MM-DD
+モード: [MODE A/B/C/D/E/F]
+目的: [一文]
+所有者: [名前]
+作成日: YYYY-MM-DD
 
-## Structure
+## 構造
 
-[PASTE THE FOLDER MAP FROM THE CHOSEN MODE]
+[選んだモードのフォルダマップを貼る]
 
-## Conventions
+## 規約
 
-- All notes use YAML frontmatter: type, status, created, updated, tags (minimum)
-- Wikilinks use [[Note Name]] format
-- .raw/ contains source documents — never modify them
-- wiki/index.md is the master catalog — update on every ingest
-- wiki/log.md is append-only — new entries go at the TOP
+- 全ノートは YAML frontmatter: type, status, created, updated, tags(最低限)
+- wikilink は [[Note Name]] 形式
+- .raw/ はソース文書 — 絶対に書き換えない
+- wiki/index.md はマスターカタログ — 取り込みごとに更新
+- wiki/log.md は追記専用 — 新エントリは TOP に
 
-## Operations
+## 操作
 
-- Ingest: drop source in .raw/, say "ingest [filename]"
-- Query: ask any question
-- Lint: say "lint the wiki"
+- 取り込み: .raw/ にソースを置き、「[ファイル名] を取り込んで」
+- 質問: 自由に質問
+- lint: 「wiki を lint して」
 ```
 
 ---
 
-## 13 — Conventions
+## 13 — 規約
 
-### Naming
+### 命名
 
-- **Filenames**: Title Case with spaces (`Machine Learning.md`)
-- **Folders**: lowercase with dashes (`wiki/data-models/`)
-- **Tags**: lowercase, hierarchical (`#domain/architecture`)
-- **Unique filenames** so wikilinks work without paths
+- **ファイル名**: スペース付きのタイトルケース(`Machine Learning.md`)。日本語ページでも英語ファイル名を維持し、`aliases:` に日本語名を入れる
+- **フォルダ**: 小文字 + ハイフン(`wiki/data-models/`)
+- **タグ**: 小文字、階層化(`#domain/architecture`)
+- **ファイル名は一意** に — wikilink がパス不要で動作
 
-### Writing Style
+### 文体
 
-- Declarative, present tense. "X uses Y" not "X basically does Y."
-- Link liberally. Every mention of a wiki page gets a wikilink.
-- Cite sources: `(Source: [[Page]])`.
-- Flag uncertainty: `> [!gap] This needs more evidence.`
-- Flag contradictions: `> [!contradiction] [[Page A]] claims X, but [[Page B]] says Y.`
+- 平叙、現在形。「X は Y を使う」と書き、「X は基本的に Y する」と書かない。
+- 積極的にリンク。wiki ページへの言及はすべて wikilink を貼る。
+- 出典を引用: `(出典: [[Page]])`。
+- 不確実性をフラグ: `> [!gap] さらに証拠が必要。`
+- 矛盾をフラグ: `> [!contradiction] [[Page A]] は X を主張するが、[[Page B]] は Y と言う。`
 
-### Cross-referencing
+### 相互参照
 
-When updating Page A to mention Page B, check if Page B should link back. Bidirectional links make the graph view useful.
+ページ A を更新してページ B に言及するとき、ページ B から戻リンクを張るべきか確認する。双方向リンクがグラフビューを有用にする。
 
 ---
 
-## 14 — Canvas Maps
+## 14 — キャンバスマップ
 
-Create `.canvas` files for visual overviews:
+ビジュアル概観用に `.canvas` ファイルを作成:
 
 ```json
 {
@@ -822,29 +831,29 @@ Create `.canvas` files for visual overviews:
 }
 ```
 
-Canvas node colors (Obsidian canvas color codes): 1=red, 2=orange, 3=yellow, 4=green, 5=cyan, 6=purple.
-Note: these differ from the wiki graph CSS color scheme. See `skills/canvas/references/canvas-spec.md` for the full canvas color table.
+キャンバスノード色(Obsidian キャンバス色コード): 1=赤、2=オレンジ、3=黄、4=緑、5=シアン、6=紫。
+注: これらは wiki グラフ CSS のカラースキームと異なる。完全な色テーブルは `skills/canvas/references/canvas-spec.md` 参照。
 
-Create a domain relationship canvas during scaffold. Update as the wiki grows.
-
----
-
-## Summary
-
-Your job as the LLM:
-1. Set up the vault (once)
-2. Scaffold wiki structure from user's domain description
-3. Ingest sources: read, summarize, cross-reference, file
-4. Maintain hot cache after every operation
-5. Answer questions using index > relevant pages > synthesis
-6. File good answers back into the wiki
-7. Lint periodically: find and fix health issues
-8. Never modify .raw/ sources
-9. Always update index, sub-indexes, log, and hot cache
-10. Always use frontmatter and wikilinks
-
-The human's job: curate sources, ask good questions, think about what it means. Everything else is on you.
+足場時にドメイン関係キャンバスを作成。wiki の成長に合わせて更新。
 
 ---
 
-*Based on Andrej Karpathy's LLM Wiki pattern. Plugin: claude-obsidian by AgriciDaniel / AI Marketing Hub.*
+## 要約
+
+LLM(あなた)の仕事:
+1. Vault のセットアップ(1 回)
+2. ユーザーのドメイン記述からウィキ構造を足場にする
+3. ソースの取り込み: 読み・要約・相互参照・ファイリング
+4. 操作のたびにホットキャッシュを維持
+5. index → 関連ページ → 合成 で質問に答える
+6. 良い回答を wiki に戻して保存
+7. 定期的に lint: 健全性問題を見つけて修正
+8. `.raw/` ソースを書き換えない
+9. 常に index・サブインデックス・log・ホットキャッシュを更新
+10. 常に frontmatter と wikilink を使う
+
+人間の仕事: ソースのキュレーション、良い質問、意味についての考察。それ以外はすべてあなたの担当。
+
+---
+
+*Andrej Karpathy の LLM Wiki パターンに基づく。プラグイン: claude-obsidian by AgriciDaniel / AI Marketing Hub。日本語ローカライズ追加。*

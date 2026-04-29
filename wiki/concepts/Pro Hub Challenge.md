@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Pro Hub Challenge"
+title: "Pro Hub チャレンジ"
 created: 2026-04-14
 updated: 2026-04-14
 tags:
@@ -10,6 +10,9 @@ tags:
   - claude-seo
   - open-source
 status: evergreen
+aliases:
+  - "Pro Hub Challenge"
+  - "Pro Hub チャレンジ"
 related:
   - "[[Claude SEO]]"
   - "[[2026-04-14-claude-seo-v190-session]]"
@@ -17,44 +20,45 @@ related:
   - "[[Search Experience Optimization]]"
 ---
 
-# Pro Hub Challenge
+# Pro Hub チャレンジ
 
-A community challenge hosted in the [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) Skool community where members build extensions for Claude SEO or Claude Blog, competing for $600 in Claude Credits.
+[AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) Skool コミュニティで開催されるコミュニティチャレンジ。メンバーが Claude SEO や Claude Blog の拡張機能を開発し、$600 分の Claude Credits を競う。
 
-## First Challenge (v1.9.0, April 2026)
+## 第 1 回チャレンジ(v1.9.0、2026 年 4 月)
 
-**6 submissions, 5 scored Proficient or above**
+**6 件の応募、5 件が Proficient 以上の評価**
 
-| Contributor | Submission | Score | Integrated? |
+| 貢献者 | 応募内容 | スコア | 統合状況 |
 |------------|------------|-------|-------------|
-| Lutfiya Miller | Semantic Cluster Engine | Winner | Yes — `seo-cluster` |
-| Florian Schmitz | SXO Skill | Proficient | Yes — `seo-sxo` |
-| Dan Colta | SEO Drift Monitor | Proficient | Yes — `seo-drift` |
-| Chris Muller | Multi-lingual Blog | Proficient | Partial — SEO parts into `seo-hreflang` |
-| Matej Marjanovic | E-commerce + Cost Config | Proficient | Yes — `seo-ecommerce` + cost guardrails |
-| Benjamin Samar | SEO Dungeon | Reviewed | No — not integrated in v1.9.0 |
+| Lutfiya Miller | Semantic Cluster Engine | 優勝 | あり: `seo-cluster` |
+| Florian Schmitz | SXO Skill | Proficient | あり: `seo-sxo` |
+| Dan Colta | SEO Drift Monitor | Proficient | あり: `seo-drift` |
+| Chris Muller | Multi-lingual Blog | Proficient | 一部: SEO 部分を `seo-hreflang` へ |
+| Matej Marjanovic | E-commerce + Cost Config | Proficient | あり: `seo-ecommerce` + コストガードレール |
+| Benjamin Samar | SEO Dungeon | Reviewed | なし: v1.9.0 では未統合 |
 
-## Integration Pattern
+## 統合パターン
 
-Community submissions go through:
-1. **Full code review** — architecture, quality, security
-2. **Security audit** — SSRF, injection, credential handling
-3. **Cherry-pick** — only SEO-relevant parts for claude-seo, blog parts stay for claude-blog
-4. **De-brand** — remove contributor-specific branding (e.g., ScienceExperts.ai)
-5. **Attribution** — `original_author` in SKILL.md frontmatter, HTML comments in agents, CONTRIBUTORS.md
+コミュニティ応募は以下を経る。
 
-## Submission Guidelines (from CONTRIBUTING.md)
+1. **完全コードレビュー**: アーキテクチャ、品質、セキュリティ
+2. **セキュリティ監査**: SSRF、インジェクション、認証情報の取り扱い
+3. **チェリーピック**: claude-seo には SEO 関連部分のみ。ブログ部分は claude-blog へ残す
+4. **デブランド**: 貢献者固有のブランディングを除去(例: ScienceExperts.ai)
+5. **クレジット表記**: SKILL.md フロントマターの `original_author`、エージェント内の HTML コメント、CONTRIBUTORS.md
 
-1. SKILL.md under 500 lines, references under 200 lines
-2. All scripts must import `validate_url()` for SSRF protection
-3. Include `original_author` in SKILL.md frontmatter metadata
-4. Submit via PR or post in AI Marketing Hub community
+## 応募ガイドライン(CONTRIBUTING.md より)
 
-## Second Challenge (April 2026)
+1. SKILL.md は 500 行以内、references は 200 行以内
+2. すべてのスクリプトは SSRF 保護のため `validate_url()` をインポートすること
+3. SKILL.md フロントマターのメタデータに `original_author` を含めること
+4. PR で提出するか、AI Marketing Hub コミュニティに投稿すること
 
-**Keyword**: LEADS
-**Prize pool**: $600 ($400 first place, $200 second place) in Claude Credits
-**Deadline**: April 28, 2026
-**Scope**: Anything touching lead generation — Claude Code skills, n8n workflows, MCP servers, scrapers, dashboards, pipelines. If it helps someone capture, qualify, nurture, or convert leads, it counts.
-**Rules**: GitHub repo or .zip file + 1-2 minute demo video. Must be functional (not a concept). Solo or team both welcome.
-**Previous winner**: Lutfiya Miller (seo-cluster, integrated in v1.9.0)
+## 第 2 回チャレンジ(2026 年 4 月)
+
+**キーワード**: LEADS
+**賞金プール**: $600($400 が 1 位、$200 が 2 位)分の Claude Credits
+**締切**: 2026 年 4 月 28 日
+**スコープ**: リード生成に関わるあらゆるもの。Claude Code スキル、n8n ワークフロー、MCP サーバー、スクレイパー、ダッシュボード、パイプライン。誰かのリードの獲得、選別、育成、転換を助けるなら対象となる。
+**ルール**: GitHub リポジトリまたは .zip ファイル + 1〜2 分のデモ動画。コンセプトではなく動作するものであること。個人でもチームでも参加可。
+**前回の優勝者**: Lutfiya Miller(seo-cluster、v1.9.0 に統合)

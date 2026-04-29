@@ -1,51 +1,54 @@
-# claude-obsidian: GitHub Copilot Instructions
+# claude-obsidian: GitHub Copilot 用指示書
 
-This repository is a **Claude Code plugin and Obsidian vault** that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It is markdown-only. No build step, no compiled code, no runtime dependencies.
+このリポジトリは **Claude Code プラグインかつ Obsidian Vault** で、Andrej Karpathy の LLM Wiki パターンを使い永続的に成長するナレッジベースを構築します。Markdown のみで構成され、ビルドステップ、コンパイル済みコード、ランタイム依存はありません。
 
-## Project Type
+> **言語ポリシー:** すべての応答とウィキ書き込みは日本語で行う(プロジェクト `CLAUDE.md` 参照)。ファイル名・コード・スキル名・frontmatter キーは英語のまま。
 
-- Agent Skills package (cross-platform Agent Skills standard)
-- Obsidian vault (interpretable by Obsidian directly)
-- Claude Code plugin (installable via marketplace)
+## プロジェクト種別
 
-## Repository Layout
+- Agent Skills パッケージ(クロスプラットフォーム Agent Skills 標準)
+- Obsidian Vault(Obsidian で直接解釈可能)
+- Claude Code プラグイン(マーケットプレイスでインストール可能)
 
-- `skills/`: 10 skills, each with a `SKILL.md` defining trigger phrases and instructions
-- `hooks/hooks.json`: Claude Code lifecycle hooks (SessionStart, PostCompact, PostToolUse, Stop)
-- `.claude-plugin/plugin.json`: plugin manifest
-- `wiki/`: generated knowledge base (Markdown files with YAML frontmatter)
-- `.raw/`: immutable source documents (never modify)
-- `_templates/`: Obsidian Templater templates
-- `_attachments/`: images and PDFs referenced by wiki pages
+## リポジトリ構成
 
-## Conventions Copilot Should Follow
+- `skills/`: 10+ のスキル。各スキルは `SKILL.md` でトリガー語と指示を定義
+- `hooks/hooks.json`: Claude Code ライフサイクル hook(SessionStart, PostCompact, PostToolUse, Stop)
+- `.claude-plugin/plugin.json`: プラグインマニフェスト
+- `wiki/`: 生成されたナレッジベース(YAML frontmatter 付き Markdown)
+- `.raw/`: 不変のソース文書(絶対に書き換えない)
+- `_templates/`: Obsidian Templater テンプレート
+- `_attachments/`: wiki ページが参照する画像・PDF
 
-When suggesting edits:
+## Copilot が従うべき規約
 
-1. **Frontmatter is flat YAML** with plural keys: `tags`, `aliases`, `cssclasses`
-2. **Internal links are wikilinks**: `[[Note Name]]`, not Markdown links to `.md` paths
-3. **Dates are `YYYY-MM-DD`**, not ISO datetimes
-4. **`.raw/` is immutable**. Never suggest edits to anything under that path
-5. **`wiki/log.md` is append-only**, with new entries at the top
-6. **`wiki/hot.md` is overwritten** at session end, not appended to
-7. **Skills use only `name` and `description` in frontmatter**. No `allowed-tools`, no `triggers`, no `globs` (these are not part of the Agent Skills spec)
-8. **Custom callouts**: this vault defines `[!contradiction]`, `[!gap]`, `[!key-insight]`, `[!stale]` in `.obsidian/snippets/vault-colors.css`. These render only with that snippet enabled.
+編集を提案するときは:
 
-## When Editing Skills (`skills/<name>/SKILL.md`)
+1. **frontmatter はフラットな YAML**、複数形キーを使う(`tags`, `aliases`, `cssclasses`)
+2. **内部リンクは wikilink**: `[[Note Name]]`、`.md` パスへの Markdown リンクは使わない
+3. **日付は `YYYY-MM-DD`**、ISO 日時形式は使わない
+4. **`.raw/` は不変**。配下の編集を提案しない
+5. **`wiki/log.md` は追記専用**、新エントリは TOP に
+6. **`wiki/hot.md` はセッション終了時に上書き**、追記ではない
+7. **スキルの frontmatter は `name` と `description` のみ**。`allowed-tools`、`triggers`、`globs` は使わない(Agent Skills 仕様外)
+8. **カスタム callout**: この Vault は `[!contradiction]`, `[!gap]`, `[!key-insight]`, `[!stale]` を `.obsidian/snippets/vault-colors.css` で定義。スニペット有効時のみレンダリング
+9. **本文・要約・チャット応答は日本語**、frontmatter のキー名・列挙値・コードは英語
 
-- Frontmatter: `name` (matches directory name) and `description` (single quoted line, max ~250 useful chars)
-- Body: short, imperative instructions. Reference files with backticks. Do not paste large code blocks unless they're essential.
-- Trigger phrases go in the `description` field, not in body or non-standard fields
+## スキル(`skills/<name>/SKILL.md`)を編集するとき
 
-## When Editing Hooks (`hooks/hooks.json`)
+- frontmatter: `name`(ディレクトリ名と一致)と `description`(クォート付き 1 行、最大約 250 文字、有用情報)
+- 本文: 短い命令形の指示。ファイル参照はバッククォートで。本質的でない大コードブロックは貼らない
+- トリガー語は `description` に書く(本文や非標準フィールドではなく)。日英バイリンガルにする(例: `triggers on: ingest, 取り込んで, ingest this url, この URL を取り込む`)
 
-- Valid event names only: `SessionStart`, `Stop`, `PreToolUse`, `PostToolUse`, `PreCompact`, `PostCompact`, `UserPromptSubmit`
-- Hook types: `command` (shell), `prompt` (LLM), `http` (POST), `agent` (subagent)
-- `matcher` field uses regex against tool names for `PreToolUse`/`PostToolUse`
-- For `SessionStart`: matcher uses `startup`, `resume`, `clear`, or `compact`
+## hook(`hooks/hooks.json`)を編集するとき
 
-## Cross-Reference
+- 有効なイベント名のみ: `SessionStart`, `Stop`, `PreToolUse`, `PostToolUse`, `PreCompact`, `PostCompact`, `UserPromptSubmit`
+- hook タイプ: `command`(shell)、`prompt`(LLM)、`http`(POST)、`agent`(サブエージェント)
+- `matcher` フィールドは `PreToolUse`/`PostToolUse` でツール名に対する正規表現
+- `SessionStart` の場合: matcher は `startup`, `resume`, `clear`, `compact` を使う
 
-- Plugin: https://github.com/AgriciDaniel/claude-obsidian
-- Pattern source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- Authoritative Obsidian-specific skills: https://github.com/kepano/obsidian-skills
+## 関連リンク
+
+- プラグイン: https://github.com/AgriciDaniel/claude-obsidian
+- パターン出典: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- 権威ある Obsidian 特化スキル: https://github.com/kepano/obsidian-skills

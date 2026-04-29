@@ -1,6 +1,7 @@
 ---
 type: meta
-title: "Entities Index"
+title: "エンティティインデックス"
+aliases: ["_index", "エンティティインデックス"]
 updated: 2026-04-07
 tags:
   - meta
@@ -14,30 +15,30 @@ related:
   - "[[LLM Wiki Pattern]]"
 ---
 
-# Entities Index
+# エンティティインデックス
 
-Navigation: [[index]] | [[concepts/_index|Concepts]] | [[sources/_index|Sources]]
+ナビゲーション: [[index]] | [[concepts/_index|概念]] | [[sources/_index|ソース]]
 
-All entity pages — people, organizations, products, and tools.
-
----
-
-## People
-
-- [[Andrej Karpathy]] — AI researcher, educator; originated the LLM Wiki pattern
+すべてのエンティティページ。人物、組織、製品、ツール。
 
 ---
 
-## Organizations
+## 人物
+
+- [[Andrej Karpathy]] — AI研究者、教育者。LLM Wikiパターンを提唱
+
+---
+
+## 組織
 
 <!-- Add organization pages here -->
 
 ---
 
-## Products & Tools
+## 製品とツール
 
 <!-- Add tool and product pages here -->
 
 ---
 
-## Add new entities here as they are identified during ingests.
+## 取り込み時に新しいエンティティを発見したらここに追加する。

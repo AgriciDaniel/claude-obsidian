@@ -1,17 +1,20 @@
-# Frontmatter Schema
+# Frontmatter スキーマ
 
-Every wiki page starts with flat YAML frontmatter. No nested objects. Obsidian's Properties UI requires flat structure.
+すべての wiki ページはフラットな YAML frontmatter で始まる。オブジェクトをネストしない。Obsidian の Properties UI はフラットな構造を要求する。
+
+> **言語ルール**: frontmatter のキー名と列挙値は英語のまま。`title:` の値、`description:` の値、`question:` の値などは日本語可。`aliases:` には英語ファイル名と日本語表示名を併記する。
 
 ---
 
-## Universal Fields
+## 共通フィールド
 
-Every page, no exceptions:
+すべてのページに(例外なし):
 
 ```yaml
 ---
 type: <source|entity|concept|domain|comparison|question|overview|meta>
-title: "Human-Readable Title"
+title: "人間が読むタイトル(日本語可)"
+aliases: ["English Filename Slug", "日本語表示名"]
 created: 2026-04-07
 updated: 2026-04-07
 tags:
@@ -25,19 +28,19 @@ sources:
 ---
 ```
 
-**status values:**
-- `seed`: exists, barely populated
-- `developing`: has real content, not yet complete
-- `mature`: comprehensive, well-linked
-- `evergreen`: unlikely to need updates
+**status の値:**
+- `seed`: 存在するが populate されていない
+- `developing`: 実コンテンツあり、未完成
+- `mature`: 包括的、リンクが豊富
+- `evergreen`: 更新がほぼ不要
 
 ---
 
-## Type-Specific Additions
+## タイプ別追加フィールド
 
 ### source
 
-Add these fields after the universal fields:
+共通フィールドの後に追加:
 
 ```yaml
 source_type: article    # article | video | podcast | paper | book | transcript | data
@@ -46,8 +49,8 @@ date_published: YYYY-MM-DD
 url: ""
 confidence: high        # high | medium | low
 key_claims:
-  - "First key claim from this source"
-  - "Second key claim"
+  - "このソースの最初の主要主張"
+  - "2 つ目の主要主張"
 ```
 
 ### entity
@@ -64,8 +67,8 @@ first_mentioned: "[[Source Title]]"
 complexity: intermediate  # basic | intermediate | advanced
 domain: ""
 aliases:
-  - "alternative name"
-  - "abbreviation"
+  - "別名(日本語可)"
+  - "略称"
 ```
 
 ### comparison
@@ -75,33 +78,34 @@ subjects:
   - "[[Thing A]]"
   - "[[Thing B]]"
 dimensions:
-  - "performance"
-  - "cost"
-  - "ease of use"
-verdict: "One-line conclusion."
+  - "性能"
+  - "コスト"
+  - "使いやすさ"
+verdict: "1 行の結論。"
 ```
 
 ### question
 
 ```yaml
-question: "The original query as asked."
+question: "聞かれた元のクエリ。"
 answer_quality: solid   # draft | solid | definitive
 ```
 
 ### domain
 
 ```yaml
-subdomain_of: ""        # leave empty for top-level domains
+subdomain_of: ""        # トップレベルドメインなら空
 page_count: 0
 ```
 
 ---
 
-## Rules
+## ルール
 
-1. Use flat YAML only. Never nest objects.
-2. Dates as `YYYY-MM-DD` strings, not ISO datetime.
-3. Lists always use the `- item` format, not inline `[a, b, c]`.
-4. Wikilinks in YAML fields must be quoted: `"[[Page Name]]"`.
-5. Keep `related` and `sources` as wikilinks, not plain URLs.
-6. Update `updated` every time you edit the page content.
+1. フラットな YAML のみ使用。オブジェクトをネストしない。
+2. 日付は `YYYY-MM-DD` の文字列。ISO 日時ではない。
+3. リストは常に `- item` 形式。インラインの `[a, b, c]` ではない。
+4. YAML フィールド内の wikilink は引用符必須: `"[[Page Name]]"`。
+5. `related` と `sources` は wikilink にする。プレーン URL ではない。
+6. ページ内容を編集するたびに `updated` を更新。
+7. **日本語ローカライズ版**: `aliases:` を必ず付け、英語ファイル名と日本語表示名の両方を含める。

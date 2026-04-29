@@ -1,7 +1,10 @@
 ---
 type: meta
-title: "Boundary Frontier Snapshot (2026-04-24)"
+title: "境界フロンティアスナップショット (2026-04-24)"
 updated: 2026-04-24
+aliases:
+  - boundary-frontier-2026-04-24
+  - "境界フロンティアスナップショット 2026-04-24"
 tags:
   - meta
   - dragonscale
@@ -13,21 +16,21 @@ related:
   - "[[hot]]"
 ---
 
-# Boundary Frontier Snapshot (2026-04-24)
+# 境界フロンティアスナップショット (2026-04-24)
 
-Navigation: [[index]] | [[log]] | [[DragonScale Memory]]
+ナビゲーション: [[index]] | [[log]] | [[DragonScale Memory]]
 
-First end-to-end run of DragonScale Mechanism 4 (`scripts/boundary-score.py`) against this vault. Generated from `./scripts/boundary-score.py --json --top 7` at 2026-04-24T08:49:16Z.
+DragonScaleメカニズム4(`scripts/boundary-score.py`)を本vaultに対して初めてエンドツーエンドで実行した結果。`./scripts/boundary-score.py --json --top 7`から2026-04-24T08:49:16Zに生成。
 
-## What this is
+## このページの位置づけ
 
-This is a scoring snapshot, not a prescription. The boundary score heuristic surfaces pages that are outward-pointing and recently-touched as candidates for `/autoresearch` to extend. It is explicitly agenda-control per the [[DragonScale Memory]] spec, v0.4, Mechanism 4: the ranking shapes what the agent researches next, and a user should accept, override, or decline any candidate.
+これはスコアリングのスナップショットであり、処方箋ではない。境界スコアのヒューリスティックは、外向きにリンクし最近触られたページを`/autoresearch`が拡張する候補として浮上させる。`[[DragonScale Memory]]`仕様v0.4のメカニズム4の通り、これは明示的にアジェンダ制御である。ランキングはエージェントが次に研究する対象を形作るが、ユーザーは候補を受け入れる、上書きする、却下するのいずれかを行うべきである。
 
-Formula: `boundary_score(p) = (out_degree(p) - in_degree(p)) * exp(-age_days / 30)`.
+数式: `boundary_score(p) = (out_degree(p) - in_degree(p)) * exp(-age_days / 30)`。
 
-No recency floor. Pages older than ~90 days approach zero weight by design, so a stale hub does not dominate the frontier.
+recencyの下限は無い。約90日より古いページは設計上ゼロ重みに近づくため、古いハブがフロンティアを支配することはない。
 
-## Frontier (top 7, score > 0)
+## フロンティア (上位7、score > 0)
 
 | # | score | out | in | age_d | title | path |
 |---|---|---|---|---|---|---|
@@ -39,29 +42,29 @@ No recency floor. Pages older than ~90 days approach zero weight by design, so a
 | 6 | 0.717 | 1 | 0 | 10 | Search Experience Optimization (SXO) | wiki/concepts/Search Experience Optimization.md |
 | 7 | 0.717 | 1 | 0 | 10 | Semantic Topic Clustering | wiki/concepts/Semantic Topic Clustering.md |
 
-22 scoreable pages total (meta, fold, and index pages excluded).
+スコアリング対象は合計22ページ(meta、fold、indexのページは除外)。
 
-## Reading the result
+## 結果の読み方
 
-- Row 1 is the ecosystem research source. It links out to eight entity pages and is not linked back, which is expected for a raw source: it seeds the graph rather than being referenced by it. The score is correct; following this candidate would extend one of its eight entities rather than re-examining the source itself.
-- Row 2 (DragonScale Memory) has age_days=0 and zero in-degree. This is a fresh concept page not yet linked back by any discussion. A legitimate frontier signal.
-- Rows 3-7 are older pages (~10 to 17 days) with modest out-degree. The recency decay correctly damps them relative to fresh pages.
-- No page ranks on pure recency with zero out-degree, because the formula multiplies degree-delta by recency.
+- 行1はエコシステム研究の情報源。8つのエンティティページに外向きリンクし、被リンクは無い。raw sourceとしては想定通り:被参照ではなくグラフのシードを果たす。スコアは正しく、この候補を辿れば情報源そのものを再検討するのではなく、その8エンティティのいずれかを拡張することになる。
+- 行2(DragonScale Memory)はage_days=0かつin-degreeが0。まだどの議論からもリンクされていない新しい概念ページ。正当なフロンティア信号。
+- 行3〜7はやや古いページ(約10〜17日)で、out-degreeはほどほど。recency減衰により新しいページに対して適切に減衰されている。
+- out-degreeがゼロでrecencyだけのページは順位に上がらない。数式が次数差にrecencyを掛けるためである。
 
-## Calibration note
+## キャリブレーションに関する注
 
-The halflife of 30 days was chosen as a default, not a tuned value. If this vault grows past ~100 pages and out-degree patterns change, the halflife should be reviewed alongside the weighting between degree and recency. The [[DragonScale Memory]] spec explicitly tags these as seed values, not literature-backed.
+30日のhalflifeはチューニング値ではなくデフォルトとして選んだ。このvaultが約100ページを超えてout-degreeパターンが変わる場合、halflifeを次数とrecency間の重み付けと併せて見直すべきである。`[[DragonScale Memory]]`仕様はこれらをシード値であり、文献に裏付けられた値ではないと明示的にタグ付けしている。
 
-## Reproduce
+## 再現方法
 
 ```
 ./scripts/boundary-score.py --json --top 7
 ```
 
-Read-only. Requires python3 only. No DragonScale setup needed to run the scorer itself.
+読み取り専用。python3のみ必要。スコアラー自体を実行するためのDragonScaleセットアップは不要。
 
-## Connections
+## 関連リンク
 
-- [[DragonScale Memory]]: spec, Mechanism 4
-- [[log]]: operation log
-- [[hot]]: recent context
+- [[DragonScale Memory]]: 仕様、メカニズム4
+- [[log]]: 操作ログ
+- [[hot]]: 最近のコンテキスト

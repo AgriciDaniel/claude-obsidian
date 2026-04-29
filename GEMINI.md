@@ -1,62 +1,64 @@
-# claude-obsidian: Gemini CLI Instructions
+# claude-obsidian: Gemini CLI 用指示書
 
-This repo is a knowledge base companion that builds persistent, compounding Obsidian wiki vaults using Andrej Karpathy's LLM Wiki pattern. The skills are written in the cross-platform Agent Skills format and work in Gemini CLI / Antigravity alongside Claude Code.
+このリポジトリは Andrej Karpathy の LLM Wiki パターンに基づき、永続的に成長する Obsidian ウィキ Vault を構築するナレッジベースコンパニオンです。スキルはクロスプラットフォームの Agent Skills 形式で書かれ、Gemini CLI / Antigravity と Claude Code の両方で動作します。
 
-## Skills Discovery
+> **注意:** 応答およびウィキへの書き込みは日本語で(プロジェクト `CLAUDE.md` の言語ポリシーを参照)。ファイル名・スキル名・コード・frontmatter キーは英語のまま。
 
-Skills live in `skills/<name>/SKILL.md`. To make them available to Gemini CLI:
+## スキルの探索
+
+スキルは `skills/<name>/SKILL.md` に配置されています。Gemini CLI から利用するには:
 
 ```bash
 ln -s "$(pwd)/skills" ~/.gemini/skills/claude-obsidian
 ```
 
-Or run the bundled installer:
+または同梱インストーラを実行:
 
 ```bash
 bash bin/setup-multi-agent.sh
 ```
 
-## Skills
+## スキル一覧
 
-| Skill | What it does |
+| スキル | 機能 |
 |---|---|
-| `wiki` | Scaffolds a new vault, manages hot cache, routes to sub-skills |
-| `wiki-ingest` | Reads sources (files, URLs, images) and creates 8-15 wiki pages each |
-| `wiki-query` | Answers questions from the wiki with three depth modes |
-| `wiki-lint` | Health checks: orphans, dead links, stale claims, gaps |
-| `save` | Files the current conversation as a wiki note |
-| `autoresearch` | Autonomous research loop: search → fetch → synthesize → file |
-| `canvas` | Creates and edits Obsidian canvas (.canvas) files |
-| `defuddle` | Cleans web pages before ingest (saves 40-60% tokens) |
-| `obsidian-markdown` | Obsidian Flavored Markdown syntax reference |
-| `obsidian-bases` | Obsidian Bases (.base files): native database views |
+| `wiki` | 新規 Vault の足場、ホットキャッシュ管理、サブスキルへのルーティング |
+| `wiki-ingest` | ソース(ファイル・URL・画像)を読み、1 件あたり 8〜15 ページを生成 |
+| `wiki-query` | 3 段階の深さモードで wiki から回答を生成 |
+| `wiki-lint` | 健全性チェック: 孤立ページ、デッドリンク、古い主張、欠落 |
+| `save` | 現在の会話を wiki ノートとして保存 |
+| `autoresearch` | 自律リサーチループ: 検索 → 取得 → 合成 → 保存 |
+| `canvas` | Obsidian キャンバス(`.canvas`)ファイルの作成・編集 |
+| `defuddle` | 取り込み前に Web ページをクリーン化(40〜60% トークン節約) |
+| `obsidian-markdown` | Obsidian Flavored Markdown 構文リファレンス |
+| `obsidian-bases` | Obsidian Bases(`.base` ファイル): ネイティブのデータベースビュー |
 
-## Trigger Phrases (Examples)
+## トリガーフレーズ(例)
 
-- "set up wiki" → `wiki`
-- "ingest this article" → `wiki-ingest`
-- "ingest https://example.com/article" → `wiki-ingest` (URL mode)
-- "what do you know about X" → `wiki-query`
-- "lint the wiki" → `wiki-lint`
-- "save this conversation" → `save`
-- "research [topic]" → `autoresearch`
+- 「ウィキを設定」「set up wiki」 → `wiki`
+- 「この記事を取り込んで」「ingest this article」 → `wiki-ingest`
+- 「https://example.com/article を取り込んで」 → `wiki-ingest`(URL モード)
+- 「X について何を知ってる?」「what do you know about X」 → `wiki-query`
+- 「wiki を lint して」「lint the wiki」 → `wiki-lint`
+- 「この会話を保存して」「save this conversation」 → `save`
+- 「[トピック] をリサーチして」「research [topic]」 → `autoresearch`
 
-## Vault Conventions
+## Vault の規約
 
-- `.raw/`: source documents, immutable (never modify)
-- `wiki/`: agent-generated knowledge (you own this)
-- `wiki/hot.md`: recent context cache (~500 tokens), read first at session start
-- `wiki/index.md`: master catalog
-- `.raw/.manifest.json`: delta tracking for ingest
+- `.raw/`: ソース文書、不変(絶対に書き換えない)
+- `wiki/`: エージェント生成ナレッジ(あなたが所有)
+- `wiki/hot.md`: 直近コンテキストキャッシュ(約 500 トークン)、セッション開始時に最初に読む
+- `wiki/index.md`: マスターカタログ
+- `.raw/.manifest.json`: 取り込みデルタ追跡
 
-## Bootstrap
+## ブートストラップ
 
-On first session:
-1. Read this file + the project `CLAUDE.md`
-2. If `wiki/hot.md` exists, silently read it to restore recent context
-3. Wait for user to type `/wiki` or `ingest` or `query`
+最初のセッションで:
+1. このファイル + プロジェクトの `CLAUDE.md` を読む
+2. `wiki/hot.md` があれば静かに読んで直近コンテキストを復元
+3. ユーザーが `/wiki`、`ingest`、`query` を入力するのを待つ
 
-## Project Links
+## プロジェクトリンク
 
-- Plugin: https://github.com/AgriciDaniel/claude-obsidian
-- Pattern: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- プラグイン: https://github.com/AgriciDaniel/claude-obsidian
+- パターン: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f

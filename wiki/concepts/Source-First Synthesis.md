@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Source-First Synthesis"
+title: "ソース優先の合成"
 created: 2026-04-24
 updated: 2026-04-24
 tags:
@@ -8,6 +8,9 @@ tags:
   - synthesis
   - provenance
 status: developing
+aliases:
+  - "Source-First Synthesis"
+  - "ソース優先の合成"
 related:
   - "[[How does the LLM Wiki pattern work?]]"
   - "[[LLM Wiki Pattern]]"
@@ -16,27 +19,27 @@ related:
   - "[[Query-Time Retrieval]]"
 ---
 
-# Source-First Synthesis
+# ソース優先の合成
 
-Source-first synthesis is the LLM Wiki practice of keeping raw sources separate from the generated wiki while requiring the wiki to cite and integrate those sources. Karpathy's pattern describes raw sources as the source of truth and the generated wiki as the maintained synthesis layer: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+ソース優先の合成とは、生のソースを生成された Wiki から分離して保ちつつ、Wiki にそれらのソースの引用と統合を要求する LLM Wiki の実践である。Karpathy のパターンは、生のソースを真実の源、生成された Wiki を維持された合成層として記述している: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 
-## Boundary Filled
+## 埋められる境界
 
-The selected question says the wiki pattern integrates sources, but it does not spell out the provenance discipline. This page records the rule: synthesis is allowed to be rewritten, but source material remains the cited anchor.
+選択された質問は Wiki パターンがソースを統合すると述べているが、来歴の規律を明示していない。本ページはそのルールを記録する。合成は書き換え可能だが、ソース資料は引用される錨であり続ける。
 
-## Extracted Claims
+## 抽出された主張
 
-- Karpathy's LLM Wiki pattern says raw sources can include articles, papers, images, and data files, and that the LLM reads them without modifying them: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The same source describes the wiki as summaries, entity pages, concept pages, comparisons, overview, and synthesis maintained by the LLM: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The ingest operation can create a source summary, update indexes, update relevant entity and concept pages, and append a log entry: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The query operation reads relevant wiki pages and synthesizes answers with citations, and useful answers can be filed back into the wiki: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The RAG paper identifies provenance and updating world knowledge as open problems for knowledge-intensive generation systems: https://arxiv.org/abs/2005.11401
+- Karpathy の LLM Wiki パターンは、生のソースが記事、論文、画像、データファイルを含み得ること、また LLM はそれらを変更せずに読むことを述べている: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- 同ソースは、Wiki を、要約、エンティティページ、概念ページ、比較、概要、合成として記述しており、これらは LLM によって維持される: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- ingest 操作は、ソース要約を作成し、インデックスを更新し、関連するエンティティと概念のページを更新し、ログエントリを追記できる: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- query 操作は、関連 Wiki ページを読み、引用付きで回答を合成する。有用な回答は Wiki に戻してファイルできる: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- RAG 論文は、知識集約型生成システムの未解決問題として、来歴と世界知識の更新を挙げている: https://arxiv.org/abs/2005.11401
 
-## Operating Rule
+## 運用ルール
 
-Source-first synthesis is stricter than unsourced summarization. A new concept page should identify the sources it used, state what was extracted from them, and avoid treating the generated page as a replacement for the source document.
+ソース優先の合成は、出典なしの要約より厳格である。新しい概念ページは使用したソースを明示し、何を抽出したかを述べ、生成されたページをソース文書の代替として扱わないようにすべきだ。
 
-## Primary Sources
+## 一次ソース
 
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - https://arxiv.org/abs/2005.11401

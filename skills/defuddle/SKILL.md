@@ -1,84 +1,84 @@
 ---
 name: defuddle
-description: "Strip clutter from web pages before ingesting into the wiki. Removes ads, navigation, headers, footers, and boilerplate: leaving clean readable markdown that saves 40-60% tokens. Triggers on: defuddle, clean this page, strip this url, fetch and clean, clean web content before ingesting, strip ads, remove clutter, clean URL content, readable markdown from URL."
+description: "ウィキ取り込み前に Web ページから装飾を取り除く。広告、ナビゲーション、ヘッダ、フッタ、定型文を除去し、読みやすいクリーンな markdown を残す。トークンを 40〜60% 節約。応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。トリガー(日本語): defuddle、このページをクリーン化、この URL を整形、取得してクリーン、取り込み前に Web 内容を整形、広告除去、装飾除去、URL 内容をクリーン化、URL から読みやすい markdown を取得。Triggers (English): defuddle, clean this page, strip this url, fetch and clean, clean web content before ingesting, strip ads, remove clutter, clean URL content, readable markdown from URL."
 allowed-tools: Read Bash
 ---
 
-# defuddle: Web Page Cleaner
+# defuddle: Web ページクリーナー
 
-Defuddle extracts the meaningful content from a web page and drops everything else: ads, cookie banners, nav bars, related articles, footers, social sharing buttons. What remains is the article body as clean markdown.
+defuddle は Web ページから意味のあるコンテンツを抽出し、それ以外(広告、Cookie バナー、ナビバー、関連記事、フッタ、ソーシャルシェアボタン)を捨てます。残るのは記事本文をクリーンな markdown 化したもの。
 
-Use this before any URL ingestion. It is optional but strongly recommended. It cuts token usage by 40-60% on typical web articles and produces cleaner wiki pages.
+URL 取り込み前に必ず使用。任意ですが強く推奨。典型的な Web 記事でトークン使用量を 40〜60% 削減し、よりクリーンな wiki ページを生成します。
 
 ---
 
-## Install
+## インストール
 
 ```bash
 npm install -g defuddle-cli
 ```
 
-Verify: `defuddle --version`
+確認: `defuddle --version`
 
 ---
 
-## Usage
+## 使い方
 
-### Clean a URL directly
+### URL を直接クリーン化
 ```bash
 defuddle https://example.com/article
 ```
-Outputs clean markdown to stdout.
+クリーンな markdown を stdout に出力。
 
-### Save to .raw/
+### `.raw/` に保存
 ```bash
 defuddle https://example.com/article > .raw/articles/article-slug-$(date +%Y-%m-%d).md
 ```
 
-### Add frontmatter header after saving
-After running defuddle, prepend the source URL and fetch date:
+### 保存後に frontmatter ヘッダを追加
+defuddle 実行後、ソース URL と取得日を先頭に付ける:
 ```bash
 SLUG="article-slug-$(date +%Y-%m-%d)"
 { echo "---"; echo "source_url: https://example.com/article"; echo "fetched: $(date +%Y-%m-%d)"; echo "---"; echo ""; defuddle https://example.com/article; } > .raw/articles/$SLUG.md
 ```
 
-### Clean a local HTML file
+### ローカル HTML ファイルをクリーン化
 ```bash
 defuddle page.html
 ```
 
 ---
 
-## When to Use
+## 使用するべき場面
 
-**Use defuddle when:**
-- Ingesting a news article, blog post, or documentation page from a URL
-- The page has a lot of surrounding content (most web pages do)
-- You want to stay within token budget on a long article
+**defuddle を使う:**
+- URL からニュース記事、ブログ投稿、ドキュメントページを取り込む
+- ページに周辺コンテンツが多い(ほとんどの Web ページがそう)
+- 長い記事でトークン予算内に収めたい
 
-**Skip defuddle when:**
-- The source is already a clean markdown or PDF file
-- The page is a dashboard, app, or structured data (defuddle expects article-style content)
-- defuddle is not installed and the article is short enough to process raw
+**defuddle をスキップ:**
+- ソースが既にクリーンな markdown または PDF
+- ページがダッシュボード、アプリ、構造化データ(defuddle は記事スタイルを想定)
+- defuddle が未インストールで、生で処理できる短い記事
 
 ---
 
-## Fallback
+## フォールバック
 
-If defuddle is not installed, check:
+defuddle が未インストールなら確認:
 
 ```bash
 which defuddle 2>/dev/null || echo "not installed"
 ```
 
-If not installed: use WebFetch directly. The content will be less clean but still workable.
+未インストールなら WebFetch を直接使用。コンテンツはクリーンさが落ちるが利用可能。
 
 ---
 
-## Integration with /wiki-ingest
+## /wiki-ingest との連携
 
-The `/wiki-ingest` skill checks for defuddle automatically when a URL is passed. You do not need to run defuddle manually before ingesting a URL. The ingest skill will call it if available.
+`/wiki-ingest` スキルは URL が渡されたとき自動で defuddle をチェックします。URL 取り込み前に手動で defuddle を実行する必要はありません。取り込みスキルが利用可能なら呼び出します。
 
-To manually clean a page and save before ingesting:
-1. Run the save command above
-2. Then: `ingest .raw/articles/[slug].md`
+ページを手動でクリーン化して取り込み前に保存するには:
+1. 上の保存コマンドを実行
+2. その後: `ingest .raw/articles/[slug].md`

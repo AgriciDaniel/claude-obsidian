@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "Nexus (ProfSynapse/claudesidian-mcp)"
+aliases: ["Nexus-claudesidian-mcp", "ProfSynapse/claudesidian-mcp"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -16,38 +17,38 @@ sources:
   - "[[claude-obsidian-ecosystem-research]]"
 ---
 
-# Nexus (formerly Claudesidian MCP)
+# Nexus(旧 Claudesidian MCP)
 
-**Type**: Native Obsidian plugin + MCP bridge
+**種別**: Obsidianネイティブプラグイン + MCPブリッジ
 **URL**: https://github.com/ProfSynapse/claudesidian-mcp
-**Current name**: Nexus MCP for Obsidian
-**Install**: `.obsidian/plugins/nexus/`
+**現在の名称**: Nexus MCP for Obsidian
+**インストール**: `.obsidian/plugins/nexus/`
 
-## What It Does
+## 概要
 
-Full Obsidian plugin with two modes:
-1. **Native chat inside Obsidian** — connect any AI provider
-2. **MCP bridge** — expose vault to Claude Desktop, Claude Code, Codex CLI, Gemini CLI, Cursor, Cline
+2つのモードを備えるObsidianのフルプラグイン:
+1. **Obsidian内ネイティブチャット** — 任意のAIプロバイダに接続
+2. **MCPブリッジ** — Claude Desktop、Claude Code、Codex CLI、Gemini CLI、Cursor、Clineにボールトを公開
 
-## Key Features
+## 主な機能
 
-- **Workspace memory** — persistent context across sessions stored as JSONL, automatically included in Obsidian Sync
-- **Task management** — projects, tasks, blockers, dependencies tracked within vault
-- **Semantic search** — search notes + past conversations by meaning
-- **Inline editing** — edit selected text in notes
-- **PDF + audio → Markdown** — conversion on right-click or auto-on-add
-- **Web page capture** — open URL in Obsidian, save as Markdown/PNG/PDF
-- **Mobile support** — native chat works on iOS/Android
-- **Two-tool architecture** — dedicated tools for read vs write actions
+- **ワークスペースメモリ** — セッションをまたいで永続化されるコンテキストをJSONLとして保存し、Obsidian Syncに自動的に含まれる
+- **タスク管理** — プロジェクト、タスク、ブロッカー、依存関係をボールト内で追跡
+- **セマンティック検索** — 意味ベースでノートと過去の会話を検索
+- **インライン編集** — ノート内で選択したテキストを編集
+- **PDF + 音声 → Markdown** — 右クリックまたは追加時の自動変換
+- **Webページキャプチャ** — ObsidianでURLを開き、Markdown/PNG/PDFとして保存
+- **モバイル対応** — ネイティブチャットがiOS/Androidで動作
+- **2ツールアーキテクチャ** — 読み取りと書き込みアクションに専用ツールを用意
 
-## Storage Architecture
+## ストレージ構成
 
-Data stored as JSONL files in `.obsidian/plugins/nexus/data/`. This is included in Obsidian Sync automatically (unlike the `.nexus/` folder of v1). SQLite cache is local-only, rebuilt from JSONL on each device.
+データは `.obsidian/plugins/nexus/data/` 内のJSONLファイルとして保存される。これはv1の `.nexus/` フォルダと異なり、Obsidian Syncに自動的に含まれる。SQLiteキャッシュはローカル専用で、各デバイスでJSONLから再構築される。
 
-## Relevance to claude-obsidian
+## claude-obsidianへの関連性
 
-Nexus is in a different category — it's a native TypeScript Obsidian plugin, not a Claude Code skill plugin. The two don't compete directly, but its workspace memory and task management patterns are cherry-pickable.
+Nexusは別カテゴリ、すなわちClaude Codeスキルプラグインではなく、TypeScript製のObsidianネイティブプラグインに属する。両者は直接競合しないが、ワークスペースメモリやタスク管理のパターンはチェリーピックの対象となる。
 
-## Cherry-Picks for claude-obsidian
+## claude-obsidianへのチェリーピック
 
-- [[cherry-picks#11. obsidian-memory-mcp Integration]] (different implementation, same concept)
+- [[cherry-picks#11. obsidian-memory-mcp Integration]](実装は異なるが概念は同じ)

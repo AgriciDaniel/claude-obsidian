@@ -1,132 +1,139 @@
 ---
 name: wiki-lint
 description: >
-  Health check the Obsidian wiki vault. Finds orphan pages, dead wikilinks, stale claims,
-  missing cross-references, frontmatter gaps, and empty sections. Creates or updates
-  Dataview dashboards. Generates canvas maps. Triggers on: "lint", "health check",
-  "clean up wiki", "check the wiki", "wiki maintenance", "find orphans", "wiki audit".
+  Obsidian ウィキ Vault の健全性チェック。孤立ページ、デッドリンク、古い主張、欠けた相互参照、
+  frontmatter のギャップ、空セクションを発見。Dataview ダッシュボードを作成または更新し、
+  キャンバスマップを生成。レポートと応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。
+  トリガー(日本語): lint、健全性チェック、ウィキ掃除、ウィキ確認、ウィキメンテ、孤立を探す、
+  ウィキ監査。Triggers (English): "lint", "health check", "clean up wiki", "check the wiki",
+  "wiki maintenance", "find orphans", "wiki audit".
 ---
 
-# wiki-lint: Wiki Health Check
+# wiki-lint: ウィキ健全性チェック
 
-Run lint after every 10-15 ingests, or weekly. Ask before auto-fixing anything. Output a lint report to `wiki/meta/lint-report-YYYY-MM-DD.md`.
-
----
-
-## Lint Checks
-
-Work through these in order:
-
-1. **Orphan pages**. Wiki pages with no inbound wikilinks. They exist but nothing points to them.
-2. **Dead links**. Wikilinks that reference a page that does not exist.
-3. **Stale claims**. Assertions on older pages that newer sources have contradicted or updated.
-4. **Missing pages**. Concepts or entities mentioned in multiple pages but lacking their own page.
-5. **Missing cross-references**. Entities mentioned in a page but not linked.
-6. **Frontmatter gaps**. Pages missing required fields (type, status, created, updated, tags).
-7. **Empty sections**. Headings with no content underneath.
-8. **Stale index entries**. Items in `wiki/index.md` pointing to renamed or deleted pages.
-9. **Address validity** (DragonScale Mechanism 2). For every page that has an `address:` frontmatter field, validate the format. See the **Address Validation** section below.
-10. **Semantic tiling** (DragonScale Mechanism 3, opt-in). Flag candidate duplicate pages (across all scanned types, not just concepts) via embedding cosine similarity. See the **Semantic Tiling** section below.
+10〜15 件取り込みごと、もしくは週次で lint を実行。自動修正前に必ず確認を取る。lint レポートは `wiki/meta/lint-report-YYYY-MM-DD.md` に日本語で出力。
 
 ---
 
-## Lint Report Format
+## チェック項目
 
-Create at `wiki/meta/lint-report-YYYY-MM-DD.md`:
+順番に実行:
+
+1. **孤立ページ**。被リンクが無い wiki ページ。存在するが何からも指されていない。
+2. **デッドリンク**。存在しないページを参照する wikilink。
+3. **古い主張**。新しいソースで矛盾または更新された古いページの主張。
+4. **欠落ページ**。複数ページで言及されているが独自ページが無い概念やエンティティ。
+5. **欠けた相互参照**。ページで言及されているがリンクが張られていないエンティティ。
+6. **frontmatter のギャップ**。必須フィールド(type, status, created, updated, tags)が欠けているページ。
+7. **空セクション**。中身が無い見出し。
+8. **古い index エントリ**。改名・削除されたページを指す `wiki/index.md` の項目。
+9. **アドレス検証**(DragonScale Mechanism 2)。`address:` frontmatter フィールドを持つすべてのページについて形式を検証。下の **アドレス検証** セクション参照。
+10. **セマンティックタイリング**(DragonScale Mechanism 3、オプトイン)。スキャン対象タイプ全体(概念だけでなく)を埋め込みコサイン類似度で重複候補ページとしてフラグ。下の **セマンティックタイリング** セクション参照。
+
+---
+
+## lint レポート形式
+
+`wiki/meta/lint-report-YYYY-MM-DD.md` に作成:
 
 ```markdown
 ---
 type: meta
-title: "Lint Report YYYY-MM-DD"
+title: "Lint レポート YYYY-MM-DD"
+aliases: ["Lint Report YYYY-MM-DD"]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [meta, lint]
 status: developing
 ---
 
-# Lint Report: YYYY-MM-DD
+# Lint レポート: YYYY-MM-DD
 
-## Summary
-- Pages scanned: N
-- Issues found: N
-- Auto-fixed: N
-- Needs review: N
+## サマリ
+- スキャン対象ページ: N
+- 検出された問題: N
+- 自動修正済み: N
+- 要レビュー: N
 
-## Orphan Pages
-- [[Page Name]]: no inbound links. Suggest: link from [[Related Page]] or delete.
+## 孤立ページ
+- [[Page Name]]: 被リンク無し。提案: [[Related Page]] からリンクするか削除する。
 
-## Dead Links
-- [[Missing Page]]: referenced in [[Source Page]] but does not exist. Suggest: create stub or remove link.
+## デッドリンク
+- [[Missing Page]]: [[Source Page]] から参照されているが存在しない。提案: スタブを作成するかリンクを削除。
 
-## Missing Pages
-- "concept name": mentioned in [[Page A]], [[Page B]], [[Page C]]. Suggest: create a concept page.
+## 欠落ページ
+- 「concept name」: [[Page A]], [[Page B]], [[Page C]] で言及。提案: 概念ページを作成。
 
-## Frontmatter Gaps
-- [[Page Name]]: missing fields: status, tags
+## frontmatter のギャップ
+- [[Page Name]]: 欠落フィールド: status, tags
 
-## Stale Claims
-- [[Page Name]]: claim "X" may conflict with newer source [[Newer Source]].
+## 古い主張
+- [[Page Name]]: 主張「X」は新しいソース [[Newer Source]] と矛盾する可能性。
 
-## Cross-Reference Gaps
-- [[Entity Name]] mentioned in [[Page A]] without a wikilink.
+## 相互参照のギャップ
+- [[Entity Name]] が [[Page A]] で言及されているが wikilink 無し。
 ```
 
 ---
 
-## Naming Conventions
+## 命名規約
 
-Enforce these during lint:
+lint 中に強制:
 
-| Element | Convention | Example |
+| 要素 | 規約 | 例 |
 |---------|-----------|---------|
-| Filenames | Title Case with spaces | `Machine Learning.md` |
-| Folders | lowercase with dashes | `wiki/data-models/` |
-| Tags | lowercase, hierarchical | `#domain/architecture` |
-| Wikilinks | match filename exactly | `[[Machine Learning]]` |
+| ファイル名 | スペース付きタイトルケース(英語) | `Machine Learning.md` |
+| フォルダ | 小文字 + ハイフン | `wiki/data-models/` |
+| タグ | 小文字、階層化 | `#domain/architecture` |
+| Wikilink | ファイル名と完全一致 | `[[Machine Learning]]` |
 
-Filenames must be unique across the vault. Wikilinks work without paths only if filenames are unique.
+ファイル名は Vault 全体で一意。wikilink がパス無しで動作するのはファイル名が一意のときのみ。
 
----
-
-## Writing Style Check
-
-During lint, flag pages that violate the style guide:
-
-- Not declarative present tense ("X basically does Y" instead of "X does Y")
-- Missing source citations where claims are made
-- Uncertainty not flagged with `> [!gap]`
-- Contradictions not flagged with `> [!contradiction]`
+> 日本語ローカライズ版: ファイル名は **英語のまま** だが、各ページの frontmatter `aliases:` に日本語表示名を入れる。これにより `[[日本語名]]` でもリンクが解決する。lint で `aliases` の有無もチェック対象に。
 
 ---
 
-## Dataview Dashboard
+## 文体チェック
 
-Create or update `wiki/meta/dashboard.md` with these queries:
+lint 中、スタイルガイド違反のページにフラグ:
+
+- 平叙の現在形でない(「X は Y を使う」の代わりに「X は基本的に Y する」)
+- 主張に出典引用が無い
+- 不確実性が `> [!gap]` でフラグされていない
+- 矛盾が `> [!contradiction]` でフラグされていない
+- 本文が英語のまま(日本語ローカライズ版では本文は日本語であるべき。`aliases:` 等のメタは英語可)
+
+---
+
+## Dataview ダッシュボード
+
+`wiki/meta/dashboard.md` を以下のクエリで作成または更新:
 
 ````markdown
 ---
 type: meta
-title: "Dashboard"
+title: "ダッシュボード"
+aliases: ["Dashboard"]
 updated: YYYY-MM-DD
 ---
-# Wiki Dashboard
+# ウィキダッシュボード
 
-## Recent Activity
+## 最近の活動
 ```dataview
 TABLE type, status, updated FROM "wiki" SORT updated DESC LIMIT 15
 ```
 
-## Seed Pages (Need Development)
+## シードページ(育成が必要)
 ```dataview
 LIST FROM "wiki" WHERE status = "seed" SORT updated ASC
 ```
 
-## Entities Missing Sources
+## ソース未紐付けのエンティティ
 ```dataview
 LIST FROM "wiki/entities" WHERE !sources OR length(sources) = 0
 ```
 
-## Open Questions
+## 未解決の質問
 ```dataview
 LIST FROM "wiki/questions" WHERE answer_quality = "draft" SORT created DESC
 ```
@@ -134,9 +141,9 @@ LIST FROM "wiki/questions" WHERE answer_quality = "draft" SORT created DESC
 
 ---
 
-## Canvas Map
+## キャンバスマップ
 
-Create or update `wiki/meta/overview.canvas` for a visual domain map:
+`wiki/meta/overview.canvas` を作成または更新してビジュアルなドメインマップを提供:
 
 ```json
 {
@@ -154,13 +161,13 @@ Create or update `wiki/meta/overview.canvas` for a visual domain map:
 }
 ```
 
-Add one node per domain page. Connect domains that have significant cross-references. Colors map to the CSS scheme: 1=blue, 2=purple, 3=yellow, 4=orange, 5=green, 6=red.
+ドメインページごとに 1 ノード追加。重要な相互参照を持つドメイン同士を接続。色は CSS スキームに対応: 1=青、2=紫、3=黄、4=オレンジ、5=緑、6=赤。
 
 ---
 
-## Address Validation (DragonScale Mechanism 2 MVP)
+## アドレス検証(DragonScale Mechanism 2 MVP)
 
-**Opt-in feature.** Address Validation runs only if the vault is using DragonScale, detected by:
+**オプトイン機能。** Vault が DragonScale を使っているときのみ実行。検出方法:
 
 ```bash
 if [ -x ./scripts/allocate-address.sh ] && [ -f ./.vault-meta/address-counter.txt ]; then
@@ -170,194 +177,194 @@ else
 fi
 ```
 
-When `DRAGONSCALE_ADDRESSES=0`, skip this entire section. Missing `address:` fields are not flagged, not even informationally. Pages that happen to have an `address:` field are passed through unvalidated (treat as user-managed metadata).
+`DRAGONSCALE_ADDRESSES=0` の場合、本セクション全体をスキップ。`address:` フィールド欠落は情報レベルでもフラグしない。たまたま `address:` を持っているページは検証なしで通過(ユーザー管理メタとして扱う)。
 
-When `DRAGONSCALE_ADDRESSES=1`, proceed with the rollout baseline and checks below.
+`DRAGONSCALE_ADDRESSES=1` の場合、下のロールアウトベースラインとチェックを進める。
 
-Rollout baseline: **2026-04-23** (Phase 2 ship date in vaults that adopted DragonScale on that day). Vaults that adopted DragonScale later should override this baseline by setting the earliest `created:` date of any addressed page as their personal rollout date. Record the chosen baseline at the top of `.vault-meta/legacy-pages.txt` as a commented line: `# rollout: YYYY-MM-DD`.
+ロールアウトベースライン: **2026-04-23**(その日に DragonScale を採用した Vault における Phase 2 出荷日)。後から DragonScale を採用した Vault は、アドレス付きページの最初の `created:` 日付を自分のロールアウト日として上書きすべき。`.vault-meta/legacy-pages.txt` の先頭にコメント行で記録: `# rollout: YYYY-MM-DD`。
 
-### Classification rule (applied per page)
+### 分類ルール(ページごと)
 
-Before validating anything, classify the page:
+検証前にページを分類:
 
-| Classification | Criteria |
+| 分類 | 基準 |
 |---|---|
-| **Meta / fold / excluded** | File is in `wiki/folds/` OR filename in `{_index.md, index.md, log.md, hot.md, overview.md, dashboard.md, dashboard.base, Wiki Map.md, getting-started.md}`. Address not required. |
-| **Post-rollout (must have address)** | `type` is not meta/fold AND frontmatter `created:` date is >= 2026-04-23 AND file path is NOT in the legacy baseline manifest. |
-| **Legacy (backfill-eligible)** | `type` is not meta/fold AND frontmatter `created:` date is < 2026-04-23 OR file path IS in the legacy baseline manifest. Address not required until backfill. |
+| **メタ / fold / 除外** | ファイルが `wiki/folds/` 配下、またはファイル名が `{_index.md, index.md, log.md, hot.md, overview.md, dashboard.md, dashboard.base, Wiki Map.md, getting-started.md}` のいずれか。アドレス不要。 |
+| **ロールアウト後(アドレス必須)** | `type` がメタ/fold でない、AND frontmatter `created:` 日付が 2026-04-23 以降、AND ファイルパスがレガシーベースラインマニフェストに無い。 |
+| **レガシー(バックフィル対象)** | `type` がメタ/fold でない、AND frontmatter `created:` 日付が 2026-04-23 より前、OR ファイルパスがレガシーベースラインマニフェストにある。バックフィルまでアドレス不要。 |
 
-**Legacy baseline manifest**: optional file at `.vault-meta/legacy-pages.txt`, one relative path per line. Pages listed there are treated as legacy regardless of `created:` date. Use this to grandfather pages whose `created:` metadata is wrong or missing.
+**レガシーベースラインマニフェスト**: 任意のファイル `.vault-meta/legacy-pages.txt`、1 行に 1 つの相対パス。`created:` 日付に関係なくここに列挙されたページはレガシー扱い。`created:` メタが間違っていたり欠けているページに祖父権を与えるのに使う。
 
-### Validation checks (run in order)
+### 検証チェック(順番に実行)
 
-1. **Format check**: any page with `address:` set must match one of:
-   - `^c-[0-9]{6}$` — post-rollout creation address.
-   - `^l-[0-9]{6}$` — legacy-backfill address.
-   - Pages under `wiki/folds/` use `fold_id`, not `address`; do not apply the `c-`/`l-` regex there.
+1. **形式チェック**: `address:` 設定済みのページは以下のいずれかに一致しなければならない:
+   - `^c-[0-9]{6}$` — ロールアウト後の作成アドレス。
+   - `^l-[0-9]{6}$` — レガシーバックフィルアドレス。
+   - `wiki/folds/` 配下のページは `address` ではなく `fold_id` を使用。`c-`/`l-` の正規表現は適用しない。
 
-2. **Uniqueness check**: no two pages share the same address value. Report both paths.
+2. **一意性チェック**: 同じアドレス値を持つページが 2 つ以上あってはならない。両パスを報告。
 
-3. **Counter consistency**: `./scripts/allocate-address.sh --peek` returns the next counter value. Every observed `c-NNNNNN` must satisfy `NNNNNN < peek_value`. Violation = counter drift.
+3. **カウンタ整合性**: `./scripts/allocate-address.sh --peek` が次のカウンタ値を返す。観測された各 `c-NNNNNN` は `NNNNNN < peek_value` を満たさねばならない。違反 = カウンタドリフト。
 
-4. **Post-rollout enforcement**: every page classified as "post-rollout (must have address)" that LACKS the `address:` field is a lint **error**, not informational. This prevents the silent-regression path where a new page skips address assignment.
+4. **ロールアウト後の強制**: 「ロールアウト後(アドレス必須)」に分類されたページで `address:` フィールドを **欠いた** ものは情報レベルではなく lint **エラー**。新ページがアドレス割当をスキップする静かな後退を防ぐ。
 
-5. **Legacy identification**: every page classified as "legacy" that LACKS an address is informational. The lint report lists them under "Pending backfill" with total count.
+5. **レガシー識別**: 「レガシー」分類でアドレス無しのページは情報レベル。lint レポートでは「バックフィル待ち」セクションに件数とともに列挙。
 
-6. **Address-map consistency** (`.raw/.manifest.json`): for every page path in `address_map`, the page must exist and its frontmatter `address` must match the mapping. Mismatches are errors (either a rename dropped the map update, or a manual edit diverged).
+6. **address-map 整合性**(`.raw/.manifest.json`): `address_map` の各ページパスは存在し、その frontmatter `address` がマッピングと一致しなければならない。不一致はエラー(改名がマップ更新を漏らした、または手動編集が分岐した可能性)。
 
-### Lint posture summary
+### lint 姿勢サマリ
 
-- Pages that HAVE an address with bad format: **error**.
-- Pages that HAVE colliding addresses: **error**.
-- Pages classified **post-rollout** WITHOUT an address: **error**.
-- Pages classified **legacy** WITHOUT an address: **informational** (expected).
-- Meta and fold pages without `address`: **ignored** (not applicable).
-- Counter drift (observed counter >= peek): **error**.
-- Address-map mismatch: **error**.
+- アドレス形式が不正なページ: **エラー**。
+- アドレスが衝突しているページ: **エラー**。
+- **ロールアウト後** 分類でアドレス無しのページ: **エラー**。
+- **レガシー** 分類でアドレス無しのページ: **情報**(想定通り)。
+- メタ・fold ページにアドレス無し: **無視**(該当しない)。
+- カウンタドリフト(観測カウンタ >= peek): **エラー**。
+- address-map 不一致: **エラー**。
 
-Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment is `wiki-ingest`'s responsibility only.
+lint は観察のみ。lint 中に欠落アドレスを **自動割当しない**。割当は `wiki-ingest` の責務のみ。
 
-### Output section in the lint report
+### lint レポート出力セクション
 
 ```markdown
-## Address Validation
+## アドレス検証
 
-- Counter state: `$(./scripts/allocate-address.sh --peek)`
-- Highest c- address observed: c-XXXXXX
-- Post-rollout pages checked: N (X passing, Y errors)
-- Legacy pages pending backfill: M
+- カウンタ状態: `$(./scripts/allocate-address.sh --peek)`
+- 観測された最大の c- アドレス: c-XXXXXX
+- ロールアウト後ページ確認済み: N(X 件合格、Y 件エラー)
+- バックフィル待ちレガシーページ: M
 
-### Errors
-- [[Page Name]]: invalid address format `{value}`. Expected `c-NNNNNN` or `l-NNNNNN`.
-- [[Page A]] and [[Page B]] share address `c-000042`.
-- [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `./scripts/allocate-address.sh` and add to frontmatter.
-- [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `./scripts/allocate-address.sh --rebuild`.
-- `.raw/.manifest.json` maps `wiki/foo.md` -> `c-000010` but page frontmatter has `c-000012`. Resolve mismatch.
+### エラー
+- [[Page Name]]: 不正なアドレス形式 `{value}`。期待値 `c-NNNNNN` または `l-NNNNNN`。
+- [[Page A]] と [[Page B]] がアドレス `c-000042` で衝突。
+- [[Post-Rollout Page]]: アドレス欠落。ページ作成 2026-04-25(ロールアウト後)、アドレス必須。wiki-ingest を再実行するか、手動で `./scripts/allocate-address.sh` を実行して frontmatter に追加。
+- [[Page Name]] のアドレス `c-000100` だがカウンタ peek は `50`。カウンタドリフト。`./scripts/allocate-address.sh --rebuild` を実行。
+- `.raw/.manifest.json` は `wiki/foo.md` -> `c-000010` をマップしているが、ページ frontmatter は `c-000012`。不一致を解決。
 
-### Pending backfill (informational)
-- M legacy pages without addresses. See `.vault-meta/legacy-pages.txt` for the canonical legacy set, or filter by `created:` < 2026-04-23.
+### バックフィル待ち(情報)
+- M 件のレガシーページにアドレス無し。`.vault-meta/legacy-pages.txt` の正規レガシーセット、または `created:` < 2026-04-23 でフィルタ。
 ```
 
 ---
 
-## Semantic Tiling (DragonScale Mechanism 3 MVP, opt-in)
+## セマンティックタイリング(DragonScale Mechanism 3 MVP、オプトイン)
 
-**Opt-in feature.** Semantic tiling flags candidate duplicate *pages* (not just concept pages — see Scope below) using embedding cosine similarity. Local ollama only by default; remote endpoints require an explicit override flag.
+**オプトイン機能。** セマンティックタイリングは埋め込みコサイン類似度を使って重複候補 *ページ*(概念ページだけではない、下記スコープ参照)をフラグする。デフォルトはローカル ollama のみ。リモートエンドポイントは明示的なオーバーライドフラグが必要。
 
-### Detection and delegation
+### 検出と委譲
 
 ```bash
 if [ -x ./scripts/tiling-check.py ] && command -v python3 >/dev/null 2>&1; then
   ./scripts/tiling-check.py --peek > /tmp/tiling-peek.json 2>/dev/null
   PEEK_EXIT=$?
   case $PEEK_EXIT in
-    0)  TILING_READY=1 ;;                                  # ready
-    2)  TILING_READY=0 ; echo "tiling ERROR: usage error (exit 2); inspect /tmp/tiling-peek.json" ;;
-    3)  TILING_READY=0 ; echo "tiling ERROR: cache corrupt (exit 3); inspect .vault-meta/tiling-cache.json" ;;
-    4)  TILING_READY=0 ; echo "tiling ERROR: vault exceeds scale hard-fail (exit 4); batching required" ;;
-    10) TILING_READY=0 ; echo "tiling skipped: ollama not reachable (exit 10)" ;;
-    11) TILING_READY=0 ; echo "tiling skipped: run 'ollama pull nomic-embed-text' to enable (exit 11)" ;;
-    *)  TILING_READY=0 ; echo "tiling ERROR: unexpected exit code $PEEK_EXIT from tiling-check.py --peek" ;;
+    0)  TILING_READY=1 ;;                                  # 準備完了
+    2)  TILING_READY=0 ; echo "tiling ERROR: usage error (exit 2); /tmp/tiling-peek.json を確認" ;;
+    3)  TILING_READY=0 ; echo "tiling ERROR: cache corrupt (exit 3); .vault-meta/tiling-cache.json を確認" ;;
+    4)  TILING_READY=0 ; echo "tiling ERROR: vault がスケールハードフェイル (exit 4); バッチ処理が必要" ;;
+    10) TILING_READY=0 ; echo "tiling skipped: ollama 到達不能 (exit 10)" ;;
+    11) TILING_READY=0 ; echo "tiling skipped: 'ollama pull nomic-embed-text' を実行 (exit 11)" ;;
+    *)  TILING_READY=0 ; echo "tiling ERROR: tiling-check.py --peek から想定外の exit code $PEEK_EXIT" ;;
   esac
 else
   TILING_READY=0
-  echo "tiling skipped: scripts/tiling-check.py or python3 not available"
+  echo "tiling skipped: scripts/tiling-check.py または python3 が利用不可"
 fi
 ```
 
-Inspect `/tmp/tiling-peek.json` (structured diagnostics: script path, python interpreter, ollama URL, cache state, thresholds state) whenever the status is ambiguous. Never collapse unknown exits into "unknown status" silently.
+ステータスが曖昧なときは `/tmp/tiling-peek.json`(構造化診断: スクリプトパス、python interpreter、ollama URL、cache 状態、閾値状態)を確認する。未知の exit を黙って「unknown status」にまとめない。
 
-When `TILING_READY=1`:
+`TILING_READY=1` のとき:
 
 ```bash
 ./scripts/tiling-check.py --report wiki/meta/tiling-report-YYYY-MM-DD.md
 REPORT_EXIT=$?
 case $REPORT_EXIT in
-  0)  echo "tiling report written" ;;
-  2)  echo "tiling ERROR: usage error during --report" ;;
-  3)  echo "tiling ERROR: cache corrupt during --report" ;;
-  4)  echo "tiling ERROR: scale hard-fail during --report" ;;
-  10) echo "tiling ERROR: ollama became unreachable between --peek and --report" ;;
-  11) echo "tiling ERROR: model became unavailable between --peek and --report" ;;
-  *)  echo "tiling ERROR: unexpected exit code $REPORT_EXIT from tiling-check.py --report" ;;
+  0)  echo "tiling レポート出力済み" ;;
+  2)  echo "tiling ERROR: --report 中の usage error" ;;
+  3)  echo "tiling ERROR: --report 中の cache corrupt" ;;
+  4)  echo "tiling ERROR: --report 中の scale hard-fail" ;;
+  10) echo "tiling ERROR: --peek と --report の間で ollama が到達不能になった" ;;
+  11) echo "tiling ERROR: --peek と --report の間でモデルが利用不可になった" ;;
+  *)  echo "tiling ERROR: tiling-check.py --report から想定外の exit code $REPORT_EXIT" ;;
 esac
 ```
 
-### Scope (what the helper scans)
+### スコープ(ヘルパーがスキャンする対象)
 
-- Includes: every `.md` under `wiki/` **except** the exclusion set below. The scope is "candidate tileable pages," not just `type: concept`.
-- Excludes (path): anything under `wiki/folds/` or `wiki/meta/`.
-- Excludes (filename): `_index.md`, `index.md`, `log.md`, `hot.md`, `overview.md`, `dashboard.md`, `Wiki Map.md`, `getting-started.md`.
-- Excludes (frontmatter): `type: meta` or `type: fold`.
-- Excludes (security): symlinks. Any page file that is a symlink, or whose resolved path escapes the vault root, is skipped.
+- 含む: `wiki/` 配下のすべての `.md`、ただし以下の除外セットを除く。スコープは「タイル化候補ページ」、`type: concept` だけではない。
+- 除外(パス): `wiki/folds/` または `wiki/meta/` 配下のすべて。
+- 除外(ファイル名): `_index.md`, `index.md`, `log.md`, `hot.md`, `overview.md`, `dashboard.md`, `Wiki Map.md`, `getting-started.md`。
+- 除外(frontmatter): `type: meta` または `type: fold`。
+- 除外(セキュリティ): シンボリックリンク。シンボリックリンクであるか、解決後パスが Vault ルート外に逃げるページファイルはスキップ。
 
-If you place a real concept under `wiki/meta/` it will be excluded by path regardless of content. Keep concepts in their canonical folders.
+`wiki/meta/` 配下に実際の概念を置くと、内容に関わらずパスで除外される。概念は正規フォルダに置く。
 
-### How the helper works
+### ヘルパーの動作
 
-- Computes one embedding per included page via the ollama `nomic-embed-text` model by default.
-- Caches embeddings at `.vault-meta/tiling-cache.json`, keyed on `sha256(model + body)` so model drift auto-invalidates. Frontmatter is not part of the hash or the embedding input — pure frontmatter edits (tag changes, status bumps) do not trigger recomputation.
-- Orphans are GC'd: when a cached page path no longer exists on disk, its entry is dropped on save.
-- Concurrent-safe: exclusive flock on `.vault-meta/.tiling.lock` around cache I/O; per-PID temp file for atomic writes.
+- 含まれた各ページに対し ollama の `nomic-embed-text` モデルでデフォルトで 1 つの埋め込みを計算。
+- 埋め込みを `.vault-meta/tiling-cache.json` にキャッシュ。キーは `sha256(model + body)` でモデルドリフトを自動無効化。frontmatter はハッシュにも埋め込み入力にも含まれない — 純粋な frontmatter 編集(タグ変更、status 変更)は再計算をトリガーしない。
+- 孤立は GC: キャッシュされたページパスがディスクに無くなると保存時にエントリを削除。
+- 並行安全: cache I/O 周辺で `.vault-meta/.tiling.lock` を排他 flock。書き込みアトミシティのため PID ごとの一時ファイル。
 
-### Security posture
+### セキュリティ姿勢
 
-- Defaults to `http://127.0.0.1:11434`. `OLLAMA_URL` env override is accepted **only** with `--allow-remote-ollama` because page bodies are POSTed as embedding input.
-- Symlinks and vault-root escapes are rejected.
+- デフォルトは `http://127.0.0.1:11434`。ページ本文は埋め込み入力として POST されるため、`OLLAMA_URL` 環境変数オーバーライドは `--allow-remote-ollama` 付きでのみ受け付ける。
+- シンボリックリンクと Vault ルート脱出は拒否。
 
-### Default bands (conservative seeds, NOT calibrated)
+### デフォルトバンド(保守的シード、未キャリブレーション)
 
-| Band | Similarity | Report section |
+| バンド | 類似度 | レポートセクション |
 |---|---|---|
-| Error | `>= 0.90` | **Errors** — strong near-duplicate, likely the same concept |
-| Review | `0.80 - 0.90` | **Review** — possible tile overlap; human judgement needed |
-| Pass | `< 0.80` | not emitted |
+| エラー | `>= 0.90` | **エラー** — 強い近似重複、ほぼ同じ概念 |
+| レビュー | `0.80 - 0.90` | **レビュー** — タイル重複の可能性。人間判断必要 |
+| 合格 | `< 0.80` | 出力しない |
 
-**These values are conservative seeds, not literature-backed interpolation.** Published reference points: Sentence Transformers `community_detection` defaults to 0.75; Quora-duplicate calibrations land around 0.7715-0.8352 depending on objective. The 0.80 review floor is already stricter than at least one cited Quora optimum, so expect **false negatives** against those baselines. Reduce the review floor during calibration if you want more sensitivity.
+**これらは保守的シード値で、文献に基づく補間ではない。** 公開された参照点: Sentence Transformers の `community_detection` はデフォルト 0.75。Quora 重複キャリブレーションは目的により 0.7715-0.8352 の範囲。0.80 のレビュー下限は引用された Quora 最適解の少なくとも 1 つより既に厳しいため、それらのベースラインに対して **偽陰性** を予期する。感度を上げたければキャリブレーション中にレビュー下限を下げる。
 
-### Calibration procedure (manual, one-time per vault)
+### キャリブレーション手順(手動、Vault ごとに 1 回)
 
-1. Run the helper with defaults. Capture the **Review** band pairs.
-2. Temporarily lower `bands.review` to `0.70` in `.vault-meta/tiling-thresholds.json` to surface a wider sample. Aim for >=50 pairs spanning 0.70-0.95.
-3. Label each pair: `duplicate`, `similar`, `distinct`.
-4. Pick bands such that: (a) the `error` band contains >= 95% true duplicates; (b) the `review` band captures `similar` pairs without swamping the report with `distinct` ones.
-5. Edit `.vault-meta/tiling-thresholds.json`: set new `bands.error` and `bands.review`, set `calibrated: true`, set `calibration_pairs_labeled` to the label count.
-6. Re-run lint. Report footer now says `calibrated: true`.
+1. デフォルトでヘルパーを実行。**レビュー** バンドのペアをキャプチャ。
+2. `.vault-meta/tiling-thresholds.json` の `bands.review` を一時的に `0.70` に下げて広いサンプルを表示。0.70-0.95 にまたがる 50 ペア以上を目指す。
+3. 各ペアにラベル付け: `duplicate`, `similar`, `distinct`。
+4. バンドを選ぶ: (a) `error` バンドが真の重複 95% 以上を含む、(b) `review` バンドが `similar` ペアを捕捉しつつ `distinct` でレポートを溢れさせない。
+5. `.vault-meta/tiling-thresholds.json` を編集: 新 `bands.error` と `bands.review` を設定、`calibrated: true` に、`calibration_pairs_labeled` をラベル数に。
+6. lint 再実行。レポートフッターは `calibrated: true` を表示。
 
-### Scale
+### スケール
 
-- Cold-cache cost is O(N) POSTs to ollama. Warm-cache cost is O(N^2) cosines in pure Python.
-- Helper prints a warning at > 500 pages and hard-fails (exit 4) at > 5000. Revisit the implementation (batching, vectorized cosine, or external tooling) before exceeding either limit.
+- コールドキャッシュコストは ollama への O(N) POST。ウォームキャッシュコストは純粋 Python での O(N^2) コサイン。
+- ヘルパーは 500 ページ超で警告、5000 ページ超でハードフェイル(exit 4)。いずれかの限界を超える前に実装を見直す(バッチ化、ベクトル化コサイン、外部ツール)。
 
-### Lint report embed
+### lint レポート埋め込み
 
 ```markdown
-## Semantic Tiling
-See [[tiling-report-YYYY-MM-DD]] for the full pair listing.
-- Errors (>=0.90): N pairs
-- Review (0.80-0.90): M pairs
-- Calibrated: true|false
+## セマンティックタイリング
+完全なペア一覧は [[tiling-report-YYYY-MM-DD]] 参照。
+- エラー(>=0.90): N ペア
+- レビュー(0.80-0.90): M ペア
+- キャリブレーション済み: true|false
 ```
 
-### Invariants
+### 不変条件
 
-- Read-only. `tiling-check.py` never modifies wiki pages.
-- No auto-merge. Duplicates are listed, never resolved.
-- Cache is incremental and model-scoped. Unchanged pages are not re-embedded.
-- Exit codes: `0` ok, `2` usage error, `3` cache corrupt, `4` scale hard-fail, `10` ollama unreachable, `11` model missing. Surface all of them; do not collapse into a single "unknown" bucket.
+- 読み取り専用。`tiling-check.py` は wiki ページを書き換えない。
+- 自動マージなし。重複は列挙されるだけで解決はされない。
+- キャッシュはインクリメンタルかつモデル単位。変更されていないページは再埋め込みされない。
+- exit code: `0` 正常、`2` usage error、`3` cache corrupt、`4` scale hard-fail、`10` ollama 到達不能、`11` モデル不在。すべてを表面化する。単一の "unknown" バケットにまとめない。
 
 ---
 
-## Before Auto-Fixing
+## 自動修正前
 
-Always show the lint report first. Ask: "Should I fix these automatically, or do you want to review each one?"
+必ず先に lint レポートを表示。質問: 「自動修正しますか?それとも 1 つずつレビューしますか?」
 
-Safe to auto-fix:
-- Adding missing frontmatter fields with placeholder values
-- Creating stub pages for missing entities
-- Adding wikilinks for unlinked mentions
+自動修正可能:
+- プレースホルダ値で frontmatter フィールドを補完
+- 欠落エンティティのスタブページを作成
+- リンクされていない言及に wikilink を追加
 
-Needs review before fixing:
-- Deleting orphan pages (they might be intentionally isolated)
-- Resolving contradictions (requires human judgment)
-- Merging duplicate pages
+レビュー必要:
+- 孤立ページの削除(意図的に分離されている可能性)
+- 矛盾の解決(人間判断必要)
+- 重複ページのマージ

@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "Claudian (YishenTu/claudian)"
+aliases: ["Claudian-YishenTu", "YishenTu/claudian"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -17,43 +18,43 @@ sources:
 
 # Claudian (YishenTu/claudian)
 
-**Type**: Native Obsidian plugin (TypeScript, embedded Claude Code/Codex)
+**種別**: Obsidianネイティブプラグイン(TypeScript製、Claude Code/Codexを内蔵)
 **URL**: https://github.com/YishenTu/claudian
-**Install**: BRAT or manual (not yet in community store)
+**インストール**: BRATまたは手動(コミュニティストアには未掲載)
 
-## What It Does
+## 概要
 
-Embeds Claude Code (or Codex CLI) directly inside Obsidian as a sidebar chat. The vault becomes the agent's working directory — all Claude Code tools work natively inside Obsidian.
+Claude Code(またはCodex CLI)をObsidian内のサイドバーチャットとして直接埋め込む。ボールトがそのままエージェントの作業ディレクトリとなり、Claude CodeのすべてのツールがそのままネイティブにObsidian内で動作する。
 
-## Key Features
+## 主な機能
 
-### Inline Edit with Word-Level Diff
-Select text in a note + hotkey → Claude proposes edit with word-level diff preview → one-click apply. Best-in-class inline editing in the Obsidian AI ecosystem.
+### 単語単位の差分付きインライン編集
+ノート内のテキストを選択してホットキーを押すと、Claudeが単語単位の差分プレビュー付きで編集案を提示し、ワンクリックで適用できる。Obsidian AIエコシステムにおいて最も完成度の高いインライン編集である。
 
-### Plan Mode (Shift+Tab)
-Agent explores and designs before implementing. Presents a plan for approval before any file changes. Mirrors Claude Code's own plan mode.
+### プランモード(Shift+Tab)
+実装に着手する前にエージェントが探索と設計を行う。ファイルを変更する前に承認用のプランを提示する。Claude Code本体のプランモードを反映している。
 
-### @mention System
-Type `@` to reference:
-- Vault files
-- Sub-agents
-- MCP servers
-- Files in external directories (outside vault)
+### @メンションシステム
+`@` を入力すると以下を参照できる:
+- ボールト内のファイル
+- サブエージェント
+- MCPサーバー
+- 外部ディレクトリのファイル(ボールト外)
 
-### Instruction Mode (#)
-Add refined custom instructions directly from chat input — persisted for the session.
+### 指示モード(#)
+チャット入力から直接、洗練されたカスタム指示を追加できる。セッション中は永続化される。
 
-### MCP Server Integration
-Connect external tools via stdio, SSE, or HTTP. Claude manages vault MCP in-app; Codex uses CLI-managed config.
+### MCPサーバー連携
+stdio、SSE、HTTPで外部ツールを接続する。Claudeはアプリ内でボールトのMCPを管理し、CodexはCLIで管理される設定を使う。
 
-### Multi-Tab Conversations
-Multiple chat tabs, conversation history, fork, resume, compact mode.
+### マルチタブ会話
+複数のチャットタブ、会話履歴、フォーク、再開、コンパクトモードに対応。
 
-## Privacy
-- No telemetry
-- Settings stored in `vault/.claudian/`
-- Claude files in `vault/.claude/`
-- Transcripts in `~/.claude/projects/`
+## プライバシー
+- テレメトリなし
+- 設定は `vault/.claudian/` に保存
+- Claudeのファイルは `vault/.claude/` に配置
+- トランスクリプトは `~/.claude/projects/` に保存
 
-## Relevance to claude-obsidian
-Claudian is a native plugin (different category) but its Plan Mode, @mention, and inline edit patterns could inspire new features in claude-obsidian skills — particularly for the canvas and wiki-query workflows.
+## claude-obsidianへの関連性
+Claudianはネイティブプラグインであり別カテゴリだが、そのプランモード、@メンション、インライン編集の各パターンはclaude-obsidianスキルの新機能、特にcanvasやwiki-queryワークフローのインスピレーションとなり得る。

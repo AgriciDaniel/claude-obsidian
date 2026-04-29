@@ -1,44 +1,46 @@
-# DragonScale Memory Guide
+# DragonScale Memory ガイド
 
-DragonScale Memory is an optional extension for `claude-obsidian`. It adds conservative helpers for log rollups, stable page addresses, duplicate-page linting, and frontier topic suggestion. Start with [docs/install-guide.md](./install-guide.md). For the design spec and rationale, read [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md).
+> 🇯🇵 **日本語ローカライズ版。** 上流の英語ドキュメントを日本語化したもの。コード・コマンド・ファイル名は英語のまま。
 
-This page stays close to shipped behavior in `v1.6.0`. It explains what setup creates, what each mechanism actually does, what it needs, and how to turn it off safely without uninstalling the repo.
+DragonScale Memory は `claude-obsidian` のオプション拡張です。ログのロールアップ、安定したページアドレス、重複ページの lint、フロンティアトピックの提案について、控えめなヘルパー群を追加します。まずは [docs/install-guide.md](./install-guide.md) から始めてください。設計仕様と背景については [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md) を参照してください。
 
-## What DragonScale Is
+このページは `v1.6.0` で出荷された挙動に近い内容に保たれています。セットアップが何を作成するか、各メカニズムが実際に何をするか、何を必要とするか、リポジトリをアンインストールせずに安全に無効化する方法を説明します。
 
-### Scope and opt-in status
+## DragonScale とは何か
 
-DragonScale is a memory-layer extension for the wiki. It covers rollups, deterministic page IDs, duplicate detection, and one opt-in topic-selection path for `/autoresearch`. It is not required for the base vault.
+### スコープとオプトイン状態
 
-If you never run `bash bin/setup-dragonscale.sh`, the base install and the original skill behavior remain in place. The repo uses feature detection so DragonScale can stay optional instead of becoming a hard dependency.
+DragonScale は wiki 向けのメモリレイヤー拡張です。ロールアップ、決定論的なページ ID、重複検出、`/autoresearch` 用のオプトイントピック選択パスを 1 つカバーします。ベースの vault では必須ではありません。
 
-The concept page is broader than this guide. This guide is operational. When the spec and implementation differ in detail, prefer the shipped scripts and skills for day-to-day behavior.
+`bash bin/setup-dragonscale.sh` を一度も実行しなければ、ベースインストールと元のスキル挙動はそのまま残ります。リポジトリは特徴検出を使うため、DragonScale はハード依存ではなくオプションのままにできます。
 
-### What ships in 1.6.0
+コンセプトページはこのガイドより範囲が広いです。このガイドは運用向けです。仕様と実装が細部で異なる場合は、日々の挙動については出荷されたスクリプトとスキルを優先してください。
 
-Version `1.6.0` ships all four DragonScale mechanisms as opt-in features:
+### 1.6.0 で出荷されるもの
 
-- Mechanism 1, Fold Operator: `skills/wiki-fold/`
-- Mechanism 2, Deterministic Page Addresses: `scripts/allocate-address.sh` plus `wiki-ingest` and `wiki-lint` integration
-- Mechanism 3, Semantic Tiling Lint: `scripts/tiling-check.py` plus `wiki-lint` integration
-- Mechanism 4, Boundary-First Autoresearch: `scripts/boundary-score.py` plus `skills/autoresearch/SKILL.md` Topic Selection logic
+バージョン `1.6.0` では、4 つの DragonScale メカニズムすべてがオプトイン機能として出荷されます。
 
-Use `CHANGELOG.md` for the release trail, [docs/install-guide.md](./install-guide.md) for the quick-start view, and [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md) for the full design context.
+- メカニズム 1、Fold Operator: `skills/wiki-fold/`
+- メカニズム 2、決定論的ページアドレス: `scripts/allocate-address.sh` および `wiki-ingest` と `wiki-lint` の統合
+- メカニズム 3、Semantic Tiling Lint: `scripts/tiling-check.py` および `wiki-lint` の統合
+- メカニズム 4、Boundary-First Autoresearch: `scripts/boundary-score.py` および `skills/autoresearch/SKILL.md` の Topic Selection ロジック
 
-## Before You Enable It
+リリース履歴は `CHANGELOG.md`、クイックスタート視点は [docs/install-guide.md](./install-guide.md)、完全な設計コンテキストは [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md) を参照してください。
 
-### Base install requirements
+## 有効化する前に
 
-DragonScale is an add-on, not a replacement for base setup. Do the normal vault install first by following [docs/install-guide.md](./install-guide.md).
+### ベースインストールの要件
 
-At minimum:
+DragonScale はアドオンであり、ベースセットアップの代替ではありません。まず [docs/install-guide.md](./install-guide.md) に従って通常の vault インストールを行ってください。
 
-- clone the repo or install the plugin
-- run `bash bin/setup-vault.sh`
-- open the folder as an Obsidian vault
-- use `/wiki` to scaffold or continue setup
+最低限必要なもの:
 
-The DragonScale setup script accepts one optional argument, the vault path:
+- リポジトリをクローンするか、プラグインをインストールする
+- `bash bin/setup-vault.sh` を実行する
+- フォルダを Obsidian vault として開く
+- `/wiki` を使ってスキャフォルドするか、セットアップを続行する
+
+DragonScale セットアップスクリプトは、vault パスというオプション引数を 1 つ受け取ります。
 
 ```bash
 bash bin/setup-dragonscale.sh
@@ -48,27 +50,27 @@ bash bin/setup-dragonscale.sh
 bash bin/setup-dragonscale.sh /path/to/vault
 ```
 
-If you omit the path, it uses the repo root inferred from `bin/`.
+パスを省略すると、`bin/` から推論されたリポジトリルートを使用します。
 
-### Universal prerequisite: flock
+### 共通の前提条件: flock
 
-`flock` is the universal prerequisite. Mechanism 2 uses it directly in `scripts/allocate-address.sh` to guard `.vault-meta/.address.lock`. Mechanism 3 uses flock from Python to guard `.vault-meta/.tiling.lock` around cache I/O.
+`flock` は共通の前提条件です。メカニズム 2 は `scripts/allocate-address.sh` の中で `.vault-meta/.address.lock` を保護するために直接使用します。メカニズム 3 はキャッシュ I/O 前後で `.vault-meta/.tiling.lock` を保護するために、Python から flock を使用します。
 
-Quick check:
+クイックチェック:
 
 ```bash
 command -v flock
 ```
 
-If that prints nothing, install `flock` before relying on DragonScale. On Linux it is usually already present. On macOS it commonly comes from `util-linux`.
+何も出力されない場合、DragonScale に依存する前に `flock` をインストールしてください。Linux では通常すでに存在します。macOS では `util-linux` から取得することが多いです。
 
-If `flock` is missing, setup can still create files, but the address allocator and tiling cache path are not reliable. Treat that as a blocker.
+`flock` がない場合、セットアップはファイルを作成できますが、アドレスアロケーターと tiling キャッシュのパスは信頼できません。これはブロッカーとして扱ってください。
 
-### Mechanism 3 extra prerequisites: python3, ollama, nomic-embed-text
+### メカニズム 3 の追加前提条件: python3、ollama、nomic-embed-text
 
-Mechanism 3 is the only mechanism with the full local embeddings stack. You need `python3`, `ollama`, and the `nomic-embed-text` model pulled into ollama.
+メカニズム 3 はローカル埋め込みスタック全体を必要とする唯一のメカニズムです。`python3`、`ollama`、そして ollama に取り込んだ `nomic-embed-text` モデルが必要です。
 
-Useful checks:
+便利なチェック:
 
 ```bash
 command -v python3
@@ -82,201 +84,201 @@ curl -sS http://127.0.0.1:11434/api/version
 ollama pull nomic-embed-text
 ```
 
-The setup script does not install any of those. It only checks and reports status. Mechanism 4 needs `python3`, but not ollama. Mechanisms 1 and 2 do not need either.
+セットアップスクリプトはこれらをインストールしません。チェックして状態を報告するだけです。メカニズム 4 は `python3` を必要としますが、ollama は不要です。メカニズム 1 と 2 はどちらも不要です。
 
-### What happens when optional deps are missing
+### オプション依存が欠けている場合の挙動
 
-DragonScale is meant to fail closed or no-op cleanly.
+DragonScale はクリーンに失敗するか、no-op で動作するように設計されています。
 
-If `python3` is missing:
+`python3` がない場合:
 
-- Mechanism 3 cannot run
-- Mechanism 4 cannot run
-- Mechanisms 1 and 2 still work
+- メカニズム 3 は実行できない
+- メカニズム 4 は実行できない
+- メカニズム 1 と 2 は引き続き動作する
 
-If ollama is unreachable, `scripts/tiling-check.py` exits `10`. If ollama is reachable but `nomic-embed-text` is not installed, it exits `11`. `wiki-lint` is expected to treat those as skip conditions for semantic tiling, not as a reason to break the rest of the lint flow.
+ollama に到達できない場合、`scripts/tiling-check.py` は `10` で終了します。ollama には到達できるが `nomic-embed-text` がインストールされていない場合、`11` で終了します。`wiki-lint` はこれらを semantic tiling のスキップ条件として扱い、lint フローの残りを壊す理由とはしないことが期待されます。
 
-If the boundary helper fails, `/autoresearch` falls back to the normal ask-the-user topic path. It does not force a candidate list and it does not improvise a topic.
+boundary ヘルパーが失敗した場合、`/autoresearch` は通常のユーザーへトピックを尋ねるパスにフォールバックします。候補リストを強制せず、トピックを即興で作ることもしません。
 
-If DragonScale setup has never been run, `wiki-ingest` and `wiki-lint` keep their non-DragonScale behavior.
+DragonScale セットアップが一度も実行されていない場合、`wiki-ingest` と `wiki-lint` は DragonScale 非対応の挙動を維持します。
 
-## Setup
+## セットアップ
 
-### Run bin/setup-dragonscale.sh
+### bin/setup-dragonscale.sh の実行
 
-Run:
+実行:
 
 ```bash
 bash bin/setup-dragonscale.sh
 ```
 
-The script is idempotent. It is safe to re-run and it does not overwrite the runtime files it already created.
+このスクリプトは冪等です。再実行しても安全で、すでに作成したランタイムファイルを上書きしません。
 
-Before provisioning state, it verifies:
+状態をプロビジョニングする前に、以下を検証します:
 
 - `scripts/allocate-address.sh`
 - `scripts/tiling-check.py`
 - `skills/wiki-fold/SKILL.md`
 
-If any of those are missing, setup stops and tells you to reinstall the plugin.
+これらのいずれかが欠けている場合、セットアップは停止し、プラグインを再インストールするように指示します。
 
-What setup does:
+セットアップが行うこと:
 
-- makes `scripts/allocate-address.sh` executable
-- makes `scripts/tiling-check.py` executable
-- creates `.vault-meta/` if needed
-- creates address, tiling, and legacy-baseline state files if missing
-- creates `.raw/.manifest.json` if missing
-- runs sanity checks at the end
+- `scripts/allocate-address.sh` を実行可能にする
+- `scripts/tiling-check.py` を実行可能にする
+- 必要に応じて `.vault-meta/` を作成する
+- アドレス、tiling、レガシーベースラインの状態ファイルが欠けていれば作成する
+- `.raw/.manifest.json` がなければ作成する
+- 最後にサニティチェックを実行する
 
-What setup does not do:
+セットアップが行わないこと:
 
-- install ollama
-- pull `nomic-embed-text`
-- backfill addresses onto old pages
-- run a fold
-- run semantic tiling
-- rewrite your existing wiki pages
+- ollama のインストール
+- `nomic-embed-text` の取得
+- 古いページへのアドレスのバックフィル
+- fold の実行
+- semantic tiling の実行
+- 既存の wiki ページの書き換え
 
-### What files and state it creates
+### 作成されるファイルと状態
 
-Setup provisions a small amount of runtime state.
+セットアップは少量のランタイム状態をプロビジョニングします。
 
-In `.vault-meta/` it creates:
+`.vault-meta/` には次が作成されます:
 
 - `address-counter.txt`
 - `tiling-thresholds.json`
 - `legacy-pages.txt`
 
-In `.raw/` it creates:
+`.raw/` には次が作成されます:
 
 - `.manifest.json`
 
-`address-counter.txt` starts at `1`, so the next reserved page address in a brand-new vault will be `c-000001`.
+`address-counter.txt` は `1` から始まるので、まっさらな vault で次に予約されるページアドレスは `c-000001` になります。
 
-`tiling-thresholds.json` is seeded with `error: 0.90`, `review: 0.80`, and `calibrated: false`. These are conservative seed bands, not calibrated truth for your vault.
+`tiling-thresholds.json` は `error: 0.90`、`review: 0.80`、`calibrated: false` でシードされます。これらは控えめなシードバンドであり、あなたの vault に対してキャリブレートされた真実ではありません。
 
-`legacy-pages.txt` gets a rollout marker comment:
+`legacy-pages.txt` にはロールアウトマーカーのコメントが付きます:
 
 ```text
 # rollout: YYYY-MM-DD
 ```
 
-`wiki-lint` uses that baseline to separate legacy pages from post-rollout pages for address enforcement.
+`wiki-lint` はそのベースラインを使い、アドレス強制のためにレガシーページとロールアウト後ページを区別します。
 
-`.raw/.manifest.json` starts with empty `sources` and `address_map` objects. The ingest skill maintains that file. The source documents under `.raw/` remain immutable.
+`.raw/.manifest.json` は空の `sources` と `address_map` オブジェクトで始まります。ingest スキルがそのファイルを保守します。`.raw/` 配下のソースドキュメントは不変のままです。
 
-### How to verify setup
+### セットアップの検証方法
 
-The setup script already performs sanity checks, but it is useful to verify a few things yourself.
+セットアップスクリプトはすでにサニティチェックを行いますが、いくつかを自分で確認しておくと有用です。
 
-Check the next address without reserving one:
+予約せずに次のアドレスを確認:
 
 ```bash
 ./scripts/allocate-address.sh --peek
 ```
 
-Check that runtime state exists:
+ランタイム状態が存在することを確認:
 
 ```bash
 ls -1 .vault-meta
 ```
 
-Check tiling readiness without computing embeddings:
+埋め込みを計算せずに tiling の準備状況を確認:
 
 ```bash
 python3 ./scripts/tiling-check.py --peek
 ```
 
-Check the boundary helper:
+boundary ヘルパーを確認:
 
 ```bash
 python3 ./scripts/boundary-score.py --top 5
 ```
 
-If your vault is small or tightly integrated, the boundary helper may report no positive-score frontier pages. That is still a valid run.
+vault が小さい、もしくは密に統合されている場合、boundary ヘルパーはポジティブスコアのフロンティアページを 1 つも報告しないかもしれません。それでも妥当な実行結果です。
 
-## Mechanism 1: Fold Operator
+## メカニズム 1: Fold Operator
 
-### What it does
+### 何をするか
 
-The fold operator is a log rollup. It reads the most recent `2^k` entries from `wiki/log.md` and produces an extractive fold page under `wiki/folds/`.
+fold オペレーターはログのロールアップです。`wiki/log.md` から最新の `2^k` 件のエントリを読み、`wiki/folds/` 配下に extractive な fold ページを生成します。
 
-The fold is additive. It does not delete, move, or rewrite the child entries. The fold is extractive. Every outcome and theme in the output must be traceable to a child log entry.
+fold は加算的です。子エントリを削除、移動、書き換えしません。fold は extractive です。出力中のすべての成果やテーマは、子のログエントリにトレース可能でなければなりません。
 
-The current shipped skill is intentionally narrow. It supports a flat fold over raw log entries. Hierarchical fold-of-folds behavior remains outside the scope of the current skill even though the concept spec discusses stacked folds.
+現在出荷されているスキルは意図的に狭く設計されています。生のログエントリに対するフラットな fold をサポートします。コンセプト仕様には積み重ねた fold についての記述がありますが、階層的な fold-of-folds の挙動は現スキルのスコープ外です。
 
-The fold ID is deterministic for a given range:
+特定のレンジに対する fold ID は決定論的です:
 
 ```text
 fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}
 ```
 
-That gives structural idempotency. If the exact fold already exists, the skill should stop instead of writing a duplicate.
+これは構造的冪等性を与えます。完全に同じ fold がすでに存在する場合、スキルは重複書き込みではなく停止することが期待されます。
 
-### When to use it
+### いつ使うか
 
-Use a fold when the log has accumulated a coherent batch of work and you want a checkpoint page that is easier to scan than a raw run of entries.
+ログにまとまった作業バッチが蓄積し、生のエントリ列よりスキャンしやすいチェックポイントページが欲しいときに fold を使います。
 
-Typical cases:
+典型的なケース:
 
-- after several ingests on one theme
-- after a burst of research sessions
-- before a long flat `wiki/log.md` gets harder to use
+- 1 つのテーマで複数回 ingest した後
+- 集中的な研究セッションを終えた後
+- 平坦な `wiki/log.md` が長くなりすぎて使いにくくなる前
 
-Do not treat folds as garbage collection. They summarize. They do not compact by deletion.
+fold をガベージコレクションとして扱わないでください。要約はしますが、削除によるコンパクションはしません。
 
-Example command:
+コマンド例:
 
 ```text
 fold the log, dry-run k=3
 ```
 
-That asks for a dry-run over `2^3 = 8` entries.
+これは `2^3 = 8` 件のエントリに対する dry-run を要求します。
 
-### Dry-run vs commit mode
+### Dry-run と commit モード
 
-Dry-run is the default and it is stdout-only. That matters because the repo has a PostToolUse hook for writes.
+dry-run はデフォルトで stdout のみです。これはリポジトリに書き込み用の PostToolUse フックがあるため重要です。
 
-In dry-run mode:
+dry-run モードでは:
 
-- no file is written
-- no auto-commit hook is triggered
-- you get the proposed fold content in the terminal output
+- ファイルは書き込まれない
+- 自動コミットフックは発火しない
+- 提案された fold の内容が端末出力で得られる
 
-In commit mode:
+commit モードでは:
 
-- the fold page is written to `wiki/folds/`
-- `wiki/index.md` is updated
-- `wiki/log.md` gets a new fold entry
+- fold ページが `wiki/folds/` に書き込まれる
+- `wiki/index.md` が更新される
+- `wiki/log.md` に新しい fold エントリが追加される
 
-The skill docs expect three separate write operations in commit mode, so three auto-commits from the hook are normal.
+スキルドキュメントは commit モードで 3 つの別々の書き込み操作を想定しているため、フックからの 3 回の自動コミットは正常です。
 
-Example commit command:
+commit コマンド例:
 
 ```text
 fold the log, commit k=3
 ```
 
-Run a dry-run first. Commit only if the fold content looks right.
+まず dry-run を実行してください。fold の内容が正しそうな場合のみ commit してください。
 
-To disable Mechanism 1 without uninstalling DragonScale, stop invoking `wiki-fold`. Existing fold pages can remain in the vault, or you can remove them manually if you no longer want them.
+DragonScale をアンインストールせずにメカニズム 1 を無効化するには、`wiki-fold` の呼び出しをやめてください。既存の fold ページは vault に残しても、もう不要であれば手動で削除しても構いません。
 
-## Mechanism 2: Deterministic Page Addresses
+## メカニズム 2: 決定論的ページアドレス
 
-### Address format and rollout policy
+### アドレス形式とロールアウトポリシー
 
-Mechanism 2 assigns stable frontmatter addresses. The shipped format is:
+メカニズム 2 は安定した frontmatter アドレスを割り当てます。出荷形式は次の通り:
 
 ```yaml
 address: c-000042
 ```
 
-`c-` means creation-order counter. The numeric part is zero-padded to six digits. This is not a content hash. The spec is explicit that the shipped address is deterministic and stable, but not content-addressable.
+`c-` は creation-order カウンターを意味します。数値部分は 6 桁にゼロパディングされます。これはコンテンツハッシュではありません。仕様は明示的に、出荷されるアドレスは決定論的かつ安定しているが、content-addressable ではないと述べています。
 
-The rollout baseline is `2026-04-23`. After DragonScale adoption, post-rollout non-meta pages are expected to have addresses. Legacy pages are exempt until you do a deliberate backfill.
+ロールアウトベースラインは `2026-04-23` です。DragonScale 採用後、ロールアウト後の非メタページにはアドレスが付くことが期待されます。レガシーページは、意図的なバックフィルを行うまで除外されます。
 
-The helper has three real modes:
+ヘルパーには 3 つの実モードがあります:
 
 ```bash
 ./scripts/allocate-address.sh
@@ -290,94 +292,94 @@ The helper has three real modes:
 ./scripts/allocate-address.sh --rebuild
 ```
 
-The default mode reserves and prints the next address. `--peek` is read-only. `--rebuild` recomputes the counter from the highest observed `c-NNNNNN`.
+デフォルトモードは次のアドレスを予約して出力します。`--peek` は読み取り専用です。`--rebuild` は観測された最大の `c-NNNNNN` からカウンターを再計算します。
 
-Example command:
+コマンド例:
 
 ```bash
 ./scripts/allocate-address.sh --peek
 ```
 
-### How ingest and lint use it
+### ingest と lint の使い方
 
-`wiki-ingest` enables address assignment only when `./scripts/allocate-address.sh` is executable and `./.vault-meta` exists. If both conditions are true, new non-meta pages get `address:` in frontmatter. If not, ingest proceeds without addresses.
+`wiki-ingest` は `./scripts/allocate-address.sh` が実行可能で、かつ `./.vault-meta` が存在する場合にのみアドレス割り当てを有効にします。両方の条件が真であれば、新しい非メタページの frontmatter に `address:` が付きます。そうでない場合、ingest はアドレスなしで進行します。
 
-`wiki-lint` enables address validation only when `./scripts/allocate-address.sh` is executable and `./.vault-meta/address-counter.txt` exists. If those conditions are true, lint checks address format, uniqueness, counter consistency against `--peek`, missing addresses on post-rollout pages, and `address_map` consistency in `.raw/.manifest.json`.
+`wiki-lint` は `./scripts/allocate-address.sh` が実行可能で、かつ `./.vault-meta/address-counter.txt` が存在する場合にのみアドレス検証を有効にします。これらの条件が満たされている場合、lint はアドレス形式、一意性、`--peek` に対するカウンター整合性、ロールアウト後ページのアドレス欠落、`.raw/.manifest.json` の `address_map` 整合性をチェックします。
 
-The single-writer rule matters here. The allocator uses `flock`, but the ingest skill still says Phase 2 is single-writer only. Do not run parallel ingests from multiple sessions or sub-agents that assign addresses.
+ここでは single-writer ルールが重要です。アロケーターは `flock` を使いますが、ingest スキルは依然として Phase 2 が single-writer 専用と述べています。アドレスを割り当てる複数のセッションやサブエージェントから並行 ingest を実行しないでください。
 
-One hard rule from the skill docs is worth repeating. Never edit `.vault-meta/address-counter.txt` directly. Only mutate it through `scripts/allocate-address.sh`.
+スキルドキュメントの厳格なルールを 1 つ繰り返す価値があります。`.vault-meta/address-counter.txt` を直接編集しないでください。`scripts/allocate-address.sh` を通してのみ変更してください。
 
-To disable Mechanism 2 without uninstalling:
+アンインストールせずにメカニズム 2 を無効化する方法:
 
-1. stop running ingests that depend on address assignment
-2. remove `.vault-meta/` if you want feature detection to turn off
-3. stop using `./scripts/allocate-address.sh`
+1. アドレス割り当てに依存する ingest の実行をやめる
+2. 機能検出をオフにしたい場合は `.vault-meta/` を削除する
+3. `./scripts/allocate-address.sh` の使用をやめる
 
-Existing `address:` fields can stay on pages. They become inert metadata if the feature is disabled.
+既存の `address:` フィールドはページに残せます。機能を無効化すると、不活性なメタデータになります。
 
-## Mechanism 3: Semantic Tiling Lint
+## メカニズム 3: Semantic Tiling Lint
 
-### What it checks
+### 何をチェックするか
 
-Mechanism 3 is an embedding-based duplicate-page detector. It scans markdown files under `wiki/` and excludes:
+メカニズム 3 は埋め込みベースの重複ページ検出器です。`wiki/` 配下の markdown ファイルをスキャンし、次を除外します:
 
 - `wiki/folds/`
 - `wiki/meta/`
-- common meta filenames such as `index.md`, `log.md`, `hot.md`, `overview.md`, `dashboard.md`, `Wiki Map.md`, and `getting-started.md`
-- files with `type: meta`
-- files with `type: fold`
-- symlinks or paths that escape the vault root
+- `index.md`、`log.md`、`hot.md`、`overview.md`、`dashboard.md`、`Wiki Map.md`、`getting-started.md` などの一般的なメタファイル名
+- `type: meta` のファイル
+- `type: fold` のファイル
+- vault ルートを抜け出すシンボリックリンクやパス
 
-It computes one embedding per included page, compares pairs by cosine similarity, and emits candidate overlap in bands.
+含まれる各ページに対して 1 つの埋め込みを計算し、コサイン類似度でペアを比較し、候補のオーバーラップをバンドで出力します。
 
-Default bands:
+デフォルトのバンド:
 
-- `>= 0.90` as error
-- `0.80 - 0.90` as review
-- `< 0.80` as pass
+- `>= 0.90` を error とする
+- `0.80 - 0.90` を review とする
+- `< 0.80` を pass とする
 
-The helper never auto-merges pages. It only reports candidates for review.
+ヘルパーが自動でページをマージすることはありません。レビュー候補を報告するだけです。
 
-Example command:
+コマンド例:
 
 ```bash
 python3 ./scripts/tiling-check.py --peek
 ```
 
-That gives structured diagnostics without computing embeddings.
+これは埋め込みを計算せずに構造化された診断結果を返します。
 
-### Local embeddings requirement
+### ローカル埋め込みの要件
 
-By default, the helper only trusts a local ollama endpoint at `http://127.0.0.1:11434`. Remote ollama endpoints require an explicit override flag because page bodies are sent as embedding input.
+デフォルトでは、ヘルパーは `http://127.0.0.1:11434` のローカル ollama エンドポイントだけを信頼します。リモート ollama エンドポイントは、ページ本文が埋め込み入力として送信されるため、明示的なオーバーライドフラグが必要です。
 
-Remote override example:
+リモートオーバーライドの例:
 
 ```bash
 python3 ./scripts/tiling-check.py --allow-remote-ollama --peek
 ```
 
-The normal ready path is local:
+通常の準備完了パスはローカルです:
 
-1. `python3` is installed
-2. ollama is reachable on localhost
-3. `nomic-embed-text` is installed in ollama
+1. `python3` がインストールされている
+2. ollama がローカルホストで到達可能
+3. ollama に `nomic-embed-text` がインストールされている
 
-Important exit codes:
+重要な終了コード:
 
-- `0` success
-- `10` ollama unreachable
-- `11` model missing
+- `0` 成功
+- `10` ollama に到達不可
+- `11` モデル欠落
 
-`wiki-lint` is written to treat those as skip conditions.
+`wiki-lint` はこれらをスキップ条件として扱うように書かれています。
 
-### Calibration and no-op behavior
+### キャリブレーションと no-op の挙動
 
-The shipped thresholds are conservative seeds, not calibrated truth. The skill docs call for a manual one-time calibration pass per vault. Until you do that, expect both false negatives and false positives.
+出荷されるしきい値は控えめなシードであり、キャリブレートされた真実ではありません。スキルドキュメントは vault ごとに 1 度の手動キャリブレーションパスを推奨しています。それを行うまでは、偽陰性と偽陽性の両方が出ることを想定してください。
 
-The helper also has intentional no-op behavior. If ollama or the model is missing, it exits with the skip code. It does not fake results.
+ヘルパーには意図的な no-op 挙動もあります。ollama かモデルが欠けている場合、スキップコードで終了します。結果を捏造することはありません。
 
-Useful commands:
+便利なコマンド:
 
 ```bash
 python3 ./scripts/tiling-check.py --peek
@@ -391,174 +393,174 @@ python3 ./scripts/tiling-check.py --rebuild-cache
 python3 ./scripts/tiling-check.py --report wiki/meta/tiling-report-YYYY-MM-DD.md
 ```
 
-`--report` is real and path-confined to the vault. Use it when you want a saved report. Use `--peek` when you only want readiness and diagnostics.
+`--report` は実装済みで、vault 内にパスが限定されます。保存されたレポートが欲しいときに使ってください。準備状況と診断だけが欲しいときは `--peek` を使ってください。
 
-To disable Mechanism 3 without uninstalling:
+アンインストールせずにメカニズム 3 を無効化する方法:
 
-1. stop running `python3 ./scripts/tiling-check.py`
-2. stop using the semantic-tiling path in `wiki-lint`
-3. do not provision ollama or the model if you do not need them
+1. `python3 ./scripts/tiling-check.py` の実行をやめる
+2. `wiki-lint` の semantic-tiling パスの使用をやめる
+3. 不要であれば ollama やモデルをプロビジョニングしない
 
-Note that `.vault-meta/` is a shared gate for Mechanisms 2, 3, and 4. Do not remove it to disable Mechanism 3 alone, or you will also turn off address allocation and boundary-first autoresearch. The tiling cache lives under `.vault-meta/` but is inert when the helper is not invoked.
+`.vault-meta/` はメカニズム 2、3、4 の共有ゲートです。メカニズム 3 だけを無効化するために削除しないでください。アドレス割り当てと boundary-first autoresearch も同時に無効になってしまいます。tiling キャッシュは `.vault-meta/` 配下にありますが、ヘルパーが呼ばれない限り不活性です。
 
-## Mechanism 4: Boundary-First Autoresearch
+## メカニズム 4: Boundary-First Autoresearch
 
-### What it does
+### 何をするか
 
-Mechanism 4 scores frontier pages in the wiki graph. The shipped formula is:
+メカニズム 4 は wiki グラフのフロンティアページにスコアを付けます。出荷される計算式は次の通り:
 
 ```text
 boundary_score(p) = (out_degree(p) - in_degree(p)) * recency_weight(p)
 ```
 
-In practice, high-score pages point outward to many scoreable pages, receive relatively fewer inbound links, and were updated recently enough to still be frontier-like.
+実際には、高スコアのページはスコア対象の多くのページに外向きにリンクし、流入リンクは比較的少なく、フロンティアらしさを保つ程度に最近更新されています。
 
-The helper reads `wiki/**/*.md`, builds a wikilink graph, and emits ranked results to stdout or JSON. It is intentionally stdout-only. Unlike the tiling helper, it has no `--report PATH` mode.
+ヘルパーは `wiki/**/*.md` を読み、wikilink グラフを構築し、ランク付けされた結果を stdout または JSON で出力します。意図的に stdout 専用です。tiling ヘルパーと違い、`--report PATH` モードはありません。
 
-Example command:
+コマンド例:
 
 ```bash
 python3 ./scripts/boundary-score.py --json --top 5
 ```
 
-That is the exact command the autoresearch skill uses for candidate generation.
+これは autoresearch スキルが候補生成のために使う、まさにそのコマンドです。
 
-### Agenda-control caveat
+### Agenda コントロールの注意点
 
-This caveat is explicit in both the spec and the skill docs.
+この注意点は仕様とスキルドキュメントの両方で明示されています。
 
-This is agenda control, not pure memory.
+これは agenda コントロールであり、純粋なメモリではありません。
 
-Mechanism 4 does not just describe the vault. It influences what the agent is likely to research next. That crosses the memory and planning boundary.
+メカニズム 4 は単に vault を記述するだけではありません。エージェントが次に何を調査する可能性が高いかに影響を与えます。これはメモリと計画の境界をまたいでいます。
 
-The project keeps it opt-in and labels it honestly. If you want the strict memory-layer subset only, omit this path. Do not use `/autoresearch` without a topic, or do not set up and invoke the boundary scorer.
+プロジェクトはこれをオプトインに保ち、正直にラベル付けしています。厳密にメモリレイヤーのサブセットだけが欲しい場合、このパスを省略してください。トピックなしで `/autoresearch` を使わない、もしくは boundary scorer をセットアップして呼び出さないでください。
 
-### How /autoresearch behaves with and without it
+### メカニズム 4 の有無による /autoresearch の挙動
 
-With Mechanism 4 available, and only when `/autoresearch` is invoked without a topic, the skill:
+メカニズム 4 が利用可能で、かつ `/autoresearch` がトピックなしで呼ばれた場合のみ、スキルは:
 
-1. checks for `scripts/boundary-score.py`
-2. checks for `./.vault-meta`
-3. checks for `python3`
-4. runs `./scripts/boundary-score.py --json --top 5`
-5. presents the top frontier pages as candidate topics
-6. lets the user pick, override with free text, or decline
+1. `scripts/boundary-score.py` の存在を確認する
+2. `./.vault-meta` の存在を確認する
+3. `python3` の存在を確認する
+4. `./scripts/boundary-score.py --json --top 5` を実行する
+5. 上位のフロンティアページを候補トピックとして提示する
+6. ユーザーが選ぶ、フリーテキストで上書きする、辞退する、のいずれかを選択させる
 
-If the helper exits non-zero, returns invalid JSON, or returns an empty `results` array, the skill falls back.
+ヘルパーが非ゼロで終了したり、無効な JSON を返したり、空の `results` 配列を返したりすると、スキルはフォールバックします。
 
-Without Mechanism 4, or after fallback, `/autoresearch` simply asks:
+メカニズム 4 がない場合、もしくはフォールバック後、`/autoresearch` は単に次を尋ねます:
 
 ```text
 What topic should I research?
 ```
 
-The helper suggests. The user still decides.
+ヘルパーは提案するだけです。決めるのは依然としてユーザーです。
 
-To disable Mechanism 4 without uninstalling:
+アンインストールせずにメカニズム 4 を無効化する方法:
 
-1. stop running `python3 ./scripts/boundary-score.py`
-2. use `/autoresearch [topic]` with an explicit topic
-3. avoid the no-topic `/autoresearch` path if you do not want frontier suggestions
+1. `python3 ./scripts/boundary-score.py` の実行をやめる
+2. 明示的なトピックを付けて `/autoresearch [topic]` を使う
+3. フロンティア提案が不要であれば、トピックなしの `/autoresearch` パスを避ける
 
-Note that `.vault-meta/` is a shared gate for Mechanisms 2, 3, and 4. Do not remove it to disable Mechanism 4 alone. The scorer itself is read-only and uses no shared state; disabling it just means not invoking it.
+`.vault-meta/` はメカニズム 2、3、4 の共有ゲートです。メカニズム 4 だけを無効化するために削除しないでください。スコアラー自体は読み取り専用で共有状態を使いません。無効化とは呼び出さないことを意味します。
 
-## Operational Policies
+## 運用ポリシー
 
-### Single-writer rule
+### Single-writer ルール
 
-DragonScale assumes a single writer for the address-assignment path. The allocator is flock-guarded, which protects the counter from simple races. It does not turn the whole wiki into a safe multi-writer system.
+DragonScale はアドレス割り当てパスについて単一の書き手を仮定します。アロケーターは flock で保護されており、これがカウンターを単純な競合から守ります。wiki 全体を安全な複数書き手システムに変えるわけではありません。
 
-The ingest skill is explicit here. Do not run parallel ingests from multiple Claude sessions or sub-agents that assign addresses.
+ingest スキルはここで明示的です。アドレスを割り当てる複数の Claude セッションやサブエージェントから並行 ingest を実行しないでください。
 
-The safe operating policy is:
+安全な運用ポリシー:
 
-- one active ingest writer at a time
-- one address allocator path at a time
-- no direct manual edits to counter state
+- 一度に有効な ingest 書き手は 1 つ
+- 一度に有効なアドレスアロケーターパスは 1 つ
+- カウンター状態への直接の手動編集は行わない
 
-Mechanism 1 is human-invoked and easy to serialize. Mechanism 3 uses a lock for cache I/O. Mechanism 4 is read-only.
+メカニズム 1 は人間が起動するもので、直列化が容易です。メカニズム 3 はキャッシュ I/O のためにロックを使います。メカニズム 4 は読み取り専用です。
 
-### Feature detection and graceful fallback
+### 機能検出と graceful フォールバック
 
-DragonScale is meant to be feature-detected, not assumed.
+DragonScale は仮定するのではなく、機能検出されることを意図しています。
 
-`wiki-ingest` only assigns addresses when the allocator is executable and `.vault-meta/` exists.
-`wiki-lint` only validates addresses when the allocator exists and `.vault-meta/address-counter.txt` exists.
-`wiki-lint` only runs semantic tiling when the helper exists and `python3` is available, then interprets readiness from `--peek`.
-`autoresearch` only uses boundary-first selection when the helper exists, `.vault-meta/` exists, and `python3` is present.
+`wiki-ingest` はアロケーターが実行可能で `.vault-meta/` が存在する場合のみアドレスを割り当てます。
+`wiki-lint` はアロケーターが存在し `.vault-meta/address-counter.txt` が存在する場合のみアドレスを検証します。
+`wiki-lint` はヘルパーが存在し `python3` が利用可能な場合のみ semantic tiling を実行し、`--peek` から準備状況を解釈します。
+`autoresearch` はヘルパーが存在し、`.vault-meta/` が存在し、`python3` が存在する場合のみ boundary-first 選択を使います。
 
-When those conditions are not met, the repo falls back to earlier behavior. That is the intended operational posture.
+これらの条件が満たされない場合、リポジトリは以前の挙動にフォールバックします。これが意図された運用姿勢です。
 
-## Troubleshooting
+## トラブルシューティング
 
-### Missing flock
+### flock の欠落
 
-If `flock` is missing, fix that first. Symptoms can include an unsafe address-allocation path or a tiling cache path that cannot lock correctly.
+`flock` がない場合、まずそれを修正してください。症状にはアドレス割り当てパスの不安全化や、tiling キャッシュパスのロック失敗などが含まれます。
 
-Check:
+確認:
 
 ```bash
 command -v flock
 ```
 
-If it is absent, install the package that provides it for your system, then rerun:
+存在しない場合、システム上で flock を提供するパッケージをインストールし、再実行:
 
 ```bash
 bash bin/setup-dragonscale.sh
 ```
 
-Do not work around this by editing `.vault-meta/address-counter.txt` directly.
+`.vault-meta/address-counter.txt` を直接編集して回避しないでください。
 
-### Missing ollama or model
+### ollama またはモデルの欠落
 
-This only blocks Mechanism 3. It does not block the rest of DragonScale.
+これはメカニズム 3 のみをブロックします。DragonScale の他の部分はブロックしません。
 
-Check ollama reachability:
+ollama の到達可能性を確認:
 
 ```bash
 curl -sS http://127.0.0.1:11434/api/version
 ```
 
-Check tiling readiness:
+tiling の準備状況を確認:
 
 ```bash
 python3 ./scripts/tiling-check.py --peek
 ```
 
-If the helper exits `10`, ollama is not reachable. If it exits `11`, pull the model:
+ヘルパーが `10` で終了したら、ollama に到達できません。`11` で終了したら、モデルを取得:
 
 ```bash
 ollama pull nomic-embed-text
 ```
 
-Then rerun:
+その後再実行:
 
 ```bash
 python3 ./scripts/tiling-check.py --peek
 ```
 
-Remember that Mechanism 4 does not need ollama. If you only want boundary-first autoresearch, `python3` is enough.
+メカニズム 4 は ollama を必要としません。boundary-first autoresearch だけが欲しい場合は `python3` で十分です。
 
-### Safe rollback / disable path
+### 安全なロールバック / 無効化パス
 
-You do not need to uninstall the repo to turn DragonScale off. Use the smallest rollback that fits what you want:
+DragonScale をオフにするためにリポジトリをアンインストールする必要はありません。やりたいことに合った最小のロールバックを使ってください:
 
-- Mechanism 1: stop invoking `wiki-fold`. It uses no shared state.
-- Mechanism 2: stop using `./scripts/allocate-address.sh`. Existing `address:` frontmatter fields remain as plain content.
-- Mechanism 3: stop running `python3 ./scripts/tiling-check.py` and stop invoking the semantic-tiling path in `wiki-lint`. Cache under `.vault-meta/` is inert when not used.
-- Mechanism 4: stop running `python3 ./scripts/boundary-score.py` and avoid the no-topic `/autoresearch` path. The scorer is read-only; disabling is not invoking it.
+- メカニズム 1: `wiki-fold` の呼び出しをやめる。共有状態は使わない。
+- メカニズム 2: `./scripts/allocate-address.sh` の使用をやめる。既存の `address:` frontmatter フィールドはプレーンなコンテンツとして残る。
+- メカニズム 3: `python3 ./scripts/tiling-check.py` の実行をやめ、`wiki-lint` の semantic-tiling パスの呼び出しをやめる。`.vault-meta/` 配下のキャッシュは未使用なら不活性。
+- メカニズム 4: `python3 ./scripts/boundary-score.py` の実行をやめ、トピックなしの `/autoresearch` パスを避ける。スコアラーは読み取り専用で、無効化は呼び出さないこと。
 
-`.vault-meta/` is a shared gate for Mechanisms 2, 3, and 4. Removing it disables all three together, not just one.
+`.vault-meta/` はメカニズム 2、3、4 の共有ゲートです。これを削除するとひとつではなく 3 つすべてが同時に無効になります。
 
-If you want to disable DragonScale feature detection across the setup-based mechanisms at once, remove `.vault-meta/`:
+セットアップベースのメカニズム全体に対する DragonScale 機能検出を一度に無効化したい場合、`.vault-meta/` を削除します:
 
 ```bash
 rm -rf .vault-meta
 ```
 
-Then stop invoking the DragonScale-specific helpers and skills. This leaves your normal wiki content intact. It does not remove fold pages, and it does not strip existing `address:` fields from frontmatter. Those remain as plain content unless you choose to clean them up manually.
+その後、DragonScale 固有のヘルパーやスキルの呼び出しをやめてください。これは通常の wiki コンテンツをそのまま残します。fold ページは削除されず、frontmatter から既存の `address:` フィールドも除去されません。手動でクリーンアップしない限り、これらはプレーンなコンテンツとして残ります。
 
-If you later want DragonScale back, rerun:
+後で DragonScale を戻したくなったら、再実行してください:
 
 ```bash
 bash bin/setup-dragonscale.sh

@@ -1,9 +1,10 @@
 ---
 type: concept
 title: "<% tp.file.title %>"
+aliases:
+  - "<% tp.file.title %>"
 complexity: intermediate
 domain: ""
-aliases: []
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 tags:
@@ -15,26 +16,26 @@ sources: []
 
 # <% tp.file.title %>
 
-## Definition
+## 定義
 
-[What this concept is. Declarative, present tense. One clear paragraph.]
+[この概念とは何か。平叙、現在形。明確な 1 段落。]
 
-## How It Works
+## 仕組み
 
-[Mechanism or explanation]
+[メカニズムまたは説明]
 
-## Why It Matters
+## なぜ重要か
 
-[Significance in this domain]
+[このドメインにおける意義]
 
-## Examples
-
--
-
-## Connections
+## 例
 
 -
 
-## Sources
+## 関連
+
+-
+
+## 出典
 
 -

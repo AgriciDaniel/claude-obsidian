@@ -1,13 +1,15 @@
 ---
 type: comparison
 title: "<% tp.file.title %>"
+aliases:
+  - "<% tp.file.title %>"
 subjects:
   - "[[Subject A]]"
   - "[[Subject B]]"
 dimensions:
-  - "dimension 1"
-  - "dimension 2"
-verdict: "Replace with one-line conclusion."
+  - "観点 1"
+  - "観点 2"
+verdict: "1 行の結論で置き換える。"
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
 tags:
@@ -19,21 +21,21 @@ sources: []
 
 # <% tp.file.title %>
 
-## Overview
+## 概要
 
-Replace with: why these two things are being compared and what question this answers.
+なぜこの 2 つを比較するか、どんな問いに答えるかを書く。
 
-## Comparison
+## 比較
 
-| Dimension | Subject A | Subject B |
+| 観点 | Subject A | Subject B |
 |-----------|-----------|-----------|
 | | | |
 | | | |
 
-## Verdict
+## 結論
 
-Replace with: one clear conclusion — which is better for what use case.
+どのユースケースでどちらが優れるか、1 つの明確な結論を書く。
 
-## Sources
+## 出典
 
 -

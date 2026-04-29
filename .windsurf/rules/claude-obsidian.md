@@ -1,63 +1,66 @@
-# claude-obsidian: Windsurf Rules
+# claude-obsidian: Windsurf ルール
 
-This repo is a knowledge companion that builds persistent, compounding Obsidian wiki vaults using Andrej Karpathy's LLM Wiki pattern. The skills are written in the cross-platform Agent Skills format and work in Cascade alongside Claude Code.
+このリポジトリは Andrej Karpathy の LLM Wiki パターンを使い、永続的に成長する Obsidian ウィキ Vault を構築するナレッジコンパニオンです。スキルはクロスプラットフォームの Agent Skills 形式で書かれ、Cascade と Claude Code の両方で動作します。
 
-## Project Type
+> **言語ポリシー:** すべての応答とウィキ書き込みは日本語で行う(プロジェクト `CLAUDE.md` 参照)。ファイル名・コード・スキル名・frontmatter キーは英語のまま。
 
-- **Hybrid**: Claude Code plugin + Obsidian vault
-- **Pattern**: LLM Wiki (Karpathy)
-- **Stack**: Markdown only: no build step, no runtime dependencies
+## プロジェクト種別
 
-## What's In This Repo
+- **ハイブリッド**: Claude Code プラグイン + Obsidian Vault
+- **パターン**: LLM Wiki(Karpathy)
+- **スタック**: Markdown のみ。ビルドステップなし、ランタイム依存なし
+
+## リポジトリの中身
 
 ```
 claude-obsidian/
-├── skills/              ← 10 SKILL.md files (Agent Skills format)
+├── skills/              ← 10+ の SKILL.md(Agent Skills 形式)
 ├── hooks/               ← SessionStart, PostCompact, PostToolUse, Stop
-├── .claude-plugin/      ← Claude Code plugin manifest
-├── _templates/          ← Obsidian Templater templates
-├── wiki/                ← Generated knowledge base
-│   ├── hot.md           ← recent context cache (~500 tokens)
-│   ├── index.md         ← master catalog
-│   ├── log.md           ← append-only operation log
+├── .claude-plugin/      ← Claude Code プラグインマニフェスト
+├── _templates/          ← Obsidian Templater テンプレート
+├── wiki/                ← 生成されたナレッジベース
+│   ├── hot.md           ← 直近コンテキストキャッシュ(約 500 トークン)
+│   ├── index.md         ← マスターカタログ
+│   ├── log.md           ← 追記専用の操作ログ
 │   ├── concepts/, entities/, sources/, comparisons/, questions/
-│   └── meta/dashboard.base ← Obsidian Bases dashboard
-└── .raw/                ← Immutable source documents
+│   └── meta/dashboard.base ← Obsidian Bases ダッシュボード
+└── .raw/                ← 不変のソース文書
 ```
 
-## Skills Available to Cascade
+## Cascade で利用できるスキル
 
-Run `bash bin/setup-multi-agent.sh` once to symlink `skills/` into `.windsurf/skills/`. Then Cascade auto-discovers all 10 skills:
+`bash bin/setup-multi-agent.sh` を 1 回実行して `skills/` を `.windsurf/skills/` にシンボリックリンク。以後 Cascade が全スキルを自動探索します:
 
-- `wiki`: orchestration, vault scaffolding, hot cache
-- `wiki-ingest`: files, URLs, images → 8-15 wiki pages
-- `wiki-query`: Quick / Standard / Deep query modes
-- `wiki-lint`: health check (orphans, dead links, gaps)
-- `save`: file conversation as wiki note
-- `autoresearch`: autonomous research loop
-- `canvas`: Obsidian canvas (.canvas) files
-- `defuddle`: clean web pages before ingest
-- `obsidian-markdown`: full Obsidian syntax reference
-- `obsidian-bases`: Obsidian Bases (.base) database views
+- `wiki`: オーケストレーション、Vault 足場、ホットキャッシュ
+- `wiki-ingest`: ファイル、URL、画像 → 8〜15 ウィキページ
+- `wiki-query`: Quick / Standard / Deep のクエリモード
+- `wiki-lint`: 健全性チェック(孤立、デッドリンク、ギャップ)
+- `save`: 会話を wiki ノートとして保存
+- `autoresearch`: 自律リサーチループ
+- `canvas`: Obsidian キャンバス(`.canvas`)ファイル
+- `defuddle`: 取り込み前に Web ページをクリーン化
+- `obsidian-markdown`: Obsidian 構文の完全リファレンス
+- `obsidian-bases`: Obsidian Bases(`.base`)データベースビュー
 
-## Critical Rules
+## 重要なルール
 
-- **Never modify `.raw/`**: those are source documents
-- **Read `wiki/hot.md` silently at session start** to restore context
-- **Use wikilinks** `[[Note Name]]` for all internal references
-- **Frontmatter is flat YAML** with plural keys (`tags`, `aliases`)
-- **Auto-commit hook** fires on every Write/Edit to `wiki/` and `.raw/`
-- **Append to `wiki/log.md`** at the top, never edit past entries
+- **`.raw/` を絶対に書き換えない**: ソース文書である
+- **セッション開始時に `wiki/hot.md` を静かに読む**(コンテキスト復元)
+- **すべての内部参照は wikilink** `[[Note Name]]` を使う
+- **frontmatter はフラットな YAML**、複数形キー(`tags`, `aliases`)
+- **自動コミット hook** が `wiki/` と `.raw/` への Write/Edit ごとに発火
+- **`wiki/log.md` には先頭に追記**、過去エントリは編集しない
+- **本文・要約・チャット応答は日本語**、frontmatter キー・コード・列挙値は英語
 
-## Bootstrap
+## ブートストラップ
 
-When the user opens this project in Windsurf:
+ユーザーが Windsurf でこのプロジェクトを開いたら:
 
-1. Read this rules file
-2. If `wiki/hot.md` exists, silently read it
-3. Wait for triggers like "set up wiki", "ingest", or "query"
+1. このルールファイルを読む
+2. `wiki/hot.md` があれば静かに読む
+3. 「ウィキを設定」「set up wiki」「取り込んで」「ingest」「質問」「query」などのトリガーを待つ
 
-## Links
+## リンク
 
 - https://github.com/AgriciDaniel/claude-obsidian
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f

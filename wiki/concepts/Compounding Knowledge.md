@@ -1,9 +1,11 @@
 ---
 type: concept
-title: "Compounding Knowledge"
+title: "知識の複利"
 complexity: basic
 domain: knowledge-management
 aliases:
+  - "Compounding Knowledge"
+  - "知識の複利"
   - "Knowledge Compounding"
   - "Persistent Synthesis"
 created: 2026-04-07
@@ -20,50 +22,51 @@ related:
 sources:
 ---
 
-# Compounding Knowledge
+# 知識の複利
 
-The central insight behind the [[LLM Wiki Pattern]]: knowledge in a wiki compounds like interest in a bank. Every source added, every question answered, every analysis filed makes the wiki more valuable — not just by adding pages, but by enriching the connections between existing pages.
-
----
-
-## Why Normal AI Chats Don't Compound
-
-In a standard chat, knowledge is ephemeral. Each session starts fresh. Even if you upload the same documents repeatedly, the LLM re-derives the same insights from scratch. Nothing accumulates.
-
-The same is true of most RAG systems: they index raw documents and retrieve chunks at query time. The retrieval gets the right fragments, but no synthesis is built up. Nothing is compiled. Ask the same complex question twice and you get the same assembly process twice.
+[[LLM Wiki Pattern]] の中核にある洞察。Wiki の知識は、銀行の利息のように複利で増えていく。ソースを追加するごと、質問に答えるごと、分析を残すごとに、Wiki の価値は高まる。これは単にページが増えるからではなく、既存ページ間のつながりが豊かになるからだ。
 
 ---
 
-## How Wiki Knowledge Compounds
+## 通常の AI チャットが複利で増えない理由
 
-When a new source arrives, the LLM doesn't just index it. It integrates it:
-- Updates entity pages with new information
-- Flags contradictions with existing claims
-- Strengthens or challenges the evolving synthesis
-- Adds cross-references from the new source to existing pages and back
+標準的なチャットでは、知識は揮発性である。各セッションはゼロから始まる。同じ文書を繰り返しアップロードしたとしても、LLM は毎回ゼロから同じ洞察を導き直す。何も蓄積されない。
 
-The cross-references are already there next time. The contradictions have already been flagged. The synthesis already reflects everything that was read.
-
-**The wiki is pre-compiled knowledge.** RAG re-compiles on every query.
+ほとんどの RAG システムも同様だ。生の文書をインデックス化し、クエリ時にチャンクを取得する。検索は適切な断片を取り出すが、合成は積み上がらない。何もコンパイルされない。同じ複雑な質問を二度すれば、二度とも同じ組み立て作業が走る。
 
 ---
 
-## The Maintenance Problem
+## Wiki の知識が複利で増える仕組み
 
-Wikis maintained by humans decay. The maintenance burden grows faster than the value — updating cross-references, keeping summaries current, noting when new data contradicts old claims. Humans abandon wikis because no one wants to do the bookkeeping.
+新しいソースが届いたとき、LLM は単にインデックスを作るのではなく、それを統合する。
 
-LLMs don't get bored. They don't forget to update a cross-reference. The cost of maintenance is near zero. This is the practical reason the wiki pattern works: the entity that's best at the tedious maintenance work is the same entity that reads and writes the wiki.
+- エンティティページに新情報を反映して更新する
+- 既存の主張との矛盾を指摘する
+- 進化中の合成を強化したり挑戦したりする
+- 新しいソースから既存ページへ、また逆方向への相互参照を追加する
+
+次回には、相互参照はすでに張られている。矛盾はすでに指摘されている。合成はそれまでに読んだ全てを反映している。
+
+**Wiki はあらかじめコンパイルされた知識である。** RAG はクエリのたびに再コンパイルする。
 
 ---
 
-## In Practice
+## メンテナンス問題
 
-One X user turned 383 scattered files and over 100 meeting transcripts into a compact wiki and dropped token usage by 95% when querying with Claude. The drop came from two sources: better navigation (index + hot cache vs. full document search) and pre-compiled synthesis (no re-deriving the same insights from scratch).
+人間が維持する Wiki は腐敗する。メンテナンス負荷は価値の伸びより速く増えていく。相互参照の更新、要約の最新化、新データが古い主張と矛盾するときの注記。Wiki が放棄されるのは、誰もこの帳簿付け作業をしたがらないからだ。
+
+LLM は飽きない。相互参照の更新を忘れない。メンテナンスコストはほぼゼロだ。これが Wiki パターンが機能する実用的な理由である。退屈なメンテナンス作業を最も得意とする主体が、Wiki を読み書きする主体と同じなのだ。
 
 ---
 
-## Connections
+## 実例
 
-See [[LLM Wiki Pattern]] for the full architecture.
-See [[Hot Cache]] for the session context mechanism.
-See [[Andrej Karpathy]] for the origin of this framing.
+ある X ユーザーは、383 個の散らばったファイルと 100 件超のミーティング書き起こしをコンパクトな Wiki にまとめ、Claude でクエリする際のトークン使用量を 95% 削減した。削減は二つの要因による。よりよいナビゲーション(全文書検索ではなく index + ホットキャッシュ)と、あらかじめコンパイルされた合成(同じ洞察をゼロから導き直さなくてよい)である。
+
+---
+
+## 関連
+
+全体アーキテクチャは [[LLM Wiki Pattern]] を参照。
+セッションコンテキストの仕組みは [[Hot Cache]] を参照。
+この枠組みの起源は [[Andrej Karpathy]] を参照。

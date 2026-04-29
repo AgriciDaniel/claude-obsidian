@@ -1,6 +1,7 @@
 ---
 type: meta
-title: "Sources Index"
+title: "ソースインデックス"
+aliases: ["_index", "ソースインデックス"]
 updated: 2026-04-07
 tags:
   - meta
@@ -14,29 +15,29 @@ related:
   - "[[Andrej Karpathy]]"
 ---
 
-# Sources Index
+# ソースインデックス
 
-Navigation: [[index]] | [[concepts/_index|Concepts]] | [[entities/_index|Entities]]
+ナビゲーション: [[index]] | [[concepts/_index|概念]] | [[entities/_index|エンティティ]]
 
-All source pages — summaries of ingested documents, transcripts, articles, and data.
-
----
-
-## Transcripts
-
+すべてのソースページ。取り込んだドキュメント、トランスクリプト、記事、データのサマリー。
 
 ---
 
-## Articles
+## トランスクリプト
+
+
+---
+
+## 記事
 
 <!-- Add article source pages here -->
 
 ---
 
-## Papers
+## 論文
 
 <!-- Add paper source pages here -->
 
 ---
 
-## Add new sources here after each ingest.
+## 取り込みのたびに新しいソースをここに追加する。

@@ -1,15 +1,17 @@
-# Fold Page Template
+# Fold ページテンプレート
 
-Canonical output format for `wiki-fold`. Every fold page uses this layout exactly.
+`wiki-fold` の正規出力形式。すべての fold ページはこのレイアウトを正確に使う。
+
+> **言語ルール**: テーブル列ラベル・要約・主題の文言は日本語で書く。frontmatter のキー名と列挙値、`fold_id` 値、wikilink ターゲット、`op:` の値(`save`/`ingest`/`fold`/`session`/`setup`/`decision`)は英語のまま。
 
 ---
 
-## Frontmatter
+## frontmatter
 
 ```yaml
 ---
 type: fold
-title: "Fold k{K} — {EARLIEST-DATE} to {LATEST-DATE} — n{COUNT}"
+title: "Fold k{K} — {EARLIEST-DATE} 〜 {LATEST-DATE} — n{COUNT}"
 fold_id: "fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}"
 batch_exponent: {K}
 entry_count: {COUNT}
@@ -26,10 +28,10 @@ status: mature
 children:
   - date: "{YYYY-MM-DD}"
     op: "{save|ingest|fold|session|setup|decision}"
-    title: "{log entry title verbatim}"
-    page: "[[{canonical page wikilink}]]"
+    title: "{log エントリのタイトルそのまま}"
+    page: "[[{正規ページ wikilink}]]"
     page_missing: false
-  # ... one record per log entry. No dedupe by page.
+  # ... log エントリ 1 件につき 1 レコード。ページで dedupe しない。
 related:
   - "[[DragonScale Memory]]"
   - "[[log]]"
@@ -37,97 +39,97 @@ related:
 ---
 ```
 
-All fields are required. Missing any field is a dry-run failure. `title` does not contain the current date. `fold_id` is deterministic and matches the filename.
+すべてのフィールド必須。欠落はドライラン失敗。`title` に現在の日付を含めない。`fold_id` は決定論的でファイル名と一致。
 
 ---
 
-## Body Sections (in order, all required)
+## 本文セクション(順序、すべて必須)
 
-### 1. Scope (one paragraph)
+### 1. スコープ(1 段落)
 
 ```markdown
-Level-{K} fold of {COUNT} log entries spanning {FROM} to {TO}. Dominant themes: {THEME-1}, {THEME-2}, {THEME-3}.
+レベル {K} の fold、{COUNT} 件の log エントリを {FROM} 〜 {TO} の範囲でカバー。主要テーマ: {THEME-1}, {THEME-2}, {THEME-3}。
 ```
 
-### 2. Child Entries
+### 2. 子エントリ
 
-One row per log entry. Row count must equal `entry_count` in frontmatter and the length of `children:`.
+log エントリ 1 件につき 1 行。行数は frontmatter の `entry_count` と `children:` の長さに一致しなければならない。
 
 ```markdown
-## Child Entries
+## 子エントリ
 
-| Date | Op | Title | Page | Summary (extractive) |
+| 日付 | Op | タイトル | ページ | 要約(抽出的) |
 |---|---|---|---|---|
-| 2026-04-23 | save | DragonScale Memory v0.2 — post-adversarial-review | [[DragonScale Memory]] | Adversarial-review rewrite; 7/7 critiques accepted after one surgical fix. |
-| 2026-04-15 | save | Claude SEO v1.9.0 Slides and GitHub Release | [[2026-04-15-slides-and-release-session]] | 15-slide HTML deck, v1.9.0 tagged, GitHub release with PDF asset. |
-<!-- one row per log entry; no dedupe by page -->
+| 2026-04-23 | save | DragonScale Memory v0.2 — 敵対レビュー後 | [[DragonScale Memory]] | 敵対レビュー後の書き直し。7/7 の批評を 1 件の外科的修正後に受け入れ。 |
+| 2026-04-15 | save | Claude SEO v1.9.0 スライドと GitHub リリース | [[2026-04-15-slides-and-release-session]] | 15 スライド HTML デッキ、v1.9.0 タグ付け、PDF アセット付き GitHub リリース。 |
+<!-- log エントリ 1 件につき 1 行。ページで dedupe しない -->
 ```
 
-The Summary column is extractive: one sentence paraphrased from the log entry's bullets. If the source is ambiguous, write "ambiguous in source" rather than guessing.
+要約列は抽出的: log エントリの箇条書きを 1 文で言い換え。出典が曖昧なら推測せず「ソースで曖昧」と書く。
 
-### 3. Key Outcomes (3-7 bullets, extractive)
+### 3. 主要 Outcome(3〜7 箇条、抽出的)
 
-Every bullet must cite the specific child entry (by date) it draws from. Every numeric value must be grep-verifiable against that child entry. Count-check before emitting.
+各箇条は引用元の特定の子エントリ(日付)を引用。各数値は当該子エントリで grep 検証可能。出力前にカウントチェック。
 
 ```markdown
-## Key Outcomes
+## 主要 Outcome
 
-- {CONCRETE CHANGE 1, quoting or paraphrasing a child entry} (from 2026-04-14 session entry)
-- {CONCRETE CHANGE 2, with numeric grep-verified against source} (from 2026-04-10 session entry)
-<!-- max 7 bullets. Each bullet names a concrete artifact or decision AND cites its source entry. -->
+- {具体的な変更 1、子エントリを引用または言い換え}(2026-04-14 セッションエントリより)
+- {具体的な変更 2、ソースで grep 検証された数値付き}(2026-04-10 セッションエントリより)
+<!-- 最大 7 箇条。各箇条は具体的な成果物または決定を名指し、出典エントリを引用 -->
 ```
 
-### 4. Cross-entry Themes (0-4 bullets, must name contributing entries)
+### 4. エントリ横断テーマ(0〜4 箇条、貢献エントリを必ず名指し)
 
-Themes are optional. If a theme cannot be supported by naming at least two child entries that contribute to it, do not write it.
+テーマは任意。少なくとも 2 つの貢献子エントリを名指しできないテーマは書かない。
 
 ```markdown
-## Cross-entry Themes
+## エントリ横断テーマ
 
-- {THEME: describes a pattern supported by multiple entries} (supported by: 2026-04-14, 2026-04-15, 2026-04-23 entries)
+- {テーマ: 複数エントリでサポートされるパターンを記述}(サポート: 2026-04-14、2026-04-15、2026-04-23 のエントリ)
 ```
 
-Do not invent a theme to justify the fold. If no cross-entry patterns are present, write "No cross-entry themes identified; entries are independent within this range."
+fold を正当化するためにテーマを発明しない。エントリ横断パターンが無ければ「エントリ横断テーマは検出されず。本範囲内のエントリは互いに独立。」と書く。
 
-### 5. Contradictions or Corrections
+### 5. 矛盾または訂正
 
 ```markdown
-## Contradictions or Corrections
+## 矛盾または訂正
 
-- None detected.
+- 検出なし。
 ```
 
-Or, if present:
+または存在する場合:
 
 ```markdown
-## Contradictions or Corrections
+## 矛盾または訂正
 
-- [[Earlier Entry]] claimed X; [[Later Entry]] corrected to Y. Resolution: {STATUS}.
+- [[Earlier Entry]] は X を主張、[[Later Entry]] が Y に訂正。解決: {ステータス}。
 ```
 
-### 6. Links
+### 6. リンク
 
-The `Child Pages` section is **deduped by page**: one wikilink per unique target page, even if multiple log entries point at it. This is the graph-connection section, different from frontmatter `children:` which is **per log entry** (no dedupe).
+`子ページ` セクションは **ページで dedupe**: 複数の log エントリが同一ページを指していてもユニークなターゲットページごとに 1 wikilink。これがグラフ接続セクションで、frontmatter の `children:`(log エントリごと、dedupe なし)とは別。
 
 ```markdown
-## Child Pages
+## 子ページ
 
 - [[{UNIQUE-PAGE-1}]]
 - [[{UNIQUE-PAGE-2}]]
-<!-- dedupe by page; see frontmatter `children:` for per-entry records -->
+<!-- ページで dedupe。エントリごとのレコードは frontmatter の `children:` 参照 -->
 
-## Related
+## 関連
 
-- [[DragonScale Memory]] - fold-operator spec
-- [[log]] - source entries
-- [[index]] - vault catalog
+- [[DragonScale Memory]] — fold オペレータ仕様
+- [[log]] — ソースエントリ
+- [[index]] — Vault カタログ
 ```
 
 ---
 
-## Notes
+## 注
 
-- No hot-cache update: that is the save/ingest skill's responsibility.
-- No edits to child pages. Folds are strictly read-only with respect to children.
-- If a child entry's referenced pages are missing, note "source missing" in the Summary column rather than fabricating content.
-- The body is terse. A fold is a rollup, not a retelling. Target 200-400 lines total for a k=4 fold.
+- ホットキャッシュ更新なし: それは save/ingest スキルの責務。
+- 子ページの編集なし。fold は子に対して厳密に読み取り専用。
+- 子エントリの参照ページが欠落していたら、要約列に「ソース欠落」と書き、内容を捏造しない。
+- 本文は簡潔。fold はロールアップであって再話ではない。k=4 fold で合計 200〜400 行を目標。

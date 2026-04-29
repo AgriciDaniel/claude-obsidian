@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "Claude SEO"
+aliases: ["Claude SEO"]
 created: 2026-04-14
 updated: 2026-04-15
 tags:
@@ -22,53 +23,53 @@ related:
 
 # Claude SEO
 
-A Tier 4 Claude Code skill for comprehensive SEO analysis across all industries. Repository: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo)
+全業種に対応する包括的なSEO分析のためのTier 4 Claude Codeスキル。リポジトリ: [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo)
 
-## Current State (v1.9.0 — released April 15, 2026)
+## 現在の状況(v1.9.0、2026年4月15日リリース)
 
-- **23 skills** (20 core + 3 extensions: DataForSEO, Firecrawl, Banana)
-- **17 subagents** (15 core + 2 extension agents)
-- **30 Python scripts** (28 tracked + 2 dev-only)
-- **Architecture**: 3-layer (directive, orchestration, execution)
-- **Entry point**: `/seo [command] [url]`
-- **GitHub release**: [v1.9.0](https://github.com/AgriciDaniel/claude-seo/releases/tag/v1.9.0) — PDF report attached
-- **Slides**: `claude-seo-slides/v190.html` — 15-slide community presentation deck
-- **Contributors**: 6 submissions, 5 integrated (Lutfiya Miller, Florian Schmitz, Dan Colta, Matej Marjanovic, Chris Muller)
+- **23スキル**(コア20 + 拡張3: DataForSEO、Firecrawl、Banana)
+- **17サブエージェント**(コア15 + 拡張エージェント2)
+- **30 Pythonスクリプト**(追跡対象28 + 開発専用2)
+- **アーキテクチャ**: 3層構成(指示層、オーケストレーション層、実行層)
+- **エントリポイント**: `/seo [command] [url]`
+- **GitHubリリース**: [v1.9.0](https://github.com/AgriciDaniel/claude-seo/releases/tag/v1.9.0) — PDFレポート添付
+- **スライド**: `claude-seo-slides/v190.html` — 15枚のコミュニティ向け発表スライド
+- **コントリビューター**: 6件提出、5件統合(Lutfiya Miller、Florian Schmitz、Dan Colta、Matej Marjanovic、Chris Muller)
 
-## Key Commands
+## 主要コマンド
 
-| Category | Commands |
+| カテゴリ | コマンド |
 |----------|----------|
-| Analysis | audit, page, technical, content, schema, images, geo |
-| Planning | plan, cluster, sxo, programmatic, competitor-pages |
-| Monitoring | drift baseline, drift compare, drift history |
-| Local | local, maps |
-| International | hreflang (with cultural profiles) |
-| E-commerce | ecommerce |
-| Data | google, backlinks, dataforseo |
-| Generation | sitemap, image-gen |
+| 分析 | audit, page, technical, content, schema, images, geo |
+| 計画 | plan, cluster, sxo, programmatic, competitor-pages |
+| モニタリング | drift baseline, drift compare, drift history |
+| ローカル | local, maps |
+| 国際化 | hreflang(文化プロファイル付き) |
+| Eコマース | ecommerce |
+| データ | google, backlinks, dataforseo |
+| 生成 | sitemap, image-gen |
 
-## Version History
+## バージョン履歴
 
-| Version | Date | Key Addition |
+| バージョン | 日付 | 主な追加内容 |
 |---------|------|-------------|
-| v1.9.0 | 2026-04-15 | Pro Hub Challenge: cluster, SXO, drift, ecommerce, cost guardrails, cultural profiles. GitHub release + PDF report + 15-slide deck. |
-| v1.8.2 | 2026-04-10 | Ukrainian localization, CI fixes, version sync |
-| v1.8.1 | 2026-04-06 | Google Images SERP, image optimization |
-| v1.8.0 | 2026-03-31 | Free backlink data (Moz, Bing, Common Crawl) |
-| v1.7.0 | 2026-03-28 | Google SEO APIs (GSC, PageSpeed, CrUX, GA4) |
+| v1.9.0 | 2026-04-15 | Pro Hub Challenge: cluster、SXO、drift、ecommerce、コストガードレール、文化プロファイル。GitHubリリース + PDFレポート + 15枚スライド。 |
+| v1.8.2 | 2026-04-10 | ウクライナ語ローカライゼーション、CI修正、バージョン同期 |
+| v1.8.1 | 2026-04-06 | Google Images SERP、画像最適化 |
+| v1.8.0 | 2026-03-31 | 無料の被リンクデータ(Moz、Bing、Common Crawl) |
+| v1.7.0 | 2026-03-28 | Google SEO API群(GSC、PageSpeed、CrUX、GA4) |
 
-## Ecosystem
+## エコシステム
 
-- [[Claude SEO]] — SEO analysis (this project)
-- Claude Blog — companion blog engine, consumes SEO findings
-- Claude Banana — AI image generation, bundled as extension
-- AI Marketing Claude — community marketing suite by Zubair Trabzada
+- [[Claude SEO]] — SEO分析(本プロジェクト)
+- Claude Blog — 連携するブログエンジン。SEOの知見を取り込む
+- Claude Banana — AI画像生成。拡張としてバンドル
+- AI Marketing Claude — Zubair Trabzadaによるコミュニティ向けマーケティングスイート
 
-## Security Posture (v1.9.0 audit)
+## セキュリティ評価(v1.9.0監査)
 
-- **Score**: 85/100 (Grade B+)
-- **SSRF protection**: validate_url() + fetch_page.py DNS resolution
-- **SQL**: all queries parameterized
-- **Cost guardrails**: threshold approval, daily limits, file locking, audit trail
-- **Pre-existing debt**: validate_url DNS rebinding gap, install script injection, OAuth file permissions
+- **スコア**: 85/100(B+ランク)
+- **SSRF対策**: validate_url() + fetch_page.pyのDNS解決
+- **SQL**: 全クエリをパラメータ化済み
+- **コストガードレール**: 閾値承認、日次上限、ファイルロック、監査証跡
+- **既存の負債**: validate_urlのDNSリバインディング欠陥、インストールスクリプトのインジェクション、OAuthファイルパーミッション

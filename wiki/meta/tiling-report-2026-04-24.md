@@ -1,4 +1,4 @@
-# Semantic Tiling Report
+# セマンティックタイリングレポート
 
 - generated: 2026-04-24T09:20:59Z
 - model: nomic-embed-text
@@ -9,11 +9,11 @@
 - skipped reasons: embed_error=1, excluded filename=9, under wiki/meta/=10
 - cache hits: 0; recomputed: 21; orphans pruned: 0
 
-## Errors (similarity >= 0.9)
+## エラー (similarity >= 0.9)
 
-- none
+- なし
 
-## Review (0.8 <= similarity < 0.9)
+## レビュー (0.8 <= similarity < 0.9)
 
 - `0.8822` wiki/concepts/Compounding Knowledge.md -- wiki/concepts/LLM Wiki Pattern.md
 - `0.8729` wiki/concepts/LLM Wiki Pattern.md -- wiki/questions/How does the LLM Wiki pattern work.md

@@ -1,7 +1,7 @@
 {
   "name": "claude-obsidian",
   "version": "1.6.0",
-  "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Based on Andrej Karpathy's LLM Wiki pattern. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection.",
+  "description": "Claude + Obsidian ナレッジコンパニオン(日本語ローカライズ版)。永続的に成長するウィキ Vault を構築。メモリ管理、セッションノート、知識整理、プロジェクト横断エージェントコンテキストを扱う。Andrej Karpathy の LLM Wiki パターンに基づく。オプションの DragonScale Memory 拡張で階層的 log fold、決定論的ページアドレス、埋め込みベースのセマンティックタイリング lint、境界優先 autoresearch を追加。すべての出力は日本語、ファイル名・キーは英語維持。Claude + Obsidian knowledge companion (Japanese-localized). Triggers in both Japanese and English.",
   "author": {
     "name": "AgriciDaniel",
     "url": "https://github.com/AgriciDaniel"
@@ -23,6 +23,9 @@
     "karpathy",
     "pkm",
     "canvas",
-    "visual"
+    "visual",
+    "japanese",
+    "ja-jp",
+    "japanese-localized"
   ]
 }

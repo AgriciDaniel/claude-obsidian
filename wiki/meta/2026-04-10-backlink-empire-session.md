@@ -1,8 +1,11 @@
 ---
 type: session
-title: "Backlink Empire - Blog Posts, Karpathy Gist, GitHub Cross-Linking"
+title: "バックリンク帝国 - ブログ投稿、Karpathy Gist、GitHubクロスリンク"
 created: 2026-04-10
 updated: 2026-04-10
+aliases:
+  - 2026-04-10-backlink-empire-session
+  - "2026-04-10 バックリンク帝国セッション"
 tags:
   - session
   - backlinks
@@ -19,77 +22,77 @@ related:
 decision_date: 2026-04-10
 ---
 
-## What Was Done
+## 実施内容
 
-### Blog Posts Created
+### 作成したブログ投稿
 
-Two blog posts written, deployed to Vercel, and submitted to Google Indexing API + Bing IndexNow:
+2本のブログ投稿を執筆し、Vercelにデプロイ、Google Indexing API + Bing IndexNowに送信した。
 
-1. **claude-obsidian-ai-second-brain** - "I Turned Obsidian Into a Self-Organizing AI Brain"
-   - Focus keyword: "obsidian ai second brain"
-   - ~2,800 words, 5 repo images/GIFs, 3 SVG charts, 8 sourced statistics
-   - Images from `wiki/meta/` in the claude-obsidian repo (graph view, wiki map, welcome canvas GIF)
-   - Live: agricidaniel.com/blog/claude-obsidian-ai-second-brain
+1. **claude-obsidian-ai-second-brain** : 「Obsidianを自己組織化するAIブレインに変えた話」
+   - フォーカスキーワード:「obsidian ai second brain」
+   - 約2,800語、リポジトリ画像/GIF 5点、SVGチャート3点、出典付き統計8件
+   - 画像はclaude-obsidianリポジトリの`wiki/meta/`から(グラフビュー、wikiマップ、welcomeキャンバスGIF)
+   - 公開URL: agricidaniel.com/blog/claude-obsidian-ai-second-brain
 
-2. **claude-canvas-ai-visual-production** - "Claude Code Just Turned Obsidian Canvas Into an AI Design Studio"
-   - Focus keyword: "obsidian canvas ai"
-   - ~2,500 words, 5 screenshots from repo, 2 SVG charts, 7 sourced statistics
-   - Images from `assets/screenshots/` in the claude-canvas repo
-   - Live: agricidaniel.com/blog/claude-canvas-ai-visual-production
+2. **claude-canvas-ai-visual-production** : 「Claude CodeがObsidian CanvasをAIデザインスタジオに変えた」
+   - フォーカスキーワード:「obsidian canvas ai」
+   - 約2,500語、リポジトリのスクリーンショット5枚、SVGチャート2点、出典付き統計7件
+   - 画像はclaude-canvasリポジトリの`assets/screenshots/`から
+   - 公開URL: agricidaniel.com/blog/claude-canvas-ai-visual-production
 
-### Karpathy Gist Comment
+### Karpathy Gistへのコメント
 
-Comment posted on Andrej Karpathy's LLM Wiki gist (gist ID: 442a6bf555914893e9891c11519de94f). Links claude-obsidian (358 stars), claude-canvas, and the blog post. Highlights hot cache, contradiction flagging, 8-category lint, and autonomous research loops as differentiators.
+Andrej KarpathyのLLM Wiki gist(gist ID: 442a6bf555914893e9891c11519de94f)にコメントを投稿。claude-obsidian(358スター)、claude-canvas、ブログ投稿へリンクを設置。差別化要素として、ホットキャッシュ、矛盾フラグ機能、8カテゴリのlint、自律研究ループを取り上げた。
 
-### GitHub Backlink Empire (26 Repos Updated)
+### GitHubバックリンク帝国(26リポジトリ更新)
 
-**Phase 1 - API updates (no README changes):**
-- Set homepage URLs on 10 repos (on-page-seo, Keywordo-kun, claude-youtube, marketing-skill-pack, google-maps-scraper, claude-repurpose, claude-gif, claude-avatar, rankenstein-pro-latest, claude-canvas)
-- Set topics/tags on 25 repos (grouped by category: SEO, content, marketing, obsidian, media, dev tools, n8n)
+**フェーズ1:API更新(README変更なし):**
+- 10リポジトリにホームページURLを設定(on-page-seo, Keywordo-kun, claude-youtube, marketing-skill-pack, google-maps-scraper, claude-repurpose, claude-gif, claude-avatar, rankenstein-pro-latest, claude-canvas)
+- 25リポジトリにトピック/タグを設定(カテゴリ別:SEO、コンテンツ、マーケティング、obsidian、メディア、開発ツール、n8n)
 
-**Phase 2-5 - README updates:**
-- Added standardized Author section to 25 repos with links to:
+**フェーズ2-5:README更新:**
+- 25リポジトリに標準化したAuthorセクションを追加し、以下にリンク設置:
   - agricidaniel.com/about
   - agricidaniel.com/blog
   - skool.com/ai-marketing-hub
   - youtube.com/@AgriciDaniel
   - github.com/AgriciDaniel
 
-**Rankenstein.pro backlinks (5 SEO-relevant repos only):**
-- claude-seo: "Publishing Pipeline" section
-- claude-blog: "Publishing Platform" section
-- on-page-seo: blockquote before Author
-- Keywordo-kun: blockquote before Author
-- marketing-skill-pack: mentioned in Author context
+**Rankenstein.proへのバックリンク(SEO関連リポジトリ5件のみ):**
+- claude-seo:「Publishing Pipeline」セクション
+- claude-blog:「Publishing Platform」セクション
+- on-page-seo:Authorの前にblockquote
+- Keywordo-kun:Authorの前にblockquote
+- marketing-skill-pack:Author内で言及
 
-### Verification Results
+### 検証結果
 
-64/65 checks passed. 1 minor note: claude-obsidian uses footer-style attribution instead of formal `## Author` heading (intentional - already had custom attribution).
+64/65チェック合格。軽微な指摘1件:claude-obsidianは正式な`## Author`見出しの代わりにフッター形式の表記を採用(意図的:既に独自表記が存在)。
 
-## Key Decisions
+## 主要な意思決定
 
-- **rankenstein.pro placement**: Only on SEO-relevant repos (5 of 26). Not spammed across video/image/dev tools. Keeps it natural.
-- **Karpathy gist tone**: Technical, value-first. Led with the implementation, not marketing. Matched the collaborative tone of the comment thread.
-- **Blog keyword strategy**: "obsidian ai second brain" (trending, moderate competition) and "obsidian canvas ai" (low competition, growing query). Both exploit competitor gaps - no existing article covers a specific tool in depth.
-- **Cover images**: Used real repo assets (pixel-art covers, screenshots, GIFs) rather than stock photos. Converts better and is more authentic.
+- **rankenstein.pro配置**:SEO関連リポジトリのみ(26中5件)。動画/画像/開発ツールに乱用しない。自然さを保つ。
+- **Karpathy gistのトーン**:技術重視、価値先行。マーケティングではなく実装から入る。コメントスレッドの協調的なトーンに合わせる。
+- **ブログのキーワード戦略**:「obsidian ai second brain」(トレンド、競合中程度)と「obsidian canvas ai」(競合低、検索数増加中)。両方とも競合の隙を突く狙い:既存記事で特定ツールを深掘りしているものは無い。
+- **カバー画像**:ストック写真ではなく実際のリポジトリアセット(ピクセルアートカバー、スクリーンショット、GIF)を使用。コンバージョンが良く、より本物らしい。
 
-## Numbers
+## 数字
 
-- ~87 new backlinks from github.com (DA 96) to agricidaniel.com
-- ~6 backlinks to rankenstein.pro
-- ~25 backlinks to skool.com/ai-marketing-hub
-- 22 total pages in sitemap (was 20 at session start)
-- 15 total blog posts (was 13)
+- github.com(DA 96)からagricidaniel.comへの新規バックリンク約87件
+- rankenstein.proへのバックリンク約6件
+- skool.com/ai-marketing-hubへのバックリンク約25件
+- サイトマップの総ページ数22件(セッション開始時20件)
+- ブログ投稿総数15件(従来13件)
 
-## Workflow for Future Blog Posts
+## 今後のブログ投稿に向けたワークフロー
 
-This session established a repeatable workflow:
-1. Explore repo thoroughly (features, images, stats)
-2. Keyword research + competitor analysis via web search
-3. Write blog JSON with HTML content, SVG charts, repo images
-4. Add to blogPosts.ts, sitemap.xml, llms.txt
-5. Build + prerender + deploy to Vercel
-6. Submit to Google Indexing API + Bing IndexNow
-7. Set repo homepage to blog URL
-8. Add blog backlink to repo README
-9. Update README with Author/community section
+このセッションで再現可能なワークフローが確立された:
+1. リポジトリを徹底調査(機能、画像、統計)
+2. ウェブ検索によるキーワード調査+競合分析
+3. HTMLコンテンツ、SVGチャート、リポジトリ画像を含むブログJSONを執筆
+4. blogPosts.ts、sitemap.xml、llms.txtに追加
+5. Vercelへビルド+プリレンダー+デプロイ
+6. Google Indexing API + Bing IndexNowへ送信
+7. リポジトリのホームページをブログURLに設定
+8. リポジトリREADMEにブログのバックリンクを追加
+9. READMEのAuthor/コミュニティセクションを更新

@@ -1,6 +1,7 @@
 ---
 type: comparison
-title: "Claude + Obsidian Ecosystem: Feature Matrix"
+title: "Claude + Obsidian エコシステム: 機能マトリクス"
+aliases: ["claude-obsidian-ecosystem", "Claude + Obsidian エコシステム"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -17,129 +18,129 @@ sources:
   - "[[claude-obsidian-ecosystem-research]]"
 ---
 
-# Claude + Obsidian Ecosystem: Feature Matrix
+# Claude + Obsidian エコシステム: 機能マトリクス
 
-> Researched 2026-04-08 | 16+ projects analyzed | See [[cherry-picks]] for action items
-
----
-
-## Legend
-- ✅ Has it
-- ❌ Missing
-- 🟡 Partial
-- ⭐ Best-in-class implementation
+> 調査日: 2026-04-08 | 16以上のプロジェクトを分析 | アクションアイテムは [[cherry-picks]] を参照
 
 ---
 
-## LLM Wiki Pattern Projects (Claude Code Skills)
+## 凡例
+- ✅ 実装済み
+- ❌ 未実装
+- 🟡 部分対応
+- ⭐ ベストインクラスの実装
 
-| Feature | claude-obsidian | claudesidian | llm-knowledge-bases | llm-wiki | obsidian-wiki | obsidian-claude-pkm |
+---
+
+## LLM Wikiパターン系プロジェクト(Claude Codeスキル)
+
+| 機能 | claude-obsidian | claudesidian | llm-knowledge-bases | llm-wiki | obsidian-wiki | obsidian-claude-pkm |
 |---------|:-:|:-:|:-:|:-:|:-:|:-:|
-| /wiki setup & scaffold | ✅ | 🟡 `/init-bootstrap` | 🟡 `/kb-init` | ✅ | ✅ setup.sh | 🟡 `/onboard` |
-| Source ingestion | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| Wiki query | ✅ | ❌ | ✅ 3 depths | 🟡 | ✅ | ❌ |
-| Wiki lint | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| /save conversation | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Autoresearch loop | ✅ | ❌ | 🟡 | ❌ | ❌ | ❌ |
-| Canvas / visual layer | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Hot cache | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Delta tracking** | ❌ | ❌ | ❌ | ❌ | ✅⭐ | ❌ |
-| **Multi-depth query** | ❌ | ❌ | ✅⭐ | ❌ | ❌ | ❌ |
-| **URL ingestion** | ❌ | 🟡 firecrawl | ❌ | ✅ | ✅ | ❌ |
-| **Vision / image ingest** | ❌ | 🟡 gemini | ❌ | ❌ | ✅⭐ | ❌ |
-| **Auto-commit hooks** | ❌ | ❌ | ❌ | ✅ git | ❌ | ✅⭐ |
-| **Marp / slides output** | ❌ | ❌ | ✅⭐ | ✅ | ❌ | ❌ |
-| **Chart output** | ❌ | ❌ | ✅ matplotlib | ❌ | ❌ | ❌ |
-| **Hybrid search (BM25+vec)** | ❌ | ❌ | ❌ | ✅⭐ qmd | ❌ | ❌ |
-| **Goal cascade (PKM)** | ❌ | 🟡 PARA | ❌ | ❌ | ❌ | ✅⭐ |
-| **Daily/weekly review** | ❌ | 🟡 | ❌ | ❌ | ❌ | ✅⭐ |
-| **Adopt existing vault** | ❌ | ✅⭐ | ❌ | ❌ | ❌ | ✅⭐ |
-| **Multi-agent compat.** | ❌ | ❌ | ❌ | ❌ | ✅⭐ | ❌ |
-| **X/Twitter ingest** | ❌ | ❌ | ✅⭐ smaug | ❌ | ❌ | ❌ |
-| Marketplace install | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Public repo | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| /wiki セットアップとスキャフォールド | ✅ | 🟡 `/init-bootstrap` | 🟡 `/kb-init` | ✅ | ✅ setup.sh | 🟡 `/onboard` |
+| ソース取り込み | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
+| ウィキクエリ | ✅ | ❌ | ✅ 3段階 | 🟡 | ✅ | ❌ |
+| ウィキlint | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| /save 会話保存 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| autoresearch ループ | ✅ | ❌ | 🟡 | ❌ | ❌ | ❌ |
+| Canvas / ビジュアルレイヤー | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| ホットキャッシュ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **デルタ追跡** | ❌ | ❌ | ❌ | ❌ | ✅⭐ | ❌ |
+| **多段階クエリ** | ❌ | ❌ | ✅⭐ | ❌ | ❌ | ❌ |
+| **URL取り込み** | ❌ | 🟡 firecrawl | ❌ | ✅ | ✅ | ❌ |
+| **ビジョン / 画像取り込み** | ❌ | 🟡 gemini | ❌ | ❌ | ✅⭐ | ❌ |
+| **自動コミットフック** | ❌ | ❌ | ❌ | ✅ git | ❌ | ✅⭐ |
+| **Marp / スライド出力** | ❌ | ❌ | ✅⭐ | ✅ | ❌ | ❌ |
+| **チャート出力** | ❌ | ❌ | ✅ matplotlib | ❌ | ❌ | ❌ |
+| **ハイブリッド検索 (BM25+vec)** | ❌ | ❌ | ❌ | ✅⭐ qmd | ❌ | ❌ |
+| **ゴールカスケード(PKM)** | ❌ | 🟡 PARA | ❌ | ❌ | ❌ | ✅⭐ |
+| **デイリー/ウィークリーレビュー** | ❌ | 🟡 | ❌ | ❌ | ❌ | ✅⭐ |
+| **既存ボールトの取り込み** | ❌ | ✅⭐ | ❌ | ❌ | ❌ | ✅⭐ |
+| **マルチエージェント互換** | ❌ | ❌ | ❌ | ❌ | ✅⭐ | ❌ |
+| **X/Twitter 取り込み** | ❌ | ❌ | ✅⭐ smaug | ❌ | ❌ | ❌ |
+| マーケットプレイス導入 | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| 公開リポジトリ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ---
 
-## Native Obsidian Plugins (Embedded UI)
+## Obsidianネイティブプラグイン(UI埋め込み型)
 
-| Feature | Claudian | Nexus (claudesidian-mcp) | infio-copilot |
+| 機能 | Claudian | Nexus (claudesidian-mcp) | infio-copilot |
 |---------|:-:|:-:|:-:|
-| Sidebar chat in Obsidian | ✅ | ✅ | ✅ |
-| Inline edit w/ diff | ✅⭐ word-level | ✅ | ✅ |
-| Plan mode | ✅⭐ Shift+Tab | ❌ | ❌ |
-| @mention files/agents | ✅⭐ | ❌ | 🟡 |
-| MCP server support | ✅ | ✅⭐ external | ❌ |
-| Multi-tab conversations | ✅ | ❌ | ❌ |
-| Workspace memory | ❌ | ✅⭐ JSONL | ✅ workspaces |
-| Task management | ❌ | ✅⭐ | ❌ |
-| Semantic search | ❌ | ✅ | ✅⭐ local embed |
+| Obsidian内サイドバーチャット | ✅ | ✅ | ✅ |
+| 差分付きインライン編集 | ✅⭐ 単語単位 | ✅ | ✅ |
+| プランモード | ✅⭐ Shift+Tab | ❌ | ❌ |
+| ファイル/エージェント @メンション | ✅⭐ | ❌ | 🟡 |
+| MCPサーバー対応 | ✅ | ✅⭐ 外部 | ❌ |
+| マルチタブ会話 | ✅ | ❌ | ❌ |
+| ワークスペースメモリ | ❌ | ✅⭐ JSONL | ✅ workspaces |
+| タスク管理 | ❌ | ✅⭐ | ❌ |
+| セマンティック検索 | ❌ | ✅ | ✅⭐ ローカル埋め込み |
 | PDF → Markdown | ❌ | ✅ | ❌ |
-| Web page capture | ❌ | ✅ | ❌ |
-| Mobile support | ❌ | ✅⭐ | ❌ |
-| Obsidian Sync compatible | N/A | ✅⭐ | N/A |
-| Stars / popularity | ~200 est. | ~800 est. | ~300 est. |
+| Webページキャプチャ | ❌ | ✅ | ❌ |
+| モバイル対応 | ❌ | ✅⭐ | ❌ |
+| Obsidian Sync互換 | N/A | ✅⭐ | N/A |
+| スター数/人気度 | 約200(推定) | 約800(推定) | 約300(推定) |
 
 ---
 
-## MCP Servers
+## MCPサーバー
 
-| Server | Key Differentiator | Requires |
+| サーバー | 主な差別化要素 | 必要環境 |
 |--------|-------------------|----------|
-| obsidian-mcp-tools | Templater execution + SLSA attestation | Local REST API + Smart Connections |
-| obsidian-memory-mcp | AI memories as Markdown in graph view | Node 18+ |
-| obsidian-claude-code-mcp | WebSocket, auto-discovers vaults | Claude Code |
-| administrativetrick/obsidian-mcp | Minimal, simple | Claude Desktop |
-| MarkusPfundstein/mcp-obsidian | Via REST API | Local REST API |
+| obsidian-mcp-tools | Templater実行 + SLSAアテステーション | Local REST API + Smart Connections |
+| obsidian-memory-mcp | グラフビュー上のMarkdownとしてのAI記憶 | Node 18+ |
+| obsidian-claude-code-mcp | WebSocket、ボールト自動検出 | Claude Code |
+| administrativetrick/obsidian-mcp | 最小限、シンプル | Claude Desktop |
+| MarkusPfundstein/mcp-obsidian | REST API経由 | Local REST API |
 
 ---
 
-## kepano/obsidian-skills (Special — from Obsidian Creator)
+## kepano/obsidian-skills(特別枠 — Obsidian作者によるリポジトリ)
 
-Linus Kepano (Obsidian creator + Minimal theme) published official Agent Skills for Obsidian:
+Linus Kepano(Obsidian作者 + Minimalテーマ作者)が公式のAgent Skillsを公開:
 
-| Skill | What It Teaches |
+| スキル | 教える内容 |
 |-------|----------------|
-| obsidian-markdown | Obsidian Flavored Markdown (callouts, embeds, wikilinks, properties) |
-| obsidian-bases | Obsidian Bases (.base files, views, filters, formulas) |
-| json-canvas | JSON Canvas spec (.canvas nodes/edges/groups) |
-| obsidian-cli | Vault management via Obsidian CLI |
-| defuddle | Extract clean Markdown from web pages (saves tokens) |
+| obsidian-markdown | Obsidian Flavored Markdown(コールアウト、埋め込み、ウィキリンク、プロパティ) |
+| obsidian-bases | Obsidian Bases(.baseファイル、ビュー、フィルタ、フォーミュラ) |
+| json-canvas | JSON Canvas仕様(.canvas のノード/エッジ/グループ) |
+| obsidian-cli | Obsidian CLIによるボールト管理 |
+| defuddle | Webページからクリーンなマークダウンを抽出(トークン節約) |
 
-> **Key signal**: This project validates that the Agent Skills format is the right standard.
-> These skills are platform-agnostic (Claude Code, Codex, OpenCode).
+> **重要なシグナル**: このプロジェクトはAgent Skillsフォーマットが正しい標準であることを裏付ける。
+> これらのスキルはプラットフォーム非依存である(Claude Code、Codex、OpenCode)。
 
 ---
 
-## Popularity Snapshot (Traditional Plugins)
+## 人気スナップショット(従来型プラグイン)
 
-| Plugin | Stars | Approach |
+| プラグイン | スター数 | アプローチ |
 |--------|-------|---------|
-| obsidian-copilot | 5,776 | Multi-provider vault chat |
-| obsidian-smart-connections | 4,357 | Semantic search + embeddings |
-| obsidian-textgenerator-plugin | 1,837 | Text generation |
-| chatgpt-md | 1,229 | Chat in Markdown |
-| obsidian-local-gpt | 569 | Local LLM |
-| obsidian-ai-tools | 272 | Supabase + OpenAI semantic search |
+| obsidian-copilot | 5,776 | マルチプロバイダ対応のボールトチャット |
+| obsidian-smart-connections | 4,357 | セマンティック検索 + 埋め込み |
+| obsidian-textgenerator-plugin | 1,837 | テキスト生成 |
+| chatgpt-md | 1,229 | Markdown内でのチャット |
+| obsidian-local-gpt | 569 | ローカルLLM |
+| obsidian-ai-tools | 272 | Supabase + OpenAIによるセマンティック検索 |
 
 ---
 
-## Where claude-obsidian Wins
+## claude-obsidianが優れている点
 
-1. **Hot cache** — session context mechanism is unique in the ecosystem
-2. **Canvas skill** — no other LLM Wiki project has a visual layer
-3. **Marketplace install** — most polished install experience
-4. **/save conversation** — filing chat sessions as wiki pages is unique
-5. **Pub quality docs** — README, install guide, demo GIFs
-6. **Dual repo** (public + community) — distribution model unique
+1. **ホットキャッシュ** — セッションコンテキストの仕組みはエコシステム内で唯一無二
+2. **Canvasスキル** — ビジュアルレイヤーを持つLLM Wikiプロジェクトは他にない
+3. **マーケットプレイス導入** — 最も洗練されたインストール体験
+4. **/save 会話保存** — チャットセッションをウィキページとしてファイリングする機能は唯一無二
+5. **ドキュメント品質** — README、インストールガイド、デモGIF
+6. **デュアルリポジトリ**(public + community) — 配布モデルが独自
 
-## Where claude-obsidian Has Gaps
+## claude-obsidianのギャップ
 
-See [[cherry-picks]] for prioritized list with implementation notes.
+実装ノート付きの優先順位リストは [[cherry-picks]] を参照。
 
-Top 5 gaps by impact:
-1. No delta tracking → re-ingests everything on every compile
-2. No URL ingestion → forces manual copy-paste
-3. No auto-commit → vault changes aren't versioned automatically
-4. No multi-depth query → one mode for all questions
-5. No vision input → can't ingest screenshots or images
+影響度の高いギャップ上位5つ:
+1. デルタ追跡なし → コンパイルのたびに全件再取り込み
+2. URL取り込みなし → 手動コピー&ペーストを強制
+3. 自動コミットなし → ボールトの変更が自動的にバージョン管理されない
+4. 多段階クエリなし → どんな質問にも単一モードで対応
+5. ビジョン入力なし → スクリーンショットや画像を取り込めない

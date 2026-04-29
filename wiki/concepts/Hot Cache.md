@@ -1,9 +1,11 @@
 ---
 type: concept
-title: "Hot Cache"
+title: "ホットキャッシュ"
 complexity: basic
 domain: knowledge-management
 aliases:
+  - "Hot Cache"
+  - "ホットキャッシュ"
   - "hot.md"
   - "Session Cache"
   - "Context Cache"
@@ -23,25 +25,25 @@ related:
 sources:
 ---
 
-# Hot Cache
+# ホットキャッシュ
 
-A ~500-word summary of the most recent context in the wiki vault. Stored in `wiki/hot.md`. Updated at the end of every session and after every significant ingest or query.
+Wiki vault における最新コンテキストを約 500 語にまとめた要約。`wiki/hot.md` に保存される。各セッションの終わり、および重要な ingest やクエリの後に毎回更新される。
 
-The hot cache exists to answer one question: "where did we leave off?" A new session reads `hot.md` first. If the answer is there, it skips crawling the rest of the wiki.
-
----
-
-## What It Stores
-
-- What was most recently ingested or discussed
-- Key recent facts and takeaways
-- Pages recently created or updated
-- Active threads and open questions
-- What the user is currently focused on
+ホットキャッシュは「前回どこで終わったか」という一つの問いに答えるために存在する。新しいセッションはまず `hot.md` を読む。そこに答えがあれば、Wiki の他の部分を巡回する必要はない。
 
 ---
 
-## Format
+## 何を保存するか
+
+- 直近で ingest または議論した内容
+- 重要な最近の事実と要点
+- 最近作成または更新されたページ
+- 進行中のスレッドと未解決の問い
+- 現在ユーザーが集中していること
+
+---
+
+## フォーマット
 
 ```markdown
 ---
@@ -71,25 +73,25 @@ YYYY-MM-DD — [what happened]
 
 ---
 
-## Rules
+## ルール
 
-- Keep it under 500 words. It is a cache, not a journal.
-- Overwrite it completely each time. Not append-only.
-- One file. Not split by date.
-- Updated after every ingest, significant query, and at the end of each session.
-
----
-
-## Why It Matters
-
-Without the hot cache, every session starts cold: read the index (1000 tokens), read several domain sub-indexes, read several individual pages. With the hot cache, the first 500 tokens often have everything needed.
-
-In practice, adding `hot.md` to an executive assistant vault dramatically reduces the token cost of session startup compared to crawling multiple wiki pages.
-
-The hot cache is especially valuable in cross-project setups: another Claude Code project can point at this vault and read `hot.md` first to get recent context at minimal token cost.
+- 500 語以内に保つこと。これはキャッシュであってジャーナルではない。
+- 毎回完全に上書きする。追記式ではない。
+- 一つのファイル。日付ごとに分割しない。
+- ingest のたび、重要なクエリのたび、各セッションの終わりに更新する。
 
 ---
 
-## Connections
+## なぜ重要か
 
-The hot cache is part of the [[LLM Wiki Pattern]] token discipline strategy. See [[index]] for how the broader navigation works.
+ホットキャッシュがないと、各セッションはコールドスタートになる。index を読み(1000 トークン)、いくつかのドメインのサブインデックスを読み、複数の個別ページを読む必要がある。ホットキャッシュがあれば、最初の 500 トークンに必要なものがほぼ全て揃っていることが多い。
+
+実際の運用では、エグゼクティブアシスタント vault に `hot.md` を加えたことで、複数の Wiki ページを巡回する場合と比較してセッション開始時のトークンコストが大幅に削減された。
+
+ホットキャッシュは特にクロスプロジェクト構成で価値が高い。別の Claude Code プロジェクトがこの vault を指し示し、まず `hot.md` を読むだけで最小トークンコストで最近のコンテキストを得られる。
+
+---
+
+## 関連
+
+ホットキャッシュは [[LLM Wiki Pattern]] のトークン規律戦略の一部だ。広範なナビゲーションについては [[index]] を参照。

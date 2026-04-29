@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Semantic Topic Clustering"
+title: "セマンティックトピッククラスタリング"
 created: 2026-04-14
 updated: 2026-04-14
 tags:
@@ -9,37 +9,40 @@ tags:
   - content-strategy
   - clustering
 status: evergreen
+aliases:
+  - "Semantic Topic Clustering"
+  - "セマンティックトピッククラスタリング"
 related:
   - "[[Claude SEO]]"
   - "[[Pro Hub Challenge]]"
   - "[[Search Experience Optimization]]"
 ---
 
-# Semantic Topic Clustering
+# セマンティックトピッククラスタリング
 
-SERP-based keyword grouping that replaces paid tools ($50-200/month) with Claude's reasoning. Contributed to [[Claude SEO]] v1.9.0 by Lutfiya Miller (Pro Hub Challenge Winner).
+SERP に基づくキーワードグループ化により、有料ツール(月額 $50〜200)を Claude の推論で置き換える。Lutfiya Miller により [[Claude SEO]] v1.9.0 へ貢献された(Pro Hub Challenge 優勝者)。
 
-## How It Works
+## 仕組み
 
-1. **Seed keyword** provided by user
-2. **SERP fetching** — get Google results for the seed and related terms (via WebSearch or DataForSEO)
-3. **Overlap scoring** — compare top-10 results between keyword pairs:
-   - 7-10 overlapping URLs = same post (keyword cannibalization)
-   - 4-6 overlapping = same cluster (supporting content)
-   - 2-3 overlapping = interlink opportunity
-   - 0-1 overlapping = separate clusters
-4. **Hub-spoke architecture** — 1 pillar page (2500-4000 words) + 2-5 clusters + 2-4 posts each
-5. **Internal link matrix** — bidirectional linking plan with backward link injection
-6. **Visualization** — interactive cluster-map.html (SVG, dark mode, keyboard accessible)
+1. **シードキーワード**: ユーザーが指定する
+2. **SERP 取得**: シードと関連語の Google 結果を取得する(WebSearch または DataForSEO 経由)
+3. **オーバーラップ採点**: キーワードペア間でトップ 10 結果を比較する。
+   - 7〜10 個の URL が重複 = 同一記事(キーワードカニバリゼーション)
+   - 4〜6 個の重複 = 同一クラスタ(支援コンテンツ)
+   - 2〜3 個の重複 = 内部リンクの機会
+   - 0〜1 個の重複 = 別クラスタ
+4. **ハブ・スポーク構造**: ピラーページ 1 本(2500〜4000 語)+ クラスタ 2〜5 本 + 各クラスタに記事 2〜4 本
+5. **内部リンクマトリクス**: 双方向リンク計画と後方リンク注入
+6. **可視化**: インタラクティブな cluster-map.html(SVG、ダークモード、キーボードアクセシブル)
 
-## Key Design Decisions
+## 主な設計判断
 
-- **No Python scripts** — clustering is prompt-driven (Claude's reasoning + WebSearch)
-- **Optional execution** — outputs content briefs when claude-blog isn't installed, full pipeline when it is
-- **Resume capability** — for long multi-post execution runs
-- **DataForSEO integration** — uses `serp_organic_live_advanced` for live SERP data when available (with cost check)
+- **Python スクリプト不使用**: クラスタリングはプロンプト駆動(Claude の推論 + WebSearch)
+- **オプション実行**: claude-blog 未インストール時はコンテンツブリーフを出力、インストール済みならフルパイプライン
+- **再開機能**: 長時間のマルチ記事実行に対応
+- **DataForSEO 統合**: 利用可能な場合は `serp_organic_live_advanced` でライブ SERP データを使用(コストチェック付き)
 
-## Command
+## コマンド
 
 ```
 /seo cluster <seed-keyword>

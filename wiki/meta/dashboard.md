@@ -1,7 +1,10 @@
 ---
 type: meta
-title: "Dashboard"
+title: "ダッシュボード"
 updated: 2026-04-08
+aliases:
+  - dashboard
+  - "ダッシュボード"
 tags:
   - meta
   - dashboard
@@ -14,54 +17,54 @@ related:
   - "[[Compounding Knowledge]]"
 ---
 
-# Wiki Dashboard
+# Wikiダッシュボード
 
-Navigation: [[index]] | [[overview]] | [[log]] | [[hot]]
+ナビゲーション: [[index]] | [[overview]] | [[log]] | [[hot]]
 
-The dashboard uses **Obsidian Bases**. A core Obsidian feature shipped in v1.9.10 (August 2025). No plugin install required.
+ダッシュボードは**Obsidian Bases**を使用しています。v1.9.10(2025年8月)で同梱されたObsidianのコア機能で、プラグインのインストールは不要です。
 
-> [!tip] Embedded Bases view
-> The interactive dashboard lives in [[dashboard.base]]. Open that file directly, or use the embed below.
+> [!tip] 埋め込みBasesビュー
+> 対話型のダッシュボードは[[dashboard.base]]にあります。そのファイルを直接開くか、以下の埋め込みを利用してください。
 
 ![[dashboard.base]]
 
 ---
 
-## Legacy Dataview Dashboard (Optional)
+## レガシーDataviewダッシュボード(任意)
 
-If you are on Obsidian < 1.9.10 or prefer Dataview, the queries below still work. Just install the Dataview community plugin.
+Obsidian < 1.9.10を使用している、もしくはDataviewを好む場合、以下のクエリも引き続き動作します。Dataviewコミュニティプラグインをインストールするだけで使えます。
 
-### Recent Activity
+### 最近のアクティビティ
 
 ```dataview
 TABLE type, status, updated FROM "wiki" SORT updated DESC LIMIT 15
 ```
 
-### Seed Pages (Need Development)
+### シードページ(発展が必要)
 
 ```dataview
 LIST FROM "wiki" WHERE status = "seed" SORT updated ASC
 ```
 
-### Entities Missing Sources
+### 出典が無いエンティティ
 
 ```dataview
 LIST FROM "wiki/entities" WHERE !sources OR length(sources) = 0
 ```
 
-### Open Questions
+### 未解決の質問
 
 ```dataview
 LIST FROM "wiki/questions" WHERE status = "developing" OR status = "seed" SORT updated DESC
 ```
 
-### Comparisons
+### 比較
 
 ```dataview
 TABLE verdict FROM "wiki/comparisons" SORT updated DESC
 ```
 
-### Sources
+### 出典
 
 ```dataview
 TABLE author, date_published, updated FROM "wiki/sources" WHERE type = "source" SORT updated DESC LIMIT 10

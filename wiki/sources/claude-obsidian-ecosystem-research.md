@@ -1,6 +1,7 @@
 ---
 type: source
-title: "Claude + Obsidian Ecosystem Research"
+title: "Claude + Obsidian エコシステム調査"
+aliases: ["claude-obsidian-ecosystem-research", "Claude + Obsidian エコシステム調査"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -15,39 +16,39 @@ related:
 raw_file: ".raw/claude-obsidian-ecosystem-research.md"
 ---
 
-# Source: Claude + Obsidian Ecosystem Research
+# ソース: Claude + Obsidian エコシステム調査
 
-**Type**: Web research (GitHub + web search)
-**Date**: 2026-04-08
-**Queries run**: 6 parallel searches
-**Repos deep-read**: 12
+**種別**: Web調査(GitHub + Web検索)
+**日付**: 2026-04-08
+**実施したクエリ数**: 6件の並列検索
+**深掘りしたリポジトリ数**: 12
 
-## Summary
+## サマリー
 
-Comprehensive internet sweep of all Claude + Obsidian projects. Found 16+ active projects across 4 categories. Identified 13 specific features to cherry-pick for claude-obsidian v1.3.0+.
+すべてのClaude + Obsidianプロジェクトを対象とした網羅的なインターネット調査。4カテゴリにまたがる16以上のアクティブなプロジェクトを発見。claude-obsidian v1.3.0以降に向けてチェリーピックすべき具体的な機能13点を特定した。
 
-## Pages Created from This Source
+## このソースから生成されたページ
 
-- [[claude-obsidian-ecosystem]] — feature matrix comparison
-- [[cherry-picks]] — prioritized feature backlog
-- [[Ar9av-obsidian-wiki]] — entity page
-- [[Nexus-claudesidian-mcp]] — entity page
-- [[ballred-obsidian-claude-pkm]] — entity page
-- [[rvk7895-llm-knowledge-bases]] — entity page
-- [[kepano-obsidian-skills]] — entity page
-- [[Claudian-YishenTu]] — entity page
+- [[claude-obsidian-ecosystem]] — 機能マトリクス比較
+- [[cherry-picks]] — 優先順位付きの機能バックログ
+- [[Ar9av-obsidian-wiki]] — エンティティページ
+- [[Nexus-claudesidian-mcp]] — エンティティページ
+- [[ballred-obsidian-claude-pkm]] — エンティティページ
+- [[rvk7895-llm-knowledge-bases]] — エンティティページ
+- [[kepano-obsidian-skills]] — エンティティページ
+- [[Claudian-YishenTu]] — エンティティページ
 
-## Key Findings
+## 主な知見
 
-1. **16+ projects** found combining Claude/AI with Obsidian
-2. **kepano** (Obsidian creator) validates Agent Skills format with his own skill repo
-3. **ballred/obsidian-claude-pkm** has best auto-commit implementation (PostToolUse hook)
-4. **Ar9av/obsidian-wiki** has best delta tracking (manifest.json)
-5. **rvk7895/llm-knowledge-bases** has best query depth system (3 tiers)
-6. Most popular traditional plugins: obsidian-copilot (5,776 ⭐), smart-connections (4,357 ⭐)
-7. **claude-obsidian unique advantages**: hot cache, canvas skill, /save conversation, marketplace polish
-8. **Top gap**: No URL ingestion — forces manual copy-paste from web
+1. ClaudeまたはAIをObsidianと組み合わせるプロジェクトが**16以上**見つかった
+2. **kepano**(Obsidian作者)が自身のスキルリポジトリでAgent Skillsフォーマットを裏付けている
+3. **ballred/obsidian-claude-pkm** が最良の自動コミット実装(PostToolUseフック)を持つ
+4. **Ar9av/obsidian-wiki** が最良のデルタ追跡(manifest.json)を持つ
+5. **rvk7895/llm-knowledge-bases** が最良のクエリ深さシステム(3段階)を持つ
+6. 従来型プラグインで最も人気: obsidian-copilot(5,776 ⭐)、smart-connections(4,357 ⭐)
+7. **claude-obsidian独自の優位**: ホットキャッシュ、Canvasスキル、/save 会話保存、マーケットプレイス完成度
+8. **最大のギャップ**: URL取り込み未対応 — Webからの手動コピー&ペーストを強要する
 
-## Raw File
+## 生ファイル
 
-`.raw/claude-obsidian-ecosystem-research.md` — full notes with all sources
+`.raw/claude-obsidian-ecosystem-research.md` — 全ソースを含む完全なノート

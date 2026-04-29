@@ -1,10 +1,10 @@
-# Git Setup
+# Git セットアップ
 
-Initialize git in the vault to get full history and protect against bad writes.
+Vault に git を初期化して完全な履歴を持ち、不正な書き込みから守る。
 
 ---
 
-## Initialize
+## 初期化
 
 ```bash
 cd "$VAULT_PATH"
@@ -17,7 +17,7 @@ git commit -m "Initial vault scaffold"
 
 ## .gitignore
 
-The root `.gitignore` in this repo already covers the right exclusions:
+このリポジトリのルート `.gitignore` は適切な除外を既にカバー:
 
 ```
 .obsidian/workspace.json
@@ -28,31 +28,31 @@ The root `.gitignore` in this repo already covers the right exclusions:
 .DS_Store
 ```
 
-`workspace.json` changes constantly as you move panes around. Excluding it keeps the diff clean.
+`workspace.json` はペインを動かすたびに変わる。除外して diff をクリーンに保つ。
 
 ---
 
-## Obsidian Git Plugin
+## Obsidian Git プラグイン
 
-After installing the plugin (see `plugins.md`):
+プラグインインストール後(`plugins.md` 参照):
 
-Settings > Obsidian Git:
-- Auto backup interval: **15 minutes**
+設定 → Obsidian Git:
+- Auto backup interval: **15 分**
 - Auto backup after file change: on
-- Push on backup: on (if you have a remote)
+- Push on backup: on(リモートがあれば)
 - Commit message: `vault: auto backup {{date}}`
 
-This runs silently in the background. You get a full history of every note without thinking about it.
+バックグラウンドで静かに動く。何も意識せずすべてのノートの完全な履歴が手に入る。
 
 ---
 
-## Remote (Optional)
+## リモート(任意)
 
-To back up to GitHub:
+GitHub にバックアップ:
 
 ```bash
 git remote add origin https://github.com/yourname/your-vault
 git push -u origin main
 ```
 
-Keep the repo private if the vault contains personal notes.
+Vault に個人ノートが含まれるならリポジトリは private にする。

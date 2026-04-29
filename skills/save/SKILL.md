@@ -1,85 +1,90 @@
 ---
 name: save
 description: >
-  Save the current conversation, answer, or insight into the Obsidian wiki vault as a
-  structured note. Analyzes the chat, determines the right note type, creates frontmatter,
-  files it in the correct wiki folder, and updates index, log, and hot cache.
-  Triggers on: "save this", "save that answer", "/save", "file this",
-  "save to wiki", "save this session", "file this conversation", "keep this",
-  "save this analysis", "add this to the wiki".
+  現在の会話、回答、気づきを Obsidian ウィキ Vault に構造化ノートとして保存する。
+  チャットを解析し、適切なノートタイプを判定、frontmatter を作成し、正しい wiki フォルダに
+  ファイリングして、index、log、ホットキャッシュを更新。本文は日本語で書く
+  (プロジェクト CLAUDE.md の言語ポリシー参照)。トリガー(日本語): これを保存、その回答を保存、
+  /save、これをファイル化、wiki に保存、このセッションを保存、この会話をファイル、これを残す、
+  この分析を保存、これをウィキに追加。Triggers (English): "save this", "save that answer",
+  "/save", "file this", "save to wiki", "save this session", "file this conversation",
+  "keep this", "save this analysis", "add this to the wiki".
 allowed-tools: Read Write Edit Glob Grep
 ---
 
-# save: File Conversations Into the Wiki
+# save: 会話をウィキにファイリングする
 
-Good answers and insights shouldn't disappear into chat history. This skill takes what was just discussed and files it as a permanent wiki page.
+良い回答や気づきをチャット履歴に消えさせない。このスキルは直前の議論を取り、永続的な wiki ページとしてファイリングする。
 
-The wiki compounds. Save often.
+ウィキは複利で積み上がる。こまめに保存する。
+
+> **言語ルール**: ノート本文・見出し・log エントリは日本語。frontmatter のキー名と列挙値、ファイル名、wikilink ターゲットは英語のまま。`aliases:` には英語のファイル名と日本語表示名の両方を入れる。
 
 ---
 
-## Note Type Decision
+## ノートタイプの決定
 
-Determine the best type from the conversation content:
+会話内容から最適なタイプを判定:
 
-| Type | Folder | Use when |
+| タイプ | フォルダ | 適用 |
 |------|--------|---------|
-| synthesis | wiki/questions/ | Multi-step analysis, comparison, or answer to a specific question |
-| concept | wiki/concepts/ | Explaining or defining an idea, pattern, or framework |
-| source | wiki/sources/ | Summary of external material discussed in the session |
-| decision | wiki/meta/ | Architectural, project, or strategic decision that was made |
-| session | wiki/meta/ | Full session summary: captures everything discussed |
+| synthesis | wiki/questions/ | 複数ステップの分析、比較、特定質問への回答 |
+| concept | wiki/concepts/ | アイデア、パターン、フレームワークの説明や定義 |
+| source | wiki/sources/ | セッションで議論された外部資料の要約 |
+| decision | wiki/meta/ | 行われたアーキテクチャ・プロジェクト・戦略上の決定 |
+| session | wiki/meta/ | フルセッション要約: 議論されたすべてを捕捉 |
 
-If the user specifies a type, use that. If not, pick the best fit based on the content. When in doubt, use `synthesis`.
-
----
-
-## Save Workflow
-
-1. **Scan** the current conversation. Identify the most valuable content to preserve.
-2. **Ask** (if not already named): "What should I call this note?" Keep the name short and descriptive.
-3. **Determine** note type using the table above.
-4. **Extract** all relevant content from the conversation. Rewrite it in declarative present tense (not "the user asked" but the actual content itself).
-5. **Create** the note in the correct folder with full frontmatter.
-6. **Collect links**: identify any wiki pages mentioned in the conversation. Add them to `related` in frontmatter.
-7. **Update** `wiki/index.md`. Add the new entry at the top of the relevant section.
-8. **Append** to `wiki/log.md`. New entry at the TOP:
-   ```
-   ## [YYYY-MM-DD] save | Note Title
-   - Type: [note type]
-   - Location: wiki/[folder]/Note Title.md
-   - From: conversation on [brief topic description]
-   ```
-9. **Update** `wiki/hot.md` to reflect the new addition.
-10. **Confirm**: "Saved as [[Note Title]] in wiki/[folder]/."
+ユーザーがタイプを指定したらそれに従う。指定が無ければ内容から最適を選ぶ。迷ったら `synthesis`。
 
 ---
 
-## Frontmatter Template
+## 保存ワークフロー
+
+1. 現在の会話を **スキャン**。残す価値がある最重要部分を特定。
+2. **質問**(まだ命名されていなければ): 「このノートに何という名前を付けますか?」短く説明的に。
+3. 上の表からノートタイプを **判定**。
+4. 会話から関連内容をすべて **抽出**。平叙の現在形で書き直す(「ユーザーが聞いた」ではなく実際の内容そのもの)。
+5. 完全な frontmatter 付きで正しいフォルダに **ノートを作成**。
+6. **リンク収集**: 会話で言及された wiki ページを特定。frontmatter の `related` に追加。
+7. `wiki/index.md` を **更新**。新エントリを該当セクションの先頭に追加。
+8. `wiki/log.md` に **追記**。新エントリは TOP に:
+   ```
+   ## [YYYY-MM-DD] save | ノートタイトル
+   - タイプ: [ノートタイプ]
+   - 場所: wiki/[folder]/Note Title.md
+   - 出典: [簡単なトピック説明] についての会話
+   ```
+9. 新規追加を反映するよう `wiki/hot.md` を **更新**。
+10. **確認**: 「[[Note Title]] として wiki/[folder]/ に保存しました。」
+
+---
+
+## frontmatter テンプレート
 
 ```yaml
 ---
 type: <synthesis|concept|source|decision|session>
-title: "Note Title"
+title: "ノートタイトル(日本語可)"
+aliases: ["English Filename Slug", "日本語表示名"]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags:
-  - <relevant-tag>
+  - <関連タグ>
 status: developing
 related:
-  - "[[Any Wiki Page Mentioned]]"
+  - "[[言及された Wiki ページ]]"
 sources:
   - "[[.raw/source-if-applicable.md]]"
 ---
 ```
 
-For `question` type, add:
+`question` タイプには追加:
 ```yaml
-question: "The original query as asked."
+question: "聞かれた元のクエリ"
 answer_quality: solid
 ```
 
-For `decision` type, add:
+`decision` タイプには追加:
 ```yaml
 decision_date: YYYY-MM-DD
 status: active
@@ -87,30 +92,30 @@ status: active
 
 ---
 
-## Writing Style
+## 文体
 
-- Declarative, present tense. Write the knowledge, not the conversation.
-- Not: "The user asked about X and Claude explained..."
-- Yes: "X works by doing Y. The key insight is Z."
-- Include all relevant context. Future sessions should be able to read this page cold.
-- Link every mentioned concept, entity, or wiki page with wikilinks.
-- Cite sources where applicable: `(Source: [[Page]])`.
+- 平叙、現在形で日本語で書く。会話ではなく知識を書く。
+- NG: 「ユーザーが X について尋ね、Claude が説明した...」
+- OK: 「X は Y することで動作する。重要な気づきは Z。」
+- 関連コンテキストをすべて含める。未来のセッションがコールドでこのページを読めるように。
+- 言及された概念・エンティティ・wiki ページすべてに wikilink を張る。
+- 該当する場合は出典を引用: `(出典: [[Page]])`。
 
 ---
 
-## What to Save vs. Skip
+## 保存すべきもの vs スキップすべきもの
 
-Save:
-- Non-obvious insights or synthesis
-- Decisions with rationale
-- Analyses that took significant effort
-- Comparisons that are likely to be referenced again
-- Research findings
+保存:
+- 自明でない気づき・合成
+- 根拠付きの決定
+- 大きな労力をかけた分析
+- 再参照される可能性が高い比較
+- リサーチで得た発見
 
-Skip:
-- Mechanical Q&A (lookup questions with obvious answers)
-- Setup steps already documented elsewhere
-- Temporary debugging sessions with no lasting insight
-- Anything already in the wiki
+スキップ:
+- 機械的な Q&A(明らかな答えのある検索質問)
+- 他で文書化済みのセットアップ手順
+- 持続的な気づきの無い一時的なデバッグセッション
+- 既に wiki にあるもの
 
-If it's already in the wiki, update the existing page instead of creating a duplicate.
+すでに wiki にある場合、重複を作らず既存ページを更新する。

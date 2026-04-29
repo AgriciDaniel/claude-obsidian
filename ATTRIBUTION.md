@@ -1,47 +1,47 @@
-# Attributions
+# クレジット
 
-claude-obsidian is an original work. The following third-party patterns, tools, and creators informed its design.
-
----
-
-## LLM Wiki Pattern
-
-**Author:** Andrej Karpathy
-**Source:** https://github.com/karpathy
-**Use:** The core architecture of claude-obsidian — using an LLM to build and maintain a structured wiki from raw sources — is based on the LLM Wiki pattern Karpathy described publicly. claude-obsidian is an independent implementation; no code or content from Karpathy's repositories was copied.
+claude-obsidian はオリジナル作品です。設計に影響を与えた以下のサードパーティのパターン、ツール、および作者を明記します。
 
 ---
 
-## ITS CSS Snippets
+## LLM Wiki パターン
 
-**Author:** SlRvb
-**Source:** https://github.com/SlRvb/Obsidian--ITS-Theme
-**License:** GPL-2.0
-**Files:**
+**作者:** Andrej Karpathy
+**出典:** https://github.com/karpathy
+**用途:** claude-obsidian の中心アーキテクチャ(LLM を使って生ソースから構造化ウィキを構築・維持する)は、Karpathy が公開した LLM Wiki パターンに基づきます。claude-obsidian は独立した実装であり、Karpathy のリポジトリからコードや内容をコピーしたものではありません。
+
+---
+
+## ITS CSS スニペット
+
+**作者:** SlRvb
+**出典:** https://github.com/SlRvb/Obsidian--ITS-Theme
+**ライセンス:** GPL-2.0
+**ファイル:**
 - `.obsidian/snippets/ITS-Dataview-Cards.css`
 - `.obsidian/snippets/ITS-Image-Adjustments.css`
 
-These snippets are distributed under the GPL-2.0 license. Per GPL-2.0 terms, any modifications to these files must also be released under GPL-2.0.
+これらのスニペットは GPL-2.0 ライセンスで配布されています。GPL-2.0 の条項に従い、これらのファイルへの変更も GPL-2.0 でリリースする必要があります。
 
 ---
 
-## Obsidian Plugins (pre-installed)
+## Obsidian プラグイン(プリインストール)
 
-The following Obsidian community plugins ship with this vault as pre-installed binaries. They are the property of their respective authors and are distributed here solely to reduce setup friction. Users should verify license terms via each plugin's repository.
+以下の Obsidian コミュニティプラグインは、セットアップの手間を減らすためにバイナリとして同梱されています。各プラグインの著作権は各作者に帰属します。利用者は各プラグインリポジトリでライセンス条件を確認してください。
 
-| Plugin | Author | Repository |
+| プラグイン | 作者 | リポジトリ |
 |--------|--------|-----------|
 | Calendar | Liam Cain | https://github.com/liamcain/obsidian-calendar-plugin |
 | Thino | Boninall (Quorafind) | https://github.com/Quorafind/Obsidian-Thino |
 | Obsidian Excalidraw | Zsolt Viczian | https://github.com/zsviczian/obsidian-excalidraw-plugin |
 | Obsidian Banners | Danny Hernandez | https://github.com/noatpad/obsidian-banners |
 
-`obsidian-excalidraw-plugin/main.js` is **not** included in this repository. It is downloaded automatically by `bin/setup-vault.sh` from the plugin's official GitHub releases.
+`obsidian-excalidraw-plugin/main.js` はこのリポジトリには **含まれていません**。`bin/setup-vault.sh` がプラグイン公式の GitHub Releases から自動ダウンロードします。
 
 ---
 
 ## claude-obsidian
 
-**Author:** AgriciDaniel / AI Marketing Hub
-**License:** MIT (see [LICENSE](LICENSE))
-**Repository:** https://github.com/AgriciDaniel/claude-obsidian
+**作者:** AgriciDaniel / AI Marketing Hub
+**ライセンス:** MIT([LICENSE](LICENSE) を参照)
+**リポジトリ:** https://github.com/AgriciDaniel/claude-obsidian

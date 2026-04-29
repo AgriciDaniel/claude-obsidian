@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Query-Time Retrieval"
+title: "クエリ時取得"
 created: 2026-04-24
 updated: 2026-04-24
 tags:
@@ -8,6 +8,9 @@ tags:
   - retrieval
   - llm-wiki
 status: developing
+aliases:
+  - "Query-Time Retrieval"
+  - "クエリ時取得"
 related:
   - "[[How does the LLM Wiki pattern work?]]"
   - "[[Wiki vs RAG]]"
@@ -16,28 +19,28 @@ related:
   - "[[Source-First Synthesis]]"
 ---
 
-# Query-Time Retrieval
+# クエリ時取得
 
-Query-time retrieval is the baseline memory pattern that LLM Wiki is contrasted against: relevant material is retrieved when the user asks a question, and the answer is generated from the retrieved context.
+クエリ時取得とは、LLM Wiki と対比される基準的なメモリパターンである。ユーザーが質問した時点で関連資料を取得し、取得したコンテキストから回答を生成する。
 
-## Boundary Filled
+## 埋められる境界
 
-The selected question contrasts wiki accumulation with RAG, but it does not define the retrieval side precisely. This page anchors the contrast in the original RAG paper and in the LLM Wiki gist.
+選択された質問は Wiki の蓄積を RAG と対比しているが、取得側を厳密には定義していない。本ページは元の RAG 論文と LLM Wiki gist でその対比を裏付ける。
 
-## Extracted Claims
+## 抽出された主張
 
-- The RAG paper defines retrieval-augmented generation as combining parametric memory with non-parametric memory for language generation: https://arxiv.org/abs/2005.11401
-- The RAG paper describes the non-parametric memory as a dense vector index of Wikipedia accessed with a neural retriever: https://arxiv.org/abs/2005.11401
-- The paper reports that RAG models generated more specific, diverse, and factual language than a parametric-only seq2seq baseline in its evaluated generation tasks: https://arxiv.org/abs/2005.11401
-- Karpathy's LLM Wiki gist describes common document workflows as uploading files, retrieving relevant chunks at query time, and generating an answer: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- Karpathy's LLM Wiki gist states that this query-time pattern makes the model rediscover and assemble knowledge on each question instead of accumulating synthesis: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The MemGPT paper frames limited LLM context windows as a constraint for extended conversations and document analysis, then proposes virtual context management across memory tiers: https://arxiv.org/abs/2310.08560
+- RAG 論文は、検索拡張生成をパラメトリックメモリとノンパラメトリックメモリを言語生成に組み合わせるものとして定義している: https://arxiv.org/abs/2005.11401
+- RAG 論文は、ノンパラメトリックメモリを、ニューラル検索器でアクセスする Wikipedia の密ベクトルインデックスとして記述している: https://arxiv.org/abs/2005.11401
+- 同論文は、評価された生成タスクにおいて、RAG モデルがパラメトリックのみの seq2seq ベースラインよりも具体的、多様、事実的な言語を生成したと報告している: https://arxiv.org/abs/2005.11401
+- Karpathy の LLM Wiki gist は、一般的な文書ワークフローを、ファイルのアップロード、クエリ時の関連チャンク取得、回答生成として記述している: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- Karpathy の LLM Wiki gist は、このクエリ時パターンが合成を蓄積する代わりに、毎回モデルに知識を再発見・再構成させると述べている: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- MemGPT 論文は、LLM の限られたコンテキストウィンドウを長時間の会話と文書解析に対する制約として位置付け、メモリ階層をまたぐ仮想コンテキスト管理を提案している: https://arxiv.org/abs/2310.08560
 
-## Contrast With Wiki Memory
+## Wiki メモリとの対比
 
-Query-time retrieval can provide external evidence at answer time. The LLM Wiki pattern shifts part of the work earlier by compiling source material into maintained pages before later queries arrive: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+クエリ時取得は回答時に外部のエビデンスを提供できる。LLM Wiki パターンは、後続のクエリが届く前にソース資料を維持されたページにコンパイルすることで、作業の一部を前倒しにする: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 
-## Primary Sources
+## 一次ソース
 
 - https://arxiv.org/abs/2005.11401
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f

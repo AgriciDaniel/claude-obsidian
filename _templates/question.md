@@ -1,6 +1,8 @@
 ---
 type: question
 title: "<% tp.file.title %>"
+aliases:
+  - "<% tp.file.title %>"
 question: ""
 answer_quality: draft
 created: <% tp.date.now("YYYY-MM-DD") %>
@@ -14,18 +16,18 @@ sources: []
 
 # <% tp.file.title %>
 
-**Question:** [restate the original query]
+**問い:** [元のクエリを言い換える]
 
-## Answer
+## 回答
 
-[The synthesized answer, with citations to specific wiki pages]
+[特定の wiki ページへの引用付きで合成された回答]
 
-(Source: [[]])
+(出典: [[]])
 
-## Confidence
+## 信頼度
 
-[draft | solid | definitive] — [why]
+[draft | solid | definitive] — [理由]
 
-## Related Questions
+## 関連する問い
 
 -

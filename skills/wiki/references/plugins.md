@@ -1,18 +1,18 @@
-# Obsidian Setup
+# Obsidian セットアップ
 
 ---
 
-## Install Obsidian
+## Obsidian のインストール
 
-### Linux (Flatpak: recommended)
+### Linux(Flatpak: 推奨)
 
-Check if installed:
+インストール状況確認:
 ```bash
 flatpak list 2>/dev/null | grep -i obsidian && echo "FOUND via flatpak" || \
 which obsidian 2>/dev/null && echo "FOUND in PATH" || echo "NOT FOUND"
 ```
 
-Install if not found:
+未インストールなら:
 ```bash
 flatpak install flathub md.obsidian.Obsidian
 ```
@@ -29,68 +29,68 @@ ls /Applications/Obsidian.app 2>/dev/null && echo "FOUND" || brew install --cask
 Test-Path "$env:LOCALAPPDATA\Obsidian" && echo "FOUND" || winget install Obsidian.Obsidian
 ```
 
-### All platforms: direct download
+### 全プラットフォーム共通: 直接ダウンロード
 
 https://obsidian.md/download
 
 ---
 
-## Open the Vault
+## Vault を開く
 
-After installing: Obsidian > Manage Vaults > Open Folder as Vault > select your vault directory.
+インストール後: Obsidian → Vault を管理 → フォルダを Vault として開く → Vault ディレクトリを選択。
 
 ---
 
-## Core Plugins (Built-in: No Install Required)
+## コアプラグイン(組み込み: インストール不要)
 
-These ship with Obsidian. Enable them in Settings > Core Plugins:
+Obsidian に同梱。設定 → コアプラグイン で有効化:
 
-| Plugin | Purpose |
+| プラグイン | 用途 |
 |--------|---------|
-| **Bases** | Native database-like views for `.base` files. Powers `wiki/meta/dashboard.base`. Available since Obsidian v1.9.10 (August 2025). **Replaces Dataview for most wiki use cases.** |
-| **Properties** | Visual frontmatter editor. Always enabled. |
-| **Backlinks** | Outgoing/incoming links pane. |
-| **Outline** | Document heading navigation. |
+| **Bases** | `.base` ファイルへのネイティブな DB 風ビュー。`wiki/meta/dashboard.base` の動力源。Obsidian v1.9.10(2025 年 8 月)以降。**ほとんどの wiki ユースケースで Dataview を置き換え。** |
+| **Properties** | ビジュアル frontmatter エディタ。常時有効。 |
+| **Backlinks** | 受信・送信リンクペイン。 |
+| **Outline** | 文書見出しナビゲーション。 |
 
-## Recommended Community Plugins
+## 推奨コミュニティプラグイン
 
-Install via Settings > Community Plugins > Turn off Restricted Mode > Browse.
+設定 → コミュニティプラグイン → 制限モードオフ → ブラウズ。
 
-| Plugin | Purpose |
+| プラグイン | 用途 |
 |--------|---------|
-| **Templater** | Auto-populate frontmatter on note creation from `_templates/`. |
-| **Obsidian Git** | Auto-commit every 15 minutes. Protects against bad writes. |
-| **Calendar** | Right-sidebar calendar with word count, task, and link indicators. Pre-installed in this vault via `.obsidian/plugins/calendar/`. |
-| **Thino** | Quick memo capture panel in right sidebar. Pre-installed via `.obsidian/plugins/thino/`. |
-| **Iconize** | Visual folder icons for navigation. |
-| **Minimal Theme** | Best dark theme for dense information display. |
-| **Dataview** *(optional/legacy)* | Only needed if you're on Obsidian < 1.9.10 or want to use the legacy `dashboard.md` queries. The primary dashboard now uses Bases. |
+| **Templater** | `_templates/` からノート作成時に frontmatter を自動補完。 |
+| **Obsidian Git** | 15 分ごとに自動コミット。不正な書き込みから保護。 |
+| **Calendar** | 単語数・タスク・リンクインジケータ付きの右サイドバーカレンダー。`.obsidian/plugins/calendar/` 経由でこの Vault に同梱。 |
+| **Thino** | 右サイドバーのクイックメモキャプチャパネル。`.obsidian/plugins/thino/` 経由で同梱。 |
+| **Iconize** | ナビゲーション用のフォルダアイコン。 |
+| **Minimal Theme** | 高密度情報表示に最適なダークテーマ。 |
+| **Dataview** *(任意/旧)* | Obsidian < 1.9.10 の場合、または旧 `dashboard.md` クエリを使いたい場合のみ必要。プライマリダッシュボードは Bases。 |
 
-**Calendar and Thino are pre-installed**. They ship with this vault. Enable them in Settings → Community Plugins → toggle on. No download needed.
+**Calendar と Thino は同梱済み**。この Vault に同梱されている。設定 → コミュニティプラグイン → トグルオンで有効化。ダウンロード不要。
 
-If installing in a different vault: download `main.js` + `manifest.json` from their GitHub releases into `.obsidian/plugins/calendar/` and `.obsidian/plugins/thino/` respectively.
+別の Vault にインストールする場合: GitHub リリースから `main.js` + `manifest.json` をそれぞれ `.obsidian/plugins/calendar/` と `.obsidian/plugins/thino/` にダウンロード。
 
-Optional additions:
-- **Smart Connections**: semantic search across all notes
-- **QuickAdd**: macros for fast note creation
-- **Folder Notes**: click a folder to open an overview note
+任意の追加:
+- **Smart Connections**: 全ノート横断のセマンティック検索
+- **QuickAdd**: 高速ノート作成のためのマクロ
+- **Folder Notes**: フォルダクリックで概要ノートを開く
 
 ---
 
 ## Web Clipper
 
-The Obsidian Web Clipper browser extension converts web articles to markdown and sends them to `.raw/` in one click.
+Obsidian Web Clipper ブラウザ拡張は Web 記事を Markdown に変換し `.raw/` にワンクリックで送る。
 
-Install for Chrome, Firefox, or Safari from the Obsidian website.
+Obsidian Web サイトから Chrome、Firefox、Safari 用にインストール。
 
-Set the default folder to `.raw/` in the extension settings.
+拡張設定でデフォルトフォルダを `.raw/` に設定。
 
 ---
 
-## After Installing Plugins
+## プラグインインストール後
 
-1. Enable Bases: Settings > Core Plugins > toggle on (already on by default in Obsidian v1.9.10+)
-2. Enable Templater: Settings > Templater > set template folder to `_templates`
-3. Enable Obsidian Git: Settings > Obsidian Git > Auto backup interval: 15 minutes
-4. Enable the CSS snippet: Settings > Appearance > CSS Snippets > toggle on `vault-colors`
-5. *(Optional)* Enable Dataview only if you want the legacy `wiki/meta/dashboard.md` queries to work alongside the primary `dashboard.base`
+1. Bases を有効化: 設定 → コアプラグイン → トグルオン(Obsidian v1.9.10+ ではデフォルトでオン)
+2. Templater を有効化: 設定 → Templater → テンプレートフォルダを `_templates` に
+3. Obsidian Git を有効化: 設定 → Obsidian Git → Auto backup interval: 15 分
+4. CSS スニペットを有効化: 設定 → 外観 → CSS スニペット → `vault-colors` をトグルオン
+5. *(任意)* 旧 `wiki/meta/dashboard.md` クエリをプライマリ `dashboard.base` と並行で使いたい場合のみ Dataview を有効化

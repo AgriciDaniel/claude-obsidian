@@ -1,6 +1,8 @@
 ---
 type: source
 title: "<% tp.file.title %>"
+aliases:
+  - "<% tp.file.title %>"
 source_type: article
 author: ""
 date_published: <% tp.date.now("YYYY-MM-DD") %>
@@ -19,21 +21,21 @@ sources: []
 
 # <% tp.file.title %>
 
-## Summary
+## 要約
 
-[2-3 sentence summary of the source]
+[ソースの 2〜3 文要約]
 
-## Key Claims
+## 主要主張
 
 -
 
-## Entities Mentioned
+## 言及されたエンティティ
 
 - [[]] —
 
-## Concepts Introduced
+## 導入された概念
 
 - [[]] —
 
-## Notes
+## メモ
 

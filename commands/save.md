@@ -1,16 +1,16 @@
 ---
-description: Save the current conversation or a specific insight into the wiki vault as a structured note.
+description: 現在の会話または特定の気づきを構造化ノートとしてウィキ Vault に保存する。応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。
 ---
 
-Read the `save` skill. Then run the save workflow for this conversation.
+`save` スキルを読む。次にこの会話に対する保存ワークフローを実行。
 
-Usage:
-- `/save` — analyze the full conversation and save the most valuable content
-- `/save [name]` — save with a specific note title (skip the naming question)
-- `/save session` — save a complete session summary
-- `/save concept [name]` — explicitly save as a concept page
-- `/save decision [name]` — explicitly save as a decision record
+使い方:
+- `/save` — 全会話を解析して最も価値のある内容を保存
+- `/save [name]` — 特定のノートタイトルで保存(命名質問をスキップ)
+- `/save session` — 完全なセッション要約を保存
+- `/save concept [name]` — 概念ページとして明示的に保存
+- `/save decision [name]` — 決定記録として明示的に保存
 
-If no vault is set up yet, say: "No wiki vault found. Run /wiki first to set one up."
+Vault がまだ無いなら: 「ウィキ Vault が見つかりません。先に /wiki でセットアップしてください。」と返す。
 
-Check if a page with the same name already exists. If it does, offer to update it instead of creating a duplicate.
+同名ページが既に存在するか確認。存在する場合は重複作成ではなく更新を提案。

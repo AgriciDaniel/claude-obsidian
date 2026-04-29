@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "rvk7895/llm-knowledge-bases"
+aliases: ["rvk7895-llm-knowledge-bases", "rvk7895/llm-knowledge-bases"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -19,43 +20,43 @@ sources:
 
 # rvk7895/llm-knowledge-bases
 
-**Type**: Claude Code plugin (Marketplace)
+**種別**: Claude Codeプラグイン(マーケットプレイス公開)
 **URL**: https://github.com/rvk7895/llm-knowledge-bases
-**Install**: `/plugin marketplace add rvk7895/llm-knowledge-bases`
+**インストール**: `/plugin marketplace add rvk7895/llm-knowledge-bases`
 
-## What It Does
+## 概要
 
-Turns raw research material into an LLM-maintained Obsidian wiki with multi-depth querying and rich output formats. Adds a deep research pipeline with parallel agents on top of the Karpathy pattern.
+生の研究資料を、LLMが維持するObsidianウィキへと変換し、多段階の深さでクエリと豊富な出力フォーマットに対応させる。Karpathyのパターンの上に、並列エージェントによる深掘り研究パイプラインを追加している。
 
-## Key Innovations
+## 主な革新点
 
-### 3-Depth Query System
-- **Quick** — answers from wiki indexes and summaries only (minimal reads)
-- **Standard** — cross-references full wiki, supplements with web search
-- **Deep** — multi-agent parallel web search pipeline
+### 3段階の深さを持つクエリシステム
+- **Quick** — ウィキインデックスとサマリーのみから回答(読み取り最小限)
+- **Standard** — ウィキ全体を相互参照し、Web検索で補完
+- **Deep** — マルチエージェントの並列Web検索パイプライン
 
-### Output Formats
-Beyond Markdown: Marp slides, matplotlib charts. All outputs saved to `output/` and optionally filed back into wiki.
+### 出力フォーマット
+Markdownにとどまらず、Marpスライドやmatplotlibチャートに対応。出力はすべて `output/` に保存され、必要に応じてウィキにファイリングし直される。
 
-### Skills Set
-| Skill | Purpose |
+### スキル一覧
+| スキル | 用途 |
 |-------|---------|
-| `/kb-init` | One-time setup |
-| `/kb compile` | Raw → wiki |
-| `/kb query` | Query with depth |
-| `/kb lint` | Health check |
-| `/kb evolve` | Maintenance pass |
-| `/research <topic>` | Structured research outline |
-| `/research-deep` | Parallel agents per outline item |
-| `/research-report` | Compile deep results → Markdown |
+| `/kb-init` | 初回セットアップ |
+| `/kb compile` | 生データ → ウィキ化 |
+| `/kb query` | 深さを指定したクエリ |
+| `/kb lint` | 健全性チェック |
+| `/kb evolve` | メンテナンスパス |
+| `/research <topic>` | 構造化されたリサーチアウトライン |
+| `/research-deep` | アウトラインの各項目に対する並列エージェント |
+| `/research-report` | 深掘り結果のMarkdownへのコンパイル |
 
-### X/Twitter Integration
-Via Smaug tool (`npm install -g @steipete/bird`). Ingests tweets, threads, bookmarks from X/Twitter by pasting URL. Uses session cookies (read-only, personal use).
+### X/Twitter連携
+Smaugツール(`npm install -g @steipete/bird`)経由で、URLを貼り付けるだけでX/Twitterのツイート、スレッド、ブックマークを取り込む。セッションクッキーを使用する(読み取り専用、個人利用)。
 
-## Attribution
-Built on Karpathy pattern + Weizhena's Deep Research skills adapted for the research pipeline.
+## アトリビューション
+Karpathyのパターン + Weizhenaのディープリサーチスキルをリサーチパイプライン向けに適応した上に構築されている。
 
-## Cherry-Picks for claude-obsidian
+## claude-obsidianへのチェリーピック
 
 - [[cherry-picks#5. Multi-Depth Query Modes]]
 - [[cherry-picks#10. Marp Presentation Output]]

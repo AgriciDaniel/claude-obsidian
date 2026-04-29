@@ -1,7 +1,8 @@
 ---
 type: meta
-title: "Getting Started"
-updated: 2026-04-07
+title: "はじめに"
+aliases: ["Getting Started", "はじめに"]
+updated: 2026-04-29
 tags:
   - meta
   - onboarding
@@ -14,87 +15,95 @@ related:
   - "[[Wiki Map]]"
 ---
 
-# Getting Started with claude-obsidian
+# claude-obsidian をはじめる
 
-Welcome. This vault is your compounding knowledge base — a persistent second brain built with Claude and Obsidian.
+ようこそ。この Vault はあなたの複利ナレッジベース、Claude と Obsidian で構築された永続的なセカンドブレインです。
 
-Every source you add gets processed into 8–15 cross-referenced wiki pages. Every question you ask pulls from everything that's been ingested. Knowledge compounds like interest.
+> 🇯🇵 **このフォークは日本語ローカライズ版です。** 本文・要約・ログ・チャット応答はすべて日本語で行われます。ファイル名、wikilink ターゲット、コードは英語のまま。詳細は `CLAUDE.md` の言語ポリシー参照。
+
+投入したソースはすべて 8〜15 の相互参照付き wiki ページに処理されます。投げた質問はそれまで取り込んだすべてから回答を引き出します。知識は複利のように積み上がります。
 
 ---
 
-## Three-Step Quick Start
+## 3 ステップクイックスタート
 
-### 1. Drop a source
+### 1. ソースを投入
 
-Put any document into the `.raw/` folder:
-- PDFs, markdown files, transcripts, articles
-- Or paste a URL and ask Claude to fetch it
+任意の文書を `.raw/` フォルダに配置:
+- PDF、Markdown ファイル、トランスクリプト、記事
+- または URL を貼って Claude に取得させる
 
-### 2. Ingest it
+### 2. 取り込む
 
-Tell Claude in any Claude Code session:
+任意の Claude Code セッションで Claude に伝える:
+
+```
+[ファイル名] を取り込んで
+```
+
+または英語で:
 
 ```
 ingest [filename]
 ```
 
-Claude reads the source, creates 8–15 wiki pages under `wiki/`, cross-references everything, and updates `wiki/index.md`, `wiki/log.md`, and `wiki/hot.md`.
+Claude はソースを読み、`wiki/` 配下に 8〜15 ページを作成し、すべてに相互参照を張り、`wiki/index.md`、`wiki/log.md`、`wiki/hot.md` を更新します。
 
-### 3. Ask questions
+### 3. 質問する
 
 ```
-what do you know about [topic]?
+[トピック] について何を知ってる?
 ```
 
-Claude reads the hot cache, scans the index, drills into relevant pages, and gives you a synthesized answer — citing specific wiki pages, not training data.
+Claude はホットキャッシュを読み、index をスキャンし、関連ページに踏み込み、合成回答を返します。学習データではなく特定の wiki ページを引用します。
 
 ---
 
-## How the Hot Cache Works
+## ホットキャッシュの仕組み
 
-`wiki/hot.md` is a ~500-word summary of recent vault context. It loads automatically at the start of every session (via the SessionStart hook).
+`wiki/hot.md` は直近の Vault コンテキストの約 500 語要約。SessionStart hook 経由で各セッション開始時に自動ロードされます。
 
-You don't need to recap. Claude starts every session knowing what you've been working on.
+振り返りは不要。Claude は何をしていたかを把握した状態で各セッションを開始します。
 
-Update it manually at any time: `update hot cache`
-
----
-
-## Your First Ingest — Walkthrough
-
-1. Create a file in `.raw/` — copy a transcript, paste an article, or save a PDF
-2. Open Claude Code in this vault folder
-3. Type: `ingest [your-filename]`
-4. Watch the wiki grow — Claude will report which pages it created
-5. Open `wiki/index.md` — you'll see the new pages listed
-6. Open Graph View in Obsidian — a new cluster of connected nodes appears
-
-After 3–5 ingests, the graph starts to look like a real knowledge network. Cross-references emerge automatically.
+任意のタイミングで手動更新: `ホットキャッシュを更新` または `update hot cache`
 
 ---
 
-## Key Commands
+## 最初の取り込み — ウォークスルー
 
-| You say | Claude does |
+1. `.raw/` にファイルを作成 — トランスクリプトをコピー、記事を貼る、PDF を保存
+2. この Vault フォルダで Claude Code を開く
+3. 入力: `[ファイル名] を取り込んで`
+4. ウィキが成長するのを観察 — Claude が作成したページを報告
+5. `wiki/index.md` を開くと新ページが表示される
+6. Obsidian でグラフビューを開くと接続されたノードの新しいクラスタが現れる
+
+3〜5 件取り込むと、グラフは本物のナレッジネットワークのように見えてきます。相互参照が自動的に立ち上がります。
+
+---
+
+## 主要コマンド
+
+| ユーザー入力 | Claude の動作 |
 |---------|-------------|
-| `ingest [file]` | Creates 8–15 wiki pages from a source |
-| `what do you know about X?` | Queries the wiki, cites pages |
-| `/save` | Files this conversation as a wiki note |
-| `/autoresearch [topic]` | Searches the web, ingests results autonomously |
-| `lint the wiki` | Health check — finds orphans, gaps, stale links |
-| `update hot cache` | Refreshes the session context summary |
+| `[ファイル] を取り込んで` / `ingest [file]` | ソースから 8〜15 ページを作成 |
+| `X について何を知ってる?` | ウィキを検索、ページを引用 |
+| `/save` | この会話を wiki ノートとしてファイル |
+| `/autoresearch [topic]` | Web を検索し、結果を自律的に取り込み |
+| `wiki を lint して` | 健全性チェック — 孤立、ギャップ、古いリンクを発見 |
+| `ホットキャッシュを更新` | セッションコンテキスト要約をリフレッシュ |
 
 ---
 
-## Navigate the Vault
+## Vault のナビゲーション
 
-- **[[Wiki Map]]** — visual Fibonacci graph of all wiki pages
-- **[[index]]** — master catalog, all pages by type
-- **[[overview]]** — executive summary of vault contents
-- **[[LLM Wiki Pattern]]** — the pattern this vault is built on
-- **[[Wiki vs RAG]]** — why a wiki beats RAG at human scale
-- **[[dashboard]]** — live Dataview queries (requires Dataview plugin)
+- **[[Wiki Map]]** — 全 wiki ページのビジュアルなフィボナッチグラフ
+- **[[index]]** — マスターカタログ、タイプ別の全ページ
+- **[[overview]]** — Vault コンテンツのエグゼクティブサマリー
+- **[[LLM Wiki Pattern]]** — この Vault が依拠するパターン
+- **[[Wiki vs RAG]]** — なぜウィキが人間規模で RAG を上回るか
+- **[[dashboard]]** — ライブ Dataview クエリ(Dataview プラグイン必要)
 
 ---
 
-*Built on the [LLM Wiki pattern](https://github.com/karpathy) by Andrej Karpathy.*
+*[Andrej Karpathy](https://github.com/karpathy) の LLM Wiki パターンに基づく。日本語ローカライズ追加。*

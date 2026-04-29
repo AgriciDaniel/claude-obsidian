@@ -1,26 +1,26 @@
 # claude-obsidian Hooks
 
-Plugin hooks for the claude-obsidian wiki vault. All hooks are defined in `hooks.json`.
+claude-obsidian ウィキ Vault 用のプラグイン hook。すべての hook は `hooks.json` で定義。
 
-## Events
+## イベント
 
-| Event | Type | Purpose |
+| イベント | 型 | 目的 |
 |---|---|---|
-| `SessionStart` | command + prompt | Loads `wiki/hot.md` into context. Command type runs `[ -f wiki/hot.md ] && cat wiki/hot.md` as the canonical safety check (works for non-vault sessions without erroring). Prompt type complements with semantic context restoration. Matcher: `startup\|resume`. |
-| `PostCompact` | prompt | Re-loads `wiki/hot.md` after context compaction. Hook-injected context does NOT survive compaction (only `CLAUDE.md` does), so this hook restores the hot cache mid-session. |
-| `PostToolUse` | command | Auto-commits any wiki/ or .raw/ changes after Write or Edit tool calls. Guarded by `[ -d .git ]` so it never errors in non-git directories, and by `git diff --cached --quiet` so it never creates empty commits. |
-| `Stop` | prompt | Updates `wiki/hot.md` at the end of every Claude response with a brief summary of what changed. |
+| `SessionStart` | command + prompt | `wiki/hot.md` をコンテキストにロード。command 型は `[ -f wiki/hot.md ] && cat wiki/hot.md` を正規の安全チェックとして実行(Vault 無しセッションでもエラーせず)。prompt 型はセマンティックコンテキスト復元で補完。Matcher: `startup\|resume`。 |
+| `PostCompact` | prompt | コンテキスト圧縮後に `wiki/hot.md` を再ロード。hook 注入コンテキストは圧縮を生き延びない(`CLAUDE.md` のみ生き延びる)ため、本 hook がセッション中盤でホットキャッシュを復元。 |
+| `PostToolUse` | command | Write または Edit ツール呼び出し後の wiki/ または .raw/ 変更を自動コミット。`[ -d .git ]` でガードされ非 git ディレクトリでエラーせず、`git diff --cached --quiet` で空コミットを作らない。 |
+| `Stop` | prompt | 各 Claude 応答終了時に何が変わったかの簡単な要約で `wiki/hot.md` を更新。 |
 
-## Known Issue: Plugin Hooks STDOUT Bug
+## 既知の問題: プラグイン Hook の STDOUT バグ
 
-`anthropics/claude-code#10875` documents that **plugin hook STDOUT may not be captured** by Claude Code, while identical inline hooks in `settings.json` work correctly.
+`anthropics/claude-code#10875` は **プラグイン hook の STDOUT が Claude Code に捕捉されない可能性** を文書化しているが、`settings.json` の同等インライン hook は正しく動作する。
 
-**Impact**: If this bug is active in your Claude Code version, the prompt-type SessionStart and PostCompact hooks may not inject context as expected.
+**影響**: お使いの Claude Code バージョンで本バグが有効な場合、prompt 型の SessionStart と PostCompact hook が期待通りにコンテキストを注入しない可能性。
 
-**Workaround**: The command-type SessionStart hook (`cat wiki/hot.md`) is the canonical safety check. It relies on STDOUT capture for context injection, so test against this issue if hot cache restoration fails. As a fallback, copy the hook config from `hooks.json` into your user-level `~/.claude/settings.json` instead of relying on plugin hooks.
+**回避策**: command 型の SessionStart hook(`cat wiki/hot.md`)が正規の安全チェック。STDOUT 捕捉に依存するため、ホットキャッシュ復元が失敗したら本問題を疑う。フォールバックとして `hooks.json` の hook 設定をプラグイン hook ではなくユーザレベルの `~/.claude/settings.json` にコピーする。
 
-**Test for the bug**: After installing the plugin, open a fresh Claude Code session in a directory containing a populated `wiki/hot.md`. Ask Claude "what's in the hot cache?". If Claude has no idea, the STDOUT bug is active in your version.
+**バグテスト**: プラグインインストール後、populate された `wiki/hot.md` があるディレクトリで新しい Claude Code セッションを開き、「ホットキャッシュには何があるか?」と尋ねる。Claude が分からないと答えたら STDOUT バグが有効。
 
-## Non-Vault Sessions
+## Vault 無しセッション
 
-The SessionStart command hook uses `[ -f wiki/hot.md ] && cat wiki/hot.md || true` so it always exits 0, even when no vault is present. This makes the plugin safe to install globally without breaking non-vault Claude Code sessions.
+SessionStart command hook は `[ -f wiki/hot.md ] && cat wiki/hot.md || true` を使い常に exit 0 を返す。Vault が無くても 0。これでプラグインをグローバルインストールしても Vault 無しの Claude Code セッションを壊さない。

@@ -1,19 +1,19 @@
 ---
-description: Run an autonomous research loop on a topic. Searches the web, synthesizes findings, and files everything into the wiki as structured pages.
+description: トピックに対する自律リサーチループを実行。Web を検索し、発見を合成して、すべてを構造化ページとしてウィキにファイリング。生成ページは日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。
 ---
 
-Read the `autoresearch` skill. Then run the research loop.
+`autoresearch` スキルを読む。次にリサーチループを実行。
 
-Usage:
-- `/autoresearch [topic]` — research a specific topic.
-- `/autoresearch` — if DragonScale Mechanism 4 (boundary-first, agenda-control, opt-in) is set up, offer the top 5 vault-frontier pages as topic candidates; you can **pick one**, **type a topic to override**, or **decline and be asked normally**. No automatic selection happens without user confirmation. If DragonScale is not set up OR the helper fails, the command falls back to "What topic should I research?"
+使い方:
+- `/autoresearch [topic]` — 特定トピックをリサーチ。
+- `/autoresearch` — DragonScale Mechanism 4(境界優先、アジェンダ制御、オプトイン)がセットアップ済みなら、Vault フロンティアの上位 5 ページをトピック候補として提示。**1 つを選ぶ**、**トピックを入力して上書き**、**辞退して通常質問** のいずれかが可能。ユーザー確認なしの自動選択は無し。DragonScale 未セットアップ、またはヘルパー失敗時は「どのトピックをリサーチしますか?」にフォールバック。
 
-DragonScale Mechanism 4 is labeled **agenda control** in the spec because it shapes what the agent researches next; it is not pure memory. The boundary score is a heuristic surfacing candidates, not an authoritative recommendation.
+DragonScale Mechanism 4 は仕様で **アジェンダ制御** とラベル付け。エージェントが次に何をリサーチするかを形作るため。純粋な記憶ではない。境界スコアは候補を表面化するヒューリスティックであり、権威ある推奨ではない。
 
-Before starting, read `skills/autoresearch/references/program.md` to load the research constraints and objectives.
+開始前に `skills/autoresearch/references/program.md` を読みリサーチ制約と目的をロード。
 
-If no vault is set up yet, say: "No wiki vault found. Run /wiki first to set one up."
+Vault がまだ無いなら: 「ウィキ Vault が見つかりません。先に /wiki でセットアップしてください。」と返す。
 
-After research is complete, update wiki/index.md, wiki/log.md, and wiki/hot.md.
+リサーチ完了後、wiki/index.md、wiki/log.md、wiki/hot.md を更新。
 
-Report how many pages were created and what the key findings are.
+何ページ作成されたかと主要発見を報告。

@@ -1,6 +1,8 @@
 ---
 type: entity
 title: "<% tp.file.title %>"
+aliases:
+  - "<% tp.file.title %>"
 entity_type: person
 role: ""
 first_mentioned: "[[]]"
@@ -15,18 +17,18 @@ sources: []
 
 # <% tp.file.title %>
 
-## Overview
+## 概要
 
-[Who or what this is. One paragraph.]
+[誰・何か。1 段落で。]
 
-## Key Facts
-
--
-
-## Connections
+## 主要事実
 
 -
 
-## Sources
+## 関連
+
+-
+
+## 出典
 
 -

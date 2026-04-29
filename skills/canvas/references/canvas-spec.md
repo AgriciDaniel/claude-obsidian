@@ -1,45 +1,47 @@
-# Obsidian Canvas JSON Specification
+# Obsidian キャンバス JSON 仕様
 
-Canvas files are JSON with two top-level keys: `nodes` (array) and `edges` (array).
-Obsidian reads and writes them as UTF-8 JSON files with `.canvas` extension.
+キャンバスファイルは 2 つのトップレベルキー(`nodes` 配列と `edges` 配列)を持つ JSON。
+Obsidian は `.canvas` 拡張子の UTF-8 JSON ファイルとして読み書き。
 
-This reference aligns with the [JSON Canvas 1.0 open specification](https://jsoncanvas.org/spec/1.0/). All structures support arbitrary additional fields (`[key: string]: any`) for forward compatibility. Obsidian will preserve unknown fields when reading and writing canvas files.
+このリファレンスは [JSON Canvas 1.0 オープン仕様](https://jsoncanvas.org/spec/1.0/) に準拠。すべての構造は前方互換性のために任意の追加フィールド(`[key: string]: any`)をサポートする。Obsidian はキャンバスファイルの読み書きで未知のフィールドを保持する。
 
-**ID format**: The JSON Canvas 1.0 spec recommends 16-character lowercase hexadecimal IDs (e.g., `"a1b2c3d4e5f67890"`). Obsidian itself generates IDs in this format. The descriptive ID examples in this reference (`"text-title-4821"`, `"img-cover-7823"`) are an alternative naming convention that this plugin uses for human readability. Both are valid JSON Canvas. Use whichever fits your workflow.
+> **言語ルール**: ノードのテキスト・グループラベル・エッジラベルは日本語で書く。`id`、`type`、`file` パス、JSON キーは英語のまま。
+
+**ID 形式**: JSON Canvas 1.0 仕様は 16 文字小文字 16 進 ID(例: `"a1b2c3d4e5f67890"`)を推奨。Obsidian 自体はこの形式で ID を生成する。本リファレンスの説明的な ID 例(`"text-title-4821"`、`"img-cover-7823"`)は人間可読性のために本プラグインが使う代替命名規約。両方とも有効な JSON Canvas。ワークフローに合うものを使う。
 
 ---
 
-## Coordinate System
+## 座標系
 
 ```
-        x increases →
+        x が増える →
    ┌─────────────────────────────────
    │  (-920, -2400)      (0, -2400)
    │
-y  │  (-920, 0)          (0, 0) ← origin
+y  │  (-920, 0)          (0, 0) ← 原点
 ↓  │
    │  (-920, 540)        (500, 540)
 ```
 
-- **Origin** (0, 0) is the center of the canvas viewport.
-- **x increases rightward.** Negative x = left of center.
-- **y increases downward.** Negative y = above center.
-- Node `x` and `y` are the **top-left corner** of the node, not the center.
-- Obsidian pans to fit all nodes on first open.
+- **原点**(0, 0)はキャンバスビューポートの中央。
+- **x は右方向に増加。** 負の x = 中央の左。
+- **y は下方向に増加。** 負の y = 中央の上。
+- ノードの `x` と `y` は中央ではなく **左上隅**。
+- Obsidian は最初に開いたとき全ノードが見えるようにパンする。
 
 ---
 
-## Node Types
+## ノードタイプ
 
-### Text node
+### テキストノード
 
-Renders markdown content as a styled card.
+Markdown 内容をスタイル付きカードとしてレンダリング。
 
 ```json
 {
   "id": "text-title-4821",
   "type": "text",
-  "text": "# Heading\n\nParagraph with **bold** and `code`.",
+  "text": "# 見出し\n\n**太字** と `code` を含む段落。",
   "x": -400,
   "y": -300,
   "width": 400,
@@ -48,15 +50,15 @@ Renders markdown content as a styled card.
 }
 ```
 
-- `text`: markdown string. Use `\n` for newlines.
-- Minimum readable size: width ≥ 200, height ≥ 60.
-- `color` is optional. Omit for default (no color).
+- `text`: Markdown 文字列。改行は `\n`。
+- 最小可読サイズ: width >= 200, height >= 60。
+- `color` は任意。デフォルト(色無し)なら省略。
 
 ---
 
-### File node
+### ファイルノード
 
-Renders an image, PDF, markdown note, or other vault file inline.
+画像、PDF、Markdown ノート、その他 Vault ファイルをインライン表示。
 
 ```json
 {
@@ -70,24 +72,24 @@ Renders an image, PDF, markdown note, or other vault file inline.
 }
 ```
 
-- `file`: **vault-relative path** (not absolute, not `~/`).
-- Supported: `.png` `.jpg` `.webp` `.gif` `.pdf` `.md` `.canvas`
-- For `.md` files: renders as a preview card.
-- For `.pdf` files: renders the first page as preview.
-- No `color` field for file nodes: color is ignored.
+- `file`: **Vault 相対パス**(絶対や `~/` ではない)。
+- サポート: `.png` `.jpg` `.webp` `.gif` `.pdf` `.md` `.canvas`
+- `.md` ファイル: プレビューカードとしてレンダリング。
+- `.pdf` ファイル: 1 ページ目をプレビューレンダリング。
+- ファイルノードに `color` 無し: 色は無視される。
 
 ---
 
-### Group node (Zone)
+### グループノード(ゾーン)
 
-A labeled rectangular region. Does not clip or contain nodes. It's a visual guide.
-Nodes placed "inside" a group are just positioned within its bounding box.
+ラベル付き矩形領域。ノードをクリップしたり包含したりしない。視覚的なガイド。
+グループ「内」に置かれたノードは単にバウンディングボックス内に位置するだけ。
 
 ```json
 {
   "id": "zone-branding-3391",
   "type": "group",
-  "label": "Brand Identity",
+  "label": "ブランドアイデンティティ",
   "x": -920,
   "y": -880,
   "width": 1060,
@@ -98,20 +100,20 @@ Nodes placed "inside" a group are just positioned within its bounding box.
 }
 ```
 
-- `label`: shown at the top of the group box.
-- `color`: colors the group border and label.
-- `background` *(optional)*: vault-relative path to a background image for the group.
-- `backgroundStyle` *(optional)*: how the background is rendered.
-  - `"cover"`: fills the group, cropping if needed (default-ish behavior)
-  - `"ratio"`: preserves aspect ratio, fits inside the group
-  - `"repeat"`: tiles the image
-- Groups do not affect auto-layout: they are purely visual containers.
+- `label`: グループボックスの上に表示。日本語可。
+- `color`: グループの枠線とラベルを色付け。
+- `background`(任意): グループの背景画像への Vault 相対パス。
+- `backgroundStyle`(任意): 背景のレンダリング方法。
+  - `"cover"`: 必要なら切り抜いてグループを満たす(デフォルト風の動作)
+  - `"ratio"`: アスペクト比を保ちグループ内にフィット
+  - `"repeat"`: 画像をタイル
+- グループは自動レイアウトに影響しない: 純粋なビジュアルコンテナ。
 
 ---
 
-### Link node
+### リンクノード
 
-Renders a web URL as an embedded preview card.
+Web URL を埋め込みプレビューカードとしてレンダリング。
 
 ```json
 {
@@ -125,14 +127,14 @@ Renders a web URL as an embedded preview card.
 }
 ```
 
-- `url`: must be a valid `https://` URL.
-- Obsidian fetches the Open Graph preview (title, description, thumbnail).
+- `url`: 有効な `https://` URL。
+- Obsidian は Open Graph プレビュー(タイトル、説明、サムネイル)を取得。
 
 ---
 
-## Edges
+## エッジ
 
-Connections between nodes. Usually empty for mood boards.
+ノード間の接続。ムードボードでは通常空。
 
 ```json
 {
@@ -143,99 +145,99 @@ Connections between nodes. Usually empty for mood boards.
   "toNode": "c-idx",
   "toSide": "left",
   "toEnd": "arrow",
-  "label": "concepts",
+  "label": "概念",
   "color": "5"
 }
 ```
 
-**Required fields**: `id`, `fromNode`, `toNode`. Everything else is optional.
+**必須フィールド**: `id`, `fromNode`, `toNode`。それ以外は任意。
 
-- `fromNode` / `toNode`: IDs of the source and target nodes.
-- `fromSide` / `toSide` *(optional)*: `"top"` `"bottom"` `"left"` `"right"`. If omitted, Obsidian auto-calculates the best side based on relative node positions.
-- `fromEnd` *(optional)*: end-cap on the source side. Defaults to `"none"`. Values: `"none"` | `"arrow"`.
-- `toEnd` *(optional)*: end-cap on the target side. **Defaults to `"arrow"`**: note the asymmetric default vs `fromEnd`. Values: `"none"` | `"arrow"`.
-- `label` *(optional)*: text shown on the edge.
-- `color` *(optional)*: same color palette as nodes (`"1"`–`"6"` or hex).
+- `fromNode` / `toNode`: ソースとターゲットノードの ID。
+- `fromSide` / `toSide`(任意): `"top"` `"bottom"` `"left"` `"right"`。省略時、Obsidian がノード相対位置から最適な辺を自動計算。
+- `fromEnd`(任意): ソース側の端キャップ。デフォルト `"none"`。値: `"none"` | `"arrow"`。
+- `toEnd`(任意): ターゲット側の端キャップ。**デフォルト `"arrow"`**: `fromEnd` と非対称。値: `"none"` | `"arrow"`。
+- `label`(任意): エッジ上に表示されるテキスト。日本語可。
+- `color`(任意): ノードと同じカラーパレット(`"1"`〜`"6"` または hex)。
 
-Most edges represent directed relationships, so the asymmetric defaults (`fromEnd: "none"`, `toEnd: "arrow"`) produce a single arrow pointing from source to target without specifying anything explicitly.
+ほとんどのエッジは有向関係を表すため、非対称デフォルト(`fromEnd: "none"`、`toEnd: "arrow"`)で何も明示せずソース → ターゲットの単方向矢印が生成される。
 
 ---
 
-## Color Reference
+## 色リファレンス
 
-| Code | Color | Hex (approx) | Use case |
+| コード | 色 | Hex(目安) | ユースケース |
 |------|-------|-------------|----------|
-| `"1"` | Red / Tomato | #e03e3e | Warnings, archive |
-| `"2"` | Orange | #d09035 | Active work |
-| `"3"` | Yellow / Gold | #d0a023 | WIP, notes |
-| `"4"` | Green / Teal | #448361 | Content, sources |
-| `"5"` | Blue / Cyan | #3ea7d3 | Navigation, info |
-| `"6"` | Purple / Violet | #9063d2 | Title, identity |
+| `"1"` | 赤 / トマト | #e03e3e | 警告、アーカイブ |
+| `"2"` | オレンジ | #d09035 | アクティブな作業 |
+| `"3"` | 黄 / ゴールド | #d0a023 | 進行中、メモ |
+| `"4"` | 緑 / ティール | #448361 | コンテンツ、ソース |
+| `"5"` | 青 / シアン | #3ea7d3 | ナビゲーション、情報 |
+| `"6"` | 紫 / バイオレット | #9063d2 | タイトル、アイデンティティ |
 
-Omit `color` entirely for the default (no border color, transparent label).
+デフォルト(枠線色無し、透明ラベル)にしたいなら `color` 全体を省略。
 
 ---
 
-## Image Sizing Guidelines
+## 画像サイズガイドライン
 
-Calculate from actual image dimensions using PIL or `identify`:
+実際の画像寸法を PIL または `identify` から計算:
 
 ```bash
 python3 -c "from PIL import Image; img=Image.open('path.png'); print(img.width, img.height)"
-# or
+# または
 identify -format '%w %h' path.png
 ```
 
-| Aspect ratio | Condition | Canvas width | Canvas height |
+| アスペクト比 | 条件 | キャンバス幅 | キャンバス高さ |
 |-------------|-----------|-------------|--------------|
-| 16:9 (wide) | ratio 1.6–2.0 | 420 | 236 |
-| 2:1 (ultra wide) | ratio > 2.0 | 440 | 220 |
-| 4:3 | ratio 1.2–1.6 | 380 | 285 |
-| 1:1 (square) | ratio 0.9–1.1 | 280 | 280 |
-| 3:4 | ratio 0.6–0.9 | 240 | 320 |
-| 9:16 (portrait) | ratio < 0.6 | 200 | 356 |
-| PDF | any | 400 | 520 |
-| Unknown | fallback | 320 | 240 |
+| 16:9(横長) | 比率 1.6〜2.0 | 420 | 236 |
+| 2:1(超ワイド) | 比率 > 2.0 | 440 | 220 |
+| 4:3 | 比率 1.2〜1.6 | 380 | 285 |
+| 1:1(正方形) | 比率 0.9〜1.1 | 280 | 280 |
+| 3:4 | 比率 0.6〜0.9 | 240 | 320 |
+| 9:16(縦長) | 比率 < 0.6 | 200 | 356 |
+| PDF | 任意 | 400 | 520 |
+| 不明 | フォールバック | 320 | 240 |
 
 ---
 
-## Auto-Positioning Pseudocode
+## 自動配置の擬似コード
 
 ```
 function place_node(canvas, zone_label, new_w, new_h):
-  zone = find group node where label == zone_label
+  zone = label == zone_label のグループノードを検索
   padding = 20
 
-  if zone not found:
+  if zone が見つからない:
     max_y = max(n.y + n.height for n in canvas.nodes) + 60
     return (-400, max_y)
 
-  # Nodes visually inside zone
+  # zone 内に視覚的にあるノード
   inside = [n for n in canvas.nodes
             if n.type != 'group'
             and zone.x <= n.x < zone.x + zone.width
             and zone.y <= n.y < zone.y + zone.height]
 
-  if inside is empty:
+  if inside が空:
     return (zone.x + padding, zone.y + padding)
 
-  # Rightmost point in zone
+  # zone 内の最右点
   rightmost = max(n.x + n.width for n in inside)
   next_x = rightmost + 40
 
   if next_x + new_w > zone.x + zone.width - padding:
-    # Overflow → new row
+    # オーバーフロー → 新しい行
     bottom_of_row = max(n.y + n.height for n in inside)
     return (zone.x + padding, bottom_of_row + padding)
 
-  # Same row
-  row_y = min(n.y for n in inside)  # align to top of existing row
+  # 同じ行
+  row_y = min(n.y for n in inside)  # 既存行のトップに揃える
   return (next_x, row_y)
 ```
 
 ---
 
-## Full Example: Two-Zone Canvas
+## 完全な例: 2 ゾーンキャンバス
 
 ```json
 {
@@ -243,13 +245,13 @@ function place_node(canvas, zone_label, new_w, new_h):
     {
       "id": "title-0001",
       "type": "text",
-      "text": "# Brand Reference\n\n**AI Marketing Hub** visual assets",
+      "text": "# ブランドリファレンス\n\n**AI Marketing Hub** ビジュアルアセット",
       "x": -920, "y": -2440, "width": 560, "height": 180, "color": "6"
     },
     {
       "id": "zone-logos",
       "type": "group",
-      "label": "Logos & Icons",
+      "label": "ロゴとアイコン",
       "x": -920, "y": -2200, "width": 1800, "height": 320, "color": "6"
     },
     {
@@ -267,7 +269,7 @@ function place_node(canvas, zone_label, new_w, new_h):
     {
       "id": "zone-covers",
       "type": "group",
-      "label": "Skill Covers",
+      "label": "スキルカバー",
       "x": -920, "y": -1820, "width": 1800, "height": 340, "color": "3"
     },
     {
@@ -283,10 +285,10 @@ function place_node(canvas, zone_label, new_w, new_h):
 
 ---
 
-## Common Mistakes
+## よくある間違い
 
-- **Wrong path format**: use `_attachments/images/file.png` not `/home/user/...` or `~/...`
-- **ID collision**: always read existing IDs before generating a new one
-- **Negative y confusion**: `y: -2400` is ABOVE `y: -1000` (more negative = higher up)
-- **Group does not clip**: placing a node "inside" a group is just positioning it within the group's bounding box: there is no parent-child relationship in the JSON
-- **Missing height on text nodes**: Obsidian will render the text but may clip it if height is too small. Use height ≥ content-lines × 24.
+- **不正なパス形式**: `_attachments/images/file.png` を使う。`/home/user/...` や `~/...` ではない
+- **ID 衝突**: 新規生成前に必ず既存 ID を読む
+- **負の y の混乱**: `y: -2400` は `y: -1000` の **上**(負が大きいほど上)
+- **グループはクリップしない**: ノードをグループ「内」に置くのは単にグループのバウンディングボックス内に位置するだけ。JSON 上に親子関係は無い
+- **テキストノードの高さ不足**: Obsidian はテキストをレンダリングするが高さが小さすぎるとクリップする可能性あり。height >= 内容行数 × 24 を使う。

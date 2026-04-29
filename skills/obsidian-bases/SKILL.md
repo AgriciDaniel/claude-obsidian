@@ -1,44 +1,46 @@
 ---
 name: obsidian-bases
-description: "Create and edit Obsidian Bases (.base files): Obsidian's native database layer for dynamic tables, card views, list views, filters, formulas, and summaries over vault notes. Triggers on: create a base, add a base file, obsidian bases, base view, filter notes, formula, database view, dynamic table, task tracker base, reading list base."
+description: "Obsidian Bases(`.base` ファイル)を作成・編集する: Vault ノートに対する動的テーブル、カードビュー、リストビュー、フィルタ、数式、サマリーを提供する Obsidian のネイティブデータベース層。応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。トリガー(日本語): base を作成、base ファイル追加、obsidian bases、ビュー作成、ノートをフィルタ、数式、データベースビュー、動的テーブル、タスクトラッカー base、読書リスト base。Triggers (English): create a base, add a base file, obsidian bases, base view, filter notes, formula, database view, dynamic table, task tracker base, reading list base."
 allowed-tools: Read Write
 ---
 
-# obsidian-bases: Obsidian's Database Layer
+# obsidian-bases: Obsidian のデータベース層
 
-Obsidian Bases (launched 2025) turns vault notes into queryable, dynamic views. Tables, cards, lists, maps. Defined in `.base` files. No plugin required; it is a core Obsidian feature.
+Obsidian Bases(2025 年公開)は Vault ノートをクエリ可能で動的なビュー(テーブル、カード、リスト、マップ)に変えます。`.base` ファイルで定義。プラグイン不要、Obsidian のコア機能。
 
-**Authoritative reference**: If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-bases skill. Otherwise, use the reference below. Official docs: https://help.obsidian.md/bases/syntax
+> **言語ルール**: ビューの `name:`、`displayName:`、テーブル列ラベル、説明的テキストは日本語で書く。フィルタ式・数式・JSON キー・関数名・列挙値(`type: table` など)は英語のまま。
+
+**正規リファレンス**: kepano/obsidian-skills プラグインがインストールされていれば、その正規 obsidian-bases スキルを優先。なければ下のリファレンスを使用。公式ドキュメント: https://help.obsidian.md/bases/syntax
 
 ---
 
-## File Format
+## ファイル形式
 
-`.base` files contain valid YAML. The root keys are `filters`, `formulas`, `properties`, `summaries`, and `views`.
+`.base` ファイルは有効な YAML を含む。ルートキーは `filters`, `formulas`, `properties`, `summaries`, `views`。
 
 ```yaml
-# Global filters: apply to ALL views
+# グローバルフィルタ: すべてのビューに適用
 filters:
   and:
     - file.hasTag("wiki")
     - 'status != "archived"'
 
-# Computed properties
+# 計算プロパティ
 formulas:
   age_days: '(now() - file.ctime).days.round(0)'
   status_icon: 'if(status == "mature", "✅", "🔄")'
 
-# Display name overrides for properties panel
+# プロパティパネル用の表示名上書き
 properties:
   status:
-    displayName: "Status"
+    displayName: "ステータス"
   formula.age_days:
-    displayName: "Age (days)"
+    displayName: "経過日数"
 
-# One or more views
+# 1 つ以上のビュー
 views:
   - type: table
-    name: "All Pages"
+    name: "全ページ"
     order:
       - file.name
       - type
@@ -49,32 +51,32 @@ views:
 
 ---
 
-## Filters
+## フィルタ
 
-Filters select which notes appear. Applied globally or per-view.
+フィルタはどのノートを表示するかを選ぶ。グローバルまたはビュー単位で適用。
 
 ```yaml
-# Single string filter
+# 単一文字列フィルタ
 filters: 'status == "current"'
 
-# AND: all must be true
+# AND: すべて真
 filters:
   and:
     - 'status != "archived"'
     - file.hasTag("wiki")
 
-# OR: any can be true
+# OR: いずれか真
 filters:
   or:
     - file.hasTag("concept")
     - file.hasTag("entity")
 
-# NOT: exclude matches
+# NOT: マッチを除外
 filters:
   not:
     - file.inFolder("wiki/meta")
 
-# Nested
+# ネスト
 filters:
   and:
     - file.inFolder("wiki/")
@@ -83,72 +85,72 @@ filters:
         - 'type == "entity"'
 ```
 
-### Filter operators
+### フィルタ演算子
 
 `==` `!=` `>` `<` `>=` `<=`
 
-### Useful filter functions
+### 便利なフィルタ関数
 
-| Function | Example |
+| 関数 | 例 |
 |----------|---------|
-| `file.hasTag("x")` | Notes with tag `x` |
-| `file.inFolder("path/")` | Notes in folder |
-| `file.hasLink("Note")` | Notes linking to Note |
+| `file.hasTag("x")` | タグ `x` を持つノート |
+| `file.inFolder("path/")` | フォルダ内のノート |
+| `file.hasLink("Note")` | Note にリンクしているノート |
 
 ---
 
-## Properties
+## プロパティ
 
-Three types:
-- **Note properties**: from frontmatter: `status`, `type`, `updated`
-- **File properties**: metadata: `file.name`, `file.mtime`, `file.size`, `file.ctime`, `file.tags`, `file.folder`
-- **Formula properties**: computed: `formula.age_days`
+3 種類:
+- **ノートプロパティ**: frontmatter から: `status`, `type`, `updated`
+- **ファイルプロパティ**: メタデータ: `file.name`, `file.mtime`, `file.size`, `file.ctime`, `file.tags`, `file.folder`
+- **数式プロパティ**: 計算: `formula.age_days`
 
 ---
 
-## Formulas
+## 数式
 
-Defined in `formulas:`. Referenced as `formula.name` in `order:` and `properties:`.
+`formulas:` で定義。`order:` と `properties:` では `formula.name` で参照。
 
 ```yaml
 formulas:
-  # Days since created
+  # 作成からの日数
   age_days: '(now() - file.ctime).days.round(0)'
 
-  # Days until a date property
+  # 日付プロパティまでの日数
   days_until: 'if(due_date, (date(due_date) - today()).days, "")'
 
-  # Conditional label
+  # 条件付きラベル
   status_icon: 'if(status == "mature", "✅", if(status == "developing", "🔄", "🌱"))'
 
-  # Word count estimate
+  # 単語数推定
   word_est: '(file.size / 5).round(0)'
 ```
 
-**Key rule**: Subtracting two dates returns a `Duration`. Not a number. Always access `.days` first:
+**重要ルール**: 2 つの日付の減算は `Duration` を返す。数値ではない。常に先に `.days` にアクセス:
 ```yaml
-# CORRECT
+# 正しい
 age: '(now() - file.ctime).days'
 
-# WRONG: crashes
+# 間違い: クラッシュ
 age: '(now() - file.ctime).round(0)'
 ```
 
-**Always guard nullable properties with `if()`**:
+**null 可能なプロパティは常に `if()` でガード**:
 ```yaml
-# CORRECT
+# 正しい
 days_left: 'if(due_date, (date(due_date) - today()).days, "")'
 ```
 
 ---
 
-## View Types
+## ビュータイプ
 
-### Table
+### テーブル
 ```yaml
 views:
   - type: table
-    name: "Wiki Index"
+    name: "ウィキ索引"
     limit: 100
     order:
       - file.name
@@ -160,22 +162,22 @@ views:
       direction: ASC
 ```
 
-### Cards
+### カード
 ```yaml
 views:
   - type: cards
-    name: "Gallery"
+    name: "ギャラリー"
     order:
       - file.name
       - tags
       - status
 ```
 
-### List
+### リスト
 ```yaml
 views:
   - type: list
-    name: "Quick List"
+    name: "クイックリスト"
     order:
       - file.name
       - status
@@ -183,9 +185,9 @@ views:
 
 ---
 
-## Wiki Vault Templates
+## ウィキ Vault テンプレート
 
-### Wiki content dashboard (all non-meta pages)
+### ウィキコンテンツダッシュボード(全非メタページ)
 
 ```yaml
 filters:
@@ -199,11 +201,11 @@ formulas:
 
 properties:
   formula.age:
-    displayName: "Age (days)"
+    displayName: "経過日数"
 
 views:
   - type: table
-    name: "All Wiki Pages"
+    name: "全ウィキページ"
     order:
       - file.name
       - type
@@ -215,7 +217,7 @@ views:
       direction: ASC
 ```
 
-### Entity index (people, orgs, repos)
+### エンティティ索引(人物、組織、リポジトリ)
 
 ```yaml
 filters:
@@ -225,7 +227,7 @@ filters:
 
 views:
   - type: table
-    name: "Entities"
+    name: "エンティティ"
     order:
       - file.name
       - entity_type
@@ -236,7 +238,7 @@ views:
       direction: ASC
 ```
 
-### Recent ingests
+### 最近の取り込み
 
 ```yaml
 filters:
@@ -245,7 +247,7 @@ filters:
 
 views:
   - type: table
-    name: "Sources"
+    name: "ソース"
     order:
       - file.name
       - source_type
@@ -258,36 +260,36 @@ views:
 
 ---
 
-## Embedding in Notes
+## ノートへの埋め込み
 
 ```markdown
 ![[MyBase.base]]
 
-![[MyBase.base#View Name]]
+![[MyBase.base#ビュー名]]
 ```
 
 ---
 
-## Where to Save
+## 保存場所
 
-Store `.base` files in `wiki/meta/` for vault dashboards:
-- `wiki/meta/dashboard.base`: main content view
-- `wiki/meta/entities.base`: entity tracker
-- `wiki/meta/sources.base`: ingestion log
-
----
-
-## YAML Quoting Rules
-
-- Formulas with double quotes → wrap in single quotes: `'if(done, "Yes", "No")'`
-- Strings with colons or special chars → wrap in double quotes: `"Status: Active"`
-- Unquoted strings with `:` break YAML parsing
+`.base` ファイルは Vault ダッシュボード用に `wiki/meta/` に置く:
+- `wiki/meta/dashboard.base`: メインコンテンツビュー
+- `wiki/meta/entities.base`: エンティティトラッカー
+- `wiki/meta/sources.base`: 取り込みログ
 
 ---
 
-## What Not to Do
+## YAML クォートルール
 
-- Do not use `from:` or `where:`: those are Dataview syntax, not Obsidian Bases
-- Do not use `sort:` at the root level: sorting is per-view via `order:` and `groupBy:`
-- Do not put `.base` files outside the vault: they only render inside Obsidian
-- Do not reference `formula.X` in `order:` without defining `X` in `formulas:`
+- ダブルクォート付きの数式 → シングルクォートで囲む: `'if(done, "Yes", "No")'`
+- コロンや特殊文字を含む文字列 → ダブルクォートで囲む: `"ステータス: Active"`
+- クォートなしのコロン入り文字列は YAML パースを壊す
+
+---
+
+## 禁止事項
+
+- `from:` や `where:` を使わない: それは Dataview 構文で Obsidian Bases ではない
+- ルートレベルで `sort:` を使わない: ソートはビュー単位で `order:` と `groupBy:` 経由
+- `.base` ファイルを Vault 外に置かない: Obsidian 内でのみレンダリング
+- `formulas:` で `X` を定義せず `order:` で `formula.X` を参照しない

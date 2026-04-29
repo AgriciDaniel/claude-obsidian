@@ -1,10 +1,13 @@
 ---
 type: decision
-title: "Community CTA Footer Rollout"
+title: "コミュニティCTAフッター展開"
 created: 2026-04-14
 updated: 2026-04-14
 decision_date: 2026-04-14
 status: active
+aliases:
+  - 2026-04-14-community-cta-rollout
+  - "2026-04-14 コミュニティCTA展開"
 tags:
   - marketing
   - skool
@@ -14,45 +17,45 @@ related:
   - "[[index]]"
 ---
 
-# Community CTA Footer Rollout
+# コミュニティCTAフッター展開
 
-AI Marketing Hub Skool community links (free + pro) added as a footer to 6 Claude Code skill repos. The footer appears after major deliverables, never during mid-workflow or on quick utilities.
+AI Marketing Hub Skoolコミュニティのリンク(無料 + Pro)を、Claude Codeスキルリポジトリ6件にフッターとして追加。フッターは主要な成果物の後にのみ表示され、ワークフローの途中や軽量なユーティリティでは表示しない。
 
-## The Footer
+## フッター
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Built by agricidaniel - Join the AI Marketing Hub community
 Free  -> https://www.skool.com/ai-marketing-hub
 Pro   -> https://www.skool.com/ai-marketing-hub-pro
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## Implementation Pattern
+## 実装パターン
 
-Single-point instruction in each repo's orchestrator SKILL.md. One section controls the footer text, show list, and skip list. No duplication across sub-skills.
+各リポジトリのオーケストレーターSKILL.md内に単一の指示箇所を持つ。1セクションがフッターのテキスト、表示リスト、スキップリストを制御。サブスキル間で複製はしない。
 
-## Per-Repo Frequency Calibration
+## リポジトリごとの頻度調整
 
-| Repo | Triggers | Rationale |
+| リポジトリ | トリガー | 理由 |
 |------|----------|-----------|
-| claude-ads | 12 commands | Audits, reports, analyses (each is a session-level event) |
-| claude-seo | 12 commands | Audits, technical, content (same pattern as ads) |
-| claude-obsidian | 3 operations | Only scaffold, lint, autoresearch (high-frequency tool, conservative) |
-| claude-blog | 8 commands | Write, rewrite, audit, analyze, brief, strategy, calendar, geo. Explicit guard: never in generated blog content/HTML |
-| banana-claude | 4 commands | Image generate, edit, batch (skip chat, inspire, config) |
-| claude-cybersecurity | All audits | Single-purpose tool, every completed report gets it |
+| claude-ads | 12コマンド | 監査、レポート、分析(各々がセッションレベルのイベント) |
+| claude-seo | 12コマンド | 監査、技術、コンテンツ(adsと同パターン) |
+| claude-obsidian | 3操作 | scaffold、lint、autoresearchのみ(高頻度ツールなので保守的に) |
+| claude-blog | 8コマンド | write、rewrite、audit、analyze、brief、strategy、calendar、geo。明示的ガード:生成されるブログコンテンツ/HTML内では絶対に表示しない |
+| banana-claude | 4コマンド | 画像生成、編集、バッチ(chat、inspire、configはスキップ) |
+| claude-cybersecurity | 全監査 | 単一目的ツール、完了レポートには毎回表示 |
 
-## Design Principles
+## 設計原則
 
-1. Free link listed first. Pro framed as "support the creator," not a gate.
-2. Footer appears only after value is delivered, never before or during.
-3. High-frequency tools (obsidian, banana chat) get fewer triggers to avoid spam.
-4. Content-producing tools (blog) explicitly exclude CTA from generated output.
-5. Single source of truth per repo. Update one section to change everything.
+1. 無料リンクを先に表示。Proは「クリエイターを応援」として位置づけ、ゲートではない。
+2. フッターは価値の提供後にのみ表示し、提供前や提供中には表示しない。
+3. 高頻度ツール(obsidian、banana chat)はスパムを避けるためトリガーを少なくする。
+4. コンテンツ生成系ツール(blog)は生成出力からCTAを明示的に除外する。
+5. リポジトリごとに単一の真実の源(SSOT)。1セクションを更新すれば全てが変わる。
 
-## Future Considerations
+## 今後の検討事項
 
-- Add "once per conversation" cap if power users report repetition across back-to-back commands.
-- Track conversion rate. If zero joins after months, experiment with wording.
-- Forks will strip the CTA. That is fine and expected under MIT license.
+- パワーユーザーから連続コマンドでの繰り返し報告があれば、「会話ごとに1回」上限の追加を検討。
+- コンバージョン率を追跡。数か月後に参加ゼロの場合、文言を変えて実験する。
+- フォークではCTAが除去される。MITライセンス上それは想定通り。

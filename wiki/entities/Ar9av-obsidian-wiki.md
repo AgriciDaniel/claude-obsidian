@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "Ar9av/obsidian-wiki"
+aliases: ["Ar9av-obsidian-wiki", "Ar9av/obsidian-wiki"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -18,18 +19,18 @@ sources:
 
 # Ar9av/obsidian-wiki
 
-**Type**: Claude Code plugin (skill-based)
+**種別**: Claude Codeプラグイン(スキルベース)
 **URL**: https://github.com/Ar9av/obsidian-wiki
-**Pattern**: Karpathy LLM Wiki
-**Unique claim**: Works with any AI coding agent via `setup.sh`
+**パターン**: Karpathy LLM Wiki
+**独自の特徴**: `setup.sh` により任意のAIコーディングエージェントで動作
 
-## What It Does
+## 概要
 
-Framework for AI agents to build and maintain an Obsidian wiki using the Karpathy LLM Wiki pattern. The key differentiator: a single `setup.sh` deploys the skills to 7 different agents simultaneously.
+Karpathy LLM Wikiパターンを用いて、AIエージェントがObsidianウィキを構築・維持するためのフレームワーク。最大の差別化要素は、単一の `setup.sh` で7種類のエージェントに同時にスキルを配備できる点である。
 
-## Agent Compatibility Matrix
+## エージェント互換性マトリクス
 
-| Agent | Bootstrap | Skills Dir |
+| エージェント | ブートストラップ | スキルディレクトリ |
 |-------|-----------|-----------|
 | Claude Code | CLAUDE.md | `.claude/skills/` |
 | Cursor | `.cursor/rules/obsidian-wiki.mdc` | `.cursor/skills/` |
@@ -39,21 +40,21 @@ Framework for AI agents to build and maintain an Obsidian wiki using the Karpath
 | OpenClaw | AGENTS.md | `.agents/skills/` |
 | GitHub Copilot | `.github/copilot-instructions.md` | — |
 
-## Key Innovations
+## 主な革新点
 
-### Delta Tracking Manifest
-`.manifest.json` tracks every ingested source: path, hash, timestamp, which wiki pages produced. Only processes new/changed files. Solves the "re-ingest everything" problem.
+### デルタ追跡マニフェスト
+`.manifest.json` が取り込まれた全ソースを追跡する。パス、ハッシュ、タイムスタンプ、生成されたウィキページが記録される。新規または変更があったファイルのみ処理する。これにより「全件再取り込み」問題を解決している。
 
-### 4-Stage Pipeline
-1. **Ingest** — reads source (PDF, JSONL, text, conversation exports, images)
-2. **Extract** — pulls concepts, entities, claims, relationships, open questions
-3. **Resolve** — merges new knowledge against existing wiki (no duplication)
-4. **Schema** — structure emerges from sources, not predefined
+### 4ステージのパイプライン
+1. **取り込み(Ingest)** — ソースを読み込む(PDF、JSONL、テキスト、会話エクスポート、画像)
+2. **抽出(Extract)** — 概念、エンティティ、主張、関係、未解決の問いを抽出する
+3. **解決(Resolve)** — 既存ウィキと突き合わせて新知識をマージする(重複させない)
+4. **スキーマ(Schema)** — 構造はソースから創発し、事前定義しない
 
-### Vision Support
-Images, screenshots, whiteboard photos ingestable with vision-capable model. Each page gets 1-2 sentence `summary:` in frontmatter for preview without opening.
+### ビジョン対応
+画像、スクリーンショット、ホワイトボード写真をビジョン対応モデルで取り込み可能。各ページのフロントマターに1〜2文の `summary:` が付与され、開かずにプレビューできる。
 
-## Cherry-Picks for claude-obsidian
+## claude-obsidianへのチェリーピック
 
 - [[cherry-picks#4. Delta Tracking Manifest]]
 - [[cherry-picks#6. /wiki-ingest Vision Support]]

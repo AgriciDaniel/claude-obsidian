@@ -1,16 +1,17 @@
 ---
 type: comparison
 title: "Wiki vs RAG"
+aliases: ["Wiki vs RAG", "ウィキ vs RAG"]
 subjects:
   - "[[LLM Wiki Pattern]]"
   - "RAG (Retrieval-Augmented Generation)"
 dimensions:
-  - "How knowledge is stored"
-  - "Query cost"
-  - "Infrastructure"
-  - "Maintenance"
-  - "Scale limit"
-verdict: "Wiki wins at <1000 pages. RAG wins at enterprise scale."
+  - "知識の保存方法"
+  - "クエリコスト"
+  - "インフラ"
+  - "メンテナンス"
+  - "スケール限界"
+verdict: "1000ページ未満ではWikiが優位。エンタープライズ規模ではRAGが優位。"
 created: 2026-04-07
 updated: 2026-04-07
 tags:
@@ -28,29 +29,29 @@ sources: []
 
 # Wiki vs RAG
 
-## Overview
+## 概要
 
-Both approaches let you query a large document collection. They differ fundamentally in when synthesis happens.
+どちらのアプローチも大量のドキュメント群に対するクエリを可能にする。両者の根本的な違いは、シンセシスがいつ行われるかにある。
 
-## Comparison
+## 比較
 
-| Dimension | LLM Wiki | Semantic RAG |
+| 観点 | LLM Wiki | セマンティックRAG |
 |-----------|----------|-------------|
-| **How knowledge is stored** | Pre-compiled markdown pages with cross-references already built | Raw chunks in a vector database |
-| **Finding answers** | Read index → follow links → synthesize | Embed query → similarity search → assemble |
-| **Query cost** | Low — synthesis already done | Higher — re-derives on every query |
-| **Infrastructure** | Just markdown files | Embedding model + vector DB + chunking pipeline |
-| **Maintenance** | Run a lint pass | Re-embed when content changes |
-| **Scale limit** | ~hundreds of pages (index file navigation) | Millions of documents |
-| **Setup time** | 5 minutes | Hours to days |
-| **Contradiction detection** | Built in — LLM flags on ingest | Manual |
+| **知識の保存方法** | クロスリファレンスが事前構築済みのコンパイル済みMarkdownページ | ベクトルデータベース内の生チャンク |
+| **回答の発見** | インデックスを読む → リンクをたどる → シンセシス | クエリを埋め込み → 類似度検索 → 組み立て |
+| **クエリコスト** | 低い。シンセシスはすでに完了している | 高い。クエリのたびに再導出する |
+| **インフラ** | Markdownファイルのみ | 埋め込みモデル + ベクトルDB + チャンク化パイプライン |
+| **メンテナンス** | lintパスを実行する | コンテンツ変更時に再埋め込み |
+| **スケール限界** | およそ数百ページ(インデックスファイルの可読性) | 数百万件のドキュメント |
+| **セットアップ時間** | 5分 | 数時間〜数日 |
+| **矛盾の検出** | 取り込み時にLLMがフラグ付けして組み込み | 手動 |
 
-## Verdict
+## 結論
 
-**Under 1000 pages → LLM Wiki.** The index file is sufficient for navigation, token cost is low, setup is minimal, and the pre-compiled synthesis means every query benefits from everything ever read.
+**1000ページ未満 → LLM Wiki**。インデックスファイルだけでナビゲーションに十分であり、トークンコストは低く、セットアップは最小限。コンパイル済みのシンセシスにより、すべてのクエリがこれまで読んだ全内容の恩恵を受ける。
 
-**Over 100K pages → RAG.** The index file becomes too large to read, and embedding-based retrieval becomes more efficient than full-index scanning.
+**10万ページ超 → RAG**。インデックスファイルが大きすぎて読み切れなくなり、埋め込みベースの検索の方がインデックス全走査より効率的になる。
 
-The sweet spot: run the wiki pattern for active research (where things are being added, synthesized, and connected), then export to a vector store if the collection grows beyond the index threshold.
+スイートスポット: 追加・統合・接続が活発な研究フェーズではウィキパターンを使い、コレクションがインデックスの閾値を超えて成長したらベクトルストアへエクスポートする。
 
-(Source: [[LLM Wiki Pattern]], [[Compounding Knowledge]])
+(ソース: [[LLM Wiki Pattern]]、[[Compounding Knowledge]])

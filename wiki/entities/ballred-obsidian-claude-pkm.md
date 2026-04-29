@@ -1,6 +1,7 @@
 ---
 type: entity
 title: "ballred/obsidian-claude-pkm"
+aliases: ["ballred-obsidian-claude-pkm", "ballred/obsidian-claude-pkm"]
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -19,47 +20,47 @@ sources:
 
 # ballred/obsidian-claude-pkm
 
-**Type**: Claude Code plugin (skill-based PKM system)
+**種別**: Claude Codeプラグイン(スキルベースのPKMシステム)
 **URL**: https://github.com/ballred/obsidian-claude-pkm
-**Version**: 3.1
-**Tagline**: "Not another PKM starter kit. An execution system."
+**バージョン**: 3.1
+**タグライン**: 「もう一つのPKMスターターキットではない。実行システムだ。」
 
-## What It Does
+## 概要
 
-Connects a 3-year vision cascade to daily task execution, using Claude as an accountability partner. Every layer is linked — daily notes surface the weekly ONE Big Thing, which links to active projects, which link to yearly goals.
+3年ビジョンのカスケードを日々のタスク実行に接続し、Claudeをアカウンタビリティパートナーとして用いる。すべてのレイヤーがリンクされており、デイリーノートは週の「ONE Big Thing」を表示し、それがアクティブなプロジェクトに、そして年間ゴールへとつながる。
 
-## Goal Cascade
+## ゴールカスケード
 
 ```
 3-Year Vision → Yearly Goals → Projects → Monthly Goals → Weekly Review → Daily Tasks
 ```
 
-Each layer has a dedicated skill: `/goal-tracking`, `/project`, `/monthly`, `/weekly`, `/daily`, `/review`.
+各レイヤーには専用スキルが用意されている: `/goal-tracking`、`/project`、`/monthly`、`/weekly`、`/daily`、`/review`。
 
-## Key Innovations
+## 主な革新点
 
-### Auto-Commit via PostToolUse Hook
-Every Write/Edit tool call triggers `git add -A && git commit` automatically. Vault is always versioned.
+### PostToolUseフックによる自動コミット
+すべてのWrite/Editツール呼び出しで `git add -A && git commit` が自動実行される。ボールトは常にバージョン管理される。
 
-### /adopt Command
-Scans an existing Obsidian vault, detects its organization method (PARA, Zettelkasten, LYT, plain folders), maps folders interactively to the PKM layers, generates config files. Non-destructive.
+### /adopt コマンド
+既存のObsidianボールトをスキャンし、そのオーガナイズ手法(PARA、Zettelkasten、LYT、シンプルなフォルダ構成)を検出する。フォルダをPKMの各レイヤーに対話的にマッピングし、設定ファイルを生成する。非破壊的に動作する。
 
-### 4 Specialized Agents with Memory
-- `goal-aligner` — audits activity vs. stated goals, flags misalignment
-- `weekly-reviewer` — facilitates 3-phase weekly review, learns reflection style
-- `note-organizer` — fixes broken links, consolidates duplicates
-- `inbox-processor` — GTD-style inbox processing
+### メモリ付き専門エージェント4種
+- `goal-aligner` — 設定したゴールに対する活動を監査し、ズレを指摘する
+- `weekly-reviewer` — 3フェーズの週次レビューを進行し、振り返りスタイルを学習する
+- `note-organizer` — 壊れたリンクを修復し、重複を統合する
+- `inbox-processor` — GTDスタイルの受信箱処理を行う
 
-Uses `memory: project` so agents remember patterns across sessions.
+`memory: project` を使用することで、エージェントはセッション間でパターンを記憶できる。
 
-### Productivity Coach Output Style
-`/output-style coach` transforms Claude into an accountability partner — challenges assumptions, asks powerful questions, points out goal-action misalignment.
+### 生産性コーチ・アウトプットスタイル
+`/output-style coach` でClaudeをアカウンタビリティパートナーに変身させる。前提を疑い、本質的な問いを投げかけ、ゴールと行動の不整合を指摘する。
 
-## Architecture
+## アーキテクチャ
 
-Zero dependencies (bash + markdown only). Path-specific rules loaded contextually. Session init surfaces ONE Big Thing, active project count, days since last review.
+依存関係なし(bash + Markdownのみ)。パスごとのルールが文脈に応じて読み込まれる。セッション初期化時にONE Big Thing、アクティブプロジェクト数、最終レビューからの経過日数が表示される。
 
-## Cherry-Picks for claude-obsidian
+## claude-obsidianへのチェリーピック
 
 - [[cherry-picks#2. Auto-Commit PostToolUse Hook]]
 - [[cherry-picks#7. /adopt — Import Existing Vault]]

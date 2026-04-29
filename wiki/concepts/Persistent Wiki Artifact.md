@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Persistent Wiki Artifact"
+title: "永続的な Wiki アーティファクト"
 created: 2026-04-24
 updated: 2026-04-24
 tags:
@@ -8,6 +8,9 @@ tags:
   - knowledge-management
   - agent-memory
 status: developing
+aliases:
+  - "Persistent Wiki Artifact"
+  - "永続的な Wiki アーティファクト"
 related:
   - "[[How does the LLM Wiki pattern work?]]"
   - "[[LLM Wiki Pattern]]"
@@ -16,29 +19,29 @@ related:
   - "[[Query-Time Retrieval]]"
 ---
 
-# Persistent Wiki Artifact
+# 永続的な Wiki アーティファクト
 
-A persistent wiki artifact is the maintained Markdown layer between raw sources and future questions. In Karpathy's LLM Wiki description, the agent reads source material, extracts key information, and integrates it into an interlinked wiki instead of only retrieving chunks at answer time: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+永続的な Wiki アーティファクトとは、生のソースと将来の質問の間に置かれる、維持された Markdown 層のことである。Karpathy の LLM Wiki 記述では、エージェントはソース資料を読み、重要情報を抽出し、回答時にチャンクを取得するだけでなく、相互リンクされた Wiki に統合する: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 
-## Boundary Filled
+## 埋められる境界
 
-The selected question explains that an LLM Wiki compounds knowledge, but it does not isolate the artifact as the unit of memory. This page makes that boundary explicit: memory is stored in files that can be browsed, linked, reviewed, and revised.
+選択された質問は LLM Wiki が知識を複利で増やすことを説明しているが、メモリの単位としてアーティファクト自体を切り出してはいない。本ページはその境界を明確にする。メモリは、閲覧、リンク、レビュー、改訂が可能なファイルに保存される。
 
-## Extracted Claims
+## 抽出された主張
 
-- The LLM Wiki pattern defines raw sources, the generated wiki, and a schema document as separate layers: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- In that pattern, the raw source collection is treated as immutable, while the wiki layer is owned and maintained by the LLM: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- The pattern frames the wiki as a compounding artifact whose cross-references, contradiction flags, and synthesis persist across later questions: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-- Obsidian supports Wikilinks such as `[[Three laws of motion]]`, which lets Markdown files form an internal network of notes: https://obsidian.md/help/links
-- Obsidian can automatically update internal links when a file is renamed, depending on the vault setting: https://obsidian.md/help/links
+- LLM Wiki パターンは、生のソース、生成された Wiki、スキーマ文書を別々の層として定義している: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- そのパターンでは、生のソース集合は不変として扱われ、Wiki 層は LLM が所有・維持する: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- パターンは Wiki を複利で増えるアーティファクトとして位置付け、相互参照、矛盾フラグ、合成は後続の質問にまたがって永続する: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- Obsidian は `[[Three laws of motion]]` のような Wikilink をサポートしており、Markdown ファイルが内部のノートネットワークを形成できる: https://obsidian.md/help/links
+- Obsidian は vault の設定によって、ファイル名変更時に内部リンクを自動更新できる: https://obsidian.md/help/links
 
-## Implications for This Vault
+## 本 vault への含意
 
-- The durable memory object is the page, not the chat turn.
-- The page needs frontmatter, stable title, wikilinks, and source URLs so later agents can inspect provenance.
-- The page should remain small enough to revise directly, because the LLM Wiki pattern depends on updating existing synthesis when new sources arrive: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- 永続的なメモリオブジェクトはチャットターンではなくページである。
+- ページにはフロントマター、安定したタイトル、Wikilink、ソース URL が必要であり、後続のエージェントが来歴を確認できるようにする。
+- ページは直接改訂できる程度に小さく保つべきだ。LLM Wiki パターンは、新しいソースが届いたときに既存の合成を更新することに依存しているからだ: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 
-## Primary Sources
+## 一次ソース
 
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - https://obsidian.md/help/links

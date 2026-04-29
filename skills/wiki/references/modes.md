@@ -1,29 +1,29 @@
-# Wiki Modes
+# ウィキモード
 
-Six modes cover the most common use cases. Pick the one that fits, or combine them.
+6 つのモードでよくあるユースケースをカバー。フィットするものを選ぶか、組み合わせる。応答テキストとフォルダ説明は日本語で書く。
 
 ---
 
-## Mode A: Website / Sitemap
+## モード A: Website / Sitemap
 
-Use when: "build a sitemap wiki for my website", "map content gaps", "SEO audit wiki"
+使用場面: 「自分のサイトのサイトマップウィキを作って」「コンテンツのギャップを把握」「SEO 監査ウィキ」
 
 ```
 vault/
-├── .raw/              # crawl exports, analytics, scraped pages, GSC data
+├── .raw/              # クロールエクスポート、解析、スクレイプページ、GSC データ
 ├── wiki/
-│   ├── pages/         # one note per URL: status, meta, content summary
-│   ├── structure/     # site architecture, nav hierarchy, internal link map
-│   ├── audits/        # content gaps, redirect needs, thin content flags
-│   ├── keywords/      # keyword clusters, target page assignments
-│   └── entities/      # brand, authors, topic hubs
+│   ├── pages/         # URL 1 件ずつ: ステータス、メタ、コンテンツ要約
+│   ├── structure/     # サイトアーキテクチャ、ナビ階層、内部リンクマップ
+│   ├── audits/        # コンテンツのギャップ、リダイレクト要件、薄いコンテンツ
+│   ├── keywords/      # キーワードクラスタ、ターゲットページ割当
+│   └── entities/      # ブランド、執筆者、トピックハブ
 ├── _meta/
 │   ├── index.md
 │   └── log.md
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/pages/` notes:
+`wiki/pages/` ノートの frontmatter:
 ```yaml
 ---
 type: page
@@ -45,30 +45,30 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Key wiki pages to create: `[[Site Overview]]`, `[[Navigation Structure]]`, `[[Content Gaps]]`, `[[Redirect Map]]`, `[[Keyword Clusters]]`
+作成すべき主要 wiki ページ: `[[Site Overview]]`, `[[Navigation Structure]]`, `[[Content Gaps]]`, `[[Redirect Map]]`, `[[Keyword Clusters]]`(`aliases:` に日本語名を併記)
 
 ---
 
-## Mode B: GitHub / Repository
+## モード B: GitHub / Repository
 
-Use when: "map my codebase", "architecture wiki for my repo", "understand this project"
+使用場面: 「コードベースをマップ」「リポジトリのアーキテクチャウィキ」「このプロジェクトを理解」
 
 ```
 vault/
-├── .raw/              # README, git log exports, code dumps, issue exports
+├── .raw/              # README、git log エクスポート、コードダンプ、issue エクスポート
 ├── wiki/
-│   ├── modules/       # one note per major module / package / service
-│   ├── components/    # reusable UI or functional components
-│   ├── decisions/     # Architecture Decision Records (ADRs)
-│   ├── dependencies/  # external deps, versions, risk assessment
-│   └── flows/         # data flows, request paths, auth flows
+│   ├── modules/       # 主要モジュール / パッケージ / サービスごとに 1 ノート
+│   ├── components/    # 再利用可能な UI または機能コンポーネント
+│   ├── decisions/     # アーキテクチャ決定記録(ADR)
+│   ├── dependencies/  # 外部依存、バージョン、リスク評価
+│   └── flows/         # データフロー、リクエストパス、認証フロー
 ├── _meta/
 │   ├── index.md
 │   └── log.md
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/modules/` notes:
+`wiki/modules/` ノートの frontmatter:
 ```yaml
 ---
 type: module           # module | component | decision | dependency | flow
@@ -87,35 +87,35 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Key wiki pages to create: `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`
+作成すべき主要 wiki ページ: `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`
 
 ---
 
-## Mode C: Business / Project
+## モード C: Business / Project
 
-Use when: "project wiki", "competitive intelligence", "team knowledge base", "meeting notes"
+使用場面: 「プロジェクトウィキ」「競合インテリジェンス」「チームナレッジベース」「会議メモ」
 
 ```
 vault/
-├── .raw/              # meeting transcripts, Slack exports, docs, emails
+├── .raw/              # 会議トランスクリプト、Slack エクスポート、ドキュメント、メール
 ├── wiki/
-│   ├── stakeholders/  # people, companies, decision-makers
-│   ├── decisions/     # key decisions with rationale and date
-│   ├── deliverables/  # milestones, outputs, status tracking
-│   ├── intel/         # competitor analysis, market research
-│   └── comms/         # synthesized meeting notes, key threads
+│   ├── stakeholders/  # 人物、企業、意思決定者
+│   ├── decisions/     # 重要な決定、根拠と日付
+│   ├── deliverables/  # マイルストーン、成果物、ステータス追跡
+│   ├── intel/         # 競合分析、市場調査
+│   └── comms/         # 合成された会議メモ、主要スレッド
 ├── _meta/
 │   ├── index.md
 │   └── log.md
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/decisions/` notes:
+`wiki/decisions/` ノートの frontmatter:
 ```yaml
 ---
 type: decision         # stakeholder | decision | deliverable | intel | meeting | competitor
 status: active         # active | pending | done | blocked | superseded
-priority: 3            # 1 (highest) to 5 (lowest)
+priority: 3            # 1(最高)〜 5(最低)
 date: YYYY-MM-DD
 owner: ""
 due_date: ""
@@ -126,31 +126,31 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Key wiki pages to create: `[[Project Overview]]`, `[[Stakeholder Map]]`, `[[Decision Log]]`, `[[Competitor Landscape]]`
+作成すべき主要 wiki ページ: `[[Project Overview]]`, `[[Stakeholder Map]]`, `[[Decision Log]]`, `[[Competitor Landscape]]`
 
 ---
 
-## Mode D: Personal / Second Brain
+## モード D: Personal / Second Brain
 
-Use when: "personal second brain", "track my goals", "journal synthesis", "life wiki"
+使用場面: 「個人セカンドブレイン」「目標を追跡」「ジャーナル合成」「人生ウィキ」
 
 ```
 vault/
-├── .raw/              # journal entries, articles, podcast notes, voice transcripts
+├── .raw/              # ジャーナル、記事、ポッドキャストメモ、音声トランスクリプト
 ├── wiki/
-│   ├── goals/         # personal and professional goals with progress tracking
-│   ├── learning/      # concepts being mastered, skill development
-│   ├── people/        # relationships, shared context, follow-ups
-│   ├── areas/         # life areas: health, finances, career, creative
-│   └── resources/     # books, courses, tools worth referencing
+│   ├── goals/         # 個人および専門の目標、進捗追跡付き
+│   ├── learning/      # 習得中の概念、スキル開発
+│   ├── people/        # 関係性、共通文脈、フォローアップ
+│   ├── areas/         # 人生領域: 健康、財政、キャリア、創造
+│   └── resources/     # 書籍、コース、参照価値のあるツール
 ├── _meta/
 │   ├── index.md
 │   ├── log.md
-│   └── hot-cache.md   # ~500-word summary of most active context
+│   └── hot-cache.md   # 最もアクティブな文脈の約 500 語要約
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/goals/` notes:
+`wiki/goals/` ノートの frontmatter:
 ```yaml
 ---
 type: goal             # goal | concept | person | area | resource | reflection
@@ -158,39 +158,39 @@ status: active         # active | paused | completed | abandoned
 area: career           # health | career | finance | creative | relationships | growth
 priority: 1
 target_date: YYYY-MM-DD
-progress: 0            # 0-100 percent
+progress: 0            # 0〜100 パーセント
 tags: [goal]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 ```
 
-Hot cache note: `_meta/hot-cache.md` is a ~500-word file Claude updates at the end of each session. It captures current focus areas, recent wins, and open threads. This prevents Claude from having to crawl the whole wiki to answer "where were we?".
+ホットキャッシュノート: `_meta/hot-cache.md` は約 500 語のファイルで Claude が各セッション終了時に更新。現在のフォーカス領域、最近の成果、未解決スレッドを捕捉。「どこまで進んだ?」に答えるために wiki 全体をクロールする必要が無くなる。
 
-Key wiki pages to create: `[[North Star]]`, `[[Weekly Review Template]]`, `[[Annual Goals]]`
+作成すべき主要 wiki ページ: `[[North Star]]`, `[[Weekly Review Template]]`, `[[Annual Goals]]`
 
 ---
 
-## Mode E: Research
+## モード E: Research
 
-Use when: "research wiki on [topic]", "track papers I'm reading", "build a thesis"
+使用場面: 「[トピック] のリサーチウィキ」「読んでる論文を追跡」「論文執筆」
 
 ```
 vault/
-├── .raw/              # PDFs, web clips, data files, raw notes
+├── .raw/              # PDF、Web クリップ、データファイル、生メモ
 ├── wiki/
-│   ├── papers/        # paper summaries with key claims and methodology
-│   ├── concepts/      # extracted concepts, models, frameworks
-│   ├── entities/      # people, organizations, methods, datasets
-│   ├── thesis/        # evolving synthesis: the "state of the field" pages
-│   └── gaps/          # open questions, contradictions, research needed
+│   ├── papers/        # 主要主張と方法論つきの論文要約
+│   ├── concepts/      # 抽出された概念、モデル、フレームワーク
+│   ├── entities/      # 人物、組織、手法、データセット
+│   ├── thesis/        # 進化中の合成: 「分野の現状」ページ
+│   └── gaps/          # 未解決の問い、矛盾、必要なリサーチ
 ├── _meta/
 │   ├── index.md
 │   └── log.md
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/papers/` notes:
+`wiki/papers/` ノートの frontmatter:
 ```yaml
 ---
 type: paper            # paper | concept | entity | thesis | gap
@@ -208,30 +208,30 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Key wiki pages to create: `[[Research Overview]]`, `[[Key Claims Map]]`, `[[Open Questions]]`, `[[Methodology Comparison]]`
+作成すべき主要 wiki ページ: `[[Research Overview]]`, `[[Key Claims Map]]`, `[[Open Questions]]`, `[[Methodology Comparison]]`
 
 ---
 
-## Mode F: Book / Course
+## モード F: Book / Course
 
-Use when: "companion wiki for a book", "course notes wiki", "as I read [title]"
+使用場面: 「書籍のコンパニオンウィキ」「コースノートウィキ」「[タイトル] を読みながら」
 
 ```
 vault/
-├── .raw/              # chapter notes, highlights, exercises
+├── .raw/              # 章メモ、ハイライト、演習
 ├── wiki/
-│   ├── characters/    # characters, personas, agents, experts (adapt to content)
-│   ├── themes/        # major themes with supporting evidence
-│   ├── concepts/      # domain-specific terms and frameworks
-│   ├── timeline/      # plot structure, curriculum sequence, chapter map
-│   └── synthesis/     # your own takeaways, questions, applications
+│   ├── characters/    # 登場人物、ペルソナ、エージェント、専門家(内容に適応)
+│   ├── themes/        # 根拠つきの主要テーマ
+│   ├── concepts/      # ドメイン固有の用語とフレームワーク
+│   ├── timeline/      # プロット構造、カリキュラム順序、章マップ
+│   └── synthesis/     # 自分なりの気づき、問い、応用
 ├── _meta/
 │   ├── index.md
 │   └── log.md
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/concepts/` notes:
+`wiki/concepts/` ノートの frontmatter:
 ```yaml
 ---
 type: concept          # concept | character | theme | chapter | synthesis
@@ -244,16 +244,16 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Key wiki pages to create: `[[Book Overview]]`, `[[Theme Map]]`, `[[Character / Expert Index]]`, `[[My Takeaways]]`
+作成すべき主要 wiki ページ: `[[Book Overview]]`, `[[Theme Map]]`, `[[Character / Expert Index]]`, `[[My Takeaways]]`
 
 ---
 
-## Combining Modes
+## モードの組み合わせ
 
-You can combine modes. Examples:
+モードは組み合わせ可能。例:
 
-- "GitHub repo + research on the AI approach used" -> Mode B folders + Mode E papers/ folder
-- "My SaaS business + second brain" -> Mode C intel/ + Mode D goals/
-- "YouTube channel" -> Mode F (content as "book") + Mode E (research on topics covered)
+- 「GitHub リポジトリ + 使用 AI アプローチのリサーチ」 → モード B フォルダ + モード E papers/ フォルダ
+- 「自分の SaaS ビジネス + セカンドブレイン」 → モード C intel/ + モード D goals/
+- 「YouTube チャンネル」 → モード F(コンテンツを「本」として) + モード E(扱うトピックのリサーチ)
 
-When combining, keep folder names distinct. Don't merge `decisions/` from Mode B and Mode C into one folder.
+組み合わせるときはフォルダ名を区別すること。モード B とモード C の `decisions/` を 1 つのフォルダにマージしない。

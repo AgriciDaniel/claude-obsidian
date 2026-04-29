@@ -1,23 +1,23 @@
 ---
-description: Bootstrap or check the claude-obsidian wiki vault. Reads the wiki skill and runs setup workflow.
+description: claude-obsidian ウィキ Vault のブートストラップまたは状態確認。wiki スキルを読み込み、セットアップワークフローを実行。応答は日本語(プロジェクト CLAUDE.md の言語ポリシー参照)。
 ---
 
-Read the `wiki` skill. Then run the setup workflow:
+`wiki` スキルを読む。次にセットアップワークフローを実行:
 
-1. Check if Obsidian is installed. If not, offer to install it (see `skills/wiki/references/plugins.md`).
-2. Check if this directory has a vault (look for `.obsidian/` folder). If yes, report current vault state.
-3. Check if the MCP server is configured (`claude mcp list`). If not, ask if the user wants to set it up.
-4. Ask ONE question: "What is this vault for?"
+1. Obsidian がインストール済みか確認。未インストールならインストールを提案(`skills/wiki/references/plugins.md` 参照)。
+2. このディレクトリに Vault があるか確認(`.obsidian/` フォルダを探す)。あれば現在の Vault 状態を報告。
+3. MCP サーバが構成されているか確認(`claude mcp list`)。未設定ならセットアップするか尋ねる。
+4. 質問は 1 つだけ: 「この Vault は何のため?」
 
-Then build the entire wiki structure based on the answer. Don't ask more questions. Scaffold it, show what was created, and ask: "Want to adjust anything before we start?"
+その後、回答に基づいてウィキ構造全体を構築。追加質問はしない。足場を作り、何が作成されたかを示し、「始める前に調整したい点はありますか?」と尋ねる。
 
-Examples of what the user might say:
-- "Map the architecture of github.com/org/repo"
-- "Build a sitemap and content analysis for example.com"
-- "Track my SaaS business — product, customers, metrics, roadmap"
-- "Research project on [topic] — papers, concepts, open questions"
-- "Personal second brain — health, goals, learning, projects"
-- "Organize my YouTube channel — transcripts, topics, tools mentioned"
-- "Executive assistant brain — meetings, tasks, business context"
+ユーザーの回答例:
+- 「github.com/org/repo のアーキテクチャをマップ」
+- 「example.com のサイトマップとコンテンツ分析を構築」
+- 「自分の SaaS ビジネスを追跡 — 製品、顧客、メトリクス、ロードマップ」
+- 「[トピック] のリサーチプロジェクト — 論文、概念、未解決の問い」
+- 「個人セカンドブレイン — 健康、目標、学習、プロジェクト」
+- 「YouTube チャンネルを整理 — トランスクリプト、トピック、言及されたツール」
+- 「エグゼクティブアシスタントブレイン — 会議、タスク、ビジネスコンテキスト」
 
-If the vault is already set up, skip to checking what has been ingested recently and offering to continue where things left off.
+Vault がすでにセットアップ済みなら、最近何が取り込まれたかの確認と、続きから再開する提案にスキップ。

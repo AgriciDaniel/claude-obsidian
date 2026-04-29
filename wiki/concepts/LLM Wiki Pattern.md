@@ -1,9 +1,11 @@
 ---
 type: concept
-title: "LLM Wiki Pattern"
+title: "LLM Wiki パターン"
 complexity: intermediate
 domain: knowledge-management
 aliases:
+  - "LLM Wiki Pattern"
+  - "LLM Wiki パターン"
   - "LLM Knowledge Base"
   - "Karpathy Wiki"
   - "Persistent Wiki"
@@ -24,74 +26,74 @@ related:
 sources:
 ---
 
-# LLM Wiki Pattern
+# LLM Wiki パターン
 
-A pattern for building persistent, compounding knowledge bases using LLMs. Originated by [[Andrej Karpathy]]. The key insight: instead of re-deriving knowledge from raw documents on every query (RAG), the LLM incrementally builds and maintains a structured wiki that gets richer with every source added.
-
----
-
-## The Core Idea
-
-Most AI knowledge tools work like RAG: index raw documents, retrieve chunks at query time, generate an answer. Nothing accumulates. Ask a question that needs five documents and the LLM reassembles fragments every time.
-
-The wiki pattern is different. When a new source arrives, the LLM reads it, extracts what matters, and integrates it into the wiki: updating entity pages, noting contradictions, strengthening the synthesis. The cross-references are already there. The knowledge is compiled once and kept current.
-
-**The wiki is a persistent, compounding artifact.** The human curates sources and asks questions. The LLM writes and maintains everything.
+LLM を用いて、永続的かつ複利で増えていく知識ベースを構築するためのパターン。[[Andrej Karpathy]] が提唱した。核心の洞察は次のとおり。クエリのたびに生の文書から知識を再導出する(RAG)のではなく、LLM が構造化された Wiki を漸進的に構築・維持し、新しいソースが追加されるたびに豊かにしていく。
 
 ---
 
-## Three Layers
+## 中核アイデア
+
+ほとんどの AI 知識ツールは RAG のように動作する。生の文書をインデックス化し、クエリ時にチャンクを取得して回答を生成する。何も蓄積されない。5 つの文書が必要な質問をすれば、LLM は毎回断片を組み立て直す。
+
+Wiki パターンは異なる。新しいソースが届くと、LLM はそれを読み、要点を抽出し、Wiki に統合する。エンティティページを更新し、矛盾を記録し、合成を強化する。相互参照はすでに張られている。知識は一度コンパイルされ、最新の状態に保たれる。
+
+**Wiki は永続的で複利で増えるアーティファクトである。** 人間がソースを選び、質問する。LLM がすべてを書いて維持する。
+
+---
+
+## 三層構造
 
 ```
-.raw/       Layer 1 — immutable source documents
-wiki/       Layer 2 — LLM-generated knowledge base
-CLAUDE.md   Layer 3 — schema that tells the LLM how to maintain it
+.raw/       Layer 1 — 不変のソース文書
+wiki/       Layer 2 — LLM 生成の知識ベース
+CLAUDE.md   Layer 3 — 維持方法を LLM に伝えるスキーマ
 ```
 
-The LLM owns Layer 2 entirely. It creates pages, updates them when new sources arrive, maintains cross-references, and keeps everything consistent. The human reads; the LLM writes.
+Layer 2 は LLM が完全に所有する。ページを作成し、新しいソースが届くと更新し、相互参照を維持し、すべての一貫性を保つ。人間は読み、LLM は書く。
 
 ---
 
-## Operations
+## 操作
 
-**Ingest** — drop a source into `.raw/`, tell the LLM to process it. The LLM reads the source, discusses key takeaways, writes a summary page, updates entity and concept pages, and logs the operation. One source typically touches 8-15 wiki pages.
+**Ingest**: ソースを `.raw/` にドロップし、LLM に処理を依頼する。LLM はソースを読み、重要な要点を議論し、要約ページを書き、エンティティおよび概念ページを更新し、操作を記録する。1 つのソースで通常 8〜15 個の Wiki ページに触れる。
 
-**Query** — ask a question. The LLM reads the index to find relevant pages, synthesizes an answer with citations. Good answers get filed back into the wiki.
+**Query**: 質問する。LLM は index を読んで関連ページを探し、引用付きで回答を合成する。よい回答は Wiki に戻されてファイルされる。
 
-**Lint** — periodic health check. Find orphan pages, dead links, stale claims, missing cross-references.
-
----
-
-## Index and Log
-
-**index.md** — content-oriented. A catalog of all pages with one-line summaries, organized by category. The LLM reads this first on every query to find relevant pages.
-
-**log.md** — chronological. Append-only record of every ingest, query, and lint pass. Parseable: `grep "^## \[" log.md | head -10`
+**Lint**: 定期的なヘルスチェック。孤立ページ、デッドリンク、古い主張、欠けている相互参照を見つける。
 
 ---
 
-## Why It Works
+## Index と Log
 
-The tedious part of maintaining a knowledge base is bookkeeping: updating cross-references, noting when new data contradicts old claims, keeping summaries current. Humans abandon wikis because the maintenance burden grows faster than the value. LLMs don't get bored. The wiki stays maintained because the cost of maintenance is near zero.
+**index.md**: コンテンツ指向。すべてのページを 1 行要約付きでカテゴリ別に整理したカタログ。LLM はクエリのたびにまずこれを読んで関連ページを探す。
 
-At small scale (~100 sources, ~hundreds of pages), the index file is sufficient. No vector database, no embeddings, no infrastructure. Just markdown files.
+**log.md**: 時系列順。ingest、query、lint のすべての操作を追記式で記録する。パース可能: `grep "^## \[" log.md | head -10`
 
 ---
 
-## Comparison to RAG
+## なぜ機能するか
 
-| Dimension | LLM Wiki | Semantic RAG |
+知識ベース維持の面倒な部分は帳簿付けだ。相互参照の更新、新データが古い主張と矛盾したときの注記、要約の最新化。人間が Wiki を放棄するのは、メンテナンス負荷が価値の伸びより速いからだ。LLM は飽きない。Wiki が維持され続けるのは、メンテナンスコストがほぼゼロだからだ。
+
+小規模(ソース 100 件程度、数百ページ程度)では、index ファイルだけで十分だ。ベクトル DB も埋め込みもインフラも不要。Markdown ファイルだけで足りる。
+
+---
+
+## RAG との比較
+
+| 観点 | LLM Wiki | セマンティック RAG |
 |-----------|----------|-------------|
-| Finding | Reads index, follows links | Similarity search over embeddings |
-| Infrastructure | Just markdown files | Embedding model + vector DB |
-| Cost | Tokens only | Ongoing compute + storage |
-| Maintenance | Run a lint | Re-embed when content changes |
-| Scale limit | Hundreds of pages | Millions of documents |
+| 検索方法 | index を読み、リンクをたどる | 埋め込み上での類似度検索 |
+| インフラ | Markdown ファイルのみ | 埋め込みモデル + ベクトル DB |
+| コスト | トークンのみ | 継続的な計算 + ストレージ |
+| 維持 | lint を実行 | コンテンツ変更時に再埋め込み |
+| 規模上限 | 数百ページ | 数百万文書 |
 
 ---
 
-## Connections
+## 関連
 
-See [[Compounding Knowledge]] for why the pattern produces more value over time.
-See [[Hot Cache]] for the session context optimization.
-See [[Andrej Karpathy]] for the pattern's origin.
+時間とともに価値が増す理由は [[Compounding Knowledge]] を参照。
+セッションコンテキスト最適化は [[Hot Cache]] を参照。
+パターンの起源は [[Andrej Karpathy]] を参照。

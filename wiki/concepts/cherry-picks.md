@@ -1,6 +1,6 @@
 ---
 type: concept
-title: "Cherry-Picks: Feature Backlog from Ecosystem Research"
+title: "チェリーピック: エコシステム調査からの機能バックログ"
 created: 2026-04-08
 updated: 2026-04-08
 tags:
@@ -9,6 +9,10 @@ tags:
   - product-roadmap
   - claude-obsidian
 status: current
+aliases:
+  - "cherry-picks"
+  - "Cherry-Picks"
+  - "チェリーピック"
 related:
   - "[[claude-obsidian-ecosystem]]"
   - "[[LLM Wiki Pattern]]"
@@ -16,123 +20,124 @@ sources:
   - "[[claude-obsidian-ecosystem-research]]"
 ---
 
-# Cherry-Picks: Feature Backlog
+# チェリーピック: 機能バックログ
 
-> Sourced from ecosystem research 2026-04-08 | 16+ projects analyzed
-> Prioritized by: impact × implementation ease × uniqueness
-
----
-
-## Tier 1 — Quick Wins (High Impact, Low Effort)
-
-### 1. URL Ingestion in /wiki-ingest
-**Source**: ekadetov/llm-wiki, Ar9av/obsidian-wiki
-**What it is**: Pass a URL directly to ingest instead of a file path. Agent fetches the page, cleans it, saves to `.raw/`, then ingests.
-**Current state**: Users must manually copy-paste web content.
-**How to add**: Detect `https://` prefix in ingest skill → WebFetch → save to `.raw/articles/` → proceed with normal ingest.
-**Bonus**: Pair with **defuddle** (kepano's web cleaner) for clean token-efficient extraction.
-
-### 2. Auto-Commit PostToolUse Hook
-**Source**: ballred/obsidian-claude-pkm, ekadetov/llm-wiki
-**What it is**: Every Write/Edit tool call in the vault triggers `git add -A && git commit -m "auto: [filename] [timestamp]"`.
-**Current state**: No auto-commit. Users must manually push.
-**How to add**: PostToolUse hook in hooks.json targeting Write + Edit tools, scoped to wiki/ directory.
-**Note**: Makes vault a proper version-controlled knowledge base automatically.
-
-### 3. defuddle Web Cleaning Skill
-**Source**: kepano/obsidian-skills
-**What it is**: A skill that wraps `defuddle-cli` — strips ads, nav, clutter from web pages before ingest. Reduces token usage ~40-60% on typical web articles.
-**How to add**: New `defuddle` sub-skill or reference in wiki-ingest. Requires `defuddle-cli` npm package.
+> エコシステム調査(2026-04-08)から抽出 | 16 以上のプロジェクトを分析
+> 優先順位: インパクト × 実装容易性 × 独自性
 
 ---
 
-## Tier 2 — Medium Effort, High Value
+## Tier 1: クイックウィン(高インパクト・低工数)
 
-### 4. Delta Tracking Manifest
-**Source**: Ar9av/obsidian-wiki
-**What it is**: `.raw/.manifest.json` tracking every ingested source — path, hash, timestamp, which wiki pages it produced. Re-ingest only processes new/changed files.
-**Current state**: Every `/wiki-ingest` call re-processes everything.
-**How to add**:
-  - On ingest: compute MD5 hash of source → check manifest → skip if unchanged
-  - On ingest: record `{path, hash, ingested_at, pages_created}` in manifest
-  - On update: re-process if hash changed, merge changes into existing pages
+### 1. /wiki-ingest での URL 取り込み
+**出典**: ekadetov/llm-wiki、Ar9av/obsidian-wiki
+**内容**: ファイルパスではなく URL を直接 ingest に渡す。エージェントがページを取得・クリーンアップして `.raw/` に保存し、通常の ingest を続ける。
+**現状**: ユーザーが手動で Web コンテンツをコピー&ペーストする必要がある。
+**追加方法**: ingest スキルで `https://` プレフィックスを検出 → WebFetch → `.raw/articles/` に保存 → 通常の ingest を進行。
+**ボーナス**: クリーンでトークン効率の高い抽出のため、**defuddle**(kepano の Web クリーナー)と組み合わせる。
 
-### 5. Multi-Depth Query Modes
-**Source**: rvk7895/llm-knowledge-bases
-**What it is**: 3 query tiers in `/wiki-query`:
-  - **Quick** — hot.md + index.md only (~3 pages read)
-  - **Standard** — full wiki cross-reference + optional web search supplement
-  - **Deep** — parallel sub-agents, each researching a different angle
-**Current state**: One depth level.
-**How to add**: `/wiki-query quick <question>`, `/wiki-query deep <question>` flags in SKILL.md.
+### 2. PostToolUse 自動コミットフック
+**出典**: ballred/obsidian-claude-pkm、ekadetov/llm-wiki
+**内容**: vault 内のすべての Write/Edit ツール呼び出しが `git add -A && git commit -m "auto: [filename] [timestamp]"` をトリガする。
+**現状**: 自動コミットなし。ユーザーが手動でプッシュする必要がある。
+**追加方法**: Write + Edit ツールを対象とする hooks.json の PostToolUse フック、wiki/ ディレクトリにスコープ。
+**注**: vault が自動的にバージョン管理された知識ベースとなる。
 
-### 6. /wiki-ingest Vision Support
-**Source**: Ar9av/obsidian-wiki
-**What it is**: Ingest images, screenshots, whiteboard photos by passing the image to a vision-capable model.
-**How to add**: Detect image extension → read as base64 → pass to Claude with vision prompt asking for transcription/description → treat result as text source → standard ingest pipeline.
-**Useful for**: Whiteboard photos from meetings, screenshots of web content, diagrams.
+### 3. defuddle Web クリーニングスキル
+**出典**: kepano/obsidian-skills
+**内容**: `defuddle-cli` をラップするスキル。ingest 前に Web ページから広告、ナビ、雑多な要素を取り除く。典型的な Web 記事でトークン使用量を約 40〜60% 削減する。
+**追加方法**: 新規 `defuddle` サブスキルか、wiki-ingest からの参照。`defuddle-cli` npm パッケージが必要。
 
 ---
 
-## Tier 3 — Bigger Features Worth Planning
+## Tier 2: 中工数・高価値
 
-### 7. /adopt — Import Existing Vault
-**Source**: heyitsnoah/claudesidian, ballred/obsidian-claude-pkm
-**What it is**: `/adopt` analyzes an existing Obsidian vault, detects its organization method (PARA, Zettelkasten, LYT, plain), and wraps the LLM Wiki pattern around it without destroying existing structure.
-**Why it matters**: Currently, users must start fresh. This unlocks adoption by people with existing vaults.
-**Implementation**: Scan folder structure → classify patterns → generate CLAUDE.md mapping existing folders to wiki roles → non-destructive.
+### 4. デルタトラッキングマニフェスト
+**出典**: Ar9av/obsidian-wiki
+**内容**: `.raw/.manifest.json` で ingest 済みのすべてのソースを追跡する。パス、ハッシュ、タイムスタンプ、生成された Wiki ページを記録。再 ingest は新規/変更ファイルのみを処理する。
+**現状**: 毎回の `/wiki-ingest` ですべてが再処理される。
+**追加方法**:
+  - ingest 時: ソースの MD5 ハッシュを計算 → マニフェストを確認 → 未変更ならスキップ
+  - ingest 時: `{path, hash, ingested_at, pages_created}` をマニフェストに記録
+  - 更新時: ハッシュが変わったら再処理し、変更を既存ページにマージ
 
-### 8. Productivity Wrapper (Daily/Weekly Reviews)
-**Source**: ballred/obsidian-claude-pkm
-**What it is**: Optional `/daily` and `/weekly` skills that connect goal tracking to the knowledge base.
-**Could be a separate plugin** rather than bundled into claude-obsidian.
-**Goal cascade**: 3-Year Vision → Yearly Goals → Projects → Weekly → Daily.
+### 5. マルチ深度クエリモード
+**出典**: rvk7895/llm-knowledge-bases
+**内容**: `/wiki-query` の 3 つのクエリ層。
+  - **Quick**: hot.md + index.md のみ(約 3 ページ読み込み)
+  - **Standard**: 完全な Wiki 相互参照 + 任意の Web 検索補完
+  - **Deep**: 並列サブエージェント、それぞれが異なる切り口を調査
+**現状**: 1 つの深度レベルのみ。
+**追加方法**: SKILL.md で `/wiki-query quick <question>`、`/wiki-query deep <question>` フラグ。
 
-### 9. Multi-Agent Compatibility (Cursor, Windsurf, Codex)
-**Source**: Ar9av/obsidian-wiki, kepano/obsidian-skills
-**What it is**: A `setup.sh` or `/wiki-convert` command that generates `.cursor/rules/`, `AGENTS.md`, `GEMINI.md` equivalents so the wiki skills work in other coding agents.
-**Note**: kepano already published skills in Agent Skills format — claude-obsidian is already in that format. Just needs the adapter files.
-
-### 10. Marp Presentation Output
-**Source**: rvk7895/llm-knowledge-bases, ekadetov/llm-wiki
-**What it is**: `/wiki-query --slides <topic>` generates a Marp presentation from wiki content, saved to `output/`.
-**Requires**: `marp-cli` npm package.
-
----
-
-## Tier 4 — Research / Ecosystem Plays
-
-### 11. obsidian-memory-mcp Integration
-**Source**: YuNaga224/obsidian-memory-mcp
-**What it is**: Connect the MCP server that stores Claude's memories as Markdown entities with `[[wikilinks]]` → they appear in Obsidian graph view automatically.
-**How to add**: Point MEMORY_DIR to the wiki/entities/ directory — entity memory pages become proper wiki pages.
-
-### 12. obsidian-bases Skill (from kepano)
-**Source**: kepano/obsidian-skills
-**What it is**: Teach Claude how to create and edit Obsidian Bases (.base files) for dynamic tables, views, and filters.
-**Why**: Obsidian Bases is a new core feature — no other LLM Wiki project teaches Claude about it yet.
-
-### 13. Schema-Emergent Vault Mode
-**Source**: Ar9av/obsidian-wiki
-**What it is**: Alternative /wiki mode where the vault structure is not scaffolded upfront but emerges from ingested content. Good for exploratory knowledge building vs. structured domains.
-**How**: Skip the scaffold step; let wiki-ingest create folders/categories organically based on source content.
+### 6. /wiki-ingest のビジョン対応
+**出典**: Ar9av/obsidian-wiki
+**内容**: 画像、スクリーンショット、ホワイトボード写真を ingest する。画像をビジョン対応モデルに渡す。
+**追加方法**: 画像拡張子を検出 → base64 として読む → 書き起こし/説明を求めるビジョンプロンプトとともに Claude へ渡す → 結果をテキストソースとして扱う → 標準 ingest パイプライン。
+**有用な場面**: 会議のホワイトボード写真、Web コンテンツのスクリーンショット、図表。
 
 ---
 
-## Competitive Positioning
+## Tier 3: 計画に値する大型機能
 
-After this research, claude-obsidian's unique advantages remain:
-- **Hot cache** — no one else has this session context mechanism
-- **Canvas visual layer** — unique in the LLM Wiki category
-- **/save conversation** — filing chat → wiki is a distinct workflow
-- **Marketplace polish** — best install experience in category
-- **Community distribution** (avalonreset-pro)
+### 7. /adopt: 既存 vault のインポート
+**出典**: heyitsnoah/claudesidian、ballred/obsidian-claude-pkm
+**内容**: `/adopt` は既存の Obsidian vault を分析し、整理方法(PARA、Zettelkasten、LYT、プレーン)を検出して、既存構造を破壊せずに LLM Wiki パターンを巻きつける。
+**重要性**: 現状ユーザーはゼロから始める必要がある。これにより既存 vault を持つ人々の採用が解放される。
+**実装**: フォルダ構造をスキャン → パターン分類 → 既存フォルダを Wiki 役割にマッピングする CLAUDE.md 生成 → 非破壊的。
 
-The ecosystem is maturing fast. Tier 1 items (URL ingest, auto-commit, defuddle) should ship in v1.3.0 to stay ahead.
+### 8. プロダクティビティラッパー(日次/週次レビュー)
+**出典**: ballred/obsidian-claude-pkm
+**内容**: 目標トラッキングを知識ベースに接続するオプションの `/daily` と `/weekly` スキル。
+**claude-obsidian 内に同梱せず、別プラグインとして切り出すのも可。**
+**ゴール階層**: 3 年ビジョン → 年次目標 → プロジェクト → 週次 → 日次。
+
+### 9. マルチエージェント互換(Cursor、Windsurf、Codex)
+**出典**: Ar9av/obsidian-wiki、kepano/obsidian-skills
+**内容**: `setup.sh` または `/wiki-convert` コマンドで `.cursor/rules/`、`AGENTS.md`、`GEMINI.md` 相当を生成し、他のコーディングエージェントでも Wiki スキルが動作するようにする。
+**注**: kepano はすでに Agent Skills 形式でスキルを公開している。claude-obsidian もすでにその形式だ。アダプタファイルが必要なだけ。
+
+### 10. Marp プレゼンテーション出力
+**出典**: rvk7895/llm-knowledge-bases、ekadetov/llm-wiki
+**内容**: `/wiki-query --slides <topic>` が Wiki コンテンツから Marp プレゼンテーションを生成し、`output/` に保存する。
+**必須**: `marp-cli` npm パッケージ。
 
 ---
 
-## Implementation Priority
+## Tier 4: リサーチ/エコシステム連携
+
+### 11. obsidian-memory-mcp 統合
+**出典**: YuNaga224/obsidian-memory-mcp
+**内容**: Claude のメモリを `[[wikilinks]]` 付きの Markdown エンティティとして保存する MCP サーバーを接続する。これらは Obsidian グラフビューに自動で表示される。
+**追加方法**: MEMORY_DIR を wiki/entities/ ディレクトリに向ける。エンティティメモリページが正規の Wiki ページとなる。
+
+### 12. obsidian-bases スキル(kepano 由来)
+**出典**: kepano/obsidian-skills
+**内容**: 動的テーブル、ビュー、フィルタのための Obsidian Bases(.base ファイル)の作成・編集方法を Claude に教える。
+**理由**: Obsidian Bases は新しいコア機能。Claude にこの機能を教えている LLM Wiki プロジェクトは他にない。
+
+### 13. スキーマ創発型 vault モード
+**出典**: Ar9av/obsidian-wiki
+**内容**: 別の /wiki モードで、vault 構造を事前にスキャフォールドせず、ingest されたコンテンツから創発させる。構造化ドメインに対して、探索的な知識構築に向く。
+**方法**: スキャフォールドステップを省略し、wiki-ingest がソースコンテンツに基づいて有機的にフォルダ/カテゴリを作る。
+
+---
+
+## 競合ポジショニング
+
+このリサーチを終えても、claude-obsidian の独自優位は健在だ。
+
+- **ホットキャッシュ**: 他には誰もこのセッションコンテキスト機構を持たない
+- **キャンバスのビジュアル層**: LLM Wiki カテゴリで唯一
+- **/save 会話**: チャット → Wiki のファイリングは独自のワークフロー
+- **マーケットプレイスの磨き込み**: カテゴリ最高のインストール体験
+- **コミュニティ流通**(avalonreset-pro)
+
+エコシステムは急速に成熟している。Tier 1 項目(URL ingest、自動コミット、defuddle)を v1.3.0 で出荷して先行を保つべきだ。
+
+---
+
+## 実装優先順位
 
 ```
 v1.3.0 (quick wins):
