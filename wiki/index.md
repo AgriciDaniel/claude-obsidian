@@ -88,6 +88,22 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ---
 
-## Domains
+## Goals
 
-<!-- Add domain entries here after scaffold -->
+<!-- Add goals here -->
+
+## Learning
+
+<!-- Add learning topics here -->
+
+## People
+
+<!-- Add people here -->
+
+## Areas
+
+<!-- Add life areas here -->
+
+## Resources
+
+<!-- Add resources here -->

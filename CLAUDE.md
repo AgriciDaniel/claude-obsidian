@@ -1,50 +1,43 @@
-# claude-obsidian — Claude + Obsidian Wiki Vault
+# Personal Second Brain: LLM Wiki
 
-This folder is both a Claude Code plugin and an Obsidian vault.
+Mode: D (Personal Second Brain)
+Purpose: Persistent, compounding personal knowledge base for goals, learning, relationships, and life areas.
+Owner: sosik27@gmail.com
+Created: 2026-05-01
 
-**Plugin name:** `claude-obsidian`
-**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`
-**Vault path:** This directory (open in Obsidian directly)
-
-## What This Vault Is For
-
-This vault demonstrates the LLM Wiki pattern — a persistent, compounding knowledge base for Claude + Obsidian. Drop any source, ask any question, and the wiki grows richer with every session.
-
-## Vault Structure
+## Structure
 
 ```
-.raw/           source documents — immutable, Claude reads but never modifies
-wiki/           Claude-generated knowledge base
+.raw/           source documents — immutable
+wiki/
+├── goals/      personal and professional goals
+├── learning/   concepts, skills, courses
+├── people/     relationships, follow-ups
+├── areas/      life areas: health, career, finance, creative
+├── resources/  books, courses, tools, articles
+├── concepts/   ideas, patterns, frameworks
+├── sources/    raw source summaries
+├── questions/  filed answers
+├── comparisons/ side-by-side analyses
+└── meta/       dashboards, lint reports
 _templates/     Obsidian Templater templates
-_attachments/   images and PDFs referenced by wiki pages
 ```
 
-## How to Use
+## Conventions
 
-Drop a source file into `.raw/`, then tell Claude: "ingest [filename]".
+- All notes use YAML frontmatter: type, status, created, updated, tags (minimum)
+- Wikilinks use [[Note Name]] format: filenames are unique, no paths needed
+- .raw/ contains source documents: never modify them
+- wiki/index.md is the master catalog: update on every ingest
+- wiki/log.md is append-only: never edit past entries
+- New log entries go at the TOP of the file
 
-Ask any question. Claude reads the index first, then drills into relevant pages.
+## Operations
 
-Run `/wiki` to scaffold a new vault or check setup status.
-
-Run "lint the wiki" every 10-15 ingests to catch orphans and gaps.
-
-## Cross-Project Access
-
-To reference this wiki from another Claude Code project, add to that project's CLAUDE.md:
-
-```markdown
-## Wiki Knowledge Base
-Path: /path/to/this/vault
-
-When you need context not already in this project:
-1. Read wiki/hot.md first (recent context, ~500 words)
-2. If not enough, read wiki/index.md
-3. If you need domain specifics, read wiki/<domain>/_index.md
-4. Only then read individual wiki pages
-
-Do NOT read the wiki for general coding questions or things already in this project.
-```
+- Ingest: drop source in .raw/, say "ingest [filename]"
+- Query: ask any question: Claude reads index first, then drills in
+- Lint: say "lint the wiki" to run a health check
+- Archive: move cold sources to .archive/ to keep .raw/ clean
 
 ## Plugin Skills
 
@@ -54,11 +47,21 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `ingest [source]` | Single or batch source ingestion |
 | `query: [question]` | Answer from wiki content |
 | `lint the wiki` | Health check |
-| `/save` | File the current conversation as a structured wiki note |
-| `/autoresearch [topic]` | Autonomous research loop: search, fetch, synthesize, file |
-| `/canvas` | Visual layer: add images, PDFs, notes to Obsidian canvas |
+| `/save` | File current conversation as structured wiki note |
+| `/autoresearch [topic]` | Autonomous research loop |
+| `/canvas` | Visual layer: add images to Obsidian canvas |
 
-## MCP (Optional)
+## Cross-Project Access
 
-If you configured the MCP server, Claude can read and write vault notes directly.
-See `skills/wiki/references/mcp-setup.md` for setup instructions.
+To reference this wiki from another Claude Code project, add to that project's CLAUDE.md:
+
+```markdown
+## Wiki Knowledge Base
+Path: C:\Projekty C\claude-obsidian
+
+When you need context not already in this project:
+1. Read wiki/hot.md first (recent context, ~500 words)
+2. If not enough, read wiki/index.md (full catalog)
+3. If you need domain specifics, read wiki/<domain>/_index.md
+4. Only then read individual wiki pages
+```
