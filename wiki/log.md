@@ -25,6 +25,18 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-04-30] ingest | Scoutius Sprint 1 Day 1-2 (project session)
+- Source: live solo-dev session with [[Scoutius ATS]] product owner
+- Summary: [[Scoutius Sprint 1 Day 1-2]]
+- Pages created: [[Scoutius ATS]] (entity, c-000003), [[Scoutius Sprint 1 Day 1-2]] (source, c-000004)
+- Pages updated: [[index]], [[hot]], [[entities/_index]], [[sources/_index]]
+- Memory updates (outside vault): added `project_scoutius.md`, `feedback_scoutius_workflow.md`, `user_vladosik.md`, `project_scoutius_oauth_switch.md`
+- Repo created: `Growth-Uni/scoutius-ats` (private), 5 commits pushed
+- Staging Supabase: 5 identity tables + RLS + 3 helpers + seed (1 tenant, 6 roles); RLS smoke PASSED
+- Key insight: Frozen architecture saved a wrong call when I initially picked Supabase's new Publishable/Secret keys; user pushback + re-check of Setup & Costs reversed it to legacy JWT keys.
+
+---
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)
