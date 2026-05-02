@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-04-24T13:10:00
+updated: 2026-04-30T15:00:00
 tags:
   - meta
   - hot-cache
@@ -19,6 +19,8 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-04-30: First Scoutius Sprint 1 session (Day 1 + Day 2) ingested. New entity [[Scoutius ATS]] (`c-000003`) and source [[Scoutius Sprint 1 Day 1-2]] (`c-000004`). Solo-dev project to replace Workable for hiring lecturers; 10–12 weeks; ~$130/mo. Day 1 = Next.js 16 + Tailwind 4 + shadcn scaffold + GitHub repo `Growth-Uni/scoutius-ats` + 3 commits. Day 2 = Drizzle 0.45 + 5 identity tables (`tenant_id` day 1) + 3 RLS helpers in `public.` + 13 RLS policies + idempotent seed (1 tenant + 6 roles) + RLS smoke PASSED on staging Supabase. Commits `0f7ef01 → 9799619`. Drift accepted (Next 16 vs doc's Next 15). Mistake caught: initially recommended Supabase's new Publishable/Secret keys; user pushback + Setup & Costs re-check reversed to legacy JWT keys. Memory anchors created for OAuth-switch reminder and solo-dev workflow expectations.
 
 2026-04-24 (late night): v1.6.0 public release notes shipped. `docs/releases/v1.6.0.md` (Karpathy-style, 346 lines) establishes the release-notes convention. Three original SVGs at `wiki/meta/dragonscale-{mechanism-overview,6-test-flow,frontier-graph}.svg` carry the visual load; Wikipedia dragon curve referenced by text link only (no binary vendoring). R4 codex verifier ACCEPT WITH FIXES, 3 wording fixes applied. User runs `gh release create v1.6.0 --notes-file docs/releases/v1.6.0.md` when ready. Commits `85515bb` (docs), plus wiki/meta/ auto-commits for SVGs.
 
