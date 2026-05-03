@@ -25,6 +25,16 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-04-29] session | JobFilter build session (intake weapon + CI fix + wiki canon)
+- Type: build session
+- Locations (new): `wiki/meta/2026-04-29-jobfilter-build-session.md`, `wiki/concepts/JobFilter Status.md`, 6 product concept pages, 1 feedback memory
+- Shipped: PR #37 (intake 4-step + GOLD/SILVER/BIN + WhatsApp + landing rebuild), fixed CI on PR #36 (commit `ba267a4`), canonicalised Vantage/Vicinity/Codex defs from project memory
+
+## [2026-04-29] save | JobFilter product features + onboarding stages
+- Type: product knowledge
+- Locations (new): `wiki/concepts/JobFilter Onboarding Stages.md`, `wiki/concepts/JobFilter Product Features.md`
+- Content: 6-stage tradesman funnel, GOLD/SILVER/BIN filter engine rules, WhatsApp alert format, planned features (QR sticker, Stripe, auth)
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)
