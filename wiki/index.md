@@ -31,6 +31,17 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Concepts
 
+- [[JobFilter Hub]] — **central node** for all JobFilter knowledge. Start here. (status: evergreen)
+- [[JobFilter Status]] — HOT CACHE: current build state, branches, CI, priorities. Read first for any JobFilter work (status: evergreen)
+- [[JobFilter Design System]] — V3 canonical design tokens, typography, page structure, copy rules (status: current)
+- [[JobFilter Product overview]] — product map: core Intake Engine + Vantage/Vicinity/Codex advantages + Free Tools funnel (status: current)
+- [[Intake Engine]] — core paid £49/mo product: 4-step filter link → GOLD/SILVER/BIN → WhatsApp ping (status: current)
+- [[Vantage]] — tender → bid deck transformer: 3D renders + infographics so small firms win £1M jobs (status: current)
+- [[Vicinity]] — completed-job → marketing-asset converter: turn camera roll into WhatsApp/website content (status: current)
+- [[Codex]] — technical-content → sales-asset transformer: manuals/schematics → videos, carousels, battle cards (status: current)
+- [[Free Tools]] — funnel-top utilities (quote calc, diesel calc, scans) driving Intake Engine signups (status: current)
+- [[JobFilter Onboarding Stages]] — 6-stage tradesman funnel; Stage 5 (first WhatsApp ping) is activation moment (status: current)
+- [[JobFilter Product Features]] — intake form, GOLD/SILVER/BIN filter engine, WhatsApp alerts, planned QR sticker + Stripe (status: current)
 - [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
 - [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
 - [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
