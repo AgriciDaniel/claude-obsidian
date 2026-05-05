@@ -125,6 +125,51 @@ Use sub-indexes when the question is scoped to one domain. Avoid reading the ful
 
 ---
 
+## Output Formats
+
+Pick the shape that fits the question. Default to declarative present tense and wikilink every concept/entity that has a page.
+
+### Comparison ("A vs B", "differences between", "when to use A or B")
+
+Trade-off table is the centerpiece. Then judgment frame, then common misconceptions.
+
+```markdown
+### 一行で
+[One-sentence rule of thumb.]
+
+### 軸ごとの比較 (Source: [[Page A]], [[Page B]])
+
+| 観点 | A | B |
+|---|---|---|
+| 知識更新 | ... | ... |
+| コスト | ... | ... |
+| ... | ... | ... |
+
+### 判断フレーム
+
+1. **「[scenario X]」** → A
+2. **「[scenario Y]」** → B
+3. **「両方必要」** → 併用 (use `> [!gap]` if hybrid is not in wiki)
+
+### よくある誤解
+
+- ❌ [misconception] → [correction]
+```
+
+### Definition / explanation ("What is X?", "Explain X")
+
+Concise definition → why it matters → related concepts (linked) → pitfalls. Keep under 200 words for Standard mode.
+
+### Inventory ("What [X] do we have?", "List all Y")
+
+Bulleted list grouped by category. Each item: `[[Wikilink]] — one-line description`. Pull from `wiki/index.md` or the relevant `_index.md`.
+
+### Synthesis ("Tell me everything about X", Deep mode)
+
+Section per dimension (concept, entities, sources, comparisons, pitfalls). Always file the result back as a question page.
+
+---
+
 ## Filing Answers Back
 
 Good answers compound into the wiki. Don't let insights disappear into chat history.
@@ -156,9 +201,19 @@ After filing, add an entry to `wiki/index.md` under Questions and append to `wik
 
 ## Gap Handling
 
-If the question cannot be answered from the wiki:
+When wiki coverage is partial or missing:
 
-1. Say clearly: "I don't have enough in the wiki to answer this well."
-2. Identify the specific gap: "I have nothing on [subtopic]."
-3. Suggest: "Want to find a source on this? I can help you search or process one."
-4. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
+1. **In chat**: say clearly "I don't have enough in the wiki to answer this well." Identify the specific gap: "I have nothing on [subtopic]."
+2. **In filed answers**: use the Obsidian callout `> [!gap]` followed by the gap statement. This makes gaps grep-able and visually distinct in the vault.
+
+   ```markdown
+   > [!gap] Hybrid patterns (LoRA + RAG) not yet covered in this wiki.
+   ```
+
+3. **Suggest a source path**: "Want to find a source on this? I can help you search or process one."
+4. **Hand off to autoresearch when appropriate**: if the gap is well-defined and worth deep coverage, suggest:
+
+   > "This looks like a clean autoresearch target. Run `/autoresearch [topic]` to have Claude search, fetch, synthesize, and file new pages on this gap."
+
+   Use this when the gap is a coherent subtopic (not a single fact) and the user would benefit from multiple new wiki pages, not just an answer.
+5. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
