@@ -40,4 +40,9 @@ All concept pages — ideas, patterns, and frameworks extracted from sources.
 
 ---
 
+## Backend Security Patterns (Heer — 2026-05-08)
+
+- [[Fetch-Validate-Delete Pattern]] — autoryzacja przed operacją destruktywną; dlaczego `delete({ include })` jest antywzorcem
+- [[Prisma Error Code Exposure]] — kody P2002/P2025 nie trafiają do response body; logowanie server-side
+
 ## Add new concepts here as they are extracted from sources.
