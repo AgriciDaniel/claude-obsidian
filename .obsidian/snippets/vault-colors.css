@@ -27,6 +27,13 @@
 /* ── People & orgs — purple ── */
 .nav-folder-title[data-path^="wiki/entities"]    { color: var(--cb-purple); }
 
+/* ── Mode D: Personal Second Brain ── */
+.nav-folder-title[data-path^="wiki/goals"]     { color: #4fc1ff; }
+.nav-folder-title[data-path^="wiki/learning"]  { color: #c586c0; }
+.nav-folder-title[data-path^="wiki/people"]    { color: #dcdcaa; }
+.nav-folder-title[data-path^="wiki/areas"]     { color: #ce9178; }
+.nav-folder-title[data-path^="wiki/resources"] { color: #6a9955; }
+
 /* ── De-emphasized ── */
 .nav-folder-title[data-path=".raw"]              { color: var(--cb-dim); opacity: 0.55; }
 .nav-folder-title[data-path="_templates"]        { color: var(--cb-dim); opacity: 0.55; }

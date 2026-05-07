@@ -1,0 +1,185 @@
+{
+  "nodes": [
+    {
+      "id": "heer-root",
+      "type": "text",
+      "text": "# Heer\nFull-stack: NestJS + React Native/Expo\nMVP v1.0 — May 2026",
+      "x": -60,
+      "y": -300,
+      "width": 320,
+      "height": 100,
+      "color": "6"
+    },
+    {
+      "id": "backend-standards",
+      "type": "text",
+      "text": "## Backend Standards\n✅ Fetch → Validate → Delete\n✅ No Prisma error codes in response\n✅ Single query with include (no N+1)\n✅ DTO ↔ Service non-null consistency",
+      "x": -60,
+      "y": -120,
+      "width": 320,
+      "height": 140,
+      "color": "4"
+    },
+    {
+      "id": "module-auth",
+      "type": "file",
+      "file": "wiki/concepts/Fetch-Validate-Delete Pattern.md",
+      "x": -460,
+      "y": 120,
+      "width": 300,
+      "height": 80
+    },
+    {
+      "id": "module-polls",
+      "type": "text",
+      "text": "## polls.service.ts\n✅ close() — fetch+include → validate → close\n✅ delete() — fetch+include → validate → delete\n✅ Single query (no N+1 for group admin check)",
+      "x": -460,
+      "y": 240,
+      "width": 300,
+      "height": 120,
+      "color": "3"
+    },
+    {
+      "id": "module-trips",
+      "type": "text",
+      "text": "## trips.service.ts\n✅ update() — uses trip.group from findById\n✅ Removed redundant group findUnique\n✅ groupId required in DTO (removed @IsOptional)",
+      "x": -60,
+      "y": 240,
+      "width": 300,
+      "height": 120,
+      "color": "3"
+    },
+    {
+      "id": "module-auth-dto",
+      "type": "text",
+      "text": "## auth DTOs\n✅ change-password: oldPassword @MinLength(8)\n✅ newPassword @MinLength(8) (matches register)\n✅ Consistent password policy",
+      "x": 360,
+      "y": 240,
+      "width": 300,
+      "height": 120,
+      "color": "3"
+    },
+    {
+      "id": "module-filter",
+      "type": "text",
+      "text": "## app-exception.filter.ts\n✅ Prisma P2002/P2025/P2003 not in response\n✅ Log server-side only\n✅ Client gets message only",
+      "x": 360,
+      "y": 120,
+      "width": 300,
+      "height": 100,
+      "color": "3"
+    },
+    {
+      "id": "mobile-standards",
+      "type": "text",
+      "text": "## Mobile Standards\n✅ sessionStorage (not localStorage) for JWT on web\n✅ storeEvents.ts — forEach wrapped in try-catch\n✅ Push notification errors caught",
+      "x": -60,
+      "y": 440,
+      "width": 320,
+      "height": 120,
+      "color": "5"
+    },
+    {
+      "id": "concept-fvd",
+      "type": "file",
+      "file": "wiki/concepts/Fetch-Validate-Delete Pattern.md",
+      "x": -460,
+      "y": 440,
+      "width": 300,
+      "height": 60
+    },
+    {
+      "id": "concept-prisma",
+      "type": "file",
+      "file": "wiki/concepts/Prisma Error Code Exposure.md",
+      "x": 360,
+      "y": 440,
+      "width": 300,
+      "height": 60
+    },
+    {
+      "id": "next-audit",
+      "type": "text",
+      "text": "## Next: WebSocket Audit\n⬜ Socket.io gateway authorization\n⬜ Room join validation\n⬜ Event rate limiting",
+      "x": -60,
+      "y": 640,
+      "width": 320,
+      "height": 100,
+      "color": "1"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "fromNode": "heer-root",
+      "fromSide": "bottom",
+      "toNode": "backend-standards",
+      "toSide": "top",
+      "label": "governs"
+    },
+    {
+      "id": "e2",
+      "fromNode": "backend-standards",
+      "fromSide": "bottom",
+      "toNode": "module-polls",
+      "toSide": "top",
+      "label": "✅ compliant"
+    },
+    {
+      "id": "e3",
+      "fromNode": "backend-standards",
+      "fromSide": "bottom",
+      "toNode": "module-trips",
+      "toSide": "top",
+      "label": "✅ compliant"
+    },
+    {
+      "id": "e4",
+      "fromNode": "backend-standards",
+      "fromSide": "bottom",
+      "toNode": "module-auth-dto",
+      "toSide": "top",
+      "label": "✅ compliant"
+    },
+    {
+      "id": "e5",
+      "fromNode": "backend-standards",
+      "fromSide": "right",
+      "toNode": "module-filter",
+      "toSide": "top",
+      "label": "✅ fixed"
+    },
+    {
+      "id": "e6",
+      "fromNode": "module-polls",
+      "fromSide": "bottom",
+      "toNode": "concept-fvd",
+      "toSide": "top",
+      "label": "uses"
+    },
+    {
+      "id": "e7",
+      "fromNode": "module-filter",
+      "fromSide": "bottom",
+      "toNode": "concept-prisma",
+      "toSide": "top",
+      "label": "documents"
+    },
+    {
+      "id": "e8",
+      "fromNode": "heer-root",
+      "fromSide": "bottom",
+      "toNode": "mobile-standards",
+      "toSide": "top",
+      "label": "governs"
+    },
+    {
+      "id": "e9",
+      "fromNode": "backend-standards",
+      "fromSide": "bottom",
+      "toNode": "next-audit",
+      "toSide": "top",
+      "label": "next →"
+    }
+  ]
+}
