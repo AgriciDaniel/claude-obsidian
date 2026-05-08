@@ -7,66 +7,19 @@
   "showOrphans": false,
   "collapse-color-groups": false,
   "colorGroups": [
-    {
-      "query": "path:wiki/entities",
-      "color": {
-        "a": 1,
-        "rgb": 12945088
-      }
-    },
-    {
-      "query": "path:wiki/concepts",
-      "color": {
-        "a": 1,
-        "rgb": 5227007
-      }
-    },
-    {
-      "query": "path:wiki/sources",
-      "color": {
-        "a": 1,
-        "rgb": 6986069
-      }
-    },
-    {
-      "query": "path:wiki/questions",
-      "color": {
-        "a": 1,
-        "rgb": 14474410
-      }
-    },
-    {
-      "query": "path:wiki/comparisons",
-      "color": {
-        "a": 1,
-        "rgb": 13724009
-      }
-    },
-    {
-      "query": "path:wiki/meta",
-      "color": {
-        "a": 1,
-        "rgb": 5676246
-      }
-    },
-    {
-      "query": "path:wiki",
-      "color": {
-        "a": 1,
-        "rgb": 4473924
-      }
-    }
+    { "query": "path:wiki/entities",    "color": { "a": 1, "rgb": 12945088 } },
+    { "query": "path:wiki/concepts",    "color": { "a": 1, "rgb": 5227007  } },
+    { "query": "path:wiki/sources",     "color": { "a": 1, "rgb": 6986069  } },
+    { "query": "path:wiki/meta",        "color": { "a": 1, "rgb": 5676246  } },
+    { "query": "path:wiki",             "color": { "a": 1, "rgb": 5676246  } }
   ],
-  "collapse-display": true,
   "showArrow": true,
   "textFadeMultiplier": -1,
-  "nodeSizeMultiplier": 2,
-  "lineSizeMultiplier": 0.8,
-  "collapse-forces": false,
-  "centerStrength": 0.25,
-  "repelStrength": 20,
-  "linkStrength": 1,
-  "linkDistance": 80,
-  "scale": 0.5191098990818888,
-  "close": true
+  "nodeSizeMultiplier": 1.8,
+  "lineSizeMultiplier": 1.2,
+  "centerStrength": 0.5,
+  "repelStrength": 30,
+  "linkStrength": 1.5,
+  "linkDistance": 120,
+  "scale": 1.0
 }

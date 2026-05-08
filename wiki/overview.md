@@ -1,70 +1,41 @@
 ---
 type: overview
 title: "Wiki Overview"
-created: 2026-04-07
-updated: 2026-04-07
-tags:
-  - meta
-  - overview
-status: developing
-related:
-  - "[[index]]"
-  - "[[hot]]"
-  - "[[log]]"
-  - "[[dashboard]]"
-  - "[[LLM Wiki Pattern]]"
-sources:
+updated: 2026-05-08
+mode: "D — Personal Second Brain"
 ---
 
-# Wiki Overview
+# Second Brain Overview
 
-Navigation: [[index]] | [[hot]] | [[log]] | [[dashboard]]
-
----
+Mode: D — Personal Second Brain
+Owner: suzuki
+Created: 2026-05-08
 
 ## Purpose
 
-This is the claude-obsidian demo vault. It demonstrates the [[LLM Wiki Pattern]] — a system for building persistent, compounding knowledge bases using Claude and Obsidian.
+個人の知識・目標・学習・人間関係・リソースを一元管理し、複利で成長するナレッジベースを構築する。
 
-Run `/wiki` to scaffold this vault for your own domain and replace this overview.
+## Structure
 
----
+```
+wiki/
+├── goals/         # 目標 — 個人・仕事の目標と進捗
+├── learning/      # 学習 — 習得中のスキル・概念
+├── people/        # 人物 — 人間関係・共有コンテキスト
+├── areas/         # 領域 — 健康・キャリア・財務・クリエイティブ
+└── resources/     # リソース — 本・コース・ツール
+```
 
-## Current Seed Content
+## Key Pages
 
+- [[North Star]] — 目指す方向性
+- [[Annual Goals]] — 2026年目標
+- [[Weekly Review Template]] — 週次レビュー
 
-**Concepts seeded:**
-- [[LLM Wiki Pattern]] — the core architecture
-- [[Hot Cache]] — session context mechanism
-- [[Compounding Knowledge]] — why the pattern works
+## How to Use
 
-**Entities seeded:**
-- [[Andrej Karpathy]] — originated the pattern
-
-**Sources seeded:**
-- [[claude-obsidian-ecosystem-research]] — 16+ projects, 13 cherry-picks identified (2026-04-08)
-
----
-
-## Current State
-
-- Sources ingested: 2
-- Wiki pages: 26
-- Last activity: 2026-04-08 (v1.4.1 shipped, release session filed)
-
----
-
-## Canvases
-
-- [[claude-obsidian-presentation]] — Full presentation: hero, overview, skills, architecture, Wiki vs RAG, visual demos (2026-04-07)
-- [[AI Marketing Hub Cover Images Canvas]] — Cover image library for AI Marketing Hub brand assets
-
----
-
-## Key Themes
-
-**Knowledge compounds.** Unlike RAG, the wiki pre-compiles synthesis. Cross-references are already there. Contradictions are flagged. Every ingest enriches existing pages rather than adding isolated chunks.
-
-**The hot cache is the force multiplier.** A ~500-word file captures recent context. New sessions start with full context at minimal token cost.
-
-**Obsidian is the IDE, Claude is the programmer.** The graph view shows what's connected. The human curates sources and asks questions. Claude writes and maintains everything else.
+1. `.raw/` にソース（記事・メモ・書き起こし）を入れる
+2. `ingest [ファイル名]` で取り込む → 自動でWikiページ生成・相互リンク
+3. 質問する → `query: [質問]`
+4. 週次レビュー → [[Weekly Review Template]] を使って [[hot]] を更新
+5. 10〜15回のingest後に `lint the wiki` でヘルスチェック
