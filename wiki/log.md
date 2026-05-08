@@ -17,6 +17,11 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-09 save | Codex Worker Mode Vault準備確認
+- Type: session
+- Location: wiki/meta/2026-05-09-codex-worker-vault-readiness.md
+- From: CLAUDE.md / AGENTS.md / hot.md / ops/codex/README.md を読んで運用準備を確認した会話
+
 ## 2026-05-09 save | Codex Worker Knowledge Ingest セットアップ
 - Source: `.raw/2026-05-09-codex-worker-knowledge-ingest.md`
 - Summary: [[codex-worker-knowledge-ingest]]
