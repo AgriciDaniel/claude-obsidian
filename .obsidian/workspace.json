@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "477f1cf965ca606e",
+        "id": "1b2013b6f986560b",
         "type": "tabs",
         "children": [
           {
-            "id": "a31de1b302cdc5cf",
+            "id": "9ae4540cbdc98587",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "Ny flik"
             }
           }
         ]
@@ -40,7 +40,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Filutforskare"
             }
           },
           {
@@ -49,15 +49,15 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
-                "matchingCase": false,
-                "explainSearch": false,
-                "collapseAll": false,
-                "extraContext": false,
+                "query": "projects",
+                "matchingCase": true,
+                "explainSearch": true,
+                "collapseAll": true,
+                "extraContext": true,
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Search"
+              "title": "Sök"
             }
           },
           {
@@ -74,7 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 390.5
   },
   "right": {
     "id": "7092b65be1e76349",
@@ -141,7 +141,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-archive",
-              "title": "All properties"
+              "title": "Alla egenskaper"
             }
           },
           {
@@ -155,7 +155,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Disposition"
             }
           },
           {
@@ -164,28 +164,94 @@
             "state": {
               "type": "calendar",
               "state": {},
-              "icon": "lucide-ghost",
-              "title": "calendar"
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          },
+          {
+            "id": "8a05745503181fa6",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
-        ]
+        ],
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "graph:Öppna grafvy": false,
+      "templater-obsidian:Templater": false,
+      "obsidian-git:Open Git source control": false,
+      "switcher:Öppna snabbväxlare": false,
+      "canvas:Skapa ny canvas": false,
+      "daily-notes:Öppna dagens anteckning": false,
+      "templates:Infoga mall": false,
+      "command-palette:Öppna kommandopalett": false,
+      "bases:Skapa ny bas": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "workspaces:Hantera arbetsytans layouter": false,
+      "audio-recorder:Starta/stoppa inspelning": false,
+      "markdown-importer:Öppna Markdown-importör": false,
+      "publish:Publicera ändringar ...": false,
+      "random-note:Öppna slumpmässig anteckning": false,
+      "zk-prefixer:Skapa ny unik anteckning": false,
+      "obsidian-memos:Thino": false,
+      "obsidian-memos:Thino Super": false
     }
   },
-  "active": "a31de1b302cdc5cf",
-  "lastOpenFiles": []
+  "active": "9ae4540cbdc98587",
+  "lastOpenFiles": [
+    "projects/jarvis/code/venv/Lib/site-packages/pip/_vendor/idna/LICENSE.md",
+    "wiki/index.md",
+    "projects/printing/bergstein-digi-7/substrates/_index.md",
+    "wiki/jarvis-log",
+    "wiki/hot.md",
+    "wiki/hot.md.tmp.3172.1778250480472",
+    "wiki/index.md.tmp.3172.1778250455721",
+    "skills/wiki/SKILL.md",
+    "projects/printing/bergstein-digi-7/orange-fix-kit.md.tmp.9820.1778183768897",
+    "projects/printing/bergstein-digi-7/orange-fix-kit.md.tmp.9820.1778183748216",
+    "projects/printing/bergstein-digi-7/onyx-setup-reference.md.tmp.9820.1778183721950",
+    "projects/printing/bergstein-digi-7/color-tests/orange-diagnos-100x100.eps",
+    "projects/printing/bergstein-digi-7/color-tests/fargtest-v1.pdf",
+    "projects/printing/bergstein-digi-7/color-tests/fargtest-100x100-v1.pdf",
+    "projects/printing/bergstein-digi-7/color-tests/orange-diagnos-100x100.pdf",
+    "projects/printing/bergstein-digi-7/orange-fix-kit.md",
+    "projects/printing/bergstein-digi-7/color-tests/orange-diagnos-100x100.svg",
+    "projects/printing/bergstein-digi-7/linearization-cheatsheet.md",
+    "projects/jarvis/_index.md",
+    "projects/jarvis/fas-1-text-jarvis.md",
+    "projects/3d-print-hallbarhet/affarsideer.md",
+    "projects/3d-print-hallbarhet/forsta-steg.md",
+    "projects/3d-print-hallbarhet/_index.md",
+    "projects/jarvis/code/venv/Lib/site-packages/anthropic/lib/foundry.md",
+    "projects/jarvis/code/venv/Lib/site-packages/httpx-0.28.1.dist-info/licenses/LICENSE.md",
+    "projects/jarvis/code/venv/Lib/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
+    "projects/jarvis/code/venv/Lib/site-packages/docstring_parser-0.18.0.dist-info/licenses/LICENSE.md",
+    "projects/jarvis/code/venv/Lib/site-packages/idna-3.13.dist-info/licenses/LICENSE.md",
+    "projects/jarvis/code/venv/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+    "projects/jarvis/code/venv/Lib/site-packages/pip-26.0.1.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+    "projects/jarvis/framtida-faser.md",
+    "projects/electronics-esp32/resurser.md",
+    "projects/electronics-esp32/projekt-ideer.md",
+    "projects/electronics-esp32/projekt-1-blinka.md",
+    "projects/electronics-esp32/_index.md",
+    "projects/3d-print-hallbarhet/marknad-och-kunder.md",
+    "projects/printing/bergstein-digi-7/onyx-setup-reference.md",
+    "projects/printing/bergstein-digi-7/color-tests/fargtest-100x100-v1.svg",
+    "projects/printing/bergstein-digi-7/color-tests/fargtest-v1.svg",
+    "Namnlös 1.canvas",
+    "wiki/meta/claude-obsidian-gif-1x1.gif",
+    "wiki/meta/dragonscale-mechanism-overview.svg",
+    "wiki/canvases/claude-obsidian-presentation.canvas",
+    "Namnlös.canvas"
+  ]
 }

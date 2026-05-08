@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100mm" height="100mm" viewBox="0 0 100 100" version="1.1">
+  <title>Färgtest 100×100 v1 — Bergstein Digi 7</title>
+  <desc>Compact production diagnostic chart for CMYK + Primer + 3 White at 360 DPI on dopplackad metall, sized for a 100×100mm printer area.</desc>
+
+  <!-- Page background -->
+  <rect width="100" height="100" fill="#ffffff"/>
+
+  <!-- =================== HEADER (3mm) =================== -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="3" y="4" font-size="2.6" font-weight="bold" fill="#000">Färgtest 100×100 v1 — Bergstein Digi 7</text>
+    <text x="3" y="6.5" font-size="1.6" fill="#444">CMYK + Primer + 3W · 360 DPI · Dopplackad metall · Datum: ____  Batch: ____  Profil: ____</text>
+    <line x1="3" y1="7.5" x2="97" y2="7.5" stroke="#000" stroke-width="0.15"/>
+  </g>
+
+  <!-- =================== SECTION 1: CMYK RAMPS (8.5–25.5, ~17mm) =================== -->
+  <text x="3" y="10.5" font-family="Arial" font-size="1.8" font-weight="bold">1. CMYK ramper (5 steg: 0/25/50/75/100%)</text>
+
+  <!-- C ramp: y=12, 4 patches × 17.5mm wide -->
+  <g>
+    <text x="3" y="14.5" font-family="Arial" font-size="2" font-weight="bold">C</text>
+    <rect x="6"    y="11.8" width="17.5" height="3.5" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="23.5" y="11.8" width="17.5" height="3.5" fill="#80d7f7"/>
+    <rect x="41"   y="11.8" width="17.5" height="3.5" fill="#33bef2"/>
+    <rect x="58.5" y="11.8" width="17.5" height="3.5" fill="#1ab6f0"/>
+    <rect x="76"   y="11.8" width="17.5" height="3.5" fill="#00aeef"/>
+  </g>
+
+  <!-- M ramp: y=15.8 -->
+  <g>
+    <text x="3" y="18.5" font-family="Arial" font-size="2" font-weight="bold">M</text>
+    <rect x="6"    y="15.8" width="17.5" height="3.5" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="23.5" y="15.8" width="17.5" height="3.5" fill="#f680c6"/>
+    <rect x="41"   y="15.8" width="17.5" height="3.5" fill="#f24daf"/>
+    <rect x="58.5" y="15.8" width="17.5" height="3.5" fill="#ee1a98"/>
+    <rect x="76"   y="15.8" width="17.5" height="3.5" fill="#ec008c"/>
+  </g>
+
+  <!-- Y ramp: y=19.8 -->
+  <g>
+    <text x="3" y="22.5" font-family="Arial" font-size="2" font-weight="bold">Y</text>
+    <rect x="6"    y="19.8" width="17.5" height="3.5" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="23.5" y="19.8" width="17.5" height="3.5" fill="#fff980"/>
+    <rect x="41"   y="19.8" width="17.5" height="3.5" fill="#fff64d"/>
+    <rect x="58.5" y="19.8" width="17.5" height="3.5" fill="#fff31a"/>
+    <rect x="76"   y="19.8" width="17.5" height="3.5" fill="#fff200"/>
+  </g>
+
+  <!-- K ramp: y=23.8 -->
+  <g>
+    <text x="3" y="26.5" font-family="Arial" font-size="2" font-weight="bold">K</text>
+    <rect x="6"    y="23.8" width="17.5" height="3.5" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="23.5" y="23.8" width="17.5" height="3.5" fill="#808080"/>
+    <rect x="41"   y="23.8" width="17.5" height="3.5" fill="#4d4d4d"/>
+    <rect x="58.5" y="23.8" width="17.5" height="3.5" fill="#1a1a1a"/>
+    <rect x="76"   y="23.8" width="17.5" height="3.5" fill="#000000"/>
+  </g>
+
+  <!-- Step labels under CMYK -->
+  <g font-family="Arial" font-size="1.4" fill="#555" text-anchor="middle">
+    <text x="14.75" y="29.5">0</text>
+    <text x="32.25" y="29.5">25</text>
+    <text x="49.75" y="29.5">50</text>
+    <text x="67.25" y="29.5">75</text>
+    <text x="84.75" y="29.5">100</text>
+  </g>
+
+  <!-- =================== SECTION 2: WHITE OPACITY WEDGE (31–47.5, 16.5mm) =================== -->
+  <text x="3" y="32.5" font-family="Arial" font-size="1.8" font-weight="bold">2. White opacity wedge (på svart)</text>
+  <rect x="3" y="33.5" width="94" height="11" fill="#000000"/>
+  <g>
+    <rect x="5"    y="34.5" width="17.4" height="9" fill="#ffffff" fill-opacity="0.0"/>
+    <rect x="23.6" y="34.5" width="17.4" height="9" fill="#ffffff" fill-opacity="0.25"/>
+    <rect x="42.2" y="34.5" width="17.4" height="9" fill="#ffffff" fill-opacity="0.5"/>
+    <rect x="60.8" y="34.5" width="17.4" height="9" fill="#ffffff" fill-opacity="0.75"/>
+    <rect x="79.4" y="34.5" width="17.4" height="9" fill="#ffffff" fill-opacity="1.0"/>
+  </g>
+  <g font-family="Arial" font-size="1.5" fill="#fff" text-anchor="middle">
+    <text x="13.7" y="40">0%</text>
+    <text x="32.3" y="40">100%</text>
+    <text x="50.9" y="40">150%</text>
+    <text x="69.5" y="40">200%</text>
+    <text x="88.1" y="40">250%</text>
+  </g>
+  <text x="3" y="46" font-family="Arial" font-size="1.4" fill="#444">Var slutar svart synas igenom? = opacity-floor.</text>
+
+  <!-- =================== SECTION 3: PURE SOLIDS + RICH BLACK (48–60, 12mm) =================== -->
+  <text x="3" y="49.5" font-family="Arial" font-size="1.8" font-weight="bold">3. Pure solids</text>
+  <g>
+    <rect x="3"    y="50.5" width="13"   height="6" fill="#00aeef"/>
+    <rect x="16.5" y="50.5" width="13"   height="6" fill="#ec008c"/>
+    <rect x="30"   y="50.5" width="13"   height="6" fill="#fff200"/>
+    <rect x="43.5" y="50.5" width="13"   height="6" fill="#000000"/>
+    <rect x="57"   y="50.5" width="13"   height="6" fill="#1a1a1a"/>
+    <rect x="70.5" y="50.5" width="13"   height="6" fill="#ffffff" stroke="#888" stroke-width="0.15"/>
+    <rect x="84"   y="50.5" width="13"   height="6" fill="#f0e8d8" stroke="#888" stroke-width="0.15"/>
+  </g>
+  <g font-family="Arial" font-size="1.4" fill="#444" text-anchor="middle">
+    <text x="9.5"  y="59.5">C</text>
+    <text x="23"   y="59.5">M</text>
+    <text x="36.5" y="59.5">Y</text>
+    <text x="50"   y="59.5">K</text>
+    <text x="63.5" y="59.5">rich</text>
+    <text x="77"   y="59.5">W</text>
+    <text x="90.5" y="59.5">primer</text>
+  </g>
+
+  <!-- =================== SECTION 4: GRAYSCALE NEUTRALITY (61–69, 8mm) =================== -->
+  <text x="3" y="62.5" font-family="Arial" font-size="1.8" font-weight="bold">4. Grayscale neutralitet</text>
+  <g>
+    <rect x="3"    y="63.5" width="13.4" height="4" fill="#ffffff" stroke="#ccc" stroke-width="0.08"/>
+    <rect x="16.4" y="63.5" width="13.4" height="4" fill="#cccccc"/>
+    <rect x="29.8" y="63.5" width="13.4" height="4" fill="#999999"/>
+    <rect x="43.2" y="63.5" width="13.4" height="4" fill="#666666"/>
+    <rect x="56.6" y="63.5" width="13.4" height="4" fill="#333333"/>
+    <rect x="70"   y="63.5" width="13.4" height="4" fill="#1a1a1a"/>
+    <rect x="83.4" y="63.5" width="13.6" height="4" fill="#000000"/>
+  </g>
+  <g font-family="Arial" font-size="1.3" fill="#555" text-anchor="middle">
+    <text x="9.7"  y="70.5">0</text>
+    <text x="23.1" y="70.5">20</text>
+    <text x="36.5" y="70.5">40</text>
+    <text x="49.9" y="70.5">60</text>
+    <text x="63.3" y="70.5">75</text>
+    <text x="76.7" y="70.5">90</text>
+    <text x="90.2" y="70.5">100</text>
+  </g>
+
+  <!-- =================== SECTION 5: ADHESION BLOCK + RESOLUTION (72–94, ~22mm) =================== -->
+  <text x="3" y="73.5" font-family="Arial" font-size="1.8" font-weight="bold">5. Vidhäftning + upplösning</text>
+
+  <!-- Adhesion test block (20×20mm) -->
+  <rect x="3" y="74.5" width="20" height="20" fill="#000000" stroke="#ff0000" stroke-width="0.4"/>
+  <text x="13" y="83" font-family="Arial" font-size="1.6" fill="#ff0000" text-anchor="middle" font-weight="bold">CROSS-</text>
+  <text x="13" y="85" font-family="Arial" font-size="1.6" fill="#ff0000" text-anchor="middle" font-weight="bold">HATCH</text>
+  <text x="13" y="89" font-family="Arial" font-size="1.3" fill="#ff8888" text-anchor="middle">24h cure</text>
+  <text x="13" y="91.5" font-family="Arial" font-size="1.3" fill="#ff8888" text-anchor="middle">→ ASTM D3359</text>
+
+  <!-- Skin tones to the right of adhesion (compact, 4 patches stacked) -->
+  <g>
+    <rect x="25" y="74.5" width="14" height="4.5" fill="#f5d6c0"/>
+    <rect x="25" y="79.5" width="14" height="4.5" fill="#c89878"/>
+    <rect x="25" y="84.5" width="14" height="4.5" fill="#a07050"/>
+    <rect x="25" y="89.5" width="14" height="4.5" fill="#3e2418"/>
+  </g>
+  <g font-family="Arial" font-size="1.2" fill="#555">
+    <text x="40" y="77.5">hud ljus</text>
+    <text x="40" y="82.5">hud tan</text>
+    <text x="40" y="87.5">hud mid</text>
+    <text x="40" y="92.5">hud djup</text>
+  </g>
+
+  <!-- Resolution text samples + hairlines to the right of skin tones -->
+  <g font-family="Arial" fill="#000000">
+    <text x="56" y="77" font-size="1.4">1.4pt: kvalitetstext</text>
+    <text x="56" y="80" font-size="1.8">1.8pt: kvalitetstext</text>
+    <text x="56" y="83.5" font-size="2.2">2.2pt: kvalitetstext</text>
+    <text x="56" y="87.5" font-size="3" font-weight="bold">3pt bold</text>
+  </g>
+  <!-- hairlines -->
+  <g stroke="#000000" fill="none">
+    <line x1="56" y1="89" x2="92" y2="89" stroke-width="0.05"/>
+    <text x="93" y="89.5" font-family="Arial" font-size="1.2" fill="#444">0.05</text>
+    <line x1="56" y1="91" x2="92" y2="91" stroke-width="0.1"/>
+    <text x="93" y="91.5" font-family="Arial" font-size="1.2" fill="#444">0.1</text>
+    <line x1="56" y1="93" x2="92" y2="93" stroke-width="0.2"/>
+    <text x="93" y="93.5" font-family="Arial" font-size="1.2" fill="#444">0.2</text>
+  </g>
+
+  <!-- =================== REGISTRATION CROSSES IN 4 CORNERS =================== -->
+  <g stroke="#000000" stroke-width="0.1" fill="none">
+    <!-- Top-left -->
+    <line x1="0.5" y1="2" x2="3.5" y2="2"/>
+    <line x1="2"   y1="0.5" x2="2" y2="3.5"/>
+    <circle cx="2" cy="2" r="0.9"/>
+    <!-- Top-right -->
+    <line x1="96.5" y1="2" x2="99.5" y2="2"/>
+    <line x1="98"   y1="0.5" x2="98" y2="3.5"/>
+    <circle cx="98" cy="2" r="0.9"/>
+    <!-- Bottom-left -->
+    <line x1="0.5" y1="98" x2="3.5" y2="98"/>
+    <line x1="2"   y1="96.5" x2="2" y2="99.5"/>
+    <circle cx="2" cy="98" r="0.9"/>
+    <!-- Bottom-right -->
+    <line x1="96.5" y1="98" x2="99.5" y2="98"/>
+    <line x1="98"   y1="96.5" x2="98" y2="99.5"/>
+    <circle cx="98" cy="98" r="0.9"/>
+  </g>
+
+  <!-- =================== FOOTER =================== -->
+  <line x1="3" y1="95.5" x2="97" y2="95.5" stroke="#000" stroke-width="0.12"/>
+  <text x="3" y="98" font-family="Arial" font-size="1.2" fill="#666">RGB-approx via ICC. Pure CMYK-kalibrering: använd Onyx Print Ink Restriction Test.</text>
+</svg>

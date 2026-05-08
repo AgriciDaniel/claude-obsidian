@@ -1,93 +1,45 @@
 ---
-type: meta
-title: "Wiki Index"
-updated: 2026-04-07
+type: index
+title: "Min vault"
+created: 2026-05-08
+updated: 2026-05-08
 tags:
-  - meta
   - index
-status: evergreen
-related:
-  - "[[overview]]"
-  - "[[log]]"
-  - "[[hot]]"
-  - "[[dashboard]]"
-  - "[[Wiki Map]]"
-  - "[[concepts/_index]]"
-  - "[[entities/_index]]"
-  - "[[sources/_index]]"
-  - "[[LLM Wiki Pattern]]"
-  - "[[Hot Cache]]"
-  - "[[Compounding Knowledge]]"
-  - "[[Andrej Karpathy]]"
+  - personal
 ---
 
-# Wiki Index
+# Jakobs vault
 
-Last updated: 2026-04-15 | Total pages: 34 | Sources ingested: 2
-
-Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
+Personal kunskaps- och projektbas. Allt jag jobbar med samlat på ett ställe.
 
 ---
 
-## Concepts
+## Aktiva projekt
 
-- [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
-- [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
-- [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
-- [[cherry-picks]] — prioritized feature backlog from ecosystem research; 13 features to add to claude-obsidian (status: current)
-- [[SVG Diagram Style Guide]] — canonical visual style for all diagrams: Space Grotesk, #0A0A0A dark theme, #E07850 accent, full design tokens (status: evergreen)
-- [[Pro Hub Challenge]] — community challenge pattern for building claude-seo/claude-blog extensions; first challenge produced 6 submissions, 5 integrated in v1.9.0 (status: evergreen)
-- [[Semantic Topic Clustering]] — SERP-based keyword grouping replacing paid tools; hub-spoke architecture with interactive visualization (status: evergreen)
-- [[Search Experience Optimization]] — "read SERPs backwards" methodology for page-type mismatch detection and persona scoring (status: evergreen)
-- [[SEO Drift Monitoring]] — "git for SEO" baseline/diff/track with 17 comparison rules and SQLite persistence (status: evergreen)
-- [[DragonScale Memory]] — memory-layer spec inspired by the Heighway dragon curve; fold operator, deterministic page addresses, semantic tiling, boundary-first autoresearch (status: shipped v0.4, all four mechanisms opt-in)
-- [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object, distinct from ephemeral chat turns (status: developing)
-- [[Source-First Synthesis]]: provenance discipline; raw sources stay immutable while the wiki layer is synthesized and cited (status: developing)
-- [[Query-Time Retrieval]]: wiki query path synthesizes with citations; complementary to Obsidian's in-vault search (status: developing)
+| Projekt | Status | Var |
+|---|---|---|
+| **UV-printverkstaden** (Bergstein Digi 7) | Aktiv produktion | [[../projects/printing/bergstein-digi-7/onyx-setup-reference|Onyx setup]] |
+| **3D-print + hållbarhet** | Brainstorm-fas | [[../projects/3d-print-hallbarhet/_index|Översikt]] |
+| **Elektronik-lärande med ESP32** | Setup klart, väntar på första projekt | [[../projects/electronics-esp32/_index|Översikt]] |
+| **Jarvis (lokal AI-assistent)** | Fas 1 klar, kör via skrivbordsgenväg | [[../projects/jarvis/_index|Översikt]] |
 
 ---
 
-## Entities
+## Snabblänkar
 
-- [[Andrej Karpathy]] — AI researcher, creator of the LLM Wiki pattern, former Tesla AI director (status: developing)
-- [[Ar9av-obsidian-wiki]] — multi-agent compatible LLM Wiki plugin; delta tracking manifest (status: current)
-- [[Nexus-claudesidian-mcp]] — native Obsidian plugin + MCP bridge; workspace memory, task management (status: current)
-- [[ballred-obsidian-claude-pkm]] — goal cascade PKM; auto-commit hooks, /adopt command (status: current)
-- [[rvk7895-llm-knowledge-bases]] — 3-depth query system, Marp slides, parallel deep research (status: current)
-- [[kepano-obsidian-skills]] — official skills from Obsidian creator; defuddle, obsidian-bases (status: current)
-- [[Claudian-YishenTu]] — native Obsidian plugin embedding Claude Code; plan mode, @mention (status: current)
-- [[Claude SEO]] — Tier 4 Claude Code skill for SEO analysis; 23 skills, 17 agents, 30 scripts at v1.9.0 (status: evergreen)
+- [[hot|Aktiva trådar (hot cache)]]
+- [[../projects/printing/bergstein-digi-7/orange-fix-kit|Orange-fix kit (i morgon)]]
+- [[../projects/printing/bergstein-digi-7/substrates/_index|Substrate-databas]]
+- [[../projects/printing/bergstein-digi-7/linearization-cheatsheet|Linearization-cheat sheet]]
+- [[jarvis-log/|Jarvis-konversationer]]
 
 ---
 
-## Sources
+## Hur du använder vaulten
 
-- [[claude-obsidian-ecosystem-research]] — 2026-04-08 | web research across 16+ repos | 8 wiki pages created
+- **Dagliga jobb**: gå direkt till relevant projekt-mapp
+- **Snabb status**: läs `[[hot]]` för senaste aktiva trådar
+- **Söka något specifikt**: använd Obsidian's Quick Switcher (Ctrl+O) eller globala sökning (Ctrl+Shift+F)
+- **Ny anteckning**: skapa direkt i relevant projekt-mapp, inte här i `wiki/`
 
----
-
-## Questions
-
-- [[How does the LLM Wiki pattern work]] — how the pattern works and why it outperforms RAG at human scale (status: developing)
-
----
-
-## Comparisons
-
-- [[Wiki vs RAG]] — when to use a wiki knowledge base versus RAG; verdict: wiki wins at <1000 pages
-- [[claude-obsidian-ecosystem]] — feature matrix of 16+ Claude+Obsidian projects; where claude-obsidian wins and gaps
-
----
-
-## Decisions
-
-- [[2026-04-14-community-cta-rollout]] - Skool community CTA footer added to 6 skill repos with per-tool frequency rules (status: active)
-- [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
-- [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)
-- [[2026-04-14-claude-seo-v190-session]] - Claude SEO v1.9.0 Pro Hub Challenge integration: 5 submissions, 4 new skills, 4 review rounds, cybersecurity audit (status: complete)
-
----
-
-## Domains
-
-<!-- Add domain entries here after scaffold -->
+`wiki/` är för cross-cutting kunskap som inte hör till ett specifikt projekt. För nu är det bara den här hemsidan, hot cache, och Jarvis-konversationsloggar.

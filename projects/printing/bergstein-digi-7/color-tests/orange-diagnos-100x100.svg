@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100mm" height="100mm" viewBox="0 0 100 100" version="1.1">
+  <title>Orange-diagnostik — Bergstein Digi 7 — 100x100mm</title>
+  <desc>Diagnoschart for the C0 M75 Y100 K0 orange problem on dopplackad metall. Five rows isolate magenta channel response, yellow reference, orange variations, white underbase impact, and registration check.</desc>
+
+  <rect width="100" height="100" fill="#ffffff"/>
+
+  <!-- HEADER (3mm) -->
+  <g font-family="Arial, sans-serif">
+    <text x="3" y="3.5" font-size="2.4" font-weight="bold">Orange-diagnos — Bergstein Digi 7</text>
+    <text x="3" y="5.8" font-size="1.4" fill="#444">Datum: ____  Profil: ____  Ink-batch: ____  Substrat: dopplackad metall</text>
+    <line x1="3" y1="6.5" x2="97" y2="6.5" stroke="#000" stroke-width="0.1"/>
+  </g>
+
+  <!-- ROW 1: M ramp (8.5–18mm) -->
+  <text x="3" y="9" font-size="1.6" font-weight="bold">1. Magenta-ramp (0/25/50/75/100%)</text>
+  <g>
+    <rect x="3"    y="10" width="18" height="6" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="22"   y="10" width="18" height="6" fill="#f680c6"/>
+    <rect x="41"   y="10" width="18" height="6" fill="#f24daf"/>
+    <rect x="60"   y="10" width="18" height="6" fill="#ee1a98"/>
+    <rect x="79"   y="10" width="18" height="6" fill="#ec008c"/>
+  </g>
+  <g font-family="Arial" font-size="1.3" fill="#444" text-anchor="middle">
+    <text x="12" y="18.5">0%</text>
+    <text x="31" y="18.5">25%</text>
+    <text x="50" y="18.5">50%</text>
+    <text x="69" y="18.5">75%</text>
+    <text x="88" y="18.5">100%</text>
+  </g>
+
+  <!-- ROW 2: Y ramp (20–29mm) -->
+  <text x="3" y="21" font-size="1.6" font-weight="bold">2. Yellow-ramp (referens — bör vara linjär)</text>
+  <g>
+    <rect x="3"    y="22" width="18" height="6" fill="#ffffff" stroke="#bbb" stroke-width="0.08"/>
+    <rect x="22"   y="22" width="18" height="6" fill="#fff980"/>
+    <rect x="41"   y="22" width="18" height="6" fill="#fff64d"/>
+    <rect x="60"   y="22" width="18" height="6" fill="#fff31a"/>
+    <rect x="79"   y="22" width="18" height="6" fill="#fff200"/>
+  </g>
+  <g font-family="Arial" font-size="1.3" fill="#444" text-anchor="middle">
+    <text x="12" y="30.5">0%</text>
+    <text x="31" y="30.5">25%</text>
+    <text x="50" y="30.5">50%</text>
+    <text x="69" y="30.5">75%</text>
+    <text x="88" y="30.5">100%</text>
+  </g>
+
+  <!-- ROW 3: Orange at varying M with Y=100% (32–42mm) -->
+  <text x="3" y="33" font-size="1.6" font-weight="bold">3. Orange-svep (M50→100, Y konstant 100%)</text>
+  <g>
+    <rect x="3"    y="34" width="18" height="6" fill="#fcae61"/> <!-- M50 Y100 -->
+    <rect x="22"   y="34" width="18" height="6" fill="#fb924a"/> <!-- M65 -->
+    <rect x="41"   y="34" width="18" height="6" fill="#fa7d36"/> <!-- M75 = TARGET -->
+    <rect x="60"   y="34" width="18" height="6" fill="#f7651f"/> <!-- M85 -->
+    <rect x="79"   y="34" width="18" height="6" fill="#f24a0a"/> <!-- M100 -->
+  </g>
+  <g font-family="Arial" font-size="1.3" fill="#444" text-anchor="middle">
+    <text x="12" y="42.5">M50</text>
+    <text x="31" y="42.5">M65</text>
+    <text x="50" y="42.5" font-weight="bold" fill="#000">M75 ← din</text>
+    <text x="69" y="42.5">M85</text>
+    <text x="88" y="42.5">M100</text>
+  </g>
+
+  <!-- ROW 4: Reference colors (44–55mm) -->
+  <text x="3" y="46" font-size="1.6" font-weight="bold">4. Referens-färger (rena solidsx + svart-densitet)</text>
+  <g>
+    <rect x="3"    y="47" width="14" height="7" fill="#00aeef"/> <!-- 100C -->
+    <rect x="18"   y="47" width="14" height="7" fill="#ec008c"/> <!-- 100M -->
+    <rect x="33"   y="47" width="14" height="7" fill="#fff200"/> <!-- 100Y -->
+    <rect x="48"   y="47" width="14" height="7" fill="#000000"/> <!-- 100K -->
+    <rect x="63"   y="47" width="14" height="7" fill="#1a1a1a"/> <!-- rich K -->
+    <rect x="78"   y="47" width="14" height="7" fill="#fa7d36"/> <!-- target orange -->
+  </g>
+  <g font-family="Arial" font-size="1.2" fill="#444" text-anchor="middle">
+    <text x="10" y="56">100C</text>
+    <text x="25" y="56">100M</text>
+    <text x="40" y="56">100Y</text>
+    <text x="55" y="56">100K</text>
+    <text x="70" y="56">rich K</text>
+    <text x="85" y="56">orange</text>
+  </g>
+
+  <!-- ROW 5: Orange with varying white underbase (58–73mm) -->
+  <text x="3" y="60" font-size="1.6" font-weight="bold">5. Orange (M75 Y100) med olika vit-underbas</text>
+  <text x="3" y="62" font-size="1.2" fill="#555">Tre identiska oranger — testa om vit-täckningen är boven</text>
+  <g>
+    <!-- Visualizing the impact of underbase: lighter base = more vivid -->
+    <rect x="3"    y="63" width="30" height="9" fill="#bf6529"/> <!-- 150% under -->
+    <rect x="34"   y="63" width="30" height="9" fill="#e07530"/> <!-- 200% -->
+    <rect x="65"   y="63" width="30" height="9" fill="#fa7d36"/> <!-- 250% -->
+  </g>
+  <g font-family="Arial" font-size="1.2" fill="#444" text-anchor="middle">
+    <text x="18" y="74.5">vit 150%</text>
+    <text x="49" y="74.5">vit 200% (din)</text>
+    <text x="80" y="74.5">vit 250%</text>
+  </g>
+
+  <!-- ROW 6: Lab target hints + measurement boxes (76–87mm) -->
+  <text x="3" y="78" font-size="1.6" font-weight="bold">6. Spektro-mål (mät M75/Y100-rutan i rad 3)</text>
+  <g font-family="Arial" font-size="1.4">
+    <text x="3" y="81">Förväntad orange (M75 Y100):</text>
+    <text x="3" y="83.5" fill="#555">L* ≈ 60–65   a* ≈ +45 till +55   b* ≈ +60 till +75</text>
+    <text x="3" y="86">Avvikelse betyder:</text>
+    <text x="3" y="88.5" fill="#555">a* &lt; +40 → magenta för svag (för gul orange)</text>
+    <text x="3" y="91" fill="#555">L* &lt; 55 → för mörk (K-injection eller över-cap CMY)</text>
+    <text x="3" y="93.5" fill="#555">L* &gt; 70 → för ljus / blek (linearization-drift, vit-underbas låg)</text>
+  </g>
+
+  <!-- Registration crosses in 4 corners -->
+  <g stroke="#000000" stroke-width="0.1" fill="none">
+    <line x1="0.5" y1="2" x2="3.5" y2="2"/>
+    <line x1="2"   y1="0.5" x2="2" y2="3.5"/>
+    <circle cx="2" cy="2" r="0.9"/>
+
+    <line x1="96.5" y1="2" x2="99.5" y2="2"/>
+    <line x1="98"   y1="0.5" x2="98" y2="3.5"/>
+    <circle cx="98" cy="2" r="0.9"/>
+
+    <line x1="0.5" y1="98" x2="3.5" y2="98"/>
+    <line x1="2"   y1="96.5" x2="2" y2="99.5"/>
+    <circle cx="2" cy="98" r="0.9"/>
+
+    <line x1="96.5" y1="98" x2="99.5" y2="98"/>
+    <line x1="98"   y1="96.5" x2="98" y2="99.5"/>
+    <circle cx="98" cy="98" r="0.9"/>
+  </g>
+
+  <!-- Footer -->
+  <line x1="3" y1="95.5" x2="97" y2="95.5" stroke="#000" stroke-width="0.1"/>
+  <text x="3" y="98" font-family="Arial" font-size="1.2" fill="#666">RGB-approx. Use spectro for precise Lab. Print on production substrate, full layer stack, 24h cure before measure.</text>
+</svg>

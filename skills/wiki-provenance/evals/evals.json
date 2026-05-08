@@ -1,0 +1,33 @@
+{
+  "skill_name": "wiki-provenance",
+  "description": "Test cases for the wiki-provenance skill: emission of Provenance Blocks during synthesis, validation of existing pages, and vault-wide audit.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "emit-on-existing-entity",
+      "prompt": "I have an entity page at C:\\Users\\jakob\\claude-obsidian\\wiki\\entities\\Ar9av-obsidian-wiki.md that summarizes the Ar9av/obsidian-wiki project. It was synthesized from C:\\Users\\jakob\\claude-obsidian\\.raw\\claude-obsidian-ecosystem-research.md but the wiki page does not currently have Provenance Blocks. Read both files. Produce a new version of the entity page that adds a Provenance Block immediately beneath each non-editorial claim. Each Provenance Block should point at the source page wiki/sources/claude-obsidian-ecosystem-research.md, name the 0-based paragraph index in the underlying raw file, and quote a short verbatim excerpt (under 30 words) from that paragraph. Use the [editorial] tag for transitional/section-opener sentences and [conjecture] for any author-asserted claim that has no clear source. Save the updated entity page to your outputs/ directory under the same filename. Do NOT modify the original file in place.",
+      "expected_output": "A modified copy of Ar9av-obsidian-wiki.md with: (1) a Provenance Block beneath each claim, formatted as `> [!provenance]\\n> - [[claude-obsidian-ecosystem-research]] paragraph N: \"...\"`, (2) [editorial] / [conjecture] tags where appropriate, (3) verbatim quotes that actually appear in the cited paragraph, (4) paragraph indices that are in range for the raw source file.",
+      "files": [
+        "C:\\Users\\jakob\\claude-obsidian\\wiki\\entities\\Ar9av-obsidian-wiki.md",
+        "C:\\Users\\jakob\\claude-obsidian\\.raw\\claude-obsidian-ecosystem-research.md",
+        "C:\\Users\\jakob\\claude-obsidian\\wiki\\sources\\claude-obsidian-ecosystem-research.md"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "validate-page-with-mixed-provenance",
+      "prompt": "I want to validate the provenance state of a single wiki page. The page is at C:\\Users\\jakob\\claude-obsidian\\wiki\\concepts\\Provenance Chains.md. Run a provenance validation on this page. Report: how many paragraphs need coverage, how many are covered (and via which mechanism: provenance-block / [derived] / [conjecture] / [editorial]), how many lack coverage entirely, and whether any pointers are broken. Save your report as outputs/validation-report.md formatted as a short markdown document with a summary table at the top.",
+      "expected_output": "A markdown report with: (1) summary table showing covered vs uncovered paragraph counts, (2) a list of uncovered paragraphs with their line numbers, (3) any broken-pointer findings, (4) a one-line conclusion about whether the page is provenance-clean.",
+      "files": [
+        "C:\\Users\\jakob\\claude-obsidian\\wiki\\concepts\\Provenance Chains.md"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "audit-full-vault",
+      "prompt": "Run a vault-wide provenance audit on the wiki at C:\\Users\\jakob\\claude-obsidian\\wiki\\. Report the overall coverage percentage, breakdown by exemption type (provenance-block / derived / conjecture / editorial), the count of broken pointers, and the three pages with the worst coverage gaps. Save your report as outputs/audit.md. Conclude with a one-paragraph recommendation: is the vault ready for a provenance-clean release, or what would need to happen first?",
+      "expected_output": "A markdown audit report with: (1) overall stats (pages scanned, paragraphs total, % covered), (2) coverage breakdown by mechanism, (3) top-3 worst-covered pages, (4) broken pointer count, (5) a recommendation paragraph.",
+      "files": []
+    }
+  ]
+}

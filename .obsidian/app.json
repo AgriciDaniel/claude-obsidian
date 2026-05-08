@@ -1,13 +1,14 @@
 {
   "userIgnoreFilters": [
+    "skills/",
+    "scripts/",
+    "hooks/",
     "agents/",
     "commands/",
-    "hooks/",
-    "skills/",
-    "_templates/",
-    "README.md",
-    "CLAUDE.md",
-    "WIKI.md",
-    "Welcome.md"
-  ]
+    "bin/",
+    "tests/"
+  ],
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": true,
+  "uriCallbacks": true
 }

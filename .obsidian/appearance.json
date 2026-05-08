@@ -3,5 +3,7 @@
     "vault-colors",
     "ITS-Dataview-Cards",
     "ITS-Image-Adjustments"
-  ]
+  ],
+  "baseFontSizeAction": true,
+  "baseFontSize": 19
 }

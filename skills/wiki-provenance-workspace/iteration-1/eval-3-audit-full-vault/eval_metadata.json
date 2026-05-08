@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "audit-full-vault",
+  "prompt": "Run a vault-wide provenance audit on wiki/ and produce a coverage report",
+  "assertions": []
+}

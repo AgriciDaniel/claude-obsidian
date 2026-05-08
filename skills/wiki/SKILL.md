@@ -99,15 +99,15 @@ Keep it under 500 words. It is a cache, not a journal. Overwrite it completely e
 
 Route to the correct operation based on what the user says:
 
-| User says | Operation | Sub-skill |
-|-----------|-----------|-----------|
-| "scaffold", "set up vault", "create wiki" | SCAFFOLD | this skill |
-| "ingest [source]", "process this", "add this" | INGEST | `wiki-ingest` |
-| "what do you know about X", "query:" | QUERY | `wiki-query` |
-| "lint", "health check", "clean up" | LINT | `wiki-lint` |
-| "save this", "file this", "/save" | SAVE | `save` |
-| "/autoresearch [topic]", "research [topic]" | AUTORESEARCH | `autoresearch` |
-| "/canvas", "add to canvas", "open canvas" | CANVAS | `canvas` |
+| User says                                     | Operation    | Sub-skill      |
+| --------------------------------------------- | ------------ | -------------- |
+| "scaffold", "set up vault", "create wiki"     | SCAFFOLD     | this skill     |
+| "ingest [source]", "process this", "add this" | INGEST       | `wiki-ingest`  |
+| "what do you know about X", "query:"          | QUERY        | `wiki-query`   |
+| "lint", "health check", "clean up"            | LINT         | `wiki-lint`    |
+| "save this", "file this", "/save"             | SAVE         | `save`         |
+| "/autoresearch [topic]", "research [topic]"   | AUTORESEARCH | `autoresearch` |
+| "/canvas", "add to canvas", "open canvas"     | CANVAS       | `canvas`       |
 
 ---
 

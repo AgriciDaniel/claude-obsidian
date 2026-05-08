@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "emit-on-existing-entity",
+  "prompt": "Add Provenance Blocks to wiki/entities/Ar9av-obsidian-wiki.md, citing back to .raw/claude-obsidian-ecosystem-research.md",
+  "assertions": []
+}
