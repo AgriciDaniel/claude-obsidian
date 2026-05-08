@@ -17,6 +17,21 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-09 save | Codex Worker Knowledge Ingest セットアップ
+- Source: `.raw/2026-05-09-codex-worker-knowledge-ingest.md`
+- Summary: [[codex-worker-knowledge-ingest]]
+- Pages created: [[Codex Worker Pattern]]
+- Pages updated: [[index]], [[hot]], [[sources/_index]]
+- Key insight: Codex workerのブリーフ駆動ワークフロー確立。`codex exec -s workspace-write` が正しい起動形式、`check.sh`のrgはgrepに要置換。
+
+## 2026-05-09 ingest | Claude + Obsidian Ecosystem Research (Codex worker)
+- Source: `.raw/claude-obsidian-ecosystem-research.md`
+- Worker: `ops/codex/briefs/ecosystem-research-ingest.md`
+- Summary: [[claude-obsidian-ecosystem-research]]
+- Pages created: [[Vault adoption should be non-destructive]], [[AI vault tools need separate thinking and writing modes]], [[PARA is a practical default scaffold for personal AI vaults]], [[MCP bridges let Obsidian remain the user interface]], [[Claude Obsidian projects are converging on compounding wiki workflows]]
+- Pages updated: [[concepts/_index]], [[sources/_index]], [[claude-obsidian-ecosystem-research]]
+- Key insight: 16+プロジェクトが「hot cache + compounding wiki」に収束中。採用パターン、MCP bridge、PARA構造が共通の設計語彙になりつつある。
+
 ## 2026-05-08 ingest | claude-obsidian セットアップ記録
 - Source: `.raw/2026-05-08-claude-obsidian-setup.md`
 - Summary: [[claude-obsidian-setup]]
