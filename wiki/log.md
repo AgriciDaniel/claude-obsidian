@@ -17,6 +17,13 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-08 ingest | claude-obsidian セットアップ記録
+- Source: `.raw/2026-05-08-claude-obsidian-setup.md`
+- Summary: [[claude-obsidian-setup]]
+- Pages created: [[claude-obsidian]], [[Mode D Personal Second Brain]], [[Claude Code Hooks]]
+- Pages updated: [[index]], [[hot]]
+- Key insight: claude-obsidian × Mode D構成でVaultをセットアップ。Claude Code Hooksによる自動保存提示も設定済み。
+
 Append-only. New entries go at the TOP. Never edit past entries.
 
 Entry format: `## [YYYY-MM-DD] operation | Title`

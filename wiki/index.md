@@ -2,6 +2,7 @@
 type: meta
 title: "Wiki Index"
 updated: 2026-05-08
+total_pages: 8
 tags: [meta, index]
 mode: "D — Personal Second Brain"
 ---
@@ -53,6 +54,18 @@ Navigation: [[overview]] | [[hot]] | [[log]] | [[North Star]] | [[Annual Goals]]
 → [[resources/_index]]
 
 <!-- リソースページが追加される -->
+
+---
+
+## Concepts
+
+- [[claude-obsidian]] — Obsidian × Claude Code連携ツール。LLM Wikiパターンの実装（status: mature）
+- [[Mode D Personal Second Brain]] — claude-obsidianの第二の脳モード。goals/learning/people/areas/resources構成（status: active）
+- [[Claude Code Hooks]] — タスク後にObsidian保存を自動提示する設定（status: developing）
+
+## Sources
+
+- [[claude-obsidian-setup]] — 2026-05-08 | セットアップ会話記録 | 3 wiki pages created
 
 ---
 

@@ -2,7 +2,23 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    ".raw/2026-05-08-claude-obsidian-setup.md": {
+      "hash": "a4a750b922284fb346022a6adb57e60e",
+      "ingested_at": "2026-05-08",
+      "pages_created": [
+        "wiki/sources/claude-obsidian-setup.md",
+        "wiki/concepts/claude-obsidian.md",
+        "wiki/concepts/Mode D Personal Second Brain.md",
+        "wiki/concepts/Claude Code Hooks.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    }
+  },
   "address_map": {
     "wiki/concepts/DragonScale Memory.md": "c-000001"
   }

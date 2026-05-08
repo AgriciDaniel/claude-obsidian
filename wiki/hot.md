@@ -1,25 +1,26 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-08T22:00:00
+updated: 2026-05-08T22:30:00
 ---
 
 # Recent Context
 
 ## Last Updated
-2026-05-08. Vault を「第二の脳（Mode D）」としてスキャフォールド完了。
+2026-05-08. claude-obsidianセットアップ完了 + 初回ingest実行。
 
 ## Key Recent Facts
-- Mode D: Personal Second Brain として初期構造を構築
-- wiki/goals/, learning/, people/, areas/, resources/ を作成
-- キーページ: North Star, Annual Goals, Weekly Review Template を作成
+- Vault: `~/claude-obsidian-vault`（Mode D: Personal Second Brain）
+- 構造: wiki/goals / learning / people / areas / resources + キーページ3点
+- Claude Code自動保存設定済み：`~/.claude/CLAUDE.md` + `/obsidian-save` コマンド
+- 次のClaude Codeセッション起動時から自動保存提示が有効になる
 
 ## Recent Changes
-- Created: [[goals/_index]], [[learning/_index]], [[people/_index]], [[areas/_index]], [[resources/_index]]
-- Created: [[North Star]], [[Annual Goals]], [[Weekly Review Template]]
-- Created: [[areas/health]], [[areas/career]], [[areas/finance]], [[areas/creative]]
-- Updated: [[index]] (Mode D構造に再編)
+- Created: [[claude-obsidian]], [[Mode D Personal Second Brain]], [[Claude Code Hooks]]
+- Created: [[claude-obsidian-setup]]（sources/）
+- Updated: [[index]]（ConceptsとSourcesセクション追加）, [[log]]（初回ingest記録）
 
 ## Active Threads
-- Vault初期セットアップ完了。次のステップ: .raw/ にソースを入れて `ingest` する
-- North Star と Annual Goals への記入が残っている
+- Vault初期セットアップ完了。North Star / Annual Goals への記入が残っている
+- 次のステップ: `.raw/` に記事やメモを入れて `ingest` を試してみる
+- Claude Codeを再起動すると自動保存提示が有効になる
