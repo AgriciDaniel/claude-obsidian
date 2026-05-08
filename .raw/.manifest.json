@@ -34,6 +34,19 @@
         "wiki/sources/claude-obsidian-ecosystem-research.md"
       ]
     },
+    ".raw/2026-05-09-wiki-nav-japanese-headings.md": {
+      "hash": "f15ce29984cd89f4c3f34b065b5854ab",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/sources/wiki-nav-japanese-headings.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md",
+        "wiki/sources/_index.md"
+      ]
+    },
     ".raw/2026-05-09-codex-worker-knowledge-ingest.md": {
       "hash": "9a998929e829685721351f3445c97b9a",
       "ingested_at": "2026-05-09",

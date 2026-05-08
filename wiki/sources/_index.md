@@ -34,6 +34,7 @@ All source pages — summaries of ingested documents, transcripts, articles, and
 
 ## Conversations
 
+- [[wiki-nav-japanese-headings]] — 2026-05-09: wiki-nav.html見出しを日本語化・CSS調整
 - [[codex-worker-knowledge-ingest]] — 2026-05-09: Codex workerブリーフ作成・起動・check.shバグ修正の記録
 
 ---

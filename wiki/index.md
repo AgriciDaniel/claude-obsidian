@@ -74,6 +74,7 @@ Navigation: [[overview]] | [[hot]] | [[log]] | [[North Star]] | [[Annual Goals]]
 - [[claude-obsidian-setup]] — 2026-05-08 | セットアップ会話記録 | 3 wiki pages created
 - [[claude-obsidian-ecosystem-research]] — 2026-04-08 | エコシステムリサーチ | 5 concept pages created (Codex worker)
 - [[codex-worker-knowledge-ingest]] — 2026-05-09 | Codex workerセットアップ記録 | 1 concept page created
+- [[wiki-nav-japanese-headings]] — 2026-05-09 | wiki-nav.html見出し日本語化
 
 ---
 

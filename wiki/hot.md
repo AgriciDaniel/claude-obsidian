@@ -23,6 +23,9 @@ updated: 2026-05-09T00:00:00
 - Created: [[codex-worker-knowledge-ingest]]（sources/）
 - Updated: [[index]]（6概念 + 2ソース追加）, [[log]]（3エントリ追加）, [[sources/_index]]
 
+## Recent Changes
+- Created: [[wiki-nav-japanese-headings]]（sources/）— wiki-nav.html見出し日本語化
+
 ## Active Threads
 - North Star / Annual Goals への記入が残っている
 - `.raw/` に新しいソースを入れてingestを試せる状態

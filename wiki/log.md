@@ -17,6 +17,13 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-09 save | wiki-nav.html 見出し日本語化
+- Source: `.raw/2026-05-09-wiki-nav-japanese-headings.md`
+- Summary: [[wiki-nav-japanese-headings]]
+- Pages created: [[wiki-nav-japanese-headings]]（sources/）
+- Pages updated: [[index]], [[hot]], [[sources/_index]]
+- Key insight: `text-transform: uppercase` は日本語表示の妨げになるため削除。letter-spacingも0.08emに調整。
+
 ## 2026-05-09 save | Codex Worker Mode Vault準備確認
 - Type: session
 - Location: wiki/meta/2026-05-09-codex-worker-vault-readiness.md
