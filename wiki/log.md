@@ -17,6 +17,15 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-09 fix | デッドリンク修正（[[How does the LLM Wiki pattern work]]）
+- 対象: `Persistent Wiki Artifact`, `Source-First Synthesis`, `Query-Time Retrieval`, `log.md`
+- 変更: `?` 付きリンク → ファイル名と一致する `?` なしに統一（4箇所）
+
+## 2026-05-09 lint | wiki-lint 初回実行
+- レポート: [[lint-report-2026-05-09]]
+- スキャン: 71ページ、問題56件（エラー22、要確認34）
+- 主な発見: 孤立1件（SVG Diagram Style Guide）、デッドリンク24件、フロントマター不備11件、DragonScaleアドレス未設定20件
+
 ## 2026-05-09 save | wiki-nav.html 見出し日本語化
 - Source: `.raw/2026-05-09-wiki-nav-japanese-headings.md`
 - Summary: [[wiki-nav-japanese-headings]]
