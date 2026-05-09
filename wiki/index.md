@@ -85,6 +85,16 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 - [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
 - [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)
 - [[2026-04-14-claude-seo-v190-session]] - Claude SEO v1.9.0 Pro Hub Challenge integration: 5 submissions, 4 new skills, 4 review rounds, cybersecurity audit (status: complete)
+- [[2026-04-24-v1.6.0-release-session]] - claude-obsidian v1.6.0 release: DragonScale Phase 4 (boundary-first autoresearch) shipped; all four mechanisms now opt-in (status: evergreen)
+
+---
+
+## DragonScale Artifacts
+
+- [[DragonScale Memory]] - memory-layer spec; the four shipped opt-in mechanisms
+- [[fold-k3-from-2026-04-23-to-2026-04-24-n8]] - first real fold (Mechanism 1), 8 children spanning 2026-04-23 to 2026-04-24
+- [[tiling-report-2026-04-24]] - first real tiling report (Mechanism 3), 0 errors, 15 review-band pairs
+- [[boundary-frontier-2026-04-24]] - first real boundary-frontier snapshot (Mechanism 4)
 
 ---
 
