@@ -365,10 +365,25 @@ def run_check(
     errors = [p for p in pairs if p[0] >= error_]
     reviews = [p for p in pairs if review <= p[0] < error_]
 
+    generated_iso = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    generated_date = generated_iso.split("T", 1)[0]
+
     out_lines: list[str] = []
+    out_lines.append("---")
+    out_lines.append("type: meta")
+    out_lines.append(f"title: \"Semantic Tiling Report {generated_date}\"")
+    out_lines.append(f"created: {generated_date}")
+    out_lines.append(f"updated: {generated_date}")
+    out_lines.append("tags:")
+    out_lines.append("  - meta")
+    out_lines.append("  - tiling")
+    out_lines.append("  - dragonscale")
+    out_lines.append("status: snapshot")
+    out_lines.append("---")
+    out_lines.append("")
     out_lines.append("# Semantic Tiling Report")
     out_lines.append("")
-    out_lines.append(f"- generated: {datetime.utcnow().isoformat(timespec='seconds')}Z")
+    out_lines.append(f"- generated: {generated_iso}")
     out_lines.append(f"- model: {model}")
     out_lines.append(f"- ollama_url: {ollama_url}")
     out_lines.append(f"- thresholds: error>={error_}, review={review}-{error_}")
