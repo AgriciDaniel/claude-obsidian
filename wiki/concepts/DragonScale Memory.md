@@ -81,6 +81,8 @@ This is a **hierarchical rollup**, loosely similar to LSM-tree compaction but wi
 - Reversible (children stay; a fold is additive).
 - Level-bounded: with entry-count trigger `2^k`, fold depth is at most `⌈log₂(N)⌉` above leaf pages. Derived, not empirical.
 
+First real artifact: [[fold-k3-from-2026-04-23-to-2026-04-24-n8]] (2026-04-24, 8 children).
+
 ---
 
 ## Mechanism 2 — Deterministic Page Addresses
