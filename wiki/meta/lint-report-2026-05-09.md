@@ -183,3 +183,25 @@ If the user wants a fix pass, this is the order I would apply them:
 8. **Orphan resolution** — link or accept as historical for the two orphans.
 
 Steps 1, 6, and the heuristic empty-section work touch tooling/files outside `wiki/`; the rest are wiki edits only.
+
+---
+
+## Resolution Log (2026-05-09 fix pass)
+
+Walked through findings with the user. Final state after this session:
+
+- **Wikilink rename mismatch**: fixed in 5 files (`hot.md`, `log.md`, and the three M4 concept pages). All `[[How does the LLM Wiki pattern work?]]` references now drop the `?`.
+- **Skill / template / example wikilinks**: 4 of the originally flagged sites turned out to be inline-code-escaped already (false positives in the lint script: `cherry-picks.md`, `Persistent Wiki Artifact.md`, `DragonScale Memory.md`, `log.md`). Real fixes applied to `wiki/folds/fold-k3-from-2026-04-23-to-2026-04-24-n8.md` (frontmatter `page:` values rewritten as plain strings with `page_missing: true`; body table and Child Pages list backticked), `wiki/meta/2026-04-10-backlink-empire-session.md` (frontmatter `related:` entries converted to plain strings), and `wiki/overview.md` (`AI Marketing Hub Cover Images Canvas` reference backticked with a "not yet created" note).
+- **Index header refresh**: page count corrected to 46, last-updated set to 2026-05-09, sources count corrected to 1. Added `[[2026-04-24-v1.6.0-release-session]]` to Decisions and a new "DragonScale Artifacts" section linking [[DragonScale Memory]], [[fold-k3-from-2026-04-23-to-2026-04-24-n8]], [[tiling-report-2026-04-24]], [[boundary-frontier-2026-04-24]].
+- **Address validation errors**: per spec, lint only observes; assignment is wiki-ingest's responsibility. Action deferred to the next wiki-ingest run on those three pages (also requires `brew install flock` on this host first). Errors remain documented above.
+- **Tiling report frontmatter**: `scripts/tiling-check.py` patched to emit minimal frontmatter (`type: meta`, `title:`, `created`, `updated`, `tags: [meta, tiling, dragonscale]`, `status: snapshot`) on every future run. Existing `wiki/meta/tiling-report-2026-04-24.md` patched by hand. `tests/test_tiling_check.py` still green.
+- **Cross-reference gaps**: added "First real artifact" lines to Mechanism 1, 3, 4 sections of [[DragonScale Memory]] linking [[fold-k3-from-2026-04-23-to-2026-04-24-n8]], [[tiling-report-2026-04-24]], [[boundary-frontier-2026-04-24]].
+- **Empty sections**: skipped per user direction (heuristic too noisy).
+- **Orphans**: [[tiling-report-2026-04-24]] resolved by the index update + DragonScale Memory cross-references. [[2026-04-10-backlink-empire-session]] accepted as historical (this report inadvertently wikilinks it, so it has one inbound now too).
+
+Re-run lint summary at end of session:
+
+- Orphans: 1 (this lint report itself; expected, meta artifact).
+- Dead wikilinks: 2 (`[[E-commerce SEO]]` referenced from [[Claude SEO]] and [[2026-04-14-claude-seo-v190-session]] — flagged as missing-page candidate, not resolved this round).
+- Address errors: 3 (unchanged, deferred to wiki-ingest).
+- All other lint categories: clear.
