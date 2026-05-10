@@ -17,6 +17,63 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-11 ingest | 特養スキル3種 Claude Codeインストール
+- Source: `.raw/2026-05-11-care-skills-install.md`
+- Summary: [[care-skills-install]]
+- Pages created: [[care-skills-install]], [[テンダーヒルズ特養スキル群]]
+- Pages updated: [[index]], [[hot]]
+- Key insight: テンダーヒルズ向け3スキル（care-user-info-excel / admission-script / admission-assessment）を `~/.claude/skills/` にインストール完了。
+
+## 2026-05-09 ingest | Codex Plugin for Claude Code
+- Source: `.raw/2026-05-09-codex-plugin-claude-code.md`
+- Summary: [[codex-plugin-claude-code]]
+- Pages created: [[Codex Plugin for Claude Code]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key insight: OpenAI公式のClaude Code向けプラグインで、/codex:reviewなどのコマンドが使えるクロスプロバイダー統合。
+
+## 2026-05-09 fix | デッドリンク修正（[[How does the LLM Wiki pattern work]]）
+- 対象: `Persistent Wiki Artifact`, `Source-First Synthesis`, `Query-Time Retrieval`, `log.md`
+- 変更: `?` 付きリンク → ファイル名と一致する `?` なしに統一（4箇所）
+
+## 2026-05-09 lint | wiki-lint 初回実行
+- レポート: [[lint-report-2026-05-09]]
+- スキャン: 71ページ、問題56件（エラー22、要確認34）
+- 主な発見: 孤立1件（SVG Diagram Style Guide）、デッドリンク24件、フロントマター不備11件、DragonScaleアドレス未設定20件
+
+## 2026-05-09 save | wiki-nav.html 見出し日本語化
+- Source: `.raw/2026-05-09-wiki-nav-japanese-headings.md`
+- Summary: [[wiki-nav-japanese-headings]]
+- Pages created: [[wiki-nav-japanese-headings]]（sources/）
+- Pages updated: [[index]], [[hot]], [[sources/_index]]
+- Key insight: `text-transform: uppercase` は日本語表示の妨げになるため削除。letter-spacingも0.08emに調整。
+
+## 2026-05-09 save | Codex Worker Mode Vault準備確認
+- Type: session
+- Location: wiki/meta/2026-05-09-codex-worker-vault-readiness.md
+- From: CLAUDE.md / AGENTS.md / hot.md / ops/codex/README.md を読んで運用準備を確認した会話
+
+## 2026-05-09 save | Codex Worker Knowledge Ingest セットアップ
+- Source: `.raw/2026-05-09-codex-worker-knowledge-ingest.md`
+- Summary: [[codex-worker-knowledge-ingest]]
+- Pages created: [[Codex Worker Pattern]]
+- Pages updated: [[index]], [[hot]], [[sources/_index]]
+- Key insight: Codex workerのブリーフ駆動ワークフロー確立。`codex exec -s workspace-write` が正しい起動形式、`check.sh`のrgはgrepに要置換。
+
+## 2026-05-09 ingest | Claude + Obsidian Ecosystem Research (Codex worker)
+- Source: `.raw/claude-obsidian-ecosystem-research.md`
+- Worker: `ops/codex/briefs/ecosystem-research-ingest.md`
+- Summary: [[claude-obsidian-ecosystem-research]]
+- Pages created: [[Vault adoption should be non-destructive]], [[AI vault tools need separate thinking and writing modes]], [[PARA is a practical default scaffold for personal AI vaults]], [[MCP bridges let Obsidian remain the user interface]], [[Claude Obsidian projects are converging on compounding wiki workflows]]
+- Pages updated: [[concepts/_index]], [[sources/_index]], [[claude-obsidian-ecosystem-research]]
+- Key insight: 16+プロジェクトが「hot cache + compounding wiki」に収束中。採用パターン、MCP bridge、PARA構造が共通の設計語彙になりつつある。
+
+## 2026-05-08 ingest | claude-obsidian セットアップ記録
+- Source: `.raw/2026-05-08-claude-obsidian-setup.md`
+- Summary: [[claude-obsidian-setup]]
+- Pages created: [[claude-obsidian]], [[Mode D Personal Second Brain]], [[Claude Code Hooks]]
+- Pages updated: [[index]], [[hot]]
+- Key insight: claude-obsidian × Mode D構成でVaultをセットアップ。Claude Code Hooksによる自動保存提示も設定済み。
+
 Append-only. New entries go at the TOP. Never edit past entries.
 
 Entry format: `## [YYYY-MM-DD] operation | Title`
@@ -50,7 +107,7 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 - Scope: six-test menu the user approved. Codex gpt-5.4 for T1/T4/T6 (sub-agent delegation); chair for T0/T2/T3 (one-shot shell) and all integration (index, log, hot, commit).
 - Style: all new content uses colons or parens instead of em-dashes. Pre-existing em-dashes in index entries and wiki/concepts/_index.md left as-is (clean-room boundary; deferred to F-slice style pass).
 - Tests still green: `make test` passes (74+ assertions).
-- Integration: chair added the 3 new concepts to `wiki/index.md` and `wiki/concepts/_index.md` with colon-style descriptions so the fresh pages are discoverable. The cluster extends `[[How does the LLM Wiki pattern work?]]` and cross-references `[[LLM Wiki Pattern]]`.
+- Integration: chair added the 3 new concepts to `wiki/index.md` and `wiki/concepts/_index.md` with colon-style descriptions so the fresh pages are discoverable. The cluster extends `[[How does the LLM Wiki pattern work]]` and cross-references `[[LLM Wiki Pattern]]`.
 - Next recommended slice: either (G) commit this test batch and declare v1.6.0 validated, or (H) run a second fold k=3 now that 8 newer entries exist above this one and close the hierarchical-fold-not-yet-supported loop in a future phase.
 
 ## [2026-04-24] save | v1.6.0 closeout (Teams, chair-led)

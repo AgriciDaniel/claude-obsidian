@@ -1,93 +1,91 @@
 ---
 type: meta
 title: "Wiki Index"
-updated: 2026-04-07
-tags:
-  - meta
-  - index
-status: evergreen
-related:
-  - "[[overview]]"
-  - "[[log]]"
-  - "[[hot]]"
-  - "[[dashboard]]"
-  - "[[Wiki Map]]"
-  - "[[concepts/_index]]"
-  - "[[entities/_index]]"
-  - "[[sources/_index]]"
-  - "[[LLM Wiki Pattern]]"
-  - "[[Hot Cache]]"
-  - "[[Compounding Knowledge]]"
-  - "[[Andrej Karpathy]]"
+updated: 2026-05-08
+total_pages: 8
+tags: [meta, index]
+mode: "D — Personal Second Brain"
 ---
 
 # Wiki Index
 
-Last updated: 2026-04-15 | Total pages: 34 | Sources ingested: 2
+Mode: D — Personal Second Brain
+Navigation: [[overview]] | [[hot]] | [[log]] | [[North Star]] | [[Annual Goals]]
 
-Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
+---
+
+## Goals
+
+→ [[goals/_index]]
+
+<!-- ingest後に個別ゴールが追加される -->
+
+---
+
+## Learning
+
+→ [[learning/_index]]
+
+<!-- 学習ページが追加される -->
+
+---
+
+## People
+
+→ [[people/_index]]
+
+<!-- 人物ページが追加される -->
+
+---
+
+## Areas
+
+→ [[areas/_index]]
+
+- [[areas/health]] — 健康
+- [[areas/career]] — キャリア
+- [[areas/finance]] — 財務
+- [[areas/creative]] — クリエイティブ
+
+---
+
+## Resources
+
+→ [[resources/_index]]
+
+<!-- リソースページが追加される -->
 
 ---
 
 ## Concepts
 
-- [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
-- [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
-- [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
-- [[cherry-picks]] — prioritized feature backlog from ecosystem research; 13 features to add to claude-obsidian (status: current)
-- [[SVG Diagram Style Guide]] — canonical visual style for all diagrams: Space Grotesk, #0A0A0A dark theme, #E07850 accent, full design tokens (status: evergreen)
-- [[Pro Hub Challenge]] — community challenge pattern for building claude-seo/claude-blog extensions; first challenge produced 6 submissions, 5 integrated in v1.9.0 (status: evergreen)
-- [[Semantic Topic Clustering]] — SERP-based keyword grouping replacing paid tools; hub-spoke architecture with interactive visualization (status: evergreen)
-- [[Search Experience Optimization]] — "read SERPs backwards" methodology for page-type mismatch detection and persona scoring (status: evergreen)
-- [[SEO Drift Monitoring]] — "git for SEO" baseline/diff/track with 17 comparison rules and SQLite persistence (status: evergreen)
-- [[DragonScale Memory]] — memory-layer spec inspired by the Heighway dragon curve; fold operator, deterministic page addresses, semantic tiling, boundary-first autoresearch (status: shipped v0.4, all four mechanisms opt-in)
-- [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object, distinct from ephemeral chat turns (status: developing)
-- [[Source-First Synthesis]]: provenance discipline; raw sources stay immutable while the wiki layer is synthesized and cited (status: developing)
-- [[Query-Time Retrieval]]: wiki query path synthesizes with citations; complementary to Obsidian's in-vault search (status: developing)
-
----
-
-## Entities
-
-- [[Andrej Karpathy]] — AI researcher, creator of the LLM Wiki pattern, former Tesla AI director (status: developing)
-- [[Ar9av-obsidian-wiki]] — multi-agent compatible LLM Wiki plugin; delta tracking manifest (status: current)
-- [[Nexus-claudesidian-mcp]] — native Obsidian plugin + MCP bridge; workspace memory, task management (status: current)
-- [[ballred-obsidian-claude-pkm]] — goal cascade PKM; auto-commit hooks, /adopt command (status: current)
-- [[rvk7895-llm-knowledge-bases]] — 3-depth query system, Marp slides, parallel deep research (status: current)
-- [[kepano-obsidian-skills]] — official skills from Obsidian creator; defuddle, obsidian-bases (status: current)
-- [[Claudian-YishenTu]] — native Obsidian plugin embedding Claude Code; plan mode, @mention (status: current)
-- [[Claude SEO]] — Tier 4 Claude Code skill for SEO analysis; 23 skills, 17 agents, 30 scripts at v1.9.0 (status: evergreen)
-
----
+- [[claude-obsidian]] — Obsidian × Claude Code連携ツール。LLM Wikiパターンの実装（status: mature）
+- [[Mode D Personal Second Brain]] — claude-obsidianの第二の脳モード。goals/learning/people/areas/resources構成（status: active）
+- [[Claude Code Hooks]] — タスク後にObsidian保存を自動提示する設定（status: developing）
+- [[Codex Worker Pattern]] — Claude Codeがオーケストレーター、Codex CLIがナロウワーカーの分業パターン（status: developing）
+- [[Codex Plugin for Claude Code]] — OpenAI公式のClaude Code向けプラグイン。/codex:review等のコマンドを提供（status: active）
+- [[Vault adoption should be non-destructive]] — 既存vaultを破壊せずにLLM wikiを重ねるマイグレーションパターン
+- [[AI vault tools need separate thinking and writing modes]] — 探索的思考と耐久的vault書き込みを分離するワークフロー設計
+- [[PARA is a practical default scaffold for personal AI vaults]] — 個人用vaultのデフォルト構造としてのPARA
+- [[MCP bridges let Obsidian remain the user interface]] — エージェントアクセス用プロトコル層、Obsidianをヒューマンインターフェースとして維持
+- [[Claude Obsidian projects are converging on compounding wiki workflows]] — エコシステム競合分析と収束パターン
+- [[テンダーヒルズ特養スキル群]] — care-user-info-excel / admission-script / admission-assessment の3スキル群（status: active）
 
 ## Sources
 
-- [[claude-obsidian-ecosystem-research]] — 2026-04-08 | web research across 16+ repos | 8 wiki pages created
+- [[care-skills-install]] — 2026-05-11 | テンダーヒルズ特養スキル3種インストール | 1 concept page created
+- [[claude-obsidian-setup]] — 2026-05-08 | セットアップ会話記録 | 3 wiki pages created
+- [[claude-obsidian-ecosystem-research]] — 2026-04-08 | エコシステムリサーチ | 5 concept pages created (Codex worker)
+- [[codex-worker-knowledge-ingest]] — 2026-05-09 | Codex workerセットアップ記録 | 1 concept page created
+- [[wiki-nav-japanese-headings]] — 2026-05-09 | wiki-nav.html見出し日本語化
+- [[codex-plugin-claude-code]] — 2026-05-09 | Codex Plugin for Claude Code 導入方法 | 1 concept page created
 
 ---
 
-## Questions
+## Templates
 
-- [[How does the LLM Wiki pattern work]] — how the pattern works and why it outperforms RAG at human scale (status: developing)
-
----
-
-## Comparisons
-
-- [[Wiki vs RAG]] — when to use a wiki knowledge base versus RAG; verdict: wiki wins at <1000 pages
-- [[claude-obsidian-ecosystem]] — feature matrix of 16+ Claude+Obsidian projects; where claude-obsidian wins and gaps
-
----
-
-## Decisions
-
-- [[2026-04-14-community-cta-rollout]] - Skool community CTA footer added to 6 skill repos with per-tool frequency rules (status: active)
-- [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
-- [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)
-- [[2026-04-14-claude-seo-v190-session]] - Claude SEO v1.9.0 Pro Hub Challenge integration: 5 submissions, 4 new skills, 4 review rounds, cybersecurity audit (status: complete)
-
----
-
-## Domains
-
-<!-- Add domain entries here after scaffold -->
+- [[Weekly Review Template]]
+- `_templates/goal.md`
+- `_templates/learning.md`
+- `_templates/person.md`
+- `_templates/resource.md`

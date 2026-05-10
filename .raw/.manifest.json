@@ -2,7 +2,92 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    ".raw/2026-05-08-claude-obsidian-setup.md": {
+      "hash": "a4a750b922284fb346022a6adb57e60e",
+      "ingested_at": "2026-05-08",
+      "pages_created": [
+        "wiki/sources/claude-obsidian-setup.md",
+        "wiki/concepts/claude-obsidian.md",
+        "wiki/concepts/Mode D Personal Second Brain.md",
+        "wiki/concepts/Claude Code Hooks.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    },
+    ".raw/claude-obsidian-ecosystem-research.md": {
+      "hash": "codex-worker-2026-05-09",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/concepts/Vault adoption should be non-destructive.md",
+        "wiki/concepts/AI vault tools need separate thinking and writing modes.md",
+        "wiki/concepts/PARA is a practical default scaffold for personal AI vaults.md",
+        "wiki/concepts/MCP bridges let Obsidian remain the user interface.md",
+        "wiki/concepts/Claude Obsidian projects are converging on compounding wiki workflows.md"
+      ],
+      "pages_updated": [
+        "wiki/concepts/_index.md",
+        "wiki/sources/_index.md",
+        "wiki/sources/claude-obsidian-ecosystem-research.md"
+      ]
+    },
+    ".raw/2026-05-09-wiki-nav-japanese-headings.md": {
+      "hash": "f15ce29984cd89f4c3f34b065b5854ab",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/sources/wiki-nav-japanese-headings.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md",
+        "wiki/sources/_index.md"
+      ]
+    },
+    ".raw/2026-05-09-codex-worker-knowledge-ingest.md": {
+      "hash": "9a998929e829685721351f3445c97b9a",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/sources/codex-worker-knowledge-ingest.md",
+        "wiki/concepts/Codex Worker Pattern.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md",
+        "wiki/sources/_index.md"
+      ]
+    },
+    ".raw/2026-05-09-codex-plugin-claude-code.md": {
+      "hash": "9a0c622717f325253cb8d0d5f852710e",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/sources/codex-plugin-claude-code.md",
+        "wiki/concepts/Codex Plugin for Claude Code.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    },
+    ".raw/2026-05-11-care-skills-install.md": {
+      "hash": "31a72381a1bf86cab31fc6e3da14fae1",
+      "ingested_at": "2026-05-11",
+      "pages_created": [
+        "wiki/sources/care-skills-install.md",
+        "wiki/concepts/テンダーヒルズ特養スキル群.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    }
+  },
   "address_map": {
     "wiki/concepts/DragonScale Memory.md": "c-000001"
   }

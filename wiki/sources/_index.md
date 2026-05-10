@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Sources Index"
-updated: 2026-04-07
+updated: 2026-05-09
 tags:
   - meta
   - index
@@ -29,7 +29,13 @@ All source pages — summaries of ingested documents, transcripts, articles, and
 
 ## Articles
 
-<!-- Add article source pages here -->
+- [[claude-obsidian-ecosystem-research]] — ecosystem research across Claude + Obsidian projects, feature maps, and reusable patterns
+- [[claude-obsidian-setup]] — initial setup conversation and first ingest source
+
+## Conversations
+
+- [[wiki-nav-japanese-headings]] — 2026-05-09: wiki-nav.html見出しを日本語化・CSS調整
+- [[codex-worker-knowledge-ingest]] — 2026-05-09: Codex workerブリーフ作成・起動・check.shバグ修正の記録
 
 ---
 

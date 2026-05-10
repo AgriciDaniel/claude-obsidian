@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Brain Navigator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  h1 { font-size: 18px; color: #a78bfa; margin-bottom: 20px; letter-spacing: 0.05em; }
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #666;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a2a3e;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: #c4b5fd;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background 0.15s;
+    margin-bottom: 2px;
+  }
+  a:hover { background: #2a2a4e; color: #fff; }
+  .icon { font-size: 14px; opacity: 0.7; }
+  .tag {
+    font-size: 10px;
+    background: #2a2a4e;
+    color: #888;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+  .hot { color: #f59e0b; }
+</style>
+</head>
+<body>
+<h1>🧠 Second Brain</h1>
+
+<div class="section">
+  <div class="section-title">メタ</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fhot">
+    <span class="icon">🔥</span>Hot Cache<span class="tag hot">最新</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Findex">
+    <span class="icon">📋</span>Index
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Foverview">
+    <span class="icon">🗺</span>Overview
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Flog">
+    <span class="icon">📜</span>Log
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-title">キーページ</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2FNorth%20Star">
+    <span class="icon">⭐</span>North Star
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2FAnnual%20Goals">
+    <span class="icon">🎯</span>Annual Goals
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2FWeekly%20Review%20Template">
+    <span class="icon">📅</span>Weekly Review Template
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-title">エリア</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fareas%2Fhealth">
+    <span class="icon">💪</span>Health
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fareas%2Fcareer">
+    <span class="icon">💼</span>Career
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fareas%2Ffinance">
+    <span class="icon">💰</span>Finance
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fareas%2Fcreative">
+    <span class="icon">🎨</span>Creative
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-title">インデックス</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fgoals%2F_index">
+    <span class="icon">🎯</span>Goals
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Flearning%2F_index">
+    <span class="icon">📚</span>Learning
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fpeople%2F_index">
+    <span class="icon">👥</span>People
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fresources%2F_index">
+    <span class="icon">🔧</span>Resources
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-title">コンセプト</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2Fclaude-obsidian">
+    <span class="icon">🔌</span>claude-obsidian
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FMode%20D%20Personal%20Second%20Brain">
+    <span class="icon">🧠</span>Mode D: Personal Second Brain
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FClaude%20Code%20Hooks">
+    <span class="icon">⚡</span>Claude Code Hooks
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FCodex%20Worker%20Pattern">
+    <span class="icon">🤖</span>Codex Worker Pattern
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FCodex%20Plugin%20for%20Claude%20Code">
+    <span class="icon">🔌</span>Codex Plugin for Claude Code
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FClaude%20Obsidian%20projects%20are%20converging%20on%20compounding%20wiki%20workflows">
+    <span class="icon">🗺</span>Ecosystem Convergence Map
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FVault%20adoption%20should%20be%20non-destructive">
+    <span class="icon">🔄</span>Non-destructive Vault Adoption
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FAI%20vault%20tools%20need%20separate%20thinking%20and%20writing%20modes">
+    <span class="icon">✍️</span>Thinking vs Writing Mode
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FPARA%20is%20a%20practical%20default%20scaffold%20for%20personal%20AI%20vaults">
+    <span class="icon">📁</span>PARA as Default Scaffold
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2FMCP%20bridges%20let%20Obsidian%20remain%20the%20user%20interface">
+    <span class="icon">🌉</span>MCP Bridge Pattern
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fconcepts%2F%E3%83%86%E3%83%B3%E3%83%80%E3%83%BC%E3%83%92%E3%83%AB%E3%82%BA%E7%89%B9%E9%A4%8A%E3%82%B9%E3%82%AD%E3%83%AB%E7%BE%A4">
+    <span class="icon">🏥</span>テンダーヒルズ特養スキル群
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-title">ソース</div>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fcare-skills-install">
+    <span class="icon">💬</span>特養スキル3種インストール<span class="tag">2026-05-11</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fcodex-plugin-claude-code">
+    <span class="icon">💬</span>Codex Plugin for Claude Code<span class="tag">2026-05-09</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fwiki-nav-japanese-headings">
+    <span class="icon">💬</span>wiki-nav 見出し日本語化<span class="tag">2026-05-09</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fcodex-worker-knowledge-ingest">
+    <span class="icon">💬</span>Codex Worker Ingest セットアップ<span class="tag">2026-05-09</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fclaude-obsidian-ecosystem-research">
+    <span class="icon">🔍</span>Ecosystem Research<span class="tag">2026-04-08</span>
+  </a>
+  <a href="obsidian://open?vault=claude-obsidian-vault&file=wiki%2Fsources%2Fclaude-obsidian-setup">
+    <span class="icon">💬</span>claude-obsidian セットアップ記録
+    <span class="tag">2026-05-08</span>
+  </a>
+</div>
+
+</body>
+</html>

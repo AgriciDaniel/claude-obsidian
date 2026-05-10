@@ -2,7 +2,7 @@
 type: source
 title: "Claude + Obsidian Ecosystem Research"
 created: 2026-04-08
-updated: 2026-04-08
+updated: 2026-05-09
 tags:
   - research
   - ecosystem
@@ -36,6 +36,11 @@ Comprehensive internet sweep of all Claude + Obsidian projects. Found 16+ active
 - [[rvk7895-llm-knowledge-bases]] — entity page
 - [[kepano-obsidian-skills]] — entity page
 - [[Claudian-YishenTu]] — entity page
+- [[Vault adoption should be non-destructive]] — adoption and migration pattern
+- [[AI vault tools need separate thinking and writing modes]] — workflow boundary pattern
+- [[PARA is a practical default scaffold for personal AI vaults]] — personal vault scaffold pattern
+- [[MCP bridges let Obsidian remain the user interface]] — protocol bridge pattern
+- [[Claude Obsidian projects are converging on compounding wiki workflows]] — competitive convergence map
 
 ## Key Findings
 
