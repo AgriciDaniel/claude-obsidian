@@ -60,6 +60,32 @@
         "wiki/hot.md",
         "wiki/sources/_index.md"
       ]
+    },
+    ".raw/2026-05-09-codex-plugin-claude-code.md": {
+      "hash": "9a0c622717f325253cb8d0d5f852710e",
+      "ingested_at": "2026-05-09",
+      "pages_created": [
+        "wiki/sources/codex-plugin-claude-code.md",
+        "wiki/concepts/Codex Plugin for Claude Code.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    },
+    ".raw/2026-05-11-care-skills-install.md": {
+      "hash": "31a72381a1bf86cab31fc6e3da14fae1",
+      "ingested_at": "2026-05-11",
+      "pages_created": [
+        "wiki/sources/care-skills-install.md",
+        "wiki/concepts/テンダーヒルズ特養スキル群.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
     }
   },
   "address_map": {

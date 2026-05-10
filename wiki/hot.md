@@ -3,11 +3,10 @@ type: meta
 title: "Hot Cache"
 updated: 2026-05-09T00:00:00
 ---
-
 # Recent Context
 
 ## Last Updated
-2026-05-09. wiki-lint初回実行 + デッドリンク修正。
+2026-05-11. テンダーヒルズ特養スキル3種（care-user-info-excel / admission-script / admission-assessment）を `~/.claude/skills/` にインストール。
 
 ## Key Recent Facts
 - Vault: `~/claude-obsidian-vault`（Mode D: Personal Second Brain）
@@ -17,8 +16,11 @@ updated: 2026-05-09T00:00:00
 - Claude Code = オペレーター, Codex = ナロウワーカー, Obsidian = 外部メモリの役割分担が明確
 - **lint実施済み**: 71ページ、問題56件。レポート → [[lint-report-2026-05-09]]
 - DragonScaleアドレス未設定: post-rolloutページ20件（次回ingest時に付与）
+- **Codex Plugin for Claude Code** 調査済み（openai/codex-plugin-cc）: `/plugin marketplace add openai/codex-plugin-cc` でインストール可能
 
 ## Recent Changes
+- Created: [[テンダーヒルズ特養スキル群]]（concepts/）, [[care-skills-install]]（sources/）— 特養スキル3種インストール完了
+- Created: [[Codex Plugin for Claude Code]]（concepts/）, [[codex-plugin-claude-code]]（sources/）— OpenAI公式Claude Codeプラグイン導入調査
 - Created: [[lint-report-2026-05-09]]（meta/）— wiki-lint初回実行レポート
 - Fixed: `[[How does the LLM Wiki pattern work]]` デッドリンク4箇所（`?` 除去）
 - Created: [[2026-05-09-codex-worker-vault-readiness]]（meta/）— Codex Worker Mode運用準備確認セッション記録

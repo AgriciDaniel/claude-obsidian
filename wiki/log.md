@@ -17,6 +17,20 @@ related:
 
 Navigation: [[index]] | [[hot]] | [[overview]]
 
+## 2026-05-11 ingest | 特養スキル3種 Claude Codeインストール
+- Source: `.raw/2026-05-11-care-skills-install.md`
+- Summary: [[care-skills-install]]
+- Pages created: [[care-skills-install]], [[テンダーヒルズ特養スキル群]]
+- Pages updated: [[index]], [[hot]]
+- Key insight: テンダーヒルズ向け3スキル（care-user-info-excel / admission-script / admission-assessment）を `~/.claude/skills/` にインストール完了。
+
+## 2026-05-09 ingest | Codex Plugin for Claude Code
+- Source: `.raw/2026-05-09-codex-plugin-claude-code.md`
+- Summary: [[codex-plugin-claude-code]]
+- Pages created: [[Codex Plugin for Claude Code]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key insight: OpenAI公式のClaude Code向けプラグインで、/codex:reviewなどのコマンドが使えるクロスプロバイダー統合。
+
 ## 2026-05-09 fix | デッドリンク修正（[[How does the LLM Wiki pattern work]]）
 - 対象: `Persistent Wiki Artifact`, `Source-First Synthesis`, `Query-Time Retrieval`, `log.md`
 - 変更: `?` 付きリンク → ファイル名と一致する `?` なしに統一（4箇所）
