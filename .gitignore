@@ -33,6 +33,9 @@ node_modules/
 .env.local
 *.local.md
 
+# Local MCP config — paths and keys are user-specific
+.mcp.json
+
 # Private keys and credentials (defense-in-depth, catches accidental drops)
 *.pem
 *.key
