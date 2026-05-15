@@ -25,6 +25,16 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-05-11] bootstrap | First-run setup walkthrough
+- Verified Obsidian installation: present at `$env:USERPROFILE\AppData\Local\Programs\Obsidian\Obsidian.exe`
+- Checked Local REST API plugin: NOT installed (community-plugins.json holds excalidraw, banners, calendar, thino only). Port 27124 not listening.
+- Checked Obsidian CLI: not present.
+- Configured MCP: wrote project-scope `.mcp.json` at worktree root with `obsidian-vault` server using `@bitbonsai/mcpvault@latest` (filesystem-based, Option B). Target path is the main checkout `C:\Users\gerar\Documents\Claude\claude-obsidian`, not the worktree. No API key required, no TLS bypass, no plugin install needed.
+- Mode confirmed: Mode E (Research) + meta-documentation. Vault demonstrates the LLM Wiki pattern per [[README]] and [[overview]].
+- Created: [[domains/_index]] — fills the only schema gap vs WIKI.md Section 1.
+- Existing vault preserved: 47+ pages from v1.6.0 untouched.
+- Next steps for user (manual, optional): install Local REST API plugin from Community Plugins to unlock Option A capabilities (PATCH frontmatter, Dataview query over API, append-under-heading). When installed, re-run `claude mcp add-json obsidian-vault ...` with `--scope user` to switch to mcp-obsidian.
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)

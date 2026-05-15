@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-04-24T13:10:00
+updated: 2026-05-11T00:00:00
 tags:
   - meta
   - hot-cache
@@ -19,6 +19,8 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-05-11: First-run bootstrap walkthrough on this vault. Obsidian install confirmed (Windows, `$env:USERPROFILE\AppData\Local\Programs\Obsidian\`). Local REST API plugin not installed; port 27124 not listening. Configured MCP via project-scope `.mcp.json` with `@bitbonsai/mcpvault@latest` (filesystem-based, no plugin/key/TLS needed), targeting the main checkout `C:\Users\gerar\Documents\Claude\claude-obsidian` rather than the worktree. Filled the only schema gap: created `wiki/domains/_index.md`. Mode confirmed as **E (Research) + meta-documentation** about the LLM Wiki pattern. Existing v1.6.0 content untouched. To unlock REST-API-only features (PATCH, Dataview-via-API), user can install Local REST API plugin and re-run `claude mcp add-json` with `--scope user`.
 
 2026-04-24 (late night): v1.6.0 public release notes shipped. `docs/releases/v1.6.0.md` (Karpathy-style, 346 lines) establishes the release-notes convention. Three original SVGs at `wiki/meta/dragonscale-{mechanism-overview,6-test-flow,frontier-graph}.svg` carry the visual load; Wikipedia dragon curve referenced by text link only (no binary vendoring). R4 codex verifier ACCEPT WITH FIXES, 3 wording fixes applied. User runs `gh release create v1.6.0 --notes-file docs/releases/v1.6.0.md` when ready. Commits `85515bb` (docs), plus wiki/meta/ auto-commits for SVGs.
 
