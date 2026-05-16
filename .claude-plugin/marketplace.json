@@ -16,7 +16,7 @@
         "repo": "AgriciDaniel/claude-obsidian",
         "ref": "main"
       },
-      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection.",
+      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection. Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives (markdown, bases, json-canvas, obsidian-cli).",
       "version": "1.6.0",
       "author": {
         "name": "AgriciDaniel",
@@ -24,7 +24,15 @@
       },
       "homepage": "https://github.com/AgriciDaniel/claude-obsidian",
       "repository": "https://github.com/AgriciDaniel/claude-obsidian",
-      "license": "MIT"
+      "license": "MIT",
+      "recommendedCompanions": [
+        {
+          "marketplace": "kepano/obsidian-skills",
+          "rationale": "Canonical substrate for Obsidian primitives (obsidian-markdown, obsidian-bases, json-canvas, obsidian-cli) authored by Obsidian CEO. claude-obsidian's overlapping skills (obsidian-markdown, obsidian-bases, canvas) defer to these when available and fall back to self-contained implementations when not.",
+          "install": "claude plugin marketplace add kepano/obsidian-skills",
+          "repo": "https://github.com/kepano/obsidian-skills"
+        }
+      ]
     }
   ]
 }

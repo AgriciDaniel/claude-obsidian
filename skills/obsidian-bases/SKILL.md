@@ -8,7 +8,7 @@ allowed-tools: Read Write
 
 Obsidian Bases (launched 2025) turns vault notes into queryable, dynamic views. Tables, cards, lists, maps. Defined in `.base` files. No plugin required; it is a core Obsidian feature.
 
-**Authoritative reference**: If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-bases skill. Otherwise, use the reference below. Official docs: https://help.obsidian.md/bases/syntax
+**Substrate preference (v1.7+)**: This skill is a self-contained fallback. **Prefer `kepano/obsidian-skills`** as the authoritative substrate — its `obsidian-bases` skill is the canonical reference for Bases YAML, formulas, and view definitions. If you see an `obsidian-bases` skill available without the `claude-obsidian:` namespace, that is kepano's version: use it. The reference below is provided so the plugin remains functional when kepano's marketplace is not installed. Install: `claude plugin marketplace add kepano/obsidian-skills`. Official Bases docs: https://help.obsidian.md/bases/syntax
 
 ---
 
