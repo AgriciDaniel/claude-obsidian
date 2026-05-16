@@ -99,6 +99,13 @@ _attachments/images/skool-hub/
 # Archive of old versions (cosmic-brain, GIF assets)
 claude-obsidian-archive/
 
+# Sibling-plugin marketing assets that landed in working tree (claude-canvas covers / tutorials)
+claude-canvas-covers and stuff/
+claude-canvas/
+
+# Codex CLI sentinel marker (0-byte read-only file created by `codex` runs)
+.codex
+
 # User-specific attachments
 _attachments/
 
