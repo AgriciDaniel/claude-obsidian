@@ -2,6 +2,41 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.7.0] - 2026-05-17 (Compound Vault refoundation)
+
+The v1.7 line, codenamed **Compound Vault**, refoundations the plugin around four pillars from the May 2026 gap analysis: substrate alignment with `kepano/obsidian-skills`, Obsidian-CLI-native transport, contextual + hybrid retrieval, and safe multi-writer ingest. v1.6 vaults that never install the new opt-in components see no behavior change. Full design rationale in `docs/compound-vault-guide.md`.
+
+### Added
+
+- **§3.2 Default transport** — `skills/wiki-cli/SKILL.md` (recipe reference for Obsidian CLI), `scripts/detect-transport.sh` (writes `.vault-meta/transport.json` snapshot; auto-stale at 7d), `wiki/references/transport-fallback.md` (canonical decision tree). 5 transport-aware skills (wiki-ingest, wiki-query, save, autoresearch, wiki-lint) gained "## Transport (v1.7+)" sections.
+- **§3.3 Hybrid retrieval pipeline (wiki-retrieve, opt-in)** — implements Anthropic's Sept 2024 Contextual Retrieval pattern as agent-skill plumbing. 4 new scripts: `scripts/contextual-prefix.py` (3-tier auto: Anthropic API → claude CLI subprocess → synthetic), `scripts/bm25-index.py` (Okapi BM25, k1=1.5 b=0.75, pure stdlib, flock-guarded), `scripts/rerank.py` (cosine on nomic-embed-text via ollama, embed-cache), `scripts/retrieve.py` (orchestrator: BM25 top-20 → rerank top-5 → page dedupe). `bin/setup-retrieve.sh` opt-in bootstrap. `skills/wiki-retrieve/SKILL.md` documents the architecture and cost ceiling (~$12/1000 docs per Anthropic). Wired into `skills/wiki-query/SKILL.md` via "## Retrieval (v1.7+)" section with graceful exit-10 fallback to the v1.6 hot→index→drill read order.
+- **§3.4 Multi-writer safety (wiki-lock, core)** — `scripts/wiki-lock.sh` per-file advisory locking. Age-based staleness (default `STALE_AFTER_SEC=60`), cross-process release allowed by design. 4 skills (wiki-ingest, wiki-fold, save, autoresearch) gained "## Concurrency (v1.7+)" sections with concrete acquire/release recipes. The latent corruption bug from v1.6 — documented but unenforced in `skills/wiki-ingest/SKILL.md:259-264` — is now closed.
+- **New skills (2)**: `wiki-cli` (§3.2) and `wiki-retrieve` (§3.3). Total skill count is now 13.
+- **New scripts (6)**: `detect-transport.sh`, `contextual-prefix.py`, `bm25-index.py`, `rerank.py`, `retrieve.py`, `wiki-lock.sh`.
+- **New tests (4)**: `tests/test_bm25_index.py` (~30 hermetic assertions including BM25 monotonicity and IDF positivity), `tests/test_retrieve.py` (22 hermetic assertions including end-to-end subprocess test), `tests/test_wiki_lock.sh` (14 hermetic assertions including age-based stale reap), `tests/test_concurrent_write.sh` (6 hermetic assertions; the critical multi-writer correctness gate — 10 parallel workers, no losses, no garbled lines). `make test` now runs 7 suites with zero network and zero ollama dependency.
+- **New docs**: `docs/compound-vault-guide.md` (omnibus v1.7 guide), `wiki/references/transport-fallback.md` (transport decision tree).
+- **Makefile targets**: `test-bm25`, `test-retrieve`, `test-lock`, `test-concurrent`, `setup-retrieve`.
+
+### Changed
+
+- **§3.1 Substrate hard-prefer on `kepano/obsidian-skills`** — `skills/obsidian-markdown/SKILL.md`, `skills/obsidian-bases/SKILL.md`, and `skills/canvas/SKILL.md` upgraded from soft-defer ("if kepano installed, prefer it") to hard-prefer ("this is a fallback; prefer kepano"). Architectural behavior unchanged; signal sharpened. `skills/defuddle/SKILL.md` documented as canonical (kepano does not ship a defuddle skill). `.claude-plugin/marketplace.json` declares `recommendedCompanions: [kepano/obsidian-skills]` with install hint.
+- **`hooks/hooks.json` PostToolUse** — added a lock-in-flight check before `git add`. When `bash scripts/wiki-lock.sh list` returns non-zero count, the auto-commit defers. Prevents torn commits during multi-agent ingest. Falls through gracefully if `wiki-lock.sh` is absent.
+- **`agents/wiki-ingest.md`** — rewrote the "Sub-agents MUST NOT" section. The prohibition on calling `allocate-address.sh` from sub-agents is preserved (counter monotonicity). A NEW rule is added: sub-agents MAY now write pages, but MUST acquire locks first.
+- **Versions** synced to 1.7.0 across `plugin.json` and `marketplace.json`.
+
+### Migration notes
+
+- v1.6 vaults need no action. The new components are opt-in (`bash bin/setup-retrieve.sh` for hybrid retrieval) or universally beneficial (wiki-lock is core; no setup needed). The plugin remains MIT-licensed; no paid tier introduced.
+- To install the recommended companion: `claude plugin marketplace add kepano/obsidian-skills`. Existing local fallbacks remain functional without it.
+- Estimated upgrade time: 5 minutes (substrate auto-detected; transport auto-detected on first session; retrieval requires explicit `bash bin/setup-retrieve.sh`).
+
+### Out of scope for v1.7 (deferred to v1.8+)
+
+- Methodology modes (LYT / PARA / Zettelkasten / Generic via `wiki-mode` skill) — planned for v1.8.
+- NotebookLM-class derivative outputs (audio, quiz, flashcards, study guide via `wiki-derive`) — planned for v1.9 or v2.0.
+- Multimodal ingest adapters (YouTube, PDF, EPUB, image OCR via `wiki-ingest-multimodal`) — planned for v1.9.
+- Periodic review artifacts (`wiki-review`) — planned for v1.8.
+
 ## [1.6.0] - 2026-04-24
 
 ### Added (DragonScale Mechanism 4, opt-in)

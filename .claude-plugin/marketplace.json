@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "claude-obsidian: Claude + Obsidian knowledge companion by AgriciDaniel",
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "plugins": [
     {
@@ -16,8 +16,8 @@
         "repo": "AgriciDaniel/claude-obsidian",
         "ref": "main"
       },
-      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection. Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives (markdown, bases, json-canvas, obsidian-cli).",
-      "version": "1.6.0",
+      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. v1.7 \"Compound Vault\" adds default Obsidian CLI transport, hybrid retrieval (Anthropic Sept 2024 contextual retrieval pattern: BM25 + cosine rerank), and per-file advisory locking for safe multi-writer ingest. Optional DragonScale Memory extension (log folds, deterministic addresses, semantic tiling lint, boundary-first autoresearch). Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives.",
+      "version": "1.7.0",
       "author": {
         "name": "AgriciDaniel",
         "url": "https://github.com/AgriciDaniel"
