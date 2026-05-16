@@ -345,7 +345,7 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False):
 
 
 def collect_pages(target):
-    if target == "--all":
+    if target == "--all" or target is None:
         return sorted(p for p in WIKI_DIR.rglob("*.md")
                       if not any(part.startswith(".") for part in p.parts))
     p = Path(target)
@@ -356,7 +356,11 @@ def collect_pages(target):
 
 def main():
     parser = argparse.ArgumentParser(description="Chunk + contextualize wiki pages.")
-    parser.add_argument("path", help="Page path relative to vault root, or --all")
+    parser.add_argument("path", nargs="?",
+                        help="Page path relative to vault root. Omit (or pass --all) "
+                             "to process every wiki page.")
+    parser.add_argument("--all", action="store_true",
+                        help="Process every wiki page (equivalent to omitting path).")
     parser.add_argument("--no-llm", action="store_true",
                         help="Force tier-3 synthetic prefix (skip LLM calls).")
     parser.add_argument("--rebuild", action="store_true",
@@ -364,6 +368,12 @@ def main():
     parser.add_argument("--peek", action="store_true",
                         help="Print plan, write nothing.")
     args = parser.parse_args()
+
+    if args.all and not args.path:
+        args.path = "--all"
+    elif not args.path:
+        # No path and no --all: default to all (matches the help text)
+        args.path = "--all"
 
     pages = collect_pages(args.path)
     total_written = 0
