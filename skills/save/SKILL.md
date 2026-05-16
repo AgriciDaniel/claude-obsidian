@@ -18,6 +18,18 @@ The wiki compounds. Save often.
 
 ---
 
+## Transport (v1.7+)
+
+The session-note write itself follows the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
+
+- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < session.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
+- **filesystem** — Claude's `Write` tool with absolute path
+
+Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/references/transport-fallback.md). Index/log/hot updates use the same transport.
+
+---
+
 ## Note Type Decision
 
 Determine the best type from the conversation content:

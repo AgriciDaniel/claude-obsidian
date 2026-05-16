@@ -11,6 +11,18 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ---
 
+## Transport (v1.7+)
+
+Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
+
+- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md` (or `append`, `property:set`); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note` and friends; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
+- **filesystem** — Claude's `Write`/`Edit` tools with absolute vault-rooted paths (final floor; always works)
+
+Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/references/transport-fallback.md).
+
+---
+
 ## Delta Tracking
 
 Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.

@@ -10,6 +10,18 @@ The wiki has already done the synthesis work. Read strategically, answer precise
 
 ---
 
+## Transport (v1.7+)
+
+Reads should prefer the same transport the rest of the plugin uses. Consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`) and use the `preferred` entry:
+
+- **cli** — `obsidian-cli read "$VAULT" "$NOTE"` and `obsidian-cli search "$VAULT" "<query>"` (Obsidian-native ranking); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__read_note`, `search_notes`; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
+- **filesystem** — Claude's `Read` and `Glob`/`Grep` tools (final floor; always works)
+
+Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/references/transport-fallback.md). Quick mode (hot.md only) is transport-agnostic — always uses `Read`.
+
+---
+
 ## Query Modes
 
 Three depths. Choose based on the question complexity.

@@ -19,6 +19,18 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 
 ---
 
+## Transport (v1.7+)
+
+The research loop writes a lot — source pages, concept pages, entity pages, manifest updates. All writes follow the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
+
+- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
+- **filesystem** — Claude's `Write` tool with absolute path
+
+Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/references/transport-fallback.md). Web fetches (`WebFetch`/`WebSearch`) are transport-agnostic.
+
+---
+
 ## Before Starting
 
 Read `references/program.md` to load the research objectives and constraints. This file is user-configurable. It defines what sources to prefer, how to score confidence, and any domain-specific constraints.
