@@ -31,6 +31,22 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Concurrency (v1.7+)
+
+The research loop is a high write-rate skill (often 10-30 page writes per topic). Every wiki page write MUST be preceded by `wiki-lock acquire <path>`:
+
+```bash
+bash scripts/wiki-lock.sh acquire wiki/sources/<slug>.md || sleep 2 && bash scripts/wiki-lock.sh acquire wiki/sources/<slug>.md
+# … write via §Transport-selected method …
+bash scripts/wiki-lock.sh release wiki/sources/<slug>.md
+```
+
+If autoresearch is invoked in parallel (e.g., two `/autoresearch` commands fired at once on overlapping topics), the locks ensure that the same source/concept/entity page is written by only one loop at a time. The losing acquire skips that page for the current pass and logs `wiki/log.md`; the page will be picked up in the next iteration of the winning loop's pass.
+
+See `skills/wiki-ingest/SKILL.md` §Concurrency for the full lock semantics.
+
+---
+
 ## Before Starting
 
 Read `references/program.md` to load the research objectives and constraints. This file is user-configurable. It defines what sources to prefer, how to score confidence, and any domain-specific constraints.

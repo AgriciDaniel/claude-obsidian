@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -d .git ] && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
+            "command": "[ -d .git ] && { [ -x scripts/wiki-lock.sh ] && [ \"$(bash scripts/wiki-lock.sh list 2>/dev/null | wc -l | tr -d ' ')\" != \"0\" ] && exit 0 || true; } && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
           }
         ]
       }

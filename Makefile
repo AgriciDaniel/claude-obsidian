@@ -2,21 +2,24 @@
 # Test runner entry points for DragonScale and vault tooling.
 
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
-        setup-dragonscale setup-retrieve clean-test-state help
+        test-lock test-concurrent setup-dragonscale setup-retrieve \
+        clean-test-state help
 
 help:
 	@echo "claude-obsidian developer targets:"
-	@echo "  make test              Run all v1.7 tests (DragonScale + retrieval)"
+	@echo "  make test              Run all v1.7 tests (DragonScale + retrieval + concurrency)"
 	@echo "  make test-address     scripts/allocate-address.sh tests (shell)"
 	@echo "  make test-tiling      scripts/tiling-check.py tests (python, no ollama required)"
 	@echo "  make test-boundary    scripts/boundary-score.py tests (python, no prereqs)"
 	@echo "  make test-bm25        scripts/bm25-index.py tests (python, hermetic)"
 	@echo "  make test-retrieve    scripts/retrieve.py + rerank.py tests (python, hermetic)"
+	@echo "  make test-lock        scripts/wiki-lock.sh tests (shell, hermetic)"
+	@echo "  make test-concurrent  multi-writer correctness gate (shell, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent
 	@echo ""
 	@echo "All tests passed."
 
@@ -39,6 +42,14 @@ test-bm25:
 test-retrieve:
 	@echo "=== test_retrieve.py ==="
 	@python3 tests/test_retrieve.py
+
+test-lock:
+	@echo "=== test_wiki_lock.sh ==="
+	@bash tests/test_wiki_lock.sh
+
+test-concurrent:
+	@echo "=== test_concurrent_write.sh ==="
+	@bash tests/test_concurrent_write.sh
 
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh

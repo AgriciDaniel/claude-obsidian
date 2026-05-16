@@ -23,6 +23,38 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Concurrency (v1.7+)
+
+**Multi-writer is safe in v1.7.** The latent corruption bug from v1.6 — where two parallel sub-agents writing to the same page could silently trample each other — is closed by per-file advisory locking. Every wiki page write MUST be preceded by `wiki-lock acquire <path>`.
+
+```bash
+# Acquire — blocks (returns 75 EX_TEMPFAIL) if another writer holds the lock
+if bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md; then
+  # ... do the write via the §Transport-selected method ...
+  bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+else
+  # rc=75: another writer is in flight. Retry once after 2s; if still held,
+  # log to wiki/log.md and skip this page rather than overwrite.
+  sleep 2
+  bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md && {
+    # write …
+    bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+  } || echo "skipped wiki/concepts/Foo.md (locked); logged to wiki/log.md"
+fi
+```
+
+Properties:
+- **Per-file granularity.** Locks key on `sha1(<vault-relative-path>)`; concurrent writes to DIFFERENT pages run in parallel.
+- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `scripts/wiki-lock.sh` header for the full semantics.
+- **Cross-process release.** Release is `rm -f` (no PID match required). Skill authors are trusted to release locks they acquire; cross-skill release is allowed by design (a janitor running `wiki-lock clear-stale --max-age 0` is the canonical recovery path).
+- **The PostToolUse hook now defers `git add` if any locks are currently held**, so the auto-commit doesn't fire mid-ingest and produce torn commits. See `hooks/hooks.json`.
+
+`wiki-lock` is unconditional in v1.7+ — there is no feature gate, no fallback. Skills that don't acquire locks are racing against any other writer. The script is in core, not opt-in.
+
+Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `scripts/allocate-address.sh`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `agents/wiki-ingest.md`.
+
+---
+
 ## Delta Tracking
 
 Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.

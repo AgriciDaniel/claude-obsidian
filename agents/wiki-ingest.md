@@ -36,15 +36,32 @@ You will be given:
 9. Check for contradictions with existing pages. Add `> [!contradiction]` callouts where needed.
 10. Return a summary of what you created and updated.
 
-## DragonScale address assignment (opt-in, single-writer)
+## Concurrency (v1.7+): per-file locks REQUIRED for page writes
+
+Multi-writer page creation IS safe in v1.7 because every page write is gated by `scripts/wiki-lock.sh`. Acquire before write, release after:
+
+```bash
+bash scripts/wiki-lock.sh acquire wiki/sources/<slug>.md || {
+  # Another writer holds the same page — skip it this pass; log to wiki/log.md
+  echo "skipped wiki/sources/<slug>.md (locked)"; continue
+}
+# … write the page via Write/Edit ($Transport-selected method) …
+bash scripts/wiki-lock.sh release wiki/sources/<slug>.md
+```
+
+The lock semantics (age-based, 60s default stale window, cross-process release allowed) are documented in `scripts/wiki-lock.sh` and `skills/wiki-ingest/SKILL.md` §Concurrency. There is no opt-out; this is core in v1.7.
+
+## DragonScale address assignment (still single-writer at the allocator)
 
 If the vault has adopted DragonScale Mechanism 2 (detected by `[ -x ./scripts/allocate-address.sh ] && [ -d ./.vault-meta ]`):
 
-- **Parallel ingest sub-agents MUST NOT call `scripts/allocate-address.sh` directly.** The allocator is flock-guarded for atomicity, but the `.raw/.manifest.json` `address_map` update pattern assumes single-writer semantics.
+- **Parallel ingest sub-agents STILL MUST NOT call `scripts/allocate-address.sh` directly.** The allocator is flock-guarded for atomicity, but the `.raw/.manifest.json` `address_map` update pattern assumes single-writer semantics for the manifest specifically.
 - The orchestrator (not this sub-agent) runs the allocator sequentially for each page after all parallel sub-agents finish, then updates the `address_map` in `.raw/.manifest.json` and writes addresses into frontmatter.
 - Sub-agents write pages WITHOUT the `address:` field. The orchestrator backfills addresses in a post-pass.
 
-If the vault has NOT adopted DragonScale, ignore this section and create pages without address fields.
+The wiki-lock guard covers PAGE writes; the allocator guard covers ADDRESS writes. Both are needed because they protect different invariants (file content vs. counter monotonicity).
+
+If the vault has NOT adopted DragonScale, sub-agents simply create pages without address fields. The wiki-lock guard still applies.
 
 ## Do NOT
 
@@ -52,7 +69,8 @@ If the vault has NOT adopted DragonScale, ignore this section and create pages w
 - Update `wiki/index.md` or `wiki/log.md` (the orchestrator does this after all agents finish)
 - Update `wiki/hot.md` (the orchestrator does this at the end)
 - Create duplicate pages
-- Call `scripts/allocate-address.sh` from inside a parallel sub-agent (single-writer rule above)
+- Call `scripts/allocate-address.sh` from inside a parallel sub-agent (DragonScale rule above)
+- Write any wiki/ file WITHOUT first acquiring its lock via `scripts/wiki-lock.sh acquire` (v1.7+ concurrency rule above)
 
 ## Output Format
 

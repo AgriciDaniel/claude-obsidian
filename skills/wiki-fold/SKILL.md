@@ -38,6 +38,27 @@ When referring to level in frontmatter, use `batch_exponent: k` (not `level: k`)
 
 ---
 
+## Concurrency (v1.7+)
+
+The fold-page write in commit mode MUST be preceded by `wiki-lock acquire`:
+
+```bash
+FOLD_PATH="wiki/folds/${FOLD_ID}.md"
+bash scripts/wiki-lock.sh acquire "$FOLD_PATH" || {
+  echo "FAIL: another writer holds $FOLD_PATH; aborting fold."; exit 75
+}
+# … write the fold via Write/Edit (which fires the PostToolUse hook) …
+bash scripts/wiki-lock.sh release "$FOLD_PATH"
+```
+
+Fold pages are deterministically named (`fold-k{K}-from-{DATE}-to-{DATE}-n{COUNT}.md`), so two parallel folds with the same parameters target the same path. Without the lock, they could overwrite each other's outputs. The duplicate-detection check inside this skill (already documented below) handles the "fold already exists" case at the SKILL level; the lock handles the in-flight-write race at the OS level.
+
+Dry-run mode does not acquire a lock (no writes happen).
+
+See `skills/wiki-ingest/SKILL.md` §Concurrency for the full lock semantics.
+
+---
+
 ## Deterministic fold ID
 
 Every fold has an ID derived from its inputs:

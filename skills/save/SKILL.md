@@ -30,6 +30,25 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Concurrency (v1.7+)
+
+Session-note writes MUST be preceded by `wiki-lock acquire`:
+
+```bash
+NOTE_PATH="wiki/questions/<slug>.md"   # or wiki/concepts/, wiki/meta/, etc.
+bash scripts/wiki-lock.sh acquire "$NOTE_PATH" || {
+  echo "skipped: $NOTE_PATH currently locked by another writer"; exit 0
+}
+# … write the note via §Transport-selected method …
+bash scripts/wiki-lock.sh release "$NOTE_PATH"
+```
+
+For multi-file saves (e.g., session note + index update + log append), acquire each lock in sorted-path order to avoid deadlocks. Index/log/hot updates lock just like content pages.
+
+See `skills/wiki-ingest/SKILL.md` §Concurrency for the full lock semantics.
+
+---
+
 ## Note Type Decision
 
 Determine the best type from the conversation content:
