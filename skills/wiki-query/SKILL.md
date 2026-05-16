@@ -22,6 +22,24 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Retrieval (v1.7+)
+
+If `wiki-retrieve` is feature-detected — `[ -x scripts/retrieve.py ] && [ -d .vault-meta/chunks ] && [ -f .vault-meta/bm25/index.json ]` — Standard and Deep modes consult it BEFORE the legacy hot→index→drill chain:
+
+```bash
+python3 scripts/retrieve.py "<the user's question verbatim>" --top 5
+```
+
+Output is JSON with a `candidates` array. Each candidate has `absolute_path` to the source page, a `snippet`, and `bm25_score` + `rerank_score`. Read the cited pages (using the transport selector from §Transport above) and synthesize with chunk-level citation.
+
+If `retrieve.py` exits 10 (feature not provisioned), or any step in the pipeline errors, fall back to the v1.6 legacy read order described in the Standard/Deep workflows below — no user-visible breakage.
+
+Quick mode always skips retrieval (hot.md only — keeps the ~1,500 token budget intact).
+
+Full spec: [`skills/wiki-retrieve/SKILL.md`](../wiki-retrieve/SKILL.md). Setup: `bash bin/setup-retrieve.sh`. The legacy read-order workflows below remain authoritative when wiki-retrieve is not installed.
+
+---
+
 ## Query Modes
 
 Three depths. Choose based on the question complexity.
