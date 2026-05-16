@@ -114,3 +114,15 @@ _attachments/
 .vault-meta/.tiling.lock
 .vault-meta/tiling-cache.json
 .vault-meta/tiling-cache.*.tmp
+
+# v1.7 Compound Vault runtime artifacts (regenerable; host-specific)
+.vault-meta/.wiki-lock.meta
+.vault-meta/.bm25.lock
+.vault-meta/.embed-cache.lock
+.vault-meta/locks/
+.vault-meta/chunks/
+.vault-meta/bm25/
+.vault-meta/embed-cache.json
+.vault-meta/embed-cache.*.tmp
+.vault-meta/transport.json
+.vault-meta/transport.*.tmp
