@@ -2,6 +2,38 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.7.1] - 2026-05-17 (audit-driven patch)
+
+Patch release closing the 1 BLOCKER + 6 HIGH findings from the v1.7.0 audit ([`docs/audits/v1.7.0-audit-2026-05-17.md`](docs/audits/v1.7.0-audit-2026-05-17.md)). All v1.7.0 features remain available; the changes are guard-rails and one new agent.
+
+### Fixed
+
+- **BLOCKER B1 — Data egress without consent** (`ca68bb6`). `scripts/contextual-prefix.py` now requires an explicit `--allow-egress` flag (default off) before selecting tier-1 (Anthropic API) or tier-2 (claude CLI subprocess). Without the flag, `pick_prefix_tier()` returns `"synthetic"` regardless of `ANTHROPIC_API_KEY` or `claude` binary presence. `bin/setup-retrieve.sh` adds a y/N consent prompt before any non-synthetic Stage 1 run. `skills/wiki-retrieve/SKILL.md` adds a Data Privacy callout (also closes H6). Mirror of the existing `scripts/tiling-check.py:351` `--allow-remote-ollama` precedent.
+- **H1 — Stage 1 failure had no rollback path** (`4837d4f`). `bin/setup-retrieve.sh` now captures Stage 1's exit code, exits 5 on non-zero, and prints a 3-option recovery hint (incremental resume, full wipe, single-page re-process). Stage 2 only runs after Stage 1 success.
+- **H2 — `make clean-test-state` didn't remove v1.7 artifacts** (`7e1f187`). Extended the target to remove `.vault-meta/chunks/`, `.vault-meta/bm25/`, `.vault-meta/locks/`, `.vault-meta/transport.json`, `.vault-meta/.wiki-lock.meta`, and the related `.tmp` files. The Makefile target now matches the v1.7 `.gitignore` set.
+- **H3 — PostToolUse hook swallowed lock-check errors** (`7120970`). Restructured `hooks/hooks.json` to capture the wiki-lock script's exit code directly (not via a pipeline), defer the auto-commit on any non-zero rc, and only run `git add` after both the rc check and the non-empty-list check pass.
+- **H4 — No verifier-agent pass at workstream gates** (`3ea443f`). Added `agents/verifier.md` — a read-only (`Read`/`Grep`/`Glob`/`Bash` only; no `Write`/`Edit`) pre-commit specialist that reads the staged diff, applies the /best-practices six-cut + agent kernel, and returns findings in four tiers (BLOCKER/HIGH/MEDIUM/LOW). CLAUDE.md "Pre-commit verifier (v1.7.1+)" section references it as the recommended pre-commit step.
+- **H5 — `detect-transport.sh` JSON escaping was shell-only** (`722ac97`). Added a `json_escape()` helper that pipes through `python3 -c json.dumps`, applied to `CLI_VERSION` (both `obsidian-cli` and `obsidian`-binary paths). The heredoc now emits `${CLI_VERSION}` without surrounding quotes since the helper produces a pre-quoted JSON string. Defense in depth against pathological upstream version output (backslashes, tabs, newlines, control chars).
+- **H6 — `skills/wiki-retrieve/SKILL.md` had no Data Privacy section** (bundled with B1 in `ca68bb6`). New section at the top of the skill body documents the two-layer egress guard (`--allow-egress` flag + setup-retrieve prompt) and points back to the `tiling-check.py` precedent.
+
+### Added
+
+- `agents/verifier.md` — pre-commit specialist; see H4 above.
+- `scripts/baseline-v16.py` + `scripts/benchmark-runner.py` — audit instrumentation that ran the 50-query retrieval benchmark documented in `wiki/meta/retrieval-benchmark-v1.7.md`. Result: v1.7 top-1 54.0% vs v1.6 baseline 24.0% (+30pp); error reduction +39.5% vs the ≥30% gate. Future audits can re-run with `python3 scripts/benchmark-runner.py`.
+- `docs/audits/v1.7.0-audit-2026-05-17.md` (481 lines) — the full audit report.
+- `docs/audits/v1.7.1-fixes-plan.md` — the sequenced 6-commit roadmap this release executes.
+
+### Changed
+
+- Versions bumped to 1.7.1 in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (description fields refreshed to mention the verifier agent and the egress-consent guard).
+- `CLAUDE.md` "Pre-commit verifier (v1.7.1+)" section added; "Concurrency (v1.7+)" section retained verbatim.
+
+### Migration notes
+
+- v1.6 vaults: no action needed. The new components are opt-in or read-only.
+- v1.7.0 adopters who provisioned `bin/setup-retrieve.sh` and had `ANTHROPIC_API_KEY` set: the next `bin/setup-retrieve.sh` run will prompt for consent before proceeding with the non-synthetic tier. Decline to keep all data on-machine (tier-3 synthetic), accept to preserve the prior behavior. Existing chunks/ data is unaffected either way.
+- Test suite: `make test` continues to run 7 hermetic suites (~1162 assertions). Zero ollama, zero network dependency.
+
 ## [1.7.0] - 2026-05-17 (Compound Vault refoundation)
 
 The v1.7 line, codenamed **Compound Vault**, refoundations the plugin around four pillars from the May 2026 gap analysis: substrate alignment with `kepano/obsidian-skills`, Obsidian-CLI-native transport, contextual + hybrid retrieval, and safe multi-writer ingest. v1.6 vaults that never install the new opt-in components see no behavior change. Full design rationale in `docs/compound-vault-guide.md`.
