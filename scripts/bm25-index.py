@@ -34,8 +34,7 @@ Query interface (used by retrieve.py at query time):
   bm25-index.py query "your text here" [--top 20]
 
 Build interface:
-  bm25-index.py build               # incremental: process chunks modified since last index
-  bm25-index.py build --rebuild     # full rebuild
+  bm25-index.py build               # full rebuild (always; incremental is v1.7.x scope)
   bm25-index.py stats               # print index stats
 
 Exit codes:
@@ -193,36 +192,6 @@ def load_index():
         sys.exit(EXIT_INDEX_MISSING)
 
 
-def bm25_score(query_terms, doc_id, doc_meta, vocab, params, avg_dl):
-    """Standard Okapi BM25 score for one doc vs a query.
-    score = sum_i idf(qi) * (tf(qi, D) * (k1+1)) / (tf(qi, D) + k1*(1 - b + b * dl/avgdl))
-    """
-    k1 = params["k1"]
-    b = params["b"]
-    dl = doc_meta["dl"]
-    N = len(vocab)  # used as N for IDF? — actually N is the corpus doc_count, not vocab size
-    # Note: idf uses doc_count, not vocab len; we'll get doc_count from caller via avg-dl param shape
-    score = 0.0
-    for term in query_terms:
-        v = vocab.get(term)
-        if not v:
-            continue
-        # find tf in this doc
-        tf = 0
-        for cid, cnt in v["postings"]:
-            if cid == doc_id:
-                tf = cnt
-                break
-        if tf == 0:
-            continue
-        # BM25-style IDF with the +0.5 smoothing variant
-        df = v["df"]
-        # We need N (corpus doc count) — passed via avg_dl tuple. Caller passes (avg_dl, N).
-        # To keep signature clean, recompute IDF in query() instead.
-        score += tf  # placeholder; real score computed in query()
-    return score
-
-
 def query(text, top_k=20):
     idx = load_index()
     vocab = idx["vocab"]
@@ -275,9 +244,7 @@ def main():
     parser = argparse.ArgumentParser(description="BM25 inverted index over wiki chunks.")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    sp_build = sub.add_parser("build", help="Build (or rebuild) the index.")
-    sp_build.add_argument("--rebuild", action="store_true",
-                          help="(reserved for incremental mode; v1.7 always does full rebuild)")
+    sub.add_parser("build", help="Build the index (full rebuild every time in v1.7).")
 
     sp_query = sub.add_parser("query", help="Query the index.")
     sp_query.add_argument("text", help="Query text")

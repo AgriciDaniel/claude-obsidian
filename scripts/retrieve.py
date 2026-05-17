@@ -93,17 +93,11 @@ def main():
                         help="Candidate count from BM25 (pre-rerank)")
     parser.add_argument("--no-rerank", action="store_true",
                         help="Skip the rerank stage; return BM25-only")
-    parser.add_argument("--no-bm25", action="store_true",
-                        help="Reserved for future vector-only mode; currently errors")
     parser.add_argument("--explain", action="store_true",
                         help="Include per-stage diagnostics in output")
     parser.add_argument("--allow-remote-ollama", action="store_true",
                         help="Forwarded to rerank.py")
     args = parser.parse_args()
-
-    if args.no_bm25:
-        log("ERR: --no-bm25 reserved for v1.7.x vector-only mode; not yet implemented")
-        return EXIT_USAGE
 
     if not BM25_INDEX.is_file():
         log(f"ERR: no BM25 index at {BM25_INDEX}. Run `bash bin/setup-retrieve.sh` "
