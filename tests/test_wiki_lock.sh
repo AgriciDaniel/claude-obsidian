@@ -136,6 +136,16 @@ assert_eq "acquire ../ rejected" "4" "$RC_DOTDOT"
 RC_EMPTY=$( (wl acquire "" >/dev/null 2>&1); echo $? )
 assert_eq "acquire empty path rejected" "4" "$RC_EMPTY"
 
+# ── path validation: newline rejected (v1.7.2; closes audit M4) ──────────────
+# Newlines in lock paths would break the meta-lock line format (key=value lines
+# separated by literal \n). Must be rejected at validate_path() time.
+RC_NL=$( (wl acquire $'wiki/concepts/Foo\nbar.md' >/dev/null 2>&1); echo $? )
+assert_eq "acquire newline path rejected" "4" "$RC_NL"
+
+# ── path validation: carriage return rejected (v1.7.2; closes audit M4) ──────
+RC_CR=$( (wl acquire $'wiki/concepts/Foo\rbar.md' >/dev/null 2>&1); echo $? )
+assert_eq "acquire carriage-return path rejected" "4" "$RC_CR"
+
 # ── stress: 10 unique paths all acquire cleanly ──────────────────────────────
 for i in $(seq 1 10); do
   wl acquire "wiki/stress/page-$i.md" >/dev/null

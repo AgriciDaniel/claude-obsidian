@@ -97,12 +97,16 @@ ensure_dirs() {
 }
 
 validate_path() {
-  # Reject empty, absolute, or escape paths to prevent lock-namespace pollution.
+  # Reject empty, absolute, escape, or newline-bearing paths to prevent
+  # lock-namespace pollution. v1.7.2 / closes audit M4: newlines would break
+  # the meta-lock line format (key=value lines separated by literal \n).
   local p="$1"
   [ -z "$p" ] && die "path cannot be empty" 4
   case "$p" in
     /*) die "path must be vault-relative, not absolute: $p" 4 ;;
     *..*) die "path may not contain '..': $p" 4 ;;
+    *$'\n'*) die "path may not contain newlines (lockfile format would break)" 4 ;;
+    *$'\r'*) die "path may not contain carriage returns" 4 ;;
   esac
   return 0
 }

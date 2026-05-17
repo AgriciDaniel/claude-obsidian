@@ -48,6 +48,7 @@ import math
 import os
 import shutil
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -93,7 +94,10 @@ def ollama_url(allow_remote):
         parsed = urllib.parse.urlparse(url)
         host = parsed.hostname or ""
         if host not in ("127.0.0.1", "localhost", "::1"):
-            log(f"ERR: OLLAMA_URL={url} is not localhost; pass --allow-remote-ollama")
+            log(f"ERR: OLLAMA_URL={url} points off-localhost (host={host!r}).")
+            log("  Either: (a) run ollama locally — `systemctl --user start ollama` or `ollama serve`")
+            log("  Or:     (b) pass --allow-remote-ollama through retrieve.py, which forwards it here.")
+            log("  Or:     (c) unset OLLAMA_URL to fall back to the local default (127.0.0.1:11434).")
             sys.exit(EXIT_USAGE)
     return url
 
@@ -132,18 +136,41 @@ def load_cache():
 
 
 def save_cache(cache):
+    """Persist the embed cache atomically.
+
+    v1.7.2 / closes audit M7: previously used blocking fcntl.LOCK_EX with no
+    timeout, which could hang indefinitely on a non-flock-capable filesystem
+    (some NFS mounts, network shares, FUSE backends without lock support).
+    Now uses LOCK_NB with a 3-attempt retry loop, then falls back to writing
+    without the lock (with a WARN) so the rerank pipeline never hangs the
+    user's session. The temp + os.replace pattern provides write atomicity
+    even without the lock; the lock only serializes concurrent writers.
+    """
     META_DIR.mkdir(parents=True, exist_ok=True)
     fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_WRONLY, 0o644)
+    locked = False
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
+        for attempt in range(3):
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                locked = True
+                break
+            except BlockingIOError:
+                time.sleep(0.1)
+        if not locked:
+            log("WARN: rerank embed-cache lock unavailable after 3 tries; "
+                "writing unlocked (atomic via temp+rename). Concurrent writers "
+                "may overwrite each other's last update.")
         tmp = EMBED_CACHE_PATH.with_suffix(f".{os.getpid()}.tmp")
         tmp.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
         os.replace(tmp, EMBED_CACHE_PATH)
     finally:
-        try:
-            fcntl.flock(fd, fcntl.LOCK_UN)
-        finally:
-            os.close(fd)
+        if locked:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            except OSError:
+                pass
+        os.close(fd)
 
 
 def load_chunk(chunk_rel_path):

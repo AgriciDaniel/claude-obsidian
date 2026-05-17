@@ -325,6 +325,14 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
     chunks = chunk_body(content)
     tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress)
 
+    if not chunks:
+        # v1.7.2 / closes audit M6: previously this logged "chunks=0" with no
+        # explanation and silently produced no index entries. Now: explicit WARN
+        # so the user notices empty-body pages (often frontmatter-only stubs).
+        log(f"WARN: {page_path.relative_to(VAULT_ROOT)} has no chunkable body content "
+            f"(empty after frontmatter strip). Skipping; no chunks written.")
+        return {"address": address, "written": [], "skipped": 0, "tier": tier}
+
     log(f"-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
 
     written = []

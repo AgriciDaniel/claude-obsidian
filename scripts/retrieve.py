@@ -71,11 +71,28 @@ def log(msg):
 
 
 def import_sibling(name, filename):
-    """Import a hyphenated sibling .py file as a Python module."""
-    spec = importlib.util.spec_from_file_location(name, SCRIPTS_DIR / filename)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    """Import a hyphenated sibling .py file as a Python module.
+
+    Wrapped in try/except (v1.7.2; closes audit M5) so a syntax error or
+    missing dependency in a sibling helper produces a friendly diagnostic
+    instead of a bare Python traceback at the user's first retrieve call.
+    """
+    target = SCRIPTS_DIR / filename
+    if not target.is_file():
+        log(f"ERR: sibling helper {filename} not found at {target}")
+        log("  Run `bash bin/setup-retrieve.sh --check` to verify the install.")
+        sys.exit(EXIT_NOT_PROVISIONED)
+    try:
+        spec = importlib.util.spec_from_file_location(name, target)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except (ImportError, SyntaxError, AttributeError) as e:
+        log(f"ERR: failed to import sibling helper {filename}: {type(e).__name__}: {e}")
+        log("  This likely means the helper script is corrupted or has a syntax error.")
+        log("  Run `python3 scripts/<helper>.py --help` directly to see the underlying error.")
+        log("  If it persists: re-clone the repo or check `git status` for local damage.")
+        sys.exit(EXIT_NOT_PROVISIONED)
 
 
 def chunk_snippet(chunk_data, max_chars=200):
