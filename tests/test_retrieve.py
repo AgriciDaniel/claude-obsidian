@@ -225,6 +225,100 @@ def test_end_to_end_with_synthetic_chunks():
         assert_eq("top hit is c-000001", "c-000001", first["page_address"])
 
 
+# ─── M8 closure: --explain and --no-rerank flag coverage ─────────────────────
+def test_explain_flag_adds_diagnostics_block():
+    """v1.7.2 / closes audit M8: --explain must include an 'explain' diagnostics block."""
+    import hashlib
+    with tempfile.TemporaryDirectory() as tmpdir:
+        sandbox = Path(tmpdir)
+        (sandbox / "scripts").mkdir()
+        meta = sandbox / ".vault-meta"
+        chunks_dir = meta / "chunks"
+        bm25_dir = meta / "bm25"
+        chunks_dir.mkdir(parents=True)
+        bm25_dir.mkdir(parents=True)
+        import shutil
+        for f in ["retrieve.py", "bm25-index.py", "rerank.py"]:
+            shutil.copy(ROOT / "scripts" / f, sandbox / "scripts" / f)
+            os.chmod(sandbox / "scripts" / f, 0o755)
+        # 2 synthetic chunks
+        (chunks_dir / "c-000010").mkdir()
+        (chunks_dir / "c-000010" / "chunk-000.json").write_text(json.dumps({
+            "schema_version": 1, "page_path": "wiki/fake/c-000010.md",
+            "page_address": "c-000010", "chunk_index": 0,
+            "raw_text": "hybrid retrieval pipeline",
+            "contextualized_text": "hybrid retrieval pipeline",
+            "prefix": "", "prefix_source": "synthetic",
+            "char_count": 25,
+            "body_hash": "sha256:" + hashlib.sha256(b"hybrid retrieval pipeline").hexdigest(),
+            "page_body_hash": "sha256:0",
+            "created_at": "2026-05-17T00:00:00Z",
+        }))
+        # Build index
+        subprocess.run([sys.executable, str(sandbox / "scripts" / "bm25-index.py"), "build"],
+                       capture_output=True, timeout=10, check=True)
+        # Run with --explain --no-rerank
+        result = subprocess.run(
+            [sys.executable, str(sandbox / "scripts" / "retrieve.py"),
+             "hybrid", "--top", "1", "--no-rerank", "--explain"],
+            capture_output=True, text=True, timeout=10)
+        assert_eq("retrieve --explain --no-rerank rc=0", 0, result.returncode)
+        out = json.loads(result.stdout)
+        assert_true("--explain produces 'explain' key",
+                    "explain" in out, hint=f"keys={list(out.keys())}")
+        explain = out.get("explain", {})
+        assert_true("--explain reports BM25 candidate count",
+                    "bm25_candidates" in explain or "bm25" in str(explain).lower(),
+                    hint=f"explain={explain}")
+
+
+def test_no_rerank_flag_strategy_bm25_only():
+    """v1.7.2 / closes audit M8: --no-rerank must produce strategy='bm25-only'."""
+    import hashlib
+    with tempfile.TemporaryDirectory() as tmpdir:
+        sandbox = Path(tmpdir)
+        (sandbox / "scripts").mkdir()
+        meta = sandbox / ".vault-meta"
+        chunks_dir = meta / "chunks"
+        bm25_dir = meta / "bm25"
+        chunks_dir.mkdir(parents=True)
+        bm25_dir.mkdir(parents=True)
+        import shutil
+        for f in ["retrieve.py", "bm25-index.py", "rerank.py"]:
+            shutil.copy(ROOT / "scripts" / f, sandbox / "scripts" / f)
+            os.chmod(sandbox / "scripts" / f, 0o755)
+        (chunks_dir / "c-000020").mkdir()
+        (chunks_dir / "c-000020" / "chunk-000.json").write_text(json.dumps({
+            "schema_version": 1, "page_path": "wiki/fake/c-000020.md",
+            "page_address": "c-000020", "chunk_index": 0,
+            "raw_text": "transport detection fallback chain",
+            "contextualized_text": "transport detection fallback chain",
+            "prefix": "", "prefix_source": "synthetic",
+            "char_count": 35,
+            "body_hash": "sha256:" + hashlib.sha256(b"transport detection fallback chain").hexdigest(),
+            "page_body_hash": "sha256:0",
+            "created_at": "2026-05-17T00:00:00Z",
+        }))
+        subprocess.run([sys.executable, str(sandbox / "scripts" / "bm25-index.py"), "build"],
+                       capture_output=True, timeout=10, check=True)
+        result = subprocess.run(
+            [sys.executable, str(sandbox / "scripts" / "retrieve.py"),
+             "transport", "--top", "1", "--no-rerank"],
+            capture_output=True, text=True, timeout=10)
+        assert_eq("retrieve --no-rerank rc=0", 0, result.returncode)
+        out = json.loads(result.stdout)
+        assert_eq("--no-rerank sets strategy='bm25-only'", "bm25-only", out.get("strategy"))
+        # --no-rerank produces a consistent shape: rerank fields are populated
+        # but rerank_source is "skipped" (so callers don't have to special-case).
+        candidates = out.get("candidates", [])
+        assert_true("--no-rerank still returns candidates", len(candidates) >= 1)
+        first = candidates[0]
+        assert_eq("--no-rerank candidate rerank_source='skipped'", "skipped",
+                  first.get("rerank_source"))
+        assert_eq("--no-rerank candidate rerank_score equals bm25_score",
+                  first.get("bm25_score"), first.get("rerank_score"))
+
+
 def main():
     print("=== test_retrieve.py ===")
     test_import_sibling_resolves_hyphenated_names()
@@ -240,6 +334,8 @@ def main():
     test_rerank_truncates_to_top_k()
     test_retrieve_exits_10_without_index()
     test_end_to_end_with_synthetic_chunks()
+    test_explain_flag_adds_diagnostics_block()
+    test_no_rerank_flag_strategy_bm25_only()
     print("\nAll retrieve tests passed.")
 
 
