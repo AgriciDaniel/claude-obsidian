@@ -52,7 +52,8 @@ a an and are as at be by for from has have he her him his i if in is it its
 of on or that the their them they this to was were will with you your
 """.split())
 
-TOKEN_RE = re.compile(r"[A-Za-z][A-Za-z0-9'\-]*")
+# Mirrors bm25-index.py's Unicode-aware tokenizer (v1.7.2; closes M2).
+TOKEN_RE = re.compile(r"\w[\w'\-]*", re.UNICODE)
 
 HOT_BOOST = 5.0
 INDEX_BOOST = 3.0

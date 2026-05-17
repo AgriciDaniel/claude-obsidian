@@ -69,6 +69,29 @@ def test_tokenize_short_tokens_dropped():
     assert_eq("tokenize drops <2-char and stopwords", ["dddd"], [t for t in out if len(t) > 2])
 
 
+def test_tokenize_unicode_multilingual():
+    """v1.7.2 / closes audit M2: tokenizer must preserve non-ASCII content."""
+    # Cyrillic
+    out = bm25.tokenize("Привет мир")
+    assert_true("tokenize preserves Cyrillic", "привет" in out and "мир" in out,
+                hint=f"got {out}")
+    # CJK (each character is its own token because there are no word boundaries)
+    out = bm25.tokenize("日本語の文書")
+    assert_true("tokenize preserves CJK", len(out) >= 1 and any("日" in t or "本" in t for t in out),
+                hint=f"got {out}")
+    # Accented Latin (Spanish, French, German)
+    out = bm25.tokenize("café résumé naïve über")
+    assert_true("tokenize preserves accented Latin", "café" in out and "résumé" in out,
+                hint=f"got {out}")
+    # Pure-emoji string: no word chars → no tokens (correct skip)
+    out = bm25.tokenize("🎉🚀✨")
+    assert_eq("tokenize skips pure-emoji string", [], out)
+    # Mixed ASCII + non-ASCII: both survive
+    out = bm25.tokenize("Hello мир café")
+    assert_true("tokenize mixes ASCII + non-ASCII",
+                "hello" in out and "мир" in out and "café" in out, hint=f"got {out}")
+
+
 # ─── build_index + query() ───────────────────────────────────────────────────
 def synthetic_chunk(idx, address, raw_text, contextualized_text):
     """Build a chunk JSON record matching the contextual-prefix.py schema."""
@@ -239,6 +262,7 @@ def main():
     test_tokenize_basic()
     test_tokenize_stopwords()
     test_tokenize_punctuation_and_apostrophe()
+    test_tokenize_unicode_multilingual()
     test_tokenize_short_tokens_dropped()
     test_build_and_query()
     test_query_score_monotonicity()
