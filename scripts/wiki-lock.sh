@@ -49,6 +49,17 @@
 # Globals:
 #   STALE_AFTER_SEC — default 60. Override via --stale-after-sec N on any cmd.
 #
+# Age-threshold naming (v1.7.2; closes audit L6):
+#   - STALE_AFTER_SEC (default 60) is the PER-ACQUIRE threshold. A new
+#     acquire that finds an existing lock will reap-and-take if the lock is
+#     older than this; refuse otherwise. Tuned for "single skill operation
+#     completes within 60s."
+#   - `clear-stale --max-age N` (default 3600) is the ADMIN reaper threshold,
+#     meant to be run periodically by an operator or hook to sweep abandoned
+#     locks. Tuned for "anything older than an hour is definitely abandoned."
+#   These are two distinct concerns; both are time-since-acquire but operate
+#   at different scopes. Do not unify the defaults.
+#
 # Usage:
 #   bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md
 #   bash scripts/wiki-lock.sh release wiki/concepts/Foo.md

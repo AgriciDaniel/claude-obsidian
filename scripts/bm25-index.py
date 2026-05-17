@@ -211,6 +211,11 @@ def query(text, top_k=20):
     if not qterms:
         return []
 
+    # Defensive guard (v1.7.2; closes audit L7): avg_dl can only be 0 if the
+    # vocab is also empty (all chunks have zero tokens), in which case the
+    # loop never enters this divide path. But future refactors could change
+    # that invariant; the `or 1.0` keeps it safe by construction.
+    avg_dl_safe = avg_dl or 1.0
     scores = defaultdict(float)
     for term in qterms:
         v = vocab.get(term)
@@ -220,7 +225,7 @@ def query(text, top_k=20):
         idf = math.log(1 + (N - df + 0.5) / (df + 0.5))
         for cid, cnt in v["postings"]:
             dl = docs[cid]["dl"]
-            denom = cnt + k1 * (1 - b + b * dl / avg_dl)
+            denom = cnt + k1 * (1 - b + b * dl / avg_dl_safe)
             scores[cid] += idf * (cnt * (k1 + 1)) / denom
 
     ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)[:top_k]

@@ -417,12 +417,18 @@ def main():
         args.path = "--all"
 
     pages = collect_pages(args.path)
+    # Filter to actual files up front so progress counter is meaningful
+    # (v1.7.2; closes audit L2: tier-2 over 47 pages can take 5+ min — the
+    # user needs a count, not just per-page log lines).
+    files = [p for p in pages if p.is_file()]
+    skipped_non_files = len(pages) - len(files)
+    if skipped_non_files:
+        log(f"({skipped_non_files} non-file paths skipped)")
+    total = len(files)
     total_written = 0
     total_skipped = 0
-    for page in pages:
-        if not page.is_file():
-            log(f"skip (not a file): {page}")
-            continue
+    for i, page in enumerate(files, 1):
+        log(f"[{i}/{total}]", )
         result = process_page(
             page,
             force_synthetic=args.no_llm,
@@ -433,7 +439,7 @@ def main():
         total_written += len(result["written"])
         total_skipped += result["skipped"]
 
-    log(f"\nDone. chunks_written={total_written}  chunks_unchanged={total_skipped}")
+    log(f"\nDone. pages={total}  chunks_written={total_written}  chunks_unchanged={total_skipped}")
     return EXIT_OK
 
 
