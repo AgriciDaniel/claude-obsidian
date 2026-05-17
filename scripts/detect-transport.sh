@@ -55,6 +55,14 @@ done
 
 log() { $QUIET || echo "$@" >&2; }
 
+# json_escape: read stdin and emit a JSON-encoded string (including the
+# surrounding double quotes). Used for any untrusted value that lands in the
+# transport.json heredoc — newlines, backslashes, control chars in upstream
+# binaries (obsidian-cli --version) would otherwise break the JSON.
+json_escape() {
+  python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()), end="")'
+}
+
 mkdir -p "$META_DIR" || {
   echo "ERR: cannot create .vault-meta/ at $META_DIR" >&2
   exit 2
@@ -76,15 +84,21 @@ CLI_VERSION=""
 if command -v obsidian-cli >/dev/null 2>&1; then
   CLI_PRESENT=true
   CLI_BINARY="obsidian-cli"
-  CLI_VERSION="$(obsidian-cli --version 2>/dev/null | head -1 | tr -d '"' || echo unknown)"
+  # Pre-quoted JSON string (json_escape returns "..." including quotes).
+  # Heredoc must emit ${CLI_VERSION} WITHOUT surrounding double quotes.
+  CLI_VERSION="$(obsidian-cli --version 2>/dev/null | head -1 | json_escape || echo '"unknown"')"
 elif command -v obsidian >/dev/null 2>&1; then
   # Obsidian 1.12+ ships `obsidian` as the CLI binary on some platforms.
   # We treat it as cli-capable if it accepts a --cli or --version flag without launching the GUI.
   if obsidian --version >/dev/null 2>&1; then
     CLI_PRESENT=true
     CLI_BINARY="obsidian"
-    CLI_VERSION="$(obsidian --version 2>/dev/null | head -1 | tr -d '"' || echo unknown)"
+    CLI_VERSION="$(obsidian --version 2>/dev/null | head -1 | json_escape || echo '"unknown"')"
   fi
+fi
+# Fallback default when neither binary was found: must still be a valid JSON literal.
+if [ -z "$CLI_VERSION" ]; then
+  CLI_VERSION='""'
 fi
 
 # ── 2. Obsidian app running? (informational only; CLI works either way) ──────
@@ -121,7 +135,7 @@ snapshot() {
     "cli": {
       "present": ${CLI_PRESENT},
       "binary": "${CLI_BINARY}",
-      "version_string": "${CLI_VERSION}",
+      "version_string": ${CLI_VERSION},
       "obsidian_app_running": ${OBSIDIAN_RUNNING}
     },
     "filesystem": {
