@@ -28,6 +28,16 @@ Patch release closing the 1 BLOCKER + 6 HIGH findings from the v1.7.0 audit ([`d
 - Versions bumped to 1.7.1 in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (description fields refreshed to mention the verifier agent and the egress-consent guard).
 - `CLAUDE.md` "Pre-commit verifier (v1.7.1+)" section added; "Concurrency (v1.7+)" section retained verbatim.
 
+### Polish (post-fix self-audit refinements)
+
+After the 7 v1.7.1 commits landed, a re-pass with `agents/verifier.md` against the slice surfaced 2 MEDIUM + 3 LOW polish items. All closed in one follow-up commit:
+
+- `scripts/detect-transport.sh` — split `CLI_VERSION_RAW` (human log line) from `CLI_VERSION` (pre-quoted JSON for the heredoc). The JSON-escape fix from H5 made the log line `CLI: obsidian-cli ("1.12.0")` carry visible quotes; the split keeps both paths clean.
+- `agents/verifier.md` — converted `tools:` from CSV to YAML list. Both forms are valid per Anthropic's spec; the list form is more explicit.
+- `bin/setup-retrieve.sh` — refreshed the header docstring (lines 13-26) to mention `--allow-egress` and the consent gate. Inline comments at line 121 were already correct; the file-top doc was the stale one.
+- `scripts/contextual-prefix.py` — docstring on `generate_prefix()` explaining the deliberate asymmetric fallback (api→cli→synthetic, but cli→synthetic only — climbing from cli to api would silently spend money the user did not authorize).
+- `hooks/hooks.json` — breadcrumb log to `.vault-meta/hook.log` on the rare non-zero `LOCK_RC` defer path. Verified with concurrency (10 parallel hook fires → 10 atomic lines, no interleaving; line length < `PIPE_BUF`), no format-string injection (printf uses literal format with %s placeholders), filesystem-failure edge cases preserve `exit 0` (defer behavior intact).
+
 ### Migration notes
 
 - v1.6 vaults: no action needed. The new components are opt-in or read-only.

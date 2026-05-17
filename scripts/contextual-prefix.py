@@ -278,6 +278,15 @@ def pick_prefix_tier(force_synthetic, allow_egress=False):
 
 
 def generate_prefix(tier, fm, body, chunk_text):
+    """Asymmetric fallback by design:
+      - tier="anthropic-api" → on failure, try claude-cli (subprocess,
+        free) before synthetic. The API is the user's stated preference,
+        and claude-cli is the closer-in-quality fallback.
+      - tier="claude-cli"    → on failure, go straight to synthetic. The
+        user has either no API key or has not opted into one; climbing
+        back to the API would silently spend money they did not authorize.
+      - tier="synthetic"     → always synthetic.
+    """
     title = fm.get("title") or "(untitled)"
     if tier == "anthropic-api":
         result = anthropic_api_prefix(
@@ -285,7 +294,6 @@ def generate_prefix(tier, fm, body, chunk_text):
         )
         if result:
             return result, "anthropic-api"
-        # API failure → fall to claude-cli, then synthetic
         if shutil.which("claude"):
             result = claude_cli_prefix(title, body, chunk_text)
             if result:

@@ -84,21 +84,26 @@ CLI_VERSION=""
 if command -v obsidian-cli >/dev/null 2>&1; then
   CLI_PRESENT=true
   CLI_BINARY="obsidian-cli"
-  # Pre-quoted JSON string (json_escape returns "..." including quotes).
-  # Heredoc must emit ${CLI_VERSION} WITHOUT surrounding double quotes.
-  CLI_VERSION="$(obsidian-cli --version 2>/dev/null | head -1 | json_escape || echo '"unknown"')"
+  # Keep two views of the version: RAW for the human log line, JSON-escaped
+  # for the transport.json heredoc. CLI_VERSION below is pre-quoted (includes
+  # the surrounding double quotes), so the heredoc emits ${CLI_VERSION}
+  # without wrapping quotes.
+  CLI_VERSION_RAW="$(obsidian-cli --version 2>/dev/null | head -1 || echo unknown)"
+  CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
 elif command -v obsidian >/dev/null 2>&1; then
   # Obsidian 1.12+ ships `obsidian` as the CLI binary on some platforms.
   # We treat it as cli-capable if it accepts a --cli or --version flag without launching the GUI.
   if obsidian --version >/dev/null 2>&1; then
     CLI_PRESENT=true
     CLI_BINARY="obsidian"
-    CLI_VERSION="$(obsidian --version 2>/dev/null | head -1 | json_escape || echo '"unknown"')"
+    CLI_VERSION_RAW="$(obsidian --version 2>/dev/null | head -1 || echo unknown)"
+    CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
   fi
 fi
 # Fallback default when neither binary was found: must still be a valid JSON literal.
 if [ -z "$CLI_VERSION" ]; then
   CLI_VERSION='""'
+  CLI_VERSION_RAW=""
 fi
 
 # ── 2. Obsidian app running? (informational only; CLI works either way) ──────
@@ -172,6 +177,6 @@ trap - EXIT
 
 log "Wrote: ${OUTPUT_FILE}"
 log "Preferred transport: ${PREFERRED}"
-$CLI_PRESENT && log "  CLI:        ${CLI_BINARY} (${CLI_VERSION})"
+$CLI_PRESENT && log "  CLI:        ${CLI_BINARY} (${CLI_VERSION_RAW})"
 log "  Filesystem: always available (Read/Write/Edit tools)"
 log "  MCP:        not auto-detected (see wiki/references/mcp-setup.md to configure)"

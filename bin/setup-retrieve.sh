@@ -10,10 +10,20 @@
 #   2. Create .vault-meta/chunks/ and .vault-meta/bm25/ directories.
 #   3. Check for ollama + nomic-embed-text (informational; not required for
 #      contextual prefix tier 2/3, but required for the rerank cosine stage).
-#   4. Run contextual-prefix.py --all to chunk + contextualize every wiki page.
-#      Uses Anthropic API if ANTHROPIC_API_KEY is set, else `claude -p`
-#      subprocess if `claude` is on PATH, else falls back to synthetic prefix.
-#   5. Run bm25-index.py build to build the inverted index.
+#   4. Data-egress consent (v1.7.1+). If a non-synthetic prefix tier
+#      (anthropic-api or claude-cli) would otherwise be chosen, prompt
+#      the user for explicit y/N consent. Default is abort (synthetic-only
+#      remains the safe alternative). On consent, pass --allow-egress
+#      through to contextual-prefix.py. Pass --no-llm at the CLI to skip
+#      the prompt entirely and stay on tier-3 (synthetic).
+#   5. Run contextual-prefix.py --all to chunk + contextualize every wiki page.
+#      Tier picker (synthetic by default; non-synthetic only with consent):
+#        tier 1: Anthropic API   (--allow-egress + ANTHROPIC_API_KEY set)
+#        tier 2: claude CLI -p   (--allow-egress + `claude` on PATH)
+#        tier 3: synthetic       (no flag, --no-llm, or no consent)
+#      Stage 1 exit code is captured; non-zero aborts with a recovery hint
+#      (rc=5) before Stage 2.
+#   6. Run bm25-index.py build to build the inverted index.
 #
 # After completion the wiki-retrieve skill is "feature-detected" by other
 # skills (wiki-query checks for scripts/retrieve.py + .vault-meta/chunks/).
