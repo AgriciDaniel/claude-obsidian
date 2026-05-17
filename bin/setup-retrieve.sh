@@ -165,7 +165,21 @@ ARGS=("--all")
 $NO_LLM && ARGS+=("--no-llm")
 $ALLOW_EGRESS && ARGS+=("--allow-egress")
 $REBUILD && ARGS+=("--rebuild")
+# Disable set -e for the call so we can inspect the exit code and offer a
+# concrete recovery hint instead of aborting with a bare trace.
+set +e
 python3 "$VAULT/scripts/contextual-prefix.py" "${ARGS[@]}"
+STAGE1_RC=$?
+set -e
+if [ "$STAGE1_RC" -ne 0 ]; then
+  warn "Stage 1 failed (rc=$STAGE1_RC). Partial chunks may exist at:"
+  warn "  $META/chunks/"
+  warn "Recovery options:"
+  warn "  1. Re-run setup-retrieve.sh — body_hash skips already-processed chunks."
+  warn "  2. Wipe and start over:  rm -rf $META/chunks/ && bash bin/setup-retrieve.sh"
+  warn "  3. Re-process one page:  python3 scripts/contextual-prefix.py wiki/<failing-page>.md --rebuild"
+  exit 5
+fi
 
 # ── 6. Build BM25 index ──────────────────────────────────────────────────────
 say ""
