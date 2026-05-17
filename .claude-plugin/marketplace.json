@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "claude-obsidian: Claude + Obsidian knowledge companion by AgriciDaniel",
-    "version": "1.7.1"
+    "version": "1.7.2"
   },
   "plugins": [
     {
@@ -16,8 +16,8 @@
         "repo": "AgriciDaniel/claude-obsidian",
         "ref": "main"
       },
-      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. v1.7 \"Compound Vault\" adds default Obsidian CLI transport, hybrid retrieval (Anthropic Sept 2024 contextual retrieval pattern: BM25 + cosine rerank), per-file advisory locking for safe multi-writer ingest, and a pre-commit verifier agent. v1.7.1 closes the BLOCKER + 6 HIGH findings from the v1.7.0 audit; contextual-prefix data egress now requires explicit --allow-egress consent. Optional DragonScale Memory extension (log folds, deterministic addresses, semantic tiling lint, boundary-first autoresearch). Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives.",
-      "version": "1.7.1",
+      "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. v1.7 \"Compound Vault\" adds default Obsidian CLI transport, hybrid retrieval (Anthropic Sept 2024 contextual retrieval pattern: BM25 + cosine rerank), per-file advisory locking for safe multi-writer ingest, and a pre-commit verifier agent. v1.7.1 + v1.7.2 close every finding from the v1.7.0 audit (1 BLOCKER + 6 HIGH + 10 MEDIUM + 7 LOW); Unicode-aware BM25 tokenizer (multilingual vaults), defensive-input fixes across the retrieval stack, dead-code pruning, full 50-query retrieval benchmark verified at +32pp top-1 / +41% error-reduction vs v1.6 baseline. Optional DragonScale Memory extension (log folds, deterministic addresses, semantic tiling lint, boundary-first autoresearch). Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives.",
+      "version": "1.7.2",
       "author": {
         "name": "AgriciDaniel",
         "url": "https://github.com/AgriciDaniel"

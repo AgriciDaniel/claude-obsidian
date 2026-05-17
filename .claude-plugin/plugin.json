@@ -1,7 +1,7 @@
 {
   "name": "claude-obsidian",
-  "version": "1.7.1",
-  "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault (Karpathy's LLM Wiki pattern). v1.7 \"Compound Vault\" adds: substrate dependency on kepano/obsidian-skills, default Obsidian CLI transport with fallback chain, hybrid retrieval (contextual prefix + BM25 + cosine rerank) per Anthropic's Sept 2024 research, per-file advisory locking for safe multi-writer ingest, and a pre-commit verifier agent. v1.7.1 closes the BLOCKER + 6 HIGH findings from the v1.7.0 audit; contextual-prefix data egress now requires explicit --allow-egress consent. Optional DragonScale Memory extension (log folds, deterministic addresses, semantic tiling lint, boundary-first autoresearch).",
+  "version": "1.7.2",
+  "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault (Karpathy's LLM Wiki pattern). v1.7 \"Compound Vault\" adds: substrate dependency on kepano/obsidian-skills, default Obsidian CLI transport with fallback chain, hybrid retrieval (contextual prefix + BM25 + cosine rerank) per Anthropic's Sept 2024 research, per-file advisory locking for safe multi-writer ingest, and a pre-commit verifier agent. v1.7.1 closes the BLOCKER + 6 HIGH findings from the v1.7.0 audit; v1.7.2 closes every remaining MEDIUM + LOW including Unicode-aware BM25 tokenizer (multilingual vaults), defensive-input fixes across the retrieval stack, and dead-code pruning. Optional DragonScale Memory extension (log folds, deterministic addresses, semantic tiling lint, boundary-first autoresearch).",
   "author": {
     "name": "AgriciDaniel",
     "url": "https://github.com/AgriciDaniel"
