@@ -126,3 +126,4 @@ _attachments/
 .vault-meta/embed-cache.*.tmp
 .vault-meta/transport.json
 .vault-meta/transport.*.tmp
+.vault-meta/hook.log

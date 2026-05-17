@@ -21,11 +21,7 @@ description: >
   </example>
 model: sonnet
 maxTurns: 25
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 You are a verifier agent. Your job is to find issues a worker just missed,

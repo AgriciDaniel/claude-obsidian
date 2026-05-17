@@ -81,6 +81,7 @@ fi
 CLI_PRESENT=false
 CLI_BINARY=""
 CLI_VERSION=""
+CLI_VERSION_RAW=""
 if command -v obsidian-cli >/dev/null 2>&1; then
   CLI_PRESENT=true
   CLI_BINARY="obsidian-cli"
