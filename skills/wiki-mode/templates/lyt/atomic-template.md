@@ -1,7 +1,7 @@
 ---
 type: note
 title: "{{title}}"
-created: {{date}}
+created: "{{date}}"
 tags: []
 mocs:
   - "[[{{primary-moc}}]]"

@@ -127,19 +127,41 @@ def test_zettelkasten_routing():
     cfg = dict(wm.DEFAULT_CONFIG)
     cfg["mode"] = "zettelkasten"
     p = wm.route_path("zettelkasten", "source", "Karpathy essay", cfg)
-    # Format: wiki/<14-digit-timestamp>-<slug>.md
+    # Format: wiki/<20-digit-timestamp-with-microseconds>-<slug>.md
     assert_true("zettel path starts with wiki/", p.startswith("wiki/"), hint=p)
     assert_true("zettel no subfolders", p.count("/") == 1, hint=p)
-    # filename like "20260517123456-karpathy-essay.md"
     fname = p.rsplit("/", 1)[1]
     parts = fname.split("-", 1)
-    assert_true("zettel ID is 14 digits", parts[0].isdigit() and len(parts[0]) == 14, hint=fname)
+    # v1.8.1 fix: IDs are 20 digits (YYYYMMDDHHMMSSffffff) for collision resistance
+    assert_true("zettel ID is 20 digits", parts[0].isdigit() and len(parts[0]) == 20, hint=fname)
 
 
 # ─── Zettel ID format ───────────────────────────────────────────────────────
 def test_mint_zettel_id_format():
     zid = wm.mint_zettel_id()
-    assert_true("zettel ID is 14-digit string", len(zid) == 14 and zid.isdigit(), hint=zid)
+    # 14 (YYYYMMDDHHMMSS) + 6 (microseconds) = 20 digits
+    assert_true("zettel ID is 20-digit string", len(zid) == 20 and zid.isdigit(), hint=zid)
+
+
+def test_mint_zettel_id_collision_resistance():
+    """v1.8.1 fix: rapid back-to-back mint calls produce DIFFERENT IDs.
+    Microsecond suffix ensures two calls within the same second are distinct.
+    """
+    ids = [wm.mint_zettel_id() for _ in range(10)]
+    assert_eq("zettel IDs all distinct (10 rapid calls)", 10, len(set(ids)))
+
+
+def test_slugify_extended_unicode():
+    """v1.8.1 fix: explicit test coverage for CJK + Cyrillic (verifier LOW).
+    The slugify function preserves any Unicode word character; only ASCII
+    punctuation and emoji get stripped/converted.
+    """
+    assert_eq("CJK preserved", "日本語の文書", wm.slugify("日本語の文書"))
+    assert_eq("Cyrillic with space", "Привет-мир", wm.slugify("Привет мир"))
+    assert_eq("Mixed scripts", "Hello-мир-café", wm.slugify("Hello мир café"))
+    # Emoji is stripped (not in \w); surrounding text joined by single hyphen
+    assert_eq("Emoji becomes single hyphen between words", "Test-emoji",
+              wm.slugify("Test 🎉 emoji"))
 
 
 # ─── Slugify handles unicode + special chars ────────────────────────────────
@@ -183,7 +205,7 @@ def test_cli_id_returns_timestamp():
     )
     assert_eq("cli id rc=0", 0, result.returncode)
     zid = result.stdout.strip()
-    assert_true("cli id is 14-digit", len(zid) == 14 and zid.isdigit(), hint=zid)
+    assert_true("cli id is 20-digit", len(zid) == 20 and zid.isdigit(), hint=zid)
 
 
 # ─── CLI subprocess: `wiki-mode.py route source NAME` returns a path ────────
@@ -230,7 +252,9 @@ def main():
     test_para_routing()
     test_zettelkasten_routing()
     test_mint_zettel_id_format()
+    test_mint_zettel_id_collision_resistance()
     test_slugify()
+    test_slugify_extended_unicode()
     test_invalid_content_type_raises()
     test_cli_get_returns_mode()
     test_cli_id_returns_timestamp()

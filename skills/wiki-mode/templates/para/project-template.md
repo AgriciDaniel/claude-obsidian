@@ -2,7 +2,7 @@
 type: project
 title: "{{title}}"
 status: active
-created: {{date}}
+created: "{{date}}"
 deadline: ""
 outcome: ""
 tags:

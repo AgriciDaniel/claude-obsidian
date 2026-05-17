@@ -2,7 +2,7 @@
 type: resource
 title: "{{title}}"
 topic: "{{topic}}"
-created: {{date}}
+created: "{{date}}"
 tags:
   - resource
 sources: []

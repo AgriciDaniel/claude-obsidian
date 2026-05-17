@@ -1,7 +1,7 @@
 ---
 type: area
 title: "{{title}}"
-created: {{date}}
+created: "{{date}}"
 review_cadence: weekly
 tags:
   - area

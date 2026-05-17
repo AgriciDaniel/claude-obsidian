@@ -1,7 +1,7 @@
 ---
 type: moc
 title: "{{title}}"
-created: {{date}}
+created: "{{date}}"
 tags:
   - moc
 related: []

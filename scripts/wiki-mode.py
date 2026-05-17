@@ -113,8 +113,13 @@ def slugify(name):
 
 
 def mint_zettel_id():
-    """YYYYMMDDHHMMSS in UTC. Stable across timezones; lexicographically sortable."""
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    """YYYYMMDDHHMMSSffffff in UTC (microsecond resolution).
+    Stable across timezones; lexicographically sortable; collision-resistant
+    against rapid back-to-back calls in the same second. Microsecond suffix
+    closes the v1.8.0 verifier LOW (two rapid mint calls produced the same
+    14-digit ID and would have generated colliding filenames).
+    """
+    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S%f")
 
 
 def route_path(mode, content_type, name, cfg):

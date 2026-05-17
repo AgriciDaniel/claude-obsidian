@@ -2,7 +2,7 @@
 type: zettel
 id: "{{id}}"
 title: "{{title}}"
-created: {{date}}
+created: "{{date}}"
 parent_id: ""
 child_ids: []
 tags: []
