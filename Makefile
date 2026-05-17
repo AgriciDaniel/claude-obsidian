@@ -59,7 +59,10 @@ setup-retrieve:
 
 clean-test-state:
 	@rm -f .vault-meta/.address.lock .vault-meta/.tiling.lock .vault-meta/.bm25.lock \
-	      .vault-meta/.embed-cache.lock .vault-meta/tiling-cache.json \
+	      .vault-meta/.embed-cache.lock .vault-meta/.wiki-lock.meta \
+	      .vault-meta/tiling-cache.json \
 	      .vault-meta/tiling-cache.*.tmp .vault-meta/embed-cache.json \
-	      .vault-meta/embed-cache.*.tmp
-	@echo "Runtime lockfiles and caches removed."
+	      .vault-meta/embed-cache.*.tmp .vault-meta/transport.json \
+	      .vault-meta/transport.*.tmp
+	@rm -rf .vault-meta/chunks/ .vault-meta/bm25/ .vault-meta/locks/
+	@echo "Runtime lockfiles, caches, and v1.7 retrieval/lock artifacts removed."
