@@ -12,6 +12,19 @@ The v1.6 query path was `Read(hot.md) → Read(index.md) → Read(3-5 pages) →
 
 ---
 
+## Data privacy (v1.7.1+)
+
+Tier 1 (Anthropic API) and tier 2 (claude CLI subprocess) of the contextual-prefix generator send **wiki page bodies off-machine**. As of v1.7.1, both tiers are GATED behind explicit user consent at two layers:
+
+- `scripts/contextual-prefix.py --allow-egress` (default off). Without the flag, `pick_prefix_tier()` returns `"synthetic"` regardless of `ANTHROPIC_API_KEY` or `claude` binary presence.
+- `bin/setup-retrieve.sh` prompts before any non-synthetic Stage 1 run; default is abort.
+
+To run fully on-machine (tier 3 synthetic prefix + local ollama rerank), use `bash bin/setup-retrieve.sh --no-llm`. This is also the effective behavior if you decline the consent prompt or omit `--allow-egress`.
+
+The guard mirrors `scripts/tiling-check.py:351` `--allow-remote-ollama`. v1.6 vaults that never provisioned this skill see zero behavior change.
+
+---
+
 ## Architecture
 
 ```

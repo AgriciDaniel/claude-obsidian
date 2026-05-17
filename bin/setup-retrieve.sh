@@ -109,6 +109,8 @@ else
 fi
 
 # ── 4. Prefix-tier picker (informational) ────────────────────────────────────
+# v1.7.1: tier reflects what WOULD run if --allow-egress were passed.
+# Without consent, the actual run forces tier-3 synthetic.
 if $NO_LLM; then
   PREFIX_TIER="synthetic (forced via --no-llm)"
 elif [ -n "${ANTHROPIC_API_KEY:-}" ]; then
@@ -118,7 +120,7 @@ elif command -v claude >/dev/null 2>&1; then
 else
   PREFIX_TIER="synthetic (no API key, no claude CLI; reduced retrieval quality)"
 fi
-say "✓ Contextual-prefix tier: $PREFIX_TIER"
+say "✓ Contextual-prefix tier (if --allow-egress): $PREFIX_TIER"
 
 if $CHECK_ONLY; then
   say ""
@@ -126,11 +128,42 @@ if $CHECK_ONLY; then
   exit 0
 fi
 
+# ── 4b. Egress consent (v1.7.1) ──────────────────────────────────────────────
+# If a non-synthetic tier would otherwise be selected, require explicit consent
+# before letting contextual-prefix.py send page bodies off-machine. Mirrors the
+# --allow-remote-ollama precedent in scripts/tiling-check.py.
+ALLOW_EGRESS=false
+if ! $NO_LLM; then
+  case "$PREFIX_TIER" in
+    anthropic-api*|claude-cli*)
+      say ""
+      say "⚠️  Stage 1 will send wiki page BODIES off-machine via the '$PREFIX_TIER' tier."
+      say "    Estimated cost: ~\$0 (claude-cli, free) to ~\$12 per 1,000 pages (Anthropic API)."
+      say "    Per-page bodies are POSTed to the provider; review their privacy policy first."
+      say "    Default is NO. Tier-3 (synthetic, on-machine) is the safe alternative."
+      printf "    Continue with egress? [y/N]: "
+      read -r reply || reply=""
+      case "$reply" in
+        [yY]|[yY][eE][sS])
+          say "→ Proceeding with egress."
+          ALLOW_EGRESS=true
+          ;;
+        *)
+          say "→ Aborted. Re-run with --no-llm for the synthetic-only path,"
+          say "  or set ANTHROPIC_API_KEY and use the claude CLI deliberately."
+          exit 0
+          ;;
+      esac
+      ;;
+  esac
+fi
+
 # ── 5. Chunk + contextualize every wiki page ─────────────────────────────────
 say ""
 say "═══ Stage 1/2: chunking + contextual-prefix generation ═══"
 ARGS=("--all")
 $NO_LLM && ARGS+=("--no-llm")
+$ALLOW_EGRESS && ARGS+=("--allow-egress")
 $REBUILD && ARGS+=("--rebuild")
 python3 "$VAULT/scripts/contextual-prefix.py" "${ARGS[@]}"
 

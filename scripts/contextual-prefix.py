@@ -11,12 +11,20 @@ Three-tier prefix generation (chosen per-run automatically):
   1. If ANTHROPIC_API_KEY is set      → direct Anthropic API call (Haiku 4.5)
                                          with prompt caching on the page body.
                                          ~$12 / 1000 docs per Anthropic figures.
+                                         REQUIRES --allow-egress (sends bodies off-machine).
   2. Elif `claude` binary on PATH     → `claude -p` subprocess (uses CC subscription;
                                          no API key needed; slower per call).
-  3. Else                             → synthetic prefix from page frontmatter +
+                                         REQUIRES --allow-egress (subprocess egresses).
+  3. Else (default)                   → synthetic prefix from page frontmatter +
                                          first paragraph (zero-cost floor; loses
                                          most of the contextual benefit but BM25
                                          and vector channels still work).
+
+Data-egress posture (v1.7.1+):
+  Tiers 1 and 2 send wiki page bodies off-machine. Both are GATED behind
+  --allow-egress (default off). Without the flag, pick_prefix_tier() always
+  returns "synthetic" regardless of env vars or claude binary presence.
+  Mirror of scripts/tiling-check.py:351 --allow-remote-ollama precedent.
 
 Chunk schema written to .vault-meta/chunks/<page-address>/chunk-NNN.json:
 {
@@ -249,8 +257,18 @@ def claude_cli_prefix(page_title, page_body, chunk_text):
     return None
 
 
-def pick_prefix_tier(force_synthetic):
-    if force_synthetic:
+def pick_prefix_tier(force_synthetic, allow_egress=False):
+    """Choose the contextual-prefix generation tier.
+
+    Without allow_egress=True, ALWAYS returns "synthetic" regardless of
+    env vars or claude binary availability. This is the v1.7.1 data-egress
+    guard: tiers 1 (Anthropic API) and 2 (claude CLI subprocess) both send
+    wiki page bodies off-machine, so they require explicit user consent via
+    the --allow-egress flag at the CLI layer.
+
+    Mirrors scripts/tiling-check.py:351 --allow-remote-ollama default-deny.
+    """
+    if force_synthetic or not allow_egress:
         return "synthetic"
     if os.environ.get("ANTHROPIC_API_KEY"):
         return "anthropic-api"
@@ -281,7 +299,8 @@ def generate_prefix(tier, fm, body, chunk_text):
     return synthetic_prefix(fm, body, chunk_text), "synthetic"
 
 
-def process_page(page_path, force_synthetic=False, rebuild=False, peek=False):
+def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
+                 allow_egress=False):
     body = read_page(page_path)
     fm, content = parse_frontmatter(body)
     address = fm.get("address") or derive_synthetic_address(page_path)
@@ -296,7 +315,7 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False):
             raise SystemExit(EXIT_CHUNK_DIR)
 
     chunks = chunk_body(content)
-    tier = pick_prefix_tier(force_synthetic)
+    tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress)
 
     log(f"-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
 
@@ -363,6 +382,12 @@ def main():
                         help="Process every wiki page (equivalent to omitting path).")
     parser.add_argument("--no-llm", action="store_true",
                         help="Force tier-3 synthetic prefix (skip LLM calls).")
+    parser.add_argument("--allow-egress", action="store_true",
+                        help="Allow tier-1 (Anthropic API) or tier-2 (claude CLI "
+                             "subprocess) prefix generation. Without this flag, page "
+                             "bodies stay on-machine and only the tier-3 synthetic "
+                             "prefix is used. Mirror of tiling-check.py's "
+                             "--allow-remote-ollama guard.")
     parser.add_argument("--rebuild", action="store_true",
                         help="Re-process chunks even if body_hash matches.")
     parser.add_argument("--peek", action="store_true",
@@ -387,6 +412,7 @@ def main():
             force_synthetic=args.no_llm,
             rebuild=args.rebuild,
             peek=args.peek,
+            allow_egress=args.allow_egress,
         )
         total_written += len(result["written"])
         total_skipped += result["skipped"]
