@@ -308,7 +308,7 @@ def generate_prefix(tier, fm, body, chunk_text):
 
 
 def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
-                 allow_egress=False):
+                 allow_egress=False, progress_label=""):
     body = read_page(page_path)
     fm, content = parse_frontmatter(body)
     address = fm.get("address") or derive_synthetic_address(page_path)
@@ -325,15 +325,16 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
     chunks = chunk_body(content)
     tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress)
 
+    prefix = (progress_label + " ") if progress_label else ""
     if not chunks:
         # v1.7.2 / closes audit M6: previously this logged "chunks=0" with no
         # explanation and silently produced no index entries. Now: explicit WARN
         # so the user notices empty-body pages (often frontmatter-only stubs).
-        log(f"WARN: {page_path.relative_to(VAULT_ROOT)} has no chunkable body content "
+        log(f"{prefix}WARN: {page_path.relative_to(VAULT_ROOT)} has no chunkable body content "
             f"(empty after frontmatter strip). Skipping; no chunks written.")
         return {"address": address, "written": [], "skipped": 0, "tier": tier}
 
-    log(f"-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
+    log(f"{prefix}-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
 
     written = []
     skipped = 0
@@ -428,13 +429,13 @@ def main():
     total_written = 0
     total_skipped = 0
     for i, page in enumerate(files, 1):
-        log(f"[{i}/{total}]", )
         result = process_page(
             page,
             force_synthetic=args.no_llm,
             rebuild=args.rebuild,
             peek=args.peek,
             allow_egress=args.allow_egress,
+            progress_label=f"[{i}/{total}]",
         )
         total_written += len(result["written"])
         total_skipped += result["skipped"]
