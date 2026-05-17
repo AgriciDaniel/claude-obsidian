@@ -232,3 +232,40 @@ Do NOT show the footer after:
 - `obsidian-bases`, `obsidian-markdown` (reference skills, not output)
 - Hot cache updates, index updates, or any background maintenance
 - Error messages or prompts for more information
+ ---
+
+## Vault root vs content path — critical for Dataview
+
+Dataview `FROM "<path>"` is resolved relative to **vault root** (where `.obsidian/` lives), not relative to the open note or to the `wiki/` content folder.
+
+If the vault is structured as:
+
+```
+<vault-root>/         # .obsidian/ lives here
+├── .obsidian/
+├── .raw/
+└── wiki/             # content folder (NOT vault root)
+    ├── papers/
+    ├── Projects/
+    └── meta/
+```
+
+Then Dataview queries inside any note must address subfolders relative to `<vault-root>`:
+
+- ❌ Wrong: `FROM "papers"` → resolves to `<vault-root>/papers/` (does not exist → 0 results)
+- ✅ Right: `FROM "wiki/papers"` → resolves to `<vault-root>/wiki/papers/`
+
+Same applies to all subfolders: `wiki/Projects`, `wiki/meta`, `wiki/thesis`, etc.
+
+**Verify before writing any Dataview query in this vault:**
+
+```bash
+ls "<vault-parent>/.obsidian"   # if exists, that path IS vault root
+```
+
+If `.obsidian/` is at the same level as `wiki/`, then `wiki/` is NOT vault root, and all Dataview paths must be prefixed with `wiki/`.
+
+**Symptom of getting this wrong:** Dataview blocks render with "No results to show for table/list query" even though the folder contains hundreds of files.
+
+This rule applies when creating synthesis matrices, dashboards, lint reports, query notes, or any artefact that embeds Dataview queries.
+
