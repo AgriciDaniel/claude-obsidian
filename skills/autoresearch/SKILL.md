@@ -31,6 +31,19 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Mode awareness (v1.8+)
+
+Before filing research output, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route research "<topic>"`. The router returns the vault-relative path:
+
+- **generic**: `wiki/concepts/<Topic>.md` (v1.7 default)
+- **LYT**: `wiki/notes/<topic>.md` + create or update a topic MOC at `wiki/mocs/<topic>-moc.md`
+- **PARA**: `wiki/resources/<topic>/<topic>.md` (topic-named subfolder under resources)
+- **Zettelkasten**: `wiki/<ID>-<topic>.md` (timestamped ID prefix)
+
+If `.vault-meta/mode.json` is absent, the router returns mode=generic paths.
+
+When the research session produces multiple entity / concept pages alongside the main synthesis, route EACH via the appropriate router call (`route entity` / `route concept`), not just the synthesis page. Mode awareness applies to every new file the loop creates.
+
 ## Concurrency (v1.7+)
 
 The research loop is a high write-rate skill (often 10-30 page writes per topic). Every wiki page write MUST be preceded by `wiki-lock acquire <path>`:

@@ -23,6 +23,28 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Mode awareness (v1.8+)
+
+Before creating any new wiki page, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
+
+```bash
+SRC_PATH=$(python3 scripts/wiki-mode.py route source "Karpathy 2025 LLM Wiki essay")
+# generic:      wiki/sources/Karpathy-2025-LLM-Wiki-essay.md
+# lyt:          wiki/notes/Karpathy-2025-LLM-Wiki-essay.md  (also update relevant MOC)
+# para:         wiki/resources/incoming/Karpathy-2025-LLM-Wiki-essay.md
+# zettelkasten: wiki/20260517123456-Karpathy-2025-LLM-Wiki-essay.md
+
+ENT_PATH=$(python3 scripts/wiki-mode.py route entity "Andrej Karpathy")
+CON_PATH=$(python3 scripts/wiki-mode.py route concept "Compounding Vault Pattern")
+```
+
+If `.vault-meta/mode.json` is absent, the router returns mode=generic paths (identical to v1.7 behavior). No special-casing needed in this skill.
+
+Mode-specific follow-up:
+- **LYT**: after filing the atomic note, update the relevant MOC (`wiki/mocs/<topic>-moc.md`) to link the new note. If no MOC exists for the topic, create one using `skills/wiki-mode/templates/lyt/moc-template.md`.
+- **Zettelkasten**: filename already includes the timestamp ID. Populate the `id:` frontmatter field to match.
+- **PARA**: new ingests land in `wiki/resources/incoming/` by default. Do NOT auto-guess the topic; leave in incoming/ for user review.
+
 ## Concurrency (v1.7+)
 
 **Multi-writer is safe in v1.7.** The latent corruption bug from v1.6 — where two parallel sub-agents writing to the same page could silently trample each other — is closed by per-file advisory locking. Every wiki page write MUST be preceded by `wiki-lock acquire <path>`.

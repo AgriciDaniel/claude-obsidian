@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""test_wiki_mode.py — hermetic tests for scripts/wiki-mode.py.
+
+Covers config load/save round-trip, all 4 modes' routing, slugification, ID
+minting, and the default-to-generic fallback when .vault-meta/mode.json is
+absent. No network, no LLM, no ollama. Pure stdlib + subprocess.
+
+Usage:
+  python3 tests/test_wiki_mode.py
+"""
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+from unittest import mock
+
+ROOT = Path(__file__).resolve().parent.parent
+HELPER = ROOT / "scripts" / "wiki-mode.py"
+
+spec = importlib.util.spec_from_file_location("wiki_mode", HELPER)
+wm = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(wm)
+
+
+class Fail(SystemExit):
+    pass
+
+
+def assert_eq(label, expected, actual):
+    if expected != actual:
+        raise Fail(f"FAIL {label}: expected {expected!r}, got {actual!r}")
+    print(f"OK   {label}")
+
+
+def assert_true(label, cond, hint=""):
+    if not cond:
+        raise Fail(f"FAIL {label}{(': ' + hint) if hint else ''}")
+    print(f"OK   {label}")
+
+
+# ─── Default-to-generic when no config file ──────────────────────────────────
+def test_load_config_defaults_to_generic_when_absent():
+    with tempfile.TemporaryDirectory() as tmp:
+        with mock.patch.object(wm, "MODE_PATH", Path(tmp) / "nonexistent.json"):
+            cfg = wm.load_config()
+            assert_eq("absent config → mode=generic", "generic", cfg["mode"])
+            assert_eq("schema_version present", 1, cfg["schema_version"])
+            assert_true("all 4 mode configs present",
+                        set(cfg["config"].keys()) == {"lyt", "para", "zettelkasten", "generic"})
+
+
+# ─── Config save → load round-trip ───────────────────────────────────────────
+def test_save_load_roundtrip():
+    with tempfile.TemporaryDirectory() as tmp:
+        mode_path = Path(tmp) / "mode.json"
+        with mock.patch.object(wm, "MODE_PATH", mode_path), \
+             mock.patch.object(wm, "META_DIR", Path(tmp)):
+            cfg = wm.load_config()
+            cfg["mode"] = "lyt"
+            cfg["configured_at"] = "2026-05-17T00:00:00Z"
+            wm.save_config(cfg)
+            assert_true("mode.json written", mode_path.is_file())
+            cfg2 = wm.load_config()
+            assert_eq("round-trip mode", "lyt", cfg2["mode"])
+            assert_eq("round-trip configured_at", "2026-05-17T00:00:00Z", cfg2["configured_at"])
+
+
+# ─── Corrupted mode.json falls back to generic with warning ──────────────────
+def test_corrupted_config_falls_back_to_generic():
+    with tempfile.TemporaryDirectory() as tmp:
+        mode_path = Path(tmp) / "mode.json"
+        mode_path.write_text("{ this is not valid json", encoding="utf-8")
+        with mock.patch.object(wm, "MODE_PATH", mode_path):
+            cfg = wm.load_config()
+            assert_eq("corrupted config → mode=generic", "generic", cfg["mode"])
+
+
+# ─── Mode=generic routing matches v1.7 conventions ──────────────────────────
+def test_generic_routing():
+    cfg = dict(wm.DEFAULT_CONFIG)
+    cfg["mode"] = "generic"
+    assert_eq("generic source",
+              "wiki/sources/Karpathy-2025-essay.md",
+              wm.route_path("generic", "source", "Karpathy 2025 essay", cfg))
+    assert_eq("generic entity preserves case",
+              "wiki/entities/Andrej Karpathy.md",
+              wm.route_path("generic", "entity", "Andrej Karpathy", cfg))
+    assert_eq("generic concept",
+              "wiki/concepts/Compounding Vault.md",
+              wm.route_path("generic", "concept", "Compounding Vault", cfg))
+    assert_eq("generic session",
+              "wiki/sessions/v1-8-launch-prep.md",
+              wm.route_path("generic", "session", "v1.8 launch prep", cfg))
+
+
+# ─── Mode=lyt routing: all atomic notes flat under wiki/notes/ ──────────────
+def test_lyt_routing():
+    cfg = dict(wm.DEFAULT_CONFIG)
+    cfg["mode"] = "lyt"
+    src = wm.route_path("lyt", "source", "Karpathy essay", cfg)
+    ent = wm.route_path("lyt", "entity", "Andrej Karpathy", cfg)
+    con = wm.route_path("lyt", "concept", "Compounding Vault", cfg)
+    assert_true("lyt source goes to notes/", src.startswith("wiki/notes/"), hint=src)
+    assert_true("lyt entity goes to notes/", ent.startswith("wiki/notes/"), hint=ent)
+    assert_true("lyt concept goes to notes/", con.startswith("wiki/notes/"), hint=con)
+
+
+# ─── Mode=para routing: actionability-based folders ─────────────────────────
+def test_para_routing():
+    cfg = dict(wm.DEFAULT_CONFIG)
+    cfg["mode"] = "para"
+    src = wm.route_path("para", "source", "Karpathy essay", cfg)
+    ent = wm.route_path("para", "entity", "Andrej Karpathy", cfg)
+    sess = wm.route_path("para", "session", "v1.8 prep", cfg)
+    res = wm.route_path("para", "research", "compounding-vault", cfg)
+    assert_true("para source → resources/incoming/", src.startswith("wiki/resources/incoming/"), hint=src)
+    assert_true("para entity → resources/people/", ent.startswith("wiki/resources/people/"), hint=ent)
+    assert_true("para session → projects/inbox/", sess.startswith("wiki/projects/inbox/"), hint=sess)
+    assert_true("para research → resources/<topic>/", "wiki/resources/compounding-vault/" in res, hint=res)
+
+
+# ─── Mode=zettelkasten routing: flat, timestamp-prefixed ────────────────────
+def test_zettelkasten_routing():
+    cfg = dict(wm.DEFAULT_CONFIG)
+    cfg["mode"] = "zettelkasten"
+    p = wm.route_path("zettelkasten", "source", "Karpathy essay", cfg)
+    # Format: wiki/<14-digit-timestamp>-<slug>.md
+    assert_true("zettel path starts with wiki/", p.startswith("wiki/"), hint=p)
+    assert_true("zettel no subfolders", p.count("/") == 1, hint=p)
+    # filename like "20260517123456-karpathy-essay.md"
+    fname = p.rsplit("/", 1)[1]
+    parts = fname.split("-", 1)
+    assert_true("zettel ID is 14 digits", parts[0].isdigit() and len(parts[0]) == 14, hint=fname)
+
+
+# ─── Zettel ID format ───────────────────────────────────────────────────────
+def test_mint_zettel_id_format():
+    zid = wm.mint_zettel_id()
+    assert_true("zettel ID is 14-digit string", len(zid) == 14 and zid.isdigit(), hint=zid)
+
+
+# ─── Slugify handles unicode + special chars ────────────────────────────────
+def test_slugify():
+    # Case is PRESERVED to match v1.7 entity/concept filing conventions.
+    assert_eq("ascii slug", "Karpathy-2025-essay", wm.slugify("Karpathy 2025 essay"))
+    assert_eq("unicode preserved", "café-résumé", wm.slugify("café résumé"))
+    # Periods become hyphens (so v1.7 → v1-7, not v17)
+    assert_eq("dots become hyphens", "v1-7-launch-prep", wm.slugify("v1.7 launch! prep?"))
+    assert_eq("empty → 'untitled'", "untitled", wm.slugify(""))
+
+
+# ─── Invalid content type raises ───────────────────────────────────────────
+def test_invalid_content_type_raises():
+    cfg = dict(wm.DEFAULT_CONFIG)
+    try:
+        wm.route_path("generic", "garbage", "x", cfg)
+        raise Fail("expected SystemExit(4) for invalid type")
+    except SystemExit as e:
+        assert_eq("invalid type → exit 4", 4, e.code)
+
+
+# ─── CLI subprocess: `wiki-mode.py get` returns mode string ─────────────────
+def test_cli_get_returns_mode():
+    """End-to-end CLI test via subprocess; uses the actual vault's mode (or generic if absent)."""
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "get"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli get rc=0", 0, result.returncode)
+    mode = result.stdout.strip()
+    assert_true("cli get returns one of 4 modes",
+                mode in ("generic", "lyt", "para", "zettelkasten"), hint=mode)
+
+
+# ─── CLI subprocess: `wiki-mode.py id` returns 14-digit timestamp ───────────
+def test_cli_id_returns_timestamp():
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "id"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli id rc=0", 0, result.returncode)
+    zid = result.stdout.strip()
+    assert_true("cli id is 14-digit", len(zid) == 14 and zid.isdigit(), hint=zid)
+
+
+# ─── CLI subprocess: `wiki-mode.py route source NAME` returns a path ────────
+def test_cli_route_returns_path():
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "route", "source", "Test Source"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli route rc=0", 0, result.returncode)
+    path = result.stdout.strip()
+    assert_true("cli route returns wiki-rooted path",
+                path.startswith("wiki/"), hint=path)
+    assert_true("cli route returns .md path", path.endswith(".md"), hint=path)
+
+
+# ─── CLI subprocess: invalid mode rejected ──────────────────────────────────
+def test_cli_set_rejects_invalid_mode():
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "set", "bogus"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_true("cli set rejects invalid mode", result.returncode != 0,
+                hint=f"rc={result.returncode}")
+
+
+# ─── CLI subprocess: templates listing returns all 6 ───────────────────────
+def test_cli_templates_lists_six():
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "templates"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli templates rc=0", 0, result.returncode)
+    lines = [l for l in result.stdout.strip().split("\n") if l]
+    assert_eq("cli templates returns 6 paths", 6, len(lines))
+
+
+def main():
+    print("=== test_wiki_mode.py ===")
+    test_load_config_defaults_to_generic_when_absent()
+    test_save_load_roundtrip()
+    test_corrupted_config_falls_back_to_generic()
+    test_generic_routing()
+    test_lyt_routing()
+    test_para_routing()
+    test_zettelkasten_routing()
+    test_mint_zettel_id_format()
+    test_slugify()
+    test_invalid_content_type_raises()
+    test_cli_get_returns_mode()
+    test_cli_id_returns_timestamp()
+    test_cli_route_returns_path()
+    test_cli_set_rejects_invalid_mode()
+    test_cli_templates_lists_six()
+    print("\nAll wiki-mode tests passed.")
+
+
+if __name__ == "__main__":
+    main()

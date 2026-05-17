@@ -2,6 +2,58 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.8.0] - 2026-05-17 (methodology modes — closes compass priority gap 5)
+
+Minor release closing the **5th and final priority gap** from the May 2026 compass artifact: methodology support. Adds the **`wiki-mode`** skill with first-class support for four organizational styles (LYT / PARA / Zettelkasten / Generic). After this release, claude-obsidian is **#1 on 5 of 7 axes per compass framework** — up from 4/7 in v1.7. Full guide: [`docs/methodology-modes-guide.md`](docs/methodology-modes-guide.md).
+
+### Added
+
+- **`skills/wiki-mode/SKILL.md`** — new skill (skill #14). Reads `.vault-meta/mode.json`; defaults to `generic` (v1.7 behavior) when absent. Triggers on "set vault mode", "switch to PARA", "use LYT", "zettelkasten setup", etc.
+- **`scripts/wiki-mode.py`** — pure-stdlib router + config helper. Subcommands: `get` (current mode), `config` (full JSON), `route <type> <name>` (suggested path), `set <mode>` (write mode.json), `id` (mint Zettel timestamp ID), `templates` (list per-mode templates).
+- **`bin/setup-mode.sh`** — interactive setup with `--mode <name>` non-interactive flag. Idempotent; safe to re-run to switch modes. Optionally seeds template folders for the chosen mode.
+- **6 per-mode templates** under `skills/wiki-mode/templates/`:
+  - `lyt/moc-template.md`, `lyt/atomic-template.md`
+  - `para/project-template.md`, `para/area-template.md`, `para/resource-template.md`
+  - `zettel/atomic-template.md`
+- **`tests/test_wiki_mode.py`** — hermetic test suite (15 assertions covering load/save round-trip, all 4 modes' routing, slugify Unicode handling, Zettel ID format, corrupted-config fallback, CLI subprocess paths). `make test` is now **8 suites**.
+- **`docs/methodology-modes-guide.md`** — narrative guide; when-to-use-which decision tree per mode; full schema documentation; migration guidance.
+
+### Changed
+
+- **`skills/wiki-ingest/SKILL.md`** — new "## Mode awareness (v1.8+)" section. Skill now consults `wiki-mode.py route` before filing new source/entity/concept pages. mode=generic preserves v1.7 behavior byte-for-byte.
+- **`skills/save/SKILL.md`** — new "## Mode awareness (v1.8+)" section. Session notes now route per active mode (with explicit note that the global `~/Documents/Obsidian Vault/sessions/` rule still applies to cross-project saves).
+- **`skills/autoresearch/SKILL.md`** — new "## Mode awareness (v1.8+)" section. Research synthesis output routes per active mode; every new entity/concept page in the research loop also routes via the router.
+- **`Makefile`** — new `test-mode` and `setup-mode` targets; `test` aggregate now runs 8 suites; `clean-test-state` removes `.vault-meta/mode.json` + `.vault-meta/hook.log`.
+- **`.gitignore`** — `.vault-meta/mode.json` + `.vault-meta/mode.*.tmp` added. Host-specific runtime config by default; `git add -f` to commit if the user wants the mode choice to follow the repo.
+- **`CLAUDE.md`** — new "## Methodology Modes (v1.8+)" section + skill table row + plugin-name header reference.
+- **`.claude-plugin/plugin.json` + `marketplace.json`** — version 1.7.2 → 1.8.0; descriptions refreshed to mention methodology modes and "5 of 5 priority gaps closed."
+
+### Compass axis status after v1.8.0
+
+| Axis (compass §1 + audit §9) | v1.7.2 | v1.8.0 |
+|---|---|---|
+| Compounding wiki primitive | #1 | #1 |
+| Multi-writer safety | #1 | #1 |
+| Retrieval architecture (free tier) | #1 | #1 |
+| License / openness | #1 | #1 |
+| **Methodology support** | TIE | **#1 ← v1.8.0** |
+| Derivative outputs | NO | NO (v2.0 scope) |
+| GUI / install ergonomics | NO | NO (v2.5+ scope) |
+
+**5 of 7 axes #1.** Remaining 2 axes require multi-release effort.
+
+### Honest scope acknowledgment
+
+- "Best ever obsidian skill per the priority research" = the 5 priority gaps closed. **v1.8.0 reaches this milestone.**
+- "Best ever in the market" requires **v2.0** (derive — audio/quiz/study) + **v2.5+** (Community Plugin GUI fork). These are weeks of work per release; v1.8.0 is the foundation, not the substitute.
+- The v1.7.0 audit's 24 findings (1 BLOCKER + 6 HIGH + 10 MEDIUM + 7 LOW) are fully CLOSED-or-DEFERRED as of v1.7.2; v1.8.0 inherits a clean audit ledger.
+
+### Migration notes
+
+- v1.7.x vaults: no action needed. `wiki-mode` defaults to `generic` when `.vault-meta/mode.json` is absent, which is identical to v1.7 behavior. The mode-awareness sections in wiki-ingest/save/autoresearch are no-ops in generic mode.
+- To adopt a non-default mode: `bash bin/setup-mode.sh` (or `bash bin/setup-mode.sh --mode <name>`). Interactive prompt picks one of LYT/PARA/Zettelkasten/Generic; optionally seeds template folders.
+- Switching modes does NOT auto-migrate existing files. Manual migration via file manager or `git mv`.
+
 ## [1.7.2] - 2026-05-17 (SSS+ convergence — closes every audit finding)
 
 Patch release closing **every remaining MEDIUM (M1-M10) and LOW (L1-L7) finding** from the v1.7.0 audit. Combined with v1.7.1 (which closed the 1 BLOCKER + 6 HIGH), this means the v1.7.0 audit's full 24-finding ledger is now CLOSED or formally DEFERRED-with-rationale. Plan: [`docs/audits/v1.7.2-sss-plus-plan.md`](docs/audits/v1.7.2-sss-plus-plan.md).

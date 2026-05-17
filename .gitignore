@@ -127,3 +127,6 @@ _attachments/
 .vault-meta/transport.json
 .vault-meta/transport.*.tmp
 .vault-meta/hook.log
+# v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
+.vault-meta/mode.json
+.vault-meta/mode.*.tmp

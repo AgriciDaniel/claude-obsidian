@@ -2,8 +2,8 @@
 # Test runner entry points for DragonScale and vault tooling.
 
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
-        test-lock test-concurrent setup-dragonscale setup-retrieve \
-        clean-test-state help
+        test-lock test-concurrent test-mode setup-dragonscale setup-retrieve \
+        setup-mode clean-test-state help
 
 help:
 	@echo "claude-obsidian developer targets:"
@@ -15,11 +15,13 @@ help:
 	@echo "  make test-retrieve    scripts/retrieve.py + rerank.py tests (python, hermetic)"
 	@echo "  make test-lock        scripts/wiki-lock.sh tests (shell, hermetic)"
 	@echo "  make test-concurrent  multi-writer correctness gate (shell, hermetic)"
+	@echo "  make test-mode        scripts/wiki-mode.py tests (python, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
+	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode
 	@echo ""
 	@echo "All tests passed."
 
@@ -51,11 +53,18 @@ test-concurrent:
 	@echo "=== test_concurrent_write.sh ==="
 	@bash tests/test_concurrent_write.sh
 
+test-mode:
+	@echo "=== test_wiki_mode.py ==="
+	@python3 tests/test_wiki_mode.py
+
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh
 
 setup-retrieve:
 	@bash bin/setup-retrieve.sh
+
+setup-mode:
+	@bash bin/setup-mode.sh
 
 clean-test-state:
 	@rm -f .vault-meta/.address.lock .vault-meta/.tiling.lock .vault-meta/.bm25.lock \
@@ -65,4 +74,5 @@ clean-test-state:
 	      .vault-meta/embed-cache.*.tmp .vault-meta/transport.json \
 	      .vault-meta/transport.*.tmp
 	@rm -rf .vault-meta/chunks/ .vault-meta/bm25/ .vault-meta/locks/
-	@echo "Runtime lockfiles, caches, and v1.7 retrieval/lock artifacts removed."
+	@rm -f .vault-meta/mode.json .vault-meta/mode.*.tmp .vault-meta/hook.log
+	@echo "Runtime lockfiles, caches, and v1.7/v1.8 runtime artifacts removed."

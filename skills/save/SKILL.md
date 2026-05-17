@@ -30,6 +30,17 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ---
 
+## Mode awareness (v1.8+)
+
+Before creating the session note, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route session "<topic-summary>"`. The router returns the vault-relative path:
+
+- **generic**: `wiki/sessions/<date>-<topic>.md` (v1.7 default)
+- **LYT**: `wiki/notes/<date>-<topic>.md` + update the relevant session/journal MOC
+- **PARA**: `wiki/projects/inbox/<date>-<topic>.md` (user reroutes to specific projects)
+- **Zettelkasten**: `wiki/<ID>-session-<topic>.md` (timestamped ID becomes the filename prefix)
+
+If `.vault-meta/mode.json` is absent, the router returns mode=generic paths. **Important global rule**: per global CLAUDE.md `/save` convention, sessions for cross-project work should still file to `~/Documents/Obsidian Vault/sessions/` rather than the project's wiki. The mode router applies when filing to the project's own wiki/, not when filing to the global personal vault.
+
 ## Concurrency (v1.7+)
 
 Session-note writes MUST be preceded by `wiki-lock acquire`:
