@@ -98,6 +98,21 @@ from now on:
    that exercises it without network/LLM/external state? Tests that only
    pass with the user's specific environment → **HIGH**.
 
+5. **Git hygiene** — any new file path written by code in this diff (open
+   files, log writes, cache writes, temp files, lockfiles) that is NOT
+   already in `.gitignore` → **HIGH**. The PostToolUse auto-commit hook
+   stages everything under `wiki/`, `.raw/`, `.vault-meta/`; an unignored
+   runtime artifact creates a self-pollution loop on the next hook fire.
+   Grep the diff for `open(...,"w")`, `>>`, `>`, `write_text`, `mkdir`,
+   `touch` and verify each destination path matches an ignore rule.
+
+6. **Additive-without-pruning** — if `git diff --shortstat main..HEAD`
+   shows net additions > +500 LOC and deletions < 50 LOC, flag as
+   **MEDIUM**. Legitimate feature work adds lines; pure additive cycles
+   with no pruning suggest v_prev cruft is being retained reflexively
+   rather than evaluated for removal. Cite specific candidate files where
+   pruning might apply.
+
 ## Tier definitions
 
 | Tier | Bar |
