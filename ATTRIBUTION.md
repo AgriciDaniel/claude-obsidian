@@ -44,4 +44,5 @@ The following Obsidian community plugins ship with this vault as pre-installed b
 
 **Author:** AgriciDaniel / AI Marketing Hub
 **License:** MIT (see [LICENSE](LICENSE))
-**Repository:** https://github.com/AI-Marketing-Hub/claude-obsidian
+**Repository (public canonical):** https://github.com/AgriciDaniel/claude-obsidian
+**Community early-access mirror (Pro):** https://github.com/AI-Marketing-Hub

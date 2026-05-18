@@ -24,11 +24,15 @@ For typo fixes, doc clarifications, or single-line changes, skip straight to a P
 
 ### 2. Fork + branch
 
+Contributions are accepted on the public canonical repo. Fork [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian) on GitHub, then:
+
 ```bash
-git clone https://github.com/AI-Marketing-Hub/claude-obsidian.git
+git clone https://github.com/<your-username>/claude-obsidian.git
 cd claude-obsidian
 git checkout -b your-feature-name
 ```
+
+> ℹ️ AI Marketing Hub Pro members working from the early-access mirror (`AI-Marketing-Hub/claude-obsidian`) should also raise PRs against the public canonical — community work lands there first and gets backported.
 
 Branch names: `fix/...`, `feat/...`, `docs/...`, `refactor/...`.
 
