@@ -28,7 +28,7 @@ Navigation: [[overview]] | [[log]] | [[hot]]
 
 ## Family
 
-- [[family/_index]] — mom (stage 4 cancer, chemo starting), sister
+- [[family/_index]] — (private)
 
 ## Work & Career
 

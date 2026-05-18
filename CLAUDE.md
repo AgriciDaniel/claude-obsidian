@@ -66,7 +66,7 @@ Some wiki pages are tagged `sensitivity: private` in their frontmatter. These co
 - Do NOT read or cite private pages unless the user explicitly asks about that specific topic
 - Do NOT include them in summaries, overviews, or "what I know about you" responses
 - Private pages are still fully readable — just require an explicit ask
-- Current private pages: `wiki/relationships/alice-wang.md`
+- Current private pages: `wiki/relationships/alice-wang.md`, `wiki/family/_index.md` (and any future `wiki/family/*.md`)
 
 ## MCP (Optional)
 
