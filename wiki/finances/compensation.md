@@ -28,8 +28,9 @@ Source: FY25 and FY26 compensation statements (Google Drive). Manager: Jinal San
 - Year-end payment: $32,672
 
 **FY26 RSU Grant**: $80,000 (granted March 22, 2026)
-- 100% RSUs, 4-year vest: 25% at 1 year, then quarterly thereafter
-- Vesting commences March 22, 2026
+- 419 shares (confirmed via grant acceptance doc), Employee ID 724075
+- 100% RSUs under 2013 Equity Incentive Plan, 4-year vest: 25% at 1 year cliff, then 1/16 quarterly
+- Vesting commences March 22, 2026; first vest March 22, 2027
 
 ## Prior Year Compensation (FY25 Review, March 2025)
 

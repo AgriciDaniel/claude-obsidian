@@ -18,6 +18,8 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
 
+2026-05-18 (session 4): Additional Drive scan. Key finds: Refi in progress (6.75%→6.0%, $385k, delayed/not yet closed as of May 2026). Lab results from April 2025: HbA1c 5.7 (prediabetes threshold), LDL 144 elevated — notable for active lifter, likely genetic. New pages: [[health/labs]]. Updates: [[finances/real-estate]] (refi detail), [[interests/_index]] (Claude Code project ideas, gaming), [[decisions/integra-type-s]] (security plan, prior stolen cars), [[finances/compensation]] (419 RSU shares confirmed).
+
 2026-05-17 (session 3): Full financial picture completed. New pages: [[finances/real-estate]], [[health/insurance]]. Major updates: [[finances/overview]] (complete net worth ~$1.47M), [[finances/accounts]] (all balances from Jan 2026), [[decisions/integra-type-s]] (full purchase plan + BRZ liquidation checklist), [[health/fitness]] (Jeff Nippard PPL program history), [[interests/_index]] (Home Assistant). Source: "Financial Profile 2026" Google Doc, Form 1098, Betterment/Ally 1099s, Integra/BRZ research doc.
 
 2026-05-17 (session 2): Google Drive 2025 Tax Return folder ingested. Full financial picture now in wiki. Key pages created: [[finances/overview]], [[finances/compensation]], [[finances/wealthfront]], [[finances/accounts]], [[finances/taxes/_index]] (updated with real numbers).
@@ -50,8 +52,10 @@ Samuel Paul, 31 (turns 32 June 21). SE Lead at Salesforce (10 years, Berkeley gr
 - Mom's cancer treatment — chemo starting, she's afraid, Samuel is supporting her
 - Alice relationship — compatible vs growth question is unresolved
 - Integra Type S — purchase in progress, BRZ not yet traded in
+- **Mortgage refi** — 6.75%→6.0%, $385k, AmWest Funding, delayed past April 28 target, still in process
 - Bigger House fund — long-term goal, deploying 2025 refund ($35k) to Wealthfront
 - W-4 calibration — targeting $2-3k refund buffer, eliminate quarterly payments
+- Health: HbA1c 5.7 (prediabetes boundary), LDL 144 — follow up warranted
 
 ## Remaining Drive Files to Ingest
 
