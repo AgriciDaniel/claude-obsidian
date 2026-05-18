@@ -373,7 +373,13 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
             "page_body_hash": page_body_hash,
             "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
-        chunk_path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+        tmp = chunk_path.with_suffix(f".{os.getpid()}.tmp")
+        try:
+            tmp.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+            os.replace(tmp, chunk_path)
+        finally:
+            if tmp.exists():
+                tmp.unlink(missing_ok=True)
         written.append(chunk_path.name)
 
     log(f"   wrote={len(written)}  skipped(unchanged)={skipped}")
