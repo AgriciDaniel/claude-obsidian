@@ -43,8 +43,13 @@ Happy, active cat. Alert and bright at exams. Gets very stressed at vet visits (
 **Treatment history:**
 - Prednisolone 5mg → 2.5mg (2021) — helped, weaned off
 - Cyclosporine 25mg SID (2021) — added, then discontinued by owner 2022
-- Fluticasone 220mcg inhaler (Feb 7–25, 2025) — no improvement; made discharge thicker; discontinued
-- Apoquel (oclacitinib) — some benefit to rhinitis and pruritus; currently ongoing
+- Fluticasone 220mcg inhaler (Feb 7–25, 2025) — no improvement; discontinued (see observations below)
+- Apoquel (oclacitinib) — some benefit to rhinitis and pruritus; currently ongoing (see observations below)
+
+**Fluticasone trial (Feb 7 – Feb 25, 2025):**
+- No improvement in sneeze frequency
+- Discharge became more consistently green/yellow and stickier/thicker — solid light green color all the way through; dried on bedding as large, tough crusts
+- Discontinued Feb 25, 2025
 
 **Current plan:** No escalation of rhinitis treatment at this time. Apoquel continues for combined rhinitis + dermatitis benefit. If flares worsen, options include: oral prednisolone course, cyclosporine retry, or CT + nasal flush.
 
@@ -52,10 +57,16 @@ Happy, active cat. Alert and bright at exams. Gets very stressed at vet visits (
 
 Skin licking, over-grooming. In 2025, had two episodes of corneal ulceration from scratching her eye (resolved with ofloxacin drops). Apoquel is primary management.
 
-**History of Apoquel:**
-- May 2025: Started 2.7mg BID — helped pruritus + sneezing; stopped briefly
-- Aug 2025: Restarted 2.7mg BID → SID → back to BID Sept 2025 (corneal ulcers)
-- Current: Oclacitinib 5.4mg, 1/2 tab PO q12h
+**Apoquel trial history with owner observations:**
+
+| Period | Dose | Observations |
+|--------|------|--------------|
+| ~May 2025 (Trial 1, ~2 weeks) | 2.7mg BID | Less sneezing frequency; discharge more yellow, less moisture; reduced itching (no scabs, scratching frequency unchanged) |
+| After stopping Trial 1 | — | Sneezing frequency went way up; almost all sneezes clear (less colored discharge) |
+| Aug 1, 2025 (Restart) | 2.7mg BID × 2 weeks → SID | — |
+| Sept 13, 2025 | Back to BID | Reason: increased frequency of corneal ulcers |
+| Oct 24, 2025 | BID ongoing | Effect consistent with Trial 1; less scratching overall; no ulcers or scabs; same sneezing frequency but less spraying, more thick discharge |
+| Current | Oclacitinib 5.4mg, 1/2 tab PO q12h | — |
 
 ### 3. Right Hip Dermal Mass (benign)
 
