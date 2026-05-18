@@ -58,6 +58,16 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `/autoresearch [topic]` | Autonomous research loop: search, fetch, synthesize, file |
 | `/canvas` | Visual layer: add images, PDFs, notes to Obsidian canvas |
 
+## Private Pages
+
+Some wiki pages are tagged `sensitivity: private` in their frontmatter. These contain personal content the user does not want surfaced in general queries (e.g. "what do you know about me", "give me an overview").
+
+**Rules:**
+- Do NOT read or cite private pages unless the user explicitly asks about that specific topic
+- Do NOT include them in summaries, overviews, or "what I know about you" responses
+- Private pages are still fully readable — just require an explicit ask
+- Current private pages: `wiki/relationships/alice-wang.md`
+
 ## MCP (Optional)
 
 If you configured the MCP server, Claude can read and write vault notes directly.

@@ -2,9 +2,10 @@
 type: person
 title: "Alice Wang"
 created: 2026-05-17
-updated: 2026-05-17
+updated: 2026-05-18
 tags: [relationships, alice, girlfriend, key-person]
 status: evergreen
+sensitivity: private
 ---
 
 # Alice Wang

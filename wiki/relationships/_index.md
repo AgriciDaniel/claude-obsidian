@@ -10,7 +10,7 @@ tags: [relationships, index]
 
 ## Key People
 
-- [[alice-wang]] — girlfriend, ~2 years, Chinese-American vet, the central relationship question
+- [[alice-wang]] — girlfriend (private)
 - [[family/_index]] — mom (stage 4 cancer, chemo starting), sister (both nearby)
 
 ## Friends
