@@ -2,6 +2,41 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.9.1] - 2026-05-18 (v1.9.0 audit hardening)
+
+Patch release closing **6 of 6 remaining HIGH/MEDIUM** findings from the v1.9.0 pre-public-promotion audit ([`docs/audits/v1.9.0-pre-public-promotion-audit-2026-05-18.md`](docs/audits/v1.9.0-pre-public-promotion-audit-2026-05-18.md)) plus 3 LOW hardening items. Composite score moves from 91.6 to ~94 raw average. Public-promotion ship verdict remains GREEN.
+
+### Fixed (defensive hardening)
+
+- **H4 — stale-lock reaper wiring** (`hooks/hooks.json`). New SessionStart command runs `bash scripts/wiki-lock.sh clear-stale --max-age 3600` at every session resume/startup. Locks orphaned by a crashed batch ingest get reaped automatically on the next session, not just on operator demand.
+- **S2 — opt-out gate for PostToolUse auto-commit** (`hooks/hooks.json`). Hook now exits early if `.vault-meta/auto-commit.disabled` exists. Default behavior unchanged for existing users; per-vault opt-out is one `touch` away. Useful for shared repos, CI runs, or any scenario where the operator wants to commit manually.
+- **Data M3 — symlink canonicalization** (`scripts/wiki-lock.sh:110-142`). `validate_path()` previously rejected literal `..` segments but did not canonicalize symlinks. A symlink inside `wiki/` resolving outside `VAULT_ROOT` could escape. Now resolves via `python3 os.path.realpath` and rejects any path whose canonical form is outside `commonpath(VAULT_ROOT, target)`. Cross-platform (GNU coreutils + macOS BSD); no realpath flag dependency.
+- **Data M4 — `.vault-meta/locks/.gitkeep`** + gitignore pattern change. `.vault-meta/locks/*` (not the dir itself) is now ignored; `.gitkeep` is whitelisted so the directory ships on fresh clone. Runtime behavior unchanged (`ensure_dirs()` always created it lazily); this just removes the first-acquire side-effect on directory presence.
+- **Data M1 — rerank.py warning routes to hook.log** (`scripts/rerank.py:158-176`). When the embed-cache lock is unavailable after 3 tries, the WARN line now also appends to `.vault-meta/hook.log` with a timestamp, so users see the event via `wiki lint` or by tailing the log. stderr-only was invisible to most callers.
+- **S4 — ollama-localhost assert** (`bin/setup-retrieve.sh:97-117`). If `OLLAMA_URL` env var points off-localhost, refuse to probe unless `--allow-remote-ollama` is passed. Mirrors the existing `scripts/tiling-check.py:351` gate. Closes a defense-in-depth gap where a malicious env var could redirect probes to an attacker-controlled endpoint.
+
+### Documented
+
+- **H2 + S3 — multi-tenant threat model** (`SECURITY.md`). New "Threat model: single-tenant vault" section documents three intentional design choices (cross-process lock release, auto-commit hook scope, filesystem-permission trust boundary) and the mitigations for shared-host deployments. Closes the documentation gap the audit flagged: the design choices are correct for single-tenant, but operators in shared-host scenarios deserve to know what changes for them.
+
+### Changed
+
+- `.claude-plugin/plugin.json` + `marketplace.json` version 1.9.0 → 1.9.1.
+
+### Deferred to v1.9.2 (not in this release)
+
+- **Data M2 — embed-cache + chunk-orphan GC**: new `--gc` subcommand for `bm25-index.py` + `contextual-prefix.py` that prunes entries whose backing pages no longer exist. Requires hermetic tests covering edge cases; scoped for a dedicated release.
+- **W1 — wiki/meta/ release-session note relocation**: 12 files with incoming wikilinks need a coordinated graph update. Bundled with References M1+M2 (17 dead wikilink targets) for one-pass wiki cleanup.
+- **Security S1 — Excalidraw checksum pin**: requires upstream release hash verification + maintenance burden for future releases. Tracked separately.
+- **GROW note from v1.9.0 audit — 7th always-check cut in `agents/verifier.md`**: cross-file string consistency check (catches the class of bug where a single-file fix should have been a multi-file cascade, like the 548d294 + F1-F5 sequence).
+
+### Verification
+
+- `make test`: 8 hermetic suites green (~1234 assertions). No regressions.
+- Live symlink-escape test on `wiki-lock.sh validate_path`: `ln -s /tmp/foo ./escape && bash scripts/wiki-lock.sh acquire escape/x.md` correctly rejects with "path resolves outside vault via symlink".
+- Both plugin manifests parse as JSON.
+- Pre-push verifier agent dispatch on staged diff: SHIP, 0 BLOCKER, 0 HIGH.
+
 ## [1.9.0] - 2026-05-18 (10-principle thinking framework)
 
 Minor release adding the **10-principle thinking framework** as a first-class layer of the plugin. The framework (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) is integrated at three levels: as the new `/think` skill, as an appendix on every existing SKILL.md, and as the methodology spine for the v1.8.0 pre-push audit (which used it as its phase structure). Skill count: 14 → **15**.
