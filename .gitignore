@@ -120,7 +120,8 @@ _attachments/
 .vault-meta/.wiki-lock.meta
 .vault-meta/.bm25.lock
 .vault-meta/.embed-cache.lock
-.vault-meta/locks/
+.vault-meta/locks/*
+!.vault-meta/locks/.gitkeep
 .vault-meta/chunks/
 .vault-meta/bm25/
 .vault-meta/embed-cache.json

@@ -111,6 +111,8 @@ validate_path() {
   # Reject empty, absolute, escape, or newline-bearing paths to prevent
   # lock-namespace pollution. v1.7.2 / closes audit M4: newlines would break
   # the meta-lock line format (key=value lines separated by literal \n).
+  # v1.9.1 / closes audit M3 (symlink escape): when a vault-relative path
+  # resolves through a symlink to outside VAULT_ROOT, treat as path traversal.
   local p="$1"
   [ -z "$p" ] && die "path cannot be empty" 4
   case "$p" in
@@ -119,6 +121,22 @@ validate_path() {
     *$'\n'*) die "path may not contain newlines (lockfile format would break)" 4 ;;
     *$'\r'*) die "path may not contain carriage returns" 4 ;;
   esac
+  # Symlink canonicalization (only when the path or one of its parents exists).
+  # Non-existent paths can pass; the lock acquire itself creates leaves under
+  # LOCK_DIR, not the path itself. We resolve via python3 (portable across
+  # GNU coreutils + macOS BSD where realpath flag semantics differ).
+  if command -v python3 >/dev/null 2>&1; then
+    local resolved root
+    resolved=$(VAULT_ROOT_BASH="$VAULT_ROOT" P_BASH="$p" python3 -c '
+import os, sys
+root = os.path.realpath(os.environ["VAULT_ROOT_BASH"])
+candidate = os.environ["P_BASH"]
+target = os.path.realpath(os.path.join(root, candidate))
+common = os.path.commonpath([root, target]) if target else ""
+sys.stdout.write("INSIDE" if common == root else "OUTSIDE")
+' 2>/dev/null)
+    [ "$resolved" = "OUTSIDE" ] && die "path resolves outside vault via symlink: $p" 4
+  fi
   return 0
 }
 
