@@ -19,10 +19,10 @@ Claude + Obsidian knowledge companion. A running notetaker that builds and maint
 
 Open-source Obsidian AI plugin for personal knowledge management (PKM), second-brain workflows, and Notion AI alternatives. **15 Claude Code skills**, multi-agent support, multi-writer safe (v1.7+), first-class methodology modes (LYT / PARA / Zettelkasten / Generic via v1.8), and the 10-principle thinking framework (v1.9). Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
 
-> **Two versions of this skill.** Choose the one that fits how you work.
+> **Two ways to get this skill.** Pick the one that fits how you work.
 >
-> - 🌐 **Public open-source** (latest stable: `v1.6.0`): [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian). MIT-licensed, open to anyone, no membership required.
-> - 🔒 **Community private mirror** (this repo, latest: `v1.9.0`): [`AI-Marketing-Hub/claude-obsidian`](https://github.com/AI-Marketing-Hub/claude-obsidian). Early access to v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework, and direct collaboration with the [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community.
+> - 🌐 **Public open-source build** (latest stable: `v1.6.0`): the free, MIT-licensed release on [Daniel Agrici's GitHub](https://github.com/AgriciDaniel/claude-obsidian). Open to anyone, no membership required.
+> - 🔒 **Community early-access build** (latest: `v1.9.0`): newest releases ship first to the [AI Marketing Hub](https://github.com/AI-Marketing-Hub) GitHub org for [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community members. Includes v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework, and direct collaboration with the community.
 >
 > ℹ️ **Star count** tracks the public repo (shields.io cannot read private mirrors). **Release** and **CI** badges are pinned static for the private mirror (currently `v1.9.0`, tests green). When v1.7+ work promotes to the public canonical, these will return to live shields.io tracking.
 
@@ -111,6 +111,8 @@ Most Obsidian AI plugins are chat interfaces. They answer questions about your e
 ---
 
 ## Quick Start
+
+> ℹ️ The commands below show the **community early-access** URLs. If you are **not an AI Marketing Hub Pro member**, replace every `AI-Marketing-Hub/claude-obsidian` with `AgriciDaniel/claude-obsidian` to install the public stable release instead. Option 2 also requires swapping the plugin slug (see the disclaimer under that option).
 
 ### Option 1: Clone as vault (recommended, full setup in 2 minutes)
 
@@ -631,7 +633,7 @@ Issue + PR templates available under [`.github/`](.github/). CI runs `make test`
 ## Related Projects
 
 - 🎨 [**claude-canvas**](https://github.com/AgriciDaniel/claude-canvas): visual canvas orchestration (12 templates, 6 layout algorithms, AI image generation). Companion to this plugin.
-- 📊 [**claude-ads**](https://github.com/AI-Marketing-Hub/claude-ads): multi-platform paid advertising audit (250+ checks across Google, Meta, LinkedIn, TikTok, Microsoft, Apple, Amazon Ads).
+- 📊 [**claude-ads**](https://github.com/AgriciDaniel/claude-ads): multi-platform paid advertising audit (250+ checks across Google, Meta, LinkedIn, TikTok, Microsoft, Apple, Amazon Ads).
 - 🔍 [**claude-seo**](https://github.com/AgriciDaniel/claude-seo): technical SEO + GEO audit suite.
 - 🧠 [**best-practices**](https://github.com/AgriciDaniel/best-practices): composable engineering kernel. Source for the six-cut + agent kernel that `agents/verifier.md` enforces.
 
