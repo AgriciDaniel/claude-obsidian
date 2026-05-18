@@ -19,6 +19,20 @@ Navigation: [[index]] | [[hot]] | [[overview]]
 
 Append-only. New entries go at the TOP. Never edit past entries.
 
+## 2026-05-18 canvas | Acura Integra Type S
+- Canvas created: [[canvases/integra-type-s]]
+- Zones: Decision, Research Pages, Key Watch-Outs, Competitor Comparison, Key Specs & Ownership
+- Nodes: 16 (1 title, 5 file nodes, 7 text cards, 3 zone groups + specs zone)
+- Edges: 3 (decision → synthesis → sources)
+
+## 2026-05-18 autoresearch | Acura Integra Type S (Is It the Car for Me?)
+- Rounds: 2
+- Sources searched: 18 queries across 5 angles
+- Sources fetched: 4 pages
+- Pages created: [[questions/Research - Acura Integra Type S]], [[sources/integra-type-s-owner-forums]], [[sources/integra-type-s-specs-competitors]]
+- Pages updated: [[decisions/integra-type-s]], [[index]]
+- Key finding: Decision is well-supported. Interior rattles are the main real-world complaint (TSBs exist). Two active recalls to verify on VIN at delivery. 2026 brings Urban Gray Pearl back — relevant given 2025 discontinued that color.
+
 ---
 
 ## 2026-05-17 — Personal Life Wiki Scaffold

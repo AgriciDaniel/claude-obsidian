@@ -18,6 +18,8 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
 
+2026-05-18 (session 5): Autoresearch on Acura Integra Type S. 3 pages created. Decision validated — ITS is the only manual in class. Main watch-outs: interior rattles (TSB 23-030), two active recalls (steering gearbox + seat frame), and Urban Gray Pearl returns for 2026.
+
 2026-05-18 (session 4): Additional Drive scan. Key finds: Refi in progress (6.75%→6.0%, $385k, delayed/not yet closed as of May 2026). Lab results from April 2025: HbA1c 5.7 (prediabetes threshold), LDL 144 elevated — notable for active lifter, likely genetic. New pages: [[health/labs]]. Updates: [[finances/real-estate]] (refi detail), [[interests/_index]] (Claude Code project ideas, gaming), [[decisions/integra-type-s]] (security plan, prior stolen cars), [[finances/compensation]] (419 RSU shares confirmed).
 
 2026-05-17 (session 3): Full financial picture completed. New pages: [[finances/real-estate]], [[health/insurance]]. Major updates: [[finances/overview]] (complete net worth ~$1.47M), [[finances/accounts]] (all balances from Jan 2026), [[decisions/integra-type-s]] (full purchase plan + BRZ liquidation checklist), [[health/fitness]] (Jeff Nippard PPL program history), [[interests/_index]] (Home Assistant). Source: "Financial Profile 2026" Google Doc, Form 1098, Betterment/Ally 1099s, Integra/BRZ research doc.

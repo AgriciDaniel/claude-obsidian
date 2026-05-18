@@ -1,0 +1,187 @@
+{
+  "nodes": [
+    {
+      "id": "text-title-1747584001",
+      "type": "text",
+      "text": "# Acura Integra Type S\n## Is it the car for me?\n\nResearch completed 2026-05-18. Decision: **Buying it.**",
+      "x": -420,
+      "y": -440,
+      "width": 560,
+      "height": 110,
+      "color": "6"
+    },
+    {
+      "id": "zone-decision-1747584002",
+      "type": "group",
+      "label": "Decision",
+      "x": -420,
+      "y": -290,
+      "width": 460,
+      "height": 180,
+      "color": "6"
+    },
+    {
+      "id": "note-decision-1747584003",
+      "type": "file",
+      "file": "wiki/decisions/integra-type-s.md",
+      "x": -400,
+      "y": -270,
+      "width": 420,
+      "height": 140
+    },
+    {
+      "id": "zone-research-1747584004",
+      "type": "group",
+      "label": "Research Pages",
+      "x": -420,
+      "y": -70,
+      "width": 1120,
+      "height": 200,
+      "color": "5"
+    },
+    {
+      "id": "note-synthesis-1747584005",
+      "type": "file",
+      "file": "wiki/questions/Research - Acura Integra Type S.md",
+      "x": -400,
+      "y": -50,
+      "width": 340,
+      "height": 160
+    },
+    {
+      "id": "note-source-forums-1747584006",
+      "type": "file",
+      "file": "wiki/sources/integra-type-s-owner-forums.md",
+      "x": -40,
+      "y": -50,
+      "width": 340,
+      "height": 160
+    },
+    {
+      "id": "note-source-specs-1747584007",
+      "type": "file",
+      "file": "wiki/sources/integra-type-s-specs-competitors.md",
+      "x": 320,
+      "y": -50,
+      "width": 360,
+      "height": 160
+    },
+    {
+      "id": "zone-watchouts-1747584008",
+      "type": "group",
+      "label": "Key Watch-Outs Before Delivery",
+      "x": -420,
+      "y": 170,
+      "width": 1120,
+      "height": 300,
+      "color": "2"
+    },
+    {
+      "id": "text-recalls-1747584009",
+      "type": "text",
+      "text": "## Recalls — Verify VIN\n- **Steering gearbox** worm gear spring (heavy steering)\n- **Seat cushion frame** not properly tightened\n\nBoth are free dealer fixes. Ask Stevens Creek to confirm closed before signing.",
+      "x": -400,
+      "y": 195,
+      "width": 520,
+      "height": 130,
+      "color": "1"
+    },
+    {
+      "id": "text-rattles-1747584010",
+      "type": "text",
+      "text": "## Interior Rattles\n- #1 long-term owner complaint\n- **TSB 23-030** covers door speakers\n- Infotainment: felt tape fix (from Civic TSB)\n\nRequest rattle inspection at first service. Bring TSB numbers.",
+      "x": 140,
+      "y": 195,
+      "width": 520,
+      "height": 130,
+      "color": "2"
+    },
+    {
+      "id": "text-2026-1747584011",
+      "type": "text",
+      "text": "## 2026 Note\n- **Urban Gray Pearl** returns (your preferred color)\n- Wireless CarPlay/Android Auto added\n- Type S engine unchanged (320hp)\n\nWorth waiting for if color matters enough.",
+      "x": -400,
+      "y": 345,
+      "width": 520,
+      "height": 110,
+      "color": "3"
+    },
+    {
+      "id": "text-insurance-1747584012",
+      "type": "text",
+      "text": "## Insurance\n- Bay Area + performance class = **$200–300/mo** estimated\n- Get real quotes before finalizing deal\n- Security stack (IGLA + OBD + wheel locks) may help rates",
+      "x": 140,
+      "y": 345,
+      "width": 520,
+      "height": 110,
+      "color": "3"
+    },
+    {
+      "id": "zone-competitors-1747584013",
+      "type": "group",
+      "label": "Competitor Comparison",
+      "x": -420,
+      "y": 510,
+      "width": 1120,
+      "height": 320,
+      "color": "4"
+    },
+    {
+      "id": "text-compare-1747584014",
+      "type": "text",
+      "text": "## Why ITS Wins\n\n| | **ITS** | Audi S3 | BMW M235i | AMG CLA 35 |\n|--|---------|---------|-----------|------------|\n| HP | **320** | 306 | 301 | 302 |\n| Manual | **Yes** | No | No | No |\n| Drive | FWD | AWD | AWD | AWD |\n| Cargo | **24.3 cu ft** | 8.3 | 10.0 | 12.8 |\n| Price | $52,900 | ~$45k | ~$48k | ~$55k |\n\n**Only manual in class. Lightest. 3× the cargo space.**",
+      "x": -400,
+      "y": 535,
+      "width": 1080,
+      "height": 265
+    },
+    {
+      "id": "zone-specs-1747584015",
+      "type": "group",
+      "label": "Key Specs & Ownership",
+      "x": 700,
+      "y": -290,
+      "width": 400,
+      "height": 420,
+      "color": "4"
+    },
+    {
+      "id": "text-specs-1747584016",
+      "type": "text",
+      "text": "## Specs\n- **320hp** 2.0L VTEC Turbo\n- 6-speed manual (only option)\n- FWD + mechanical LSD\n- Dual-axis strut (torque steer mitigation)\n- Curb weight ~3,400 lbs\n\n## Fuel Economy\n- EPA: 24 MPG combined\n- Spirited city: ~20 MPG\n- Gentle highway: ~28 MPG\n- 12-gal tank → fill every ~240 mi city\n\n## Depreciation (5yr projected)\n- From ~$54k → ~$25k residual\n- Holds value better than base Integra\n- Limited production + enthusiast demand",
+      "x": 720,
+      "y": -270,
+      "width": 360,
+      "height": 380
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-decision-synthesis-1747584020",
+      "fromNode": "note-decision-1747584003",
+      "fromSide": "bottom",
+      "toNode": "note-synthesis-1747584005",
+      "toSide": "top",
+      "label": "validated by",
+      "color": "5"
+    },
+    {
+      "id": "edge-synthesis-forums-1747584021",
+      "fromNode": "note-synthesis-1747584005",
+      "fromSide": "right",
+      "toNode": "note-source-forums-1747584006",
+      "toSide": "left",
+      "toEnd": "none",
+      "color": "4"
+    },
+    {
+      "id": "edge-synthesis-specs-1747584022",
+      "fromNode": "note-synthesis-1747584005",
+      "fromSide": "right",
+      "toNode": "note-source-specs-1747584007",
+      "toSide": "left",
+      "toEnd": "none",
+      "color": "4"
+    }
+  ]
+}

@@ -128,7 +128,23 @@ Recommended stack for ITS in the Bay Area / Peninsula:
 
 Samuel's own words from research: *"Man, if you can afford to do the transition to the Type S and financially you would be secure, you'd be stupid not to. Engaging, fun, well powered, manual transmission cars are not going to be around much longer. An automatic, soul-snatching, numb driving experience will be the only thing left in the future."*
 
+## Research Validation (2026-05-18)
+
+Full autoresearch pass completed. See [[questions/Research - Acura Integra Type S]] for synthesis.
+
+**Confirmed by research:**
+- Decision is objectively sound — ITS is the only manual in class, lightest, most cargo-practical
+- Security plan (IGLA + OBD lock + wheel locks + Pebblebee) covers the main theft vectors
+
+**Watch-outs to action before/at delivery:**
+- Verify both active recalls on VIN: steering gearbox + seat cushion frame
+- Request interior rattle pre-inspection; reference TSB 23-030 (door speakers)
+- Get actual insurance quote — Bay Area full coverage on performance vehicle expected $200–300/mo
+
+**2026 note:** Urban Gray Pearl returns as a new 2026 color (was discontinued for 2025 as Carbon Metallic). If color was a compromise, the 2026 resolves it — engine unchanged.
+
 ## See Also
 
 - [[finances/overview]] — financial context
 - [[interests/_index]] — driving as interest
+- [[questions/Research - Acura Integra Type S]] — full research synthesis

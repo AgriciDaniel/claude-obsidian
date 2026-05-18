@@ -60,6 +60,19 @@ Navigation: [[overview]] | [[log]] | [[hot]]
 - [[decisions/_index]]
 - [[decisions/integra-type-s]] — Acura Integra Type S purchase (2026)
 
+## Canvases
+
+- [[canvases/integra-type-s]] — visual board: decision, research pages, watch-outs, competitor table
+
+## Research / Questions
+
+- [[questions/Research - Acura Integra Type S]] — full synthesis: specs, owner reviews, reliability, watch-outs
+
+## Sources
+
+- [[sources/integra-type-s-owner-forums]] — IntegraForums long-term owner reviews
+- [[sources/integra-type-s-specs-competitors]] — specs, competitors, depreciation, ownership costs
+
 ## Goals
 
 - [[goals/_index]]
