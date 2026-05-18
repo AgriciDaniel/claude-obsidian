@@ -20,6 +20,7 @@ Navigation: [[overview]] | [[log]] | [[hot]]
 
 - [[me/profile]] — master profile (START HERE for any personal question)
 - [[me/_index]] — identity index
+- [[me/political-profile]] — pragmatic Bay Area progressive, pocketbook-driven
 
 ## Relationships
 
