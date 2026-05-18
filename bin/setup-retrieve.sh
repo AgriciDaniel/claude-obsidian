@@ -101,7 +101,7 @@ OLLAMA_URL="${OLLAMA_URL:-http://127.0.0.1:11434}"
 # existing scripts/tiling-check.py:351 gate). Same allowlist of localhost
 # patterns ollama itself recommends.
 case "$OLLAMA_URL" in
-  http://127.0.0.1:*|http://localhost:*|http://[::1]:*) ;;
+  "http://127.0.0.1:"*|"http://localhost:"*|"http://[::1]:"*) ;;
   *)
     if ! printf '%s ' "$@" | grep -q -- '--allow-remote-ollama'; then
       warn "OLLAMA_URL points off-localhost: $OLLAMA_URL"

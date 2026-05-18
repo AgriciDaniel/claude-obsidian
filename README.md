@@ -7,7 +7,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v1.9.0-blue)](https://github.com/AI-Marketing-Hub/claude-obsidian/releases/latest)
+[![Release](https://img.shields.io/badge/release-v1.9.1-blue)](https://github.com/AI-Marketing-Hub/claude-obsidian/releases/latest)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/AI-Marketing-Hub/claude-obsidian/actions)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
 [![Obsidian](https://img.shields.io/badge/Obsidian-v1.9.10%2B-7c3aed)](https://obsidian.md)
@@ -22,9 +22,9 @@ Open-source Obsidian AI plugin for personal knowledge management (PKM), second-b
 > **Two ways to get this skill.** Pick the one that fits how you work.
 >
 > - 🌐 **Public open-source build** (latest stable: `v1.6.0`): the free, MIT-licensed release on [Daniel Agrici's GitHub](https://github.com/AgriciDaniel/claude-obsidian). Open to anyone, no membership required.
-> - 🔒 **Community early-access build** (latest: `v1.9.0`): newest releases ship first to the [AI Marketing Hub](https://github.com/AI-Marketing-Hub) GitHub org for [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community members. Includes v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework, and direct collaboration with the community.
+> - 🔒 **Community early-access build** (latest: `v1.9.1`): newest releases ship first to the [AI Marketing Hub](https://github.com/AI-Marketing-Hub) GitHub org for [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community members. Includes v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework + audit hardening, and direct collaboration with the community.
 >
-> ℹ️ **Star count** tracks the public repo (shields.io cannot read private mirrors). **Release** and **CI** badges are pinned static for the private mirror (currently `v1.9.0`, tests green). When v1.7+ work promotes to the public canonical, these will return to live shields.io tracking.
+> ℹ️ **Star count** tracks the public repo (shields.io cannot read private mirrors). **Release** and **CI** badges are pinned static for the private mirror (currently `v1.9.1`, tests green). When v1.7+ work promotes to the public canonical, these will return to live shields.io tracking.
 
 > ✨ **v1.7 "Compound Vault" refoundation**: Obsidian CLI as default transport, hybrid retrieval (contextual prefix + BM25 + cosine rerank per [Anthropic's Sept 2024 research](https://www.anthropic.com/news/contextual-retrieval)), per-file advisory locking that closes a latent multi-writer corruption hole, and substrate alignment with [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). Full guide: [docs/compound-vault-guide.md](docs/compound-vault-guide.md). Optional [DragonScale Memory](docs/dragonscale-guide.md) extension (log folds, deterministic page addresses, semantic tiling lint, boundary-first autoresearch).
 
@@ -461,7 +461,7 @@ claude-obsidian/
 ├── .claude-plugin/
 │   ├── plugin.json              # manifest
 │   └── marketplace.json         # distribution
-├── skills/                       # 15 Claude Code skills (v1.9.0)
+├── skills/                       # 15 Claude Code skills (v1.9.1)
 │   ├── wiki/                    # orchestrator + references
 │   ├── wiki-ingest/             # source ingestion
 │   ├── wiki-query/              # answer questions from the vault
@@ -624,7 +624,7 @@ PRs welcome. Read these first:
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): workflow, six-cut self-review checklist, commit conventions, hermetic test requirements
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md): Contributor Covenant v2.1
 - [`SECURITY.md`](SECURITY.md): private security disclosure policy
-- [`CHANGELOG.md`](CHANGELOG.md): version history (latest: v1.9.0)
+- [`CHANGELOG.md`](CHANGELOG.md): version history (latest: v1.9.1)
 
 Issue + PR templates available under [`.github/`](.github/). CI runs `make test` + SKILL.md frontmatter validation + plugin manifest JSON validity on every PR. The pre-commit verifier agent at [`agents/verifier.md`](agents/verifier.md) applies the six-cut + agent kernel to staged diffs.
 
