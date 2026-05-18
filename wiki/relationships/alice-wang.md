@@ -9,7 +9,7 @@ status: evergreen
 
 # Alice Wang
 
-Samuel's girlfriend of nearly two years. Chinese-American. Internal medicine veterinarian.
+Samuel's girlfriend of nearly two years. Chinese-American. Internal medicine veterinarian (DVM, MS, DACVIM). Pays $2,000/month rent. Co-owner of Nagi (Samuel's cat) — also Nagi's treating internist at VCA BAVS. See [[pets/nagi]].
 
 ## Background
 
