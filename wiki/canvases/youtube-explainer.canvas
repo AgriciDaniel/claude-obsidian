@@ -228,7 +228,7 @@
     },
     {
       "id": "z7-cmd", "type": "text",
-      "text": "```bash\nclaude plugin marketplace add AI-Marketing-Hub/claude-obsidian\nclaude plugin install claude-obsidian@ai-marketing-hub-claude-obsidian\n```",
+      "text": "```bash\nclaude plugin marketplace add AgriciDaniel/claude-obsidian\nclaude plugin install claude-obsidian@agricidaniel-claude-obsidian\n```",
       "x": 20, "y": 7700, "width": 920, "height": 160
     },
     {
