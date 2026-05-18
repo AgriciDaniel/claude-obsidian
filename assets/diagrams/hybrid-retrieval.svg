@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" role="img" aria-labelledby="retrieval-title retrieval-desc">
+  <title id="retrieval-title">Hybrid retrieval pipeline: BM25 + contextual prefix + cosine rerank</title>
+  <desc id="retrieval-desc">Pipeline diagram showing user query feeding BM25 sparse search and an optional contextual-prefix Anthropic API call. Both feed a cosine rerank via local ollama embeddings. The output is a ranked list of candidate pages with traceability via --explain.</desc>
+
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="480" fill="#ffffff" />
+
+  <text x="600" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#0f172a">Hybrid retrieval pipeline (v1.7+, opt-in via setup-retrieve.sh)</text>
+  <text x="600" y="54" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">Anthropic Sept 2024 contextual retrieval pattern. Local-by-default. Measured +32pp top-1 over v1.6 baseline.</text>
+
+  <!-- Query -->
+  <rect x="40" y="200" width="170" height="80" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+  <text x="125" y="230" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#92400e">User query</text>
+  <text x="125" y="252" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">"what do you know</text>
+  <text x="125" y="268" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">about hot cache?"</text>
+
+  <line x1="210" y1="220" x2="330" y2="140" stroke="#475569" stroke-width="2" marker-end="url(#arrow3)" />
+  <line x1="210" y1="260" x2="330" y2="340" stroke="#475569" stroke-width="2" marker-end="url(#arrow3)" />
+
+  <!-- BM25 -->
+  <rect x="330" y="100" width="220" height="100" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="440" y="128" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#1e3a8a">BM25 sparse search</text>
+  <text x="440" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">scripts/bm25-index.py</text>
+  <text x="440" y="168" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Unicode tokenizer · idf scoring</text>
+  <text x="440" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#2563eb">~50 candidates</text>
+
+  <!-- Contextual prefix -->
+  <rect x="330" y="300" width="220" height="120" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="440" y="328" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#991b1b">Contextual prefix</text>
+  <text x="440" y="350" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">scripts/contextual-prefix.py</text>
+  <text x="440" y="368" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Anthropic API (opt-in)</text>
+  <text x="440" y="386" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#dc2626">requires --allow-egress</text>
+  <text x="440" y="405" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#dc2626">falls back to synthetic if denied</text>
+
+  <line x1="550" y1="150" x2="700" y2="220" stroke="#475569" stroke-width="2" marker-end="url(#arrow3)" />
+  <line x1="550" y1="360" x2="700" y2="280" stroke="#475569" stroke-width="2" marker-end="url(#arrow3)" />
+
+  <!-- Rerank -->
+  <rect x="700" y="200" width="220" height="100" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" />
+  <text x="810" y="228" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#5b21b6">Cosine rerank</text>
+  <text x="810" y="250" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">scripts/rerank.py</text>
+  <text x="810" y="268" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">ollama nomic-embed (local)</text>
+  <text x="810" y="286" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#7c3aed">cached in .vault-meta/</text>
+
+  <line x1="920" y1="250" x2="1010" y2="250" stroke="#475569" stroke-width="2" marker-end="url(#arrow3)" />
+
+  <!-- Output -->
+  <rect x="1010" y="200" width="160" height="100" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+  <text x="1090" y="228" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#15803d">Top-K candidates</text>
+  <text x="1090" y="250" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">page paths</text>
+  <text x="1090" y="268" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">snippets · scores</text>
+  <text x="1090" y="286" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#16a34a">--explain traces each</text>
+
+  <!-- Bottom note -->
+  <text x="600" y="445" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">BM25 always runs. Prefix tier is opt-in (consent-gated). Rerank is local-only by default; --allow-remote-ollama to point elsewhere.</text>
+  <text x="600" y="463" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Pipeline degrades gracefully: if rerank is unavailable, BM25-only results return with rerank_source="skipped".</text>
+</svg>
