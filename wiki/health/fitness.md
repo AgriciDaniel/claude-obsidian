@@ -15,24 +15,42 @@ status: evergreen
 - **Goal**: Hypertrophy (muscle building, lean physique)
 - **Weight**: ~145 lbs, lean
 - **Limitation**: Neck injury — shapes exercise selection and volume
+- **Current program**: Jeff Nippard Ultimate PPL (5x/week) — last modified April 7, 2026
 
-## History
+## Current Program: Jeff Nippard Ultimate PPL
 
-Samuel got into powerlifting in college and gained ~60 lbs. At peak, he was significantly overweight. He transitioned away from powerlifting, lost the weight, and shifted to a hypertrophy-focused approach. The result is a leaner, more functional physique. The neck injury emerged at some point during this arc and is an ongoing consideration in programming.
+**5 days/week: Push / Pull / Legs / Push / Pull**
 
-The consistency is notable: daily exercise since college is not a phase. It is a core identity trait.
+This is an evidence-based hypertrophy program. Jeff Nippard's approach emphasizes progressive overload, proper form, and scientific programming. Samuel is actively running this as of April 2026.
+
+## Training History
+
+| Period | Program | Notes |
+|--------|---------|-------|
+| College | Powerlifting (undefined) | Gained ~60 lbs, was significantly overweight |
+| 2016–2019 | GZCL Method | Powerlifting-focused linear progression |
+| 2021 | SBS (Stronger by Science) Hypertrophy | Transition toward hypertrophy |
+| 2024 | Jeff Nippard Pure Bodybuilding Phase 2 | Full hypertrophy focus |
+| 2026 (current) | Jeff Nippard Ultimate PPL 5x/week | Active as of April 2026 |
+
+## Arc Summary
+
+College powerlifting → heavy weight gain (~60 lbs overweight at peak) → major cut → hypertrophy transition → current: lean (~145 lbs), consistent, building. The neck injury emerged during this arc and is an ongoing constraint on exercise selection. Training is a core identity trait — not a phase, not a debate.
 
 ## Training Philosophy
 
-Hypertrophy over strength numbers. Consistency over intensity peaks. Exercise is non-negotiable — this is not a habit he debates, it is a given in the day.
+- Hypertrophy over strength numbers
+- Consistency over intensity peaks
+- Evidence-based programming (Jeff Nippard, SBS school of thought)
+- Exercise is non-negotiable — built into daily rhythm since college
 
 ## Nutrition Overlap
 
-See [[nutrition]] — diet and training are tightly integrated. He cooks most nights, eats healthy, avoids sugar, fried foods, and excess. Lots of protein via chicken.
+See [[cooking/_index]] — diet and training are tightly integrated. He cooks most nights, eats healthy, avoids sugar, fried foods, excess. High protein via chicken. Light soups. Fresh food every other night.
 
 ## Things to Track Over Time
 
 - Neck injury status and exercises to avoid
-- Current program / split
 - Key lifts and progress
 - Any supplements
+- Program changes
