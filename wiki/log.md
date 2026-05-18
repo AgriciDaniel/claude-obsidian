@@ -19,6 +19,38 @@ Navigation: [[index]] | [[hot]] | [[overview]]
 
 Append-only. New entries go at the TOP. Never edit past entries.
 
+---
+
+## 2026-05-17 — Personal Life Wiki Scaffold
+
+**Operation**: SCAFFOLD (vault repurpose)
+**Session**: Initial personal wiki setup
+
+Vault repurposed from claude-obsidian plugin development to Samuel Paul personal life OS. Prior content archived to `wiki/archive/plugin-dev/`.
+
+**Pages created**:
+- [[me/profile]] — master profile, synthesized from conversation
+- [[me/_index]]
+- [[relationships/_index]]
+- [[relationships/alice-wang]] — girlfriend profile, relationship history and open question
+- [[family/_index]] — mom (stage 4 cancer), sister
+- [[health/_index]]
+- [[health/fitness]] — training history, hypertrophy focus, neck injury
+- [[cooking/_index]] — Asian cuisine, weeknight style, preferences
+- [[cooking/recipes/_index]]
+- [[work/_index]]
+- [[work/salesforce]] — 10-year career, SE Lead, equity history
+- [[finances/_index]]
+- [[finances/overview]] — net worth pillars, debt, incoming car loan
+- [[finances/taxes/_index]] — RSU/ESPP complexity, audit history
+- [[decisions/_index]]
+- [[decisions/integra-type-s]] — Acura Integra Type S purchase decision
+- [[goals/_index]] — marriage, family, financial, career
+- [[interests/_index]] — cooking, lifting, anime, AI, gaming
+- [[life-history/_index]] — timeline from college forward
+
+**Infrastructure updated**: [[index]], [[overview]], [[hot]]
+
 Entry format: `## [YYYY-MM-DD] operation | Title`
 
 Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
