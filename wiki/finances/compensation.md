@@ -31,7 +31,7 @@ Source: FY25 and FY26 compensation statements (Google Drive). Manager: Jinal San
 - 100% RSUs, 4-year vest: 25% at 1 year, then quarterly thereafter
 - Vesting commences March 22, 2026
 
-## Prior Year Compensation (FY25 Review)
+## Prior Year Compensation (FY25 Review, March 2025)
 
 | Component | FY24 | FY25 (post-review) |
 |-----------|------|-------------------|
@@ -41,6 +41,22 @@ Source: FY25 and FY26 compensation statements (Google Drive). Manager: Jinal San
 | Bonus multiplier | — | 105% |
 
 **FY25 RSU Grant**: $80,000 (March 22, 2025, same structure)
+
+## Prior Year Compensation (FY24 Review, March 2024)
+
+| Component | FY23 (previous) | FY24 (effective Apr 1, 2024) | Increase |
+|-----------|-----------------|------------------------------|---------|
+| Base salary | $230,000 | $241,500 | +$11,500 (+5.0%) |
+
+**FY24 Bonus (Gratitude Performance Bonus)**
+- Prorated eligible salary: $222,148.46 (reflects time in eligible role during FY24)
+- Bonus target: 15% of eligible salary
+- Corporate multiplier: 104%
+- Individual multiplier: 105%
+- **Total FY24 bonus**: $36,387.92
+  - Mid-year: $8,119.47
+  - Year-end: $28,268.45
+- Performance rating: Successful
 
 ## RSU & ESPP Structure
 
@@ -59,7 +75,7 @@ Source: FY25 and FY26 compensation statements (Google Drive). Manager: Jinal San
 
 ## Tax Implications
 
-RSU and ESPP are both included in W2 wages when they vest/are sold. The cost basis tracking for subsequent sales of held shares is complex. George Dimov CPA handles this. See [[taxes/_index]].
+RSU and ESPP are both included in W2 wages when they vest/are sold. The cost basis tracking for subsequent sales of held shares is complex. AGAPE CPA (Yi Lin) handles this currently. See [[taxes/_index]].
 
 In 2024, Samuel realized $110,112 in capital gains — mostly from liquidating RSU/ESPP shares. Strategy has shifted to selling upon vest/purchase rather than holding.
 
