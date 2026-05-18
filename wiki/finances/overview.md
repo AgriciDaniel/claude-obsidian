@@ -9,7 +9,46 @@ status: evergreen
 
 # Financial Overview
 
-Source: 2025 Tax Return folder (Google Drive), compensation statements, W2, Wealthfront 1099. Last updated May 2026.
+Source: 2025 Tax Return folder (Google Drive), compensation statements, W2, Wealthfront 1099, "Financial Profile 2026" (written Jan 6, 2026). Last updated May 2026.
+
+## Net Worth Snapshot (January 2026)
+
+Source: Self-authored "Financial Profile 2026" doc.
+
+### Assets
+
+| Asset | Value | Notes |
+|-------|-------|-------|
+| Checking/Savings | $15,000 | |
+| Emergency fund | $55,000 | 3.3% rate |
+| Wealthfront (taxable) | $215,000 | See [[wealthfront]] |
+| E*TRADE | $100,000 | Salesforce RSU/ESPP |
+| 401k (Fidelity) | $413,000 | Salesforce plan, maxed |
+| IRA — backdoor Roth (Betterment) | $115,000 | $7k/yr via backdoor Roth |
+| Primary residence | $924,100 | 1081 Beach Park Blvd #111, Foster City, CA |
+| Vehicle (BRZ) | $15,000 | Trade-in value; ITS purchase incoming |
+| **Total Assets (est.)** | **~$1,852,100** | |
+
+### Liabilities
+
+| Liability | Balance | Monthly Payment | Rate |
+|-----------|---------|-----------------|------|
+| Mortgage | $385,000 | $3,676 | 6.75% |
+| Car loan (incoming) | — | — | — |
+| Credit cards | Paid off | — | — |
+
+**Net worth (est. Jan 2026):** ~$1,467,100 (assets minus mortgage)
+
+### Monthly Cash Flow
+
+| Item | Amount |
+|------|--------|
+| Wages (gross) | ~$26,667/mo |
+| Girlfriend rent contribution | $2,000/mo |
+| Housing (PITI + HOA) | $3,976 + $930 = $4,906 |
+| Utilities & Insurance | ~$200 |
+| Food & Groceries | ~$1,000 |
+| **Surplus (eyeballed)** | **$3,000–$5,000/mo** |
 
 ## Income Summary
 
@@ -45,7 +84,7 @@ Source: 2025 Tax Return folder (Google Drive), compensation statements, W2, Weal
 | Federal balance due (paid Apr 2025) | $28,235 |
 | California balance due (paid Apr 2025) | $11,260 |
 
-Note: 2024 had unusually high capital gains ($110k) from heavy RSU/ESPP liquidation. 2025 AGI is substantially lower (~$330k) with much larger itemized deductions ($65,997) now that the condo is in play for a full year.
+Note: 2024 had unusually high capital gains ($110k) from heavy RSU/ESPP liquidation. 2025 AGI is substantially lower (~$323k) with much larger itemized deductions ($66,296) now that the condo is in play for a full year, plus SALT cap raised to $40k.
 
 ## Compensation (Current)
 
@@ -61,37 +100,27 @@ Note: 2024 had unusually high capital gains ($110k) from heavy RSU/ESPP liquidat
 
 See [[compensation]] for full history.
 
-## Net Worth Pillars
+## Financial Goals
 
-| Asset | Detail |
-|-------|--------|
-| Primary residence | Condo, 1081 Beach Park Blvd #111, Foster City, CA 94404. Mortgage ~$900k-$1.1M implied from interest deduction. |
-| Salesforce 401k | Maxed at $23,500/yr |
-| Traditional IRA | $7,000/yr contribution |
-| HSA | Active (employer contributes ~$2,560/yr) |
-| Wealthfront (taxable) | Diversified ETF portfolio, ~$130-160k AUM estimated from management fees. See [[wealthfront]] |
-| Ally HYSA | Vehicle fund — accumulating for Integra Type S, then redirecting to "Bigger House" down payment |
-| Betterment | Investment account (details TBD) |
-| E*TRADE | Salesforce stock plan — RSU vesting and ESPP purchases |
+- **Retirement target**: Age 60
+- **Savings approach**: Max 401k ($23,500/yr), max IRA ($7k/yr backdoor Roth), max HSA, $500/mo to Wealthfront, all maxed ESPP proceeds → Wealthfront
+- **Next major purchases**: Integra Type S (in progress), bigger house (longer-term)
+- **Refinance**: Monitoring for rate drop from 6.75%
+- **Excess cash flow**: $3k–$5k/mo surplus to be deployed; strategy being developed
 
-## Debt
-
-| Debt | Status |
-|------|--------|
-| Mortgage | Active. ~$900k-$1.1M balance (implied). Only existing debt as of early 2026. |
-| Car loan | Incoming — Acura Integra Type S. |
-
-## Financial Strategy Notes (from his own documents)
+## Financial Strategy Notes
 
 - After reducing W-4 withholding, redirecting $1,630/month to Ally HYSA for vehicle fund
-- Once ~$24k 2025 refund clears, deploying 100% to Wealthfront for "Bigger House" down payment fund
-- Withholding calibrated for $2,000-$3,000 refund buffer, 110% safe harbor compliance
+- Once 2025 refund (~$35k) clears, deploying to Wealthfront for "Bigger House" down payment fund
+- Withholding calibrated for $2,000–$3,000 refund buffer, 110% safe harbor compliance
 - Goal: eliminate quarterly estimated tax payments permanently via W-4 calibration
+- Backdoor Roth IRA: contribute $7k to Betterment Traditional IRA → immediately convert to Roth each year
 
 ## See Also
 
-- [[taxes/_index]] — tax history, RSU/ESPP complexity, audit history
+- [[taxes/_index]] — tax history, RSU/ESPP complexity, withholding history
 - [[compensation]] — Salesforce comp history and RSU schedule
 - [[wealthfront]] — portfolio holdings detail
 - [[accounts]] — full account list
+- [[real-estate]] — mortgage detail
 - [[decisions/integra-type-s]] — car purchase

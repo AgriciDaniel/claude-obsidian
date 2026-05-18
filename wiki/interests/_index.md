@@ -17,6 +17,7 @@ tags: [interests, hobbies, index]
 | Anime | Active interest |
 | AI / Claude | Uses AI extensively as a thinking partner, not just a tool |
 | Cleaning / home care | Takes satisfaction in a clean, well-kept space |
+| Home Assistant / Smart Home | Active interest. UniFi Flex Mini for ethernet, Lenovo tablet wall-mounted for smart home control. Exploring automations: lower shades based on temperature, lights on/off based on occupancy. Researching apartment design aesthetics (r/malelivingspace). Ikea pendant light noted. |
 
 ## Less Active (Still Present)
 
