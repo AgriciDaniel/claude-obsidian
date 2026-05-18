@@ -16,7 +16,7 @@ sources:
 ---
 
 # Claude + Obsidian Ecosystem Research
-> Researched: 2026-04-08 | Goal: cherry-pick best features for AgriciDaniel/claude-obsidian
+> Researched: 2026-04-08 | Goal: cherry-pick best features for AI-Marketing-Hub/claude-obsidian
 
 ---
 
@@ -32,8 +32,8 @@ sources:
 
 ## Category 1: LLM Wiki Pattern (Claude Code Plugins)
 
-### AgriciDaniel/claude-obsidian ⭐ OUR PROJECT
-- URL: https://github.com/AgriciDaniel/claude-obsidian
+### AI-Marketing-Hub/claude-obsidian ⭐ OUR PROJECT
+- URL: https://github.com/AI-Marketing-Hub/claude-obsidian
 - Version: 1.2.0
 - Skills: /wiki, /wiki-ingest, /wiki-query, /wiki-lint, /save, /autoresearch, /canvas
 - Approach: Hot cache + compounding wiki + Claude Code skills
@@ -268,7 +268,7 @@ From kepano/obsidian-skills (Obsidian creator):
 
 ## Sources
 
-- https://github.com/AgriciDaniel/claude-obsidian
+- https://github.com/AI-Marketing-Hub/claude-obsidian
 - https://github.com/heyitsnoah/claudesidian
 - https://github.com/ProfSynapse/claudesidian-mcp
 - https://github.com/YishenTu/claudian

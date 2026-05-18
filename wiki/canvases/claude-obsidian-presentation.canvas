@@ -236,7 +236,7 @@
     {
       "id": "text-install-1744041639",
       "type": "text",
-      "text": "## Install\n\n```bash\nclaude plugin marketplace add \\\n  AgriciDaniel/claude-obsidian\n\nclaude plugin install claude-obsidian\n```\n\nRepo: `github.com/AgriciDaniel/claude-obsidian`",
+      "text": "## Install\n\n```bash\nclaude plugin marketplace add \\\n  AI-Marketing-Hub/claude-obsidian\n\nclaude plugin install claude-obsidian\n```\n\nRepo: `github.com/AI-Marketing-Hub/claude-obsidian`",
       "x": 280, "y": -900, "width": 480, "height": 200, "color": "3"
     },
     {

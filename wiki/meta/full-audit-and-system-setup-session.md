@@ -58,7 +58,7 @@ claude-obsidian is now installed in the local Claude Code system:
 
 ```bash
 # Registered as marketplace
-claude plugin marketplace add AgriciDaniel/claude-obsidian
+claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
 # → claude-obsidian-marketplace registered (user scope)
 
 # Installed plugin

@@ -159,13 +159,13 @@ A placeholder email `[scrubbed-email]` (which the user confirmed does not exist 
 The v1.4.0 README and install guide showed this install command:
 
 ```bash
-claude plugin install github:AgriciDaniel/claude-obsidian
+claude plugin install github:AI-Marketing-Hub/claude-obsidian
 ```
 
 This form does not exist in Claude Code. Users trying it see:
 
 ```
-Failed to install plugin "github:AgriciDaniel/claude-obsidian": Plugin "github:AgriciDaniel/claude-obsidian" not found in any configured marketplace
+Failed to install plugin "github:AI-Marketing-Hub/claude-obsidian": Plugin "github:AI-Marketing-Hub/claude-obsidian" not found in any configured marketplace
 ```
 
 ### The correct install flow (per `code.claude.com/docs/en/plugin-marketplaces`)
@@ -174,7 +174,7 @@ Plugin installation is a **two-step** process:
 
 ```bash
 # Step 1: add the marketplace catalog
-claude plugin marketplace add AgriciDaniel/claude-obsidian
+claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
 
 # Step 2: install the plugin from the catalog by name
 claude plugin install claude-obsidian@claude-obsidian-marketplace
