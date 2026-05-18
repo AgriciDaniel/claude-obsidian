@@ -158,9 +158,21 @@ def save_cache(cache):
             except BlockingIOError:
                 time.sleep(0.1)
         if not locked:
-            log("WARN: rerank embed-cache lock unavailable after 3 tries; "
-                "writing unlocked (atomic via temp+rename). Concurrent writers "
-                "may overwrite each other's last update.")
+            msg = ("WARN: rerank embed-cache lock unavailable after 3 tries; "
+                   "writing unlocked (atomic via temp+rename). Concurrent writers "
+                   "may overwrite each other's last update.")
+            log(msg)
+            # v1.9.1 / closes audit Data M1: also route to .vault-meta/hook.log so
+            # the user sees the event via wiki-lint (stderr alone is invisible to
+            # most callers; this matches the hook's logging shape).
+            try:
+                META_DIR.mkdir(parents=True, exist_ok=True)
+                hook_log = META_DIR / "hook.log"
+                ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                with hook_log.open("a", encoding="utf-8") as fh:
+                    fh.write(f"{ts} rerank embed-cache lock unavailable; wrote unlocked\n")
+            except OSError:
+                pass  # never block on a logging failure
         tmp = EMBED_CACHE_PATH.with_suffix(f".{os.getpid()}.tmp")
         tmp.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
         os.replace(tmp, EMBED_CACHE_PATH)

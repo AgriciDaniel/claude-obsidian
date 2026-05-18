@@ -96,9 +96,25 @@ say "✓ State directories: $META/chunks/, $META/bm25/"
 
 # ── 3. Check ollama (informational) ──────────────────────────────────────────
 OLLAMA_URL="${OLLAMA_URL:-http://127.0.0.1:11434}"
+# v1.9.1 / closes audit S4: if OLLAMA_URL was overridden to point off-machine,
+# refuse to probe unless the caller passes --allow-remote-ollama (mirrors the
+# existing scripts/tiling-check.py:351 gate). Same allowlist of localhost
+# patterns ollama itself recommends.
+case "$OLLAMA_URL" in
+  http://127.0.0.1:*|http://localhost:*|http://[::1]:*) ;;
+  *)
+    if ! printf '%s ' "$@" | grep -q -- '--allow-remote-ollama'; then
+      warn "OLLAMA_URL points off-localhost: $OLLAMA_URL"
+      warn "Refusing to probe remote ollama without explicit consent."
+      warn "Pass --allow-remote-ollama to bin/setup-retrieve.sh to opt in, or"
+      warn "unset OLLAMA_URL to use the default http://127.0.0.1:11434."
+      OLLAMA_URL=""
+    fi
+    ;;
+esac
 OLLAMA_ALIVE=false
 MODEL_PRESENT=false
-if command -v curl >/dev/null 2>&1; then
+if [ -n "$OLLAMA_URL" ] && command -v curl >/dev/null 2>&1; then
   if curl -fsS --max-time 3 "$OLLAMA_URL/api/tags" >/dev/null 2>&1; then
     OLLAMA_ALIVE=true
     if curl -fsS --max-time 3 "$OLLAMA_URL/api/tags" 2>/dev/null \
