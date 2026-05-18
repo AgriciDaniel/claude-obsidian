@@ -16,8 +16,8 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Hook-injected context does not survive context compaction. If wiki/hot.md exists in the current directory, silently re-read it now to restore the hot cache. Do not announce this."
+            "type": "command",
+            "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
           }
         ]
       }
