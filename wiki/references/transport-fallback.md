@@ -88,13 +88,16 @@ bash scripts/detect-transport.sh --force
 
 ## Manual override
 
-If you have an MCP transport configured and want claude-obsidian to use it as preferred:
+If you have an MCP transport configured (or any other transport not in the auto-detected set) and want claude-obsidian to use it as preferred:
 
 1. Open `.vault-meta/transport.json` in any editor.
-2. Set `"preferred": "mcp-obsidian"` (or `"mcpvault"`).
-3. Add a `"manual_override": true` field at the top level so the detection script knows not to clobber your edit on next run.
+2. Set `"preferred": "mcp-obsidian"` (or `"mcpvault"`, or any custom value).
+3. Set `"fallback_chain": ["mcp-obsidian", "filesystem"]` (or your preferred order).
+4. Add a `"manual_override": true` field at the top level so the detection script knows not to clobber your `preferred` + `fallback_chain` on next run.
 
-The detection script honors `manual_override: true` and leaves the file alone (except for re-stamping `detected_at`).
+The detection script (`scripts/detect-transport.sh`, v1.8.2+) parses the existing transport.json BEFORE running auto-detection. When `manual_override` is `true`, the script re-runs auto-detection only to refresh `available.cli.*` and `available.cli.obsidian_app_running` (so the human log line stays accurate), but preserves the user's `preferred` and `fallback_chain` choices across every cycle — including `--force` runs and post-staleness refreshes. The `manual_override` field itself round-trips through the snapshot, so the override survives indefinitely.
+
+To disable the override later, edit the file and either set `"manual_override": false` or delete the field; the next detection pass will recompute `preferred` from auto-detection.
 
 ## See also
 
