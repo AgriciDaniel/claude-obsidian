@@ -17,9 +17,28 @@ status: evergreen
 
 ## Refinance In Progress (as of May 2026)
 
-Status: **Delayed — not yet closed.** Application submitted April 2026, originally targeted to close April 28, 2026 but has been delayed. Still in process as of May 2026.
+Status: **Delayed — not yet closed.** Application submitted December 2025, originally targeted to close April 28, 2026. Blocker: appraisal was refunded Dec 31, 2025 pending "clarity on repairs." HOA questionnaire completed April 24, 2026. Samuel sent building permits/inspection docs May 5, 2026. Appraisal needs to be reordered. Status unclear after May 5.
+
+**Broker:** Michael Quihuiz III — Michael Lending Inc | mq@michaellendinginc.com | 408-516-6232 | CA BRE #01384522  
+*(Michael also handled the original condo purchase in June 2024)*
 
 Source: Signed Loan Estimate / disclosure, AmWest Funding Corp, April 13, 2026
+
+### Refi Timeline (from email thread)
+
+| Date | Event |
+|------|-------|
+| Dec 4, 2025 | Samuel's initial inquiry; Michael quoted current P&I ~$2,594, discussed rates/costs |
+| Dec 5, 2025 | Application link sent by Michael |
+| Dec 6, 2025 | Application submitted; docs portal set up |
+| Dec 18, 2025 | Appraisal ordered — submitted to underwriting |
+| **Dec 31, 2025** | **Michael refunded appraisal fee** — "I will reorder once we have clarity on the repairs" |
+| Feb 19, 2026 | Samuel sent updated mortgage statement, W2, paystubs |
+| April 13, 2026 | Loan Estimate signed (AmWest Funding, 6.0%, target close April 28) |
+| April 15, 2026 | HOA lender questionnaire ordered via HomeWiseDocs |
+| April 24, 2026 | HOA shared order complete |
+| **May 5, 2026** | **Samuel sent building permits + inspection docs** — "I received these permits from city's permit department!" |
+| *After May 5* | *Status unknown — appraisal reorder pending* |
 
 | Field | Value |
 |-------|-------|
