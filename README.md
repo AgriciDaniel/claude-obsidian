@@ -7,8 +7,8 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/AgriciDaniel/claude-obsidian?label=public%20release)](https://github.com/AgriciDaniel/claude-obsidian/releases)
-[![CI](https://img.shields.io/github/actions/workflow/status/AgriciDaniel/claude-obsidian/test.yml?branch=main&label=public%20CI)](https://github.com/AgriciDaniel/claude-obsidian/actions)
+[![Release](https://img.shields.io/badge/release-v1.9.0-blue)](https://github.com/AI-Marketing-Hub/claude-obsidian/releases/latest)
+[![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/AI-Marketing-Hub/claude-obsidian/actions)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
 [![Obsidian](https://img.shields.io/badge/Obsidian-v1.9.10%2B-7c3aed)](https://obsidian.md)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Compatible-blue)](https://agentskills.io)
@@ -24,7 +24,7 @@ Open-source Obsidian AI plugin for personal knowledge management (PKM), second-b
 > - 🌐 **Public open-source** (latest stable: `v1.6.0`): [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian). MIT-licensed, open to anyone, no membership required.
 > - 🔒 **Community private mirror** (this repo, latest: `v1.9.0`): [`AI-Marketing-Hub/claude-obsidian`](https://github.com/AI-Marketing-Hub/claude-obsidian). Early access to v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework, and direct collaboration with the [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community.
 >
-> ℹ️ Badges above track the **public** repo since shields.io does not see private mirrors.
+> ℹ️ **Star count** tracks the public repo (shields.io cannot read private mirrors). **Release** and **CI** badges are pinned static for the private mirror (currently `v1.9.0`, tests green). When v1.7+ work promotes to the public canonical, these will return to live shields.io tracking.
 
 > ✨ **v1.7 "Compound Vault" refoundation**: Obsidian CLI as default transport, hybrid retrieval (contextual prefix + BM25 + cosine rerank per [Anthropic's Sept 2024 research](https://www.anthropic.com/news/contextual-retrieval)), per-file advisory locking that closes a latent multi-writer corruption hole, and substrate alignment with [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). Full guide: [docs/compound-vault-guide.md](docs/compound-vault-guide.md). Optional [DragonScale Memory](docs/dragonscale-guide.md) extension (log folds, deterministic page addresses, semantic tiling lint, boundary-first autoresearch).
 
