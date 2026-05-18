@@ -229,3 +229,22 @@ This sentence has a footnote.[^1]
 - Do not use `##` inside a callout body: headings don't render inside callouts.
 - Do not write `tags: [a, b, c]` inline in frontmatter: Obsidian prefers the list format.
 - Do not write ISO datetimes in frontmatter (`2026-04-08T00:00:00Z`): use `2026-04-08`.
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Which syntax does the user need? (Wikilinks? Callouts? Embeds? Math? Mermaid?) |
+| 2 | OBSERVE (int) | Am I documenting Obsidian Flavored Markdown as I remember it or as it currently is? Check the spec. |
+| 3 | LISTEN | The user's source-of-confusion — what specific syntax did they get wrong? |
+| 4 | THINK | Minimal correct examples. "What NOT to do" is often as valuable as "what to do." |
+| 5 | CONNECT (lat) | How does OFM differ from CommonMark and GFM? The deltas are where users get confused. |
+| 6 | CONNECT (sys) | Substrate-defer to kepano/obsidian-skills when present — single source of truth, less drift. |
+| 7 | FEEL | A cheat sheet that's scannable in 30 seconds, not a wall of text. |
+| 8 | ACCEPT | Not every wikilink needs an alias; some syntax is genuinely optional. Don't over-prescribe. |
+| 9 | CREATE | Syntax reference, current to Obsidian X.Y. Include the gotchas section. |
+| 10 | GROW | As OFM evolves (newer Mermaid types, callout types, cssclasses, etc.), refresh. |

@@ -205,3 +205,22 @@ Documented for transparency; not implemented in v1.7.0:
 - Concurrency policy: [`skills/wiki-ingest/SKILL.md`](../wiki-ingest/SKILL.md) §Concurrency
 - DragonScale Memory: [`wiki/concepts/DragonScale Memory.md`](../../wiki/concepts/DragonScale%20Memory.md)
 - Anthropic Contextual Retrieval research: https://www.anthropic.com/news/contextual-retrieval
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read the BM25 index state + embed cache state before issuing a query. Stale caches produce wrong answers. |
+| 2 | OBSERVE (int) | Am I trusting the cache when it should have been invalidated by recent ingests? Check mtime against last ingest. |
+| 3 | LISTEN | The user's query — what does it actually ask? Decompose into intent and terms before matching. |
+| 4 | THINK | Which retrieval strategy fits this query? BM25-only / BM25 + rerank / contextual-prefix + BM25 + rerank. |
+| 5 | CONNECT (lat) | How does this hybrid compare to v1.6 baseline? +32pp top-1 / +41% error reduction is the published delta. |
+| 6 | CONNECT (sys) | `--allow-egress` consent gate for Anthropic API; ollama runs local-only; rerank caches under `.vault-meta/`. |
+| 7 | FEEL | When not provisioned, exit 10 with a friendly "run `bash bin/setup-retrieve.sh` first" message — not a stack trace. |
+| 8 | ACCEPT | When retrieval returns empty, say so honestly. Don't fabricate. Don't pad with low-confidence guesses. |
+| 9 | CREATE | A ranked candidate list with `--explain` traceability for every score component. |
+| 10 | GROW | Queries that consistently fail → content gaps in the wiki. Track those as autoresearch inputs. |

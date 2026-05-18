@@ -278,3 +278,22 @@ For standalone visual production (12 templates, 6 layout algorithms, AI generati
 presentations), see [claude-canvas](https://github.com/AgriciDaniel/claude-canvas).
 This skill handles wiki-scoped visual boards. claude-canvas handles full-featured
 canvas orchestration for any project.
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Which images, PDFs, notes belong on this canvas? Read each before adding. |
+| 2 | OBSERVE (int) | Am I aestheticizing or actually communicating? Pretty canvases that don't inform are noise. |
+| 3 | LISTEN | The user's mental model of how these items relate. The canvas should mirror that, not impose another. |
+| 4 | THINK | Layout, group hierarchy, edge structure. Spatial reasoning matters; arbitrary positions confuse. |
+| 5 | CONNECT (lat) | Edges between canvas nodes reveal hidden structure not visible in the linear wiki. |
+| 6 | CONNECT (sys) | JSON Canvas 1.0 spec + Obsidian-native rendering + banana skill for AI image gen. |
+| 7 | FEEL | A canvas should be readable at first glance, not a maze of arrows. |
+| 8 | ACCEPT | Not every project needs a canvas. Admit when prose is enough. |
+| 9 | CREATE | Write the `.canvas` JSON with stable IDs and sensible positions. |
+| 10 | GROW | Which canvases get reopened? Which are abandoned? That signal informs canvas-worthiness over time. |

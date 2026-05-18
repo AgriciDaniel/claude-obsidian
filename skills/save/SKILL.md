@@ -78,11 +78,21 @@ If the user specifies a type, use that. If not, pick the best fit based on the c
 
 ## Save Workflow
 
+**Step 0: Decide the destination root.** Check in order:
+
+1. **User explicit override.** If the user said "save to this project's wiki" / "save to the personal vault" / a specific path, respect it.
+2. **Project CLAUDE.md or global `~/.claude/CLAUDE.md` `/save` rule.** If either declares a personal-vault destination (e.g., `~/Documents/Obsidian Vault/`), that is the destination ROOT. The Note Type table below describes paths relative to whichever root is active. Append the new note to `<root>/log/ingest-log.md` at the top, in the format that file already uses.
+3. **Default.** The project's own `wiki/` folder.
+
+The mode router (`python3 scripts/wiki-mode.py route session "<topic>"`) applies when filing into the project's own `wiki/`. When filing into a personal-vault root, use the canonical folders documented in that vault's CLAUDE.md (commonly `sessions/`, `concepts/`, `sources/`) — the mode router is NOT consulted for personal-vault writes by default. Filename sanitization (slug + safe_name) still applies regardless of root: strip path separators, NUL bytes, control chars, leading dots/hyphens.
+
+**Then continue the workflow:**
+
 1. **Scan** the current conversation. Identify the most valuable content to preserve.
 2. **Ask** (if not already named): "What should I call this note?" Keep the name short and descriptive.
 3. **Determine** note type using the table above.
 4. **Extract** all relevant content from the conversation. Rewrite it in declarative present tense (not "the user asked" but the actual content itself).
-5. **Create** the note in the correct folder with full frontmatter.
+5. **Create** the note in `<destination-root>/<chosen-folder>/<title>.md` (per Step 0). Full frontmatter. If a note with the same path already exists, ASK before overwriting.
 6. **Collect links**: identify any wiki pages mentioned in the conversation. Add them to `related` in frontmatter.
 7. **Update** `wiki/index.md`. Add the new entry at the top of the relevant section.
 8. **Append** to `wiki/log.md`. New entry at the TOP:
@@ -156,3 +166,22 @@ Skip:
 - Anything already in the wiki
 
 If it's already in the wiki, update the existing page instead of creating a duplicate.
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read the full conversation. Identify the actual decisions and synthesis, not the verbatim transcript. |
+| 2 | OBSERVE (int) | Am I in a save-everything mood? Some sessions don't have lasting insight; the Skip criteria exists for a reason. |
+| 3 | LISTEN | Did the user specify destination or type? Their explicit override comes first; defaults come second. |
+| 4 | THINK | Pick destination root (Step 0), then note type, then folder. Match path sanitization to destination convention. |
+| 5 | CONNECT (lat) | Does this content already have a wiki page? Update vs create matters — duplicates pollute the index. |
+| 6 | CONNECT (sys) | Index + log + hot cache + frontmatter relations all update together — atomicity matters. |
+| 7 | FEEL | Filename future-me can read cold; frontmatter that supports search. Avoid noise that drowns the signal. |
+| 8 | ACCEPT | Some sessions don't deserve saving. Honor the Skip criteria; don't archive everything. |
+| 9 | CREATE | Write the note, append to log at top, update index, refresh hot cache. |
+| 10 | GROW | Skipped saves are also signal — what threshold filtered them? Refine the type table over time. |

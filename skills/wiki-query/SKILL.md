@@ -192,3 +192,22 @@ If the question cannot be answered from the wiki:
 2. Identify the specific gap: "I have nothing on [subtopic]."
 3. Suggest: "Want to find a source on this? I can help you search or process one."
 4. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read `wiki/hot.md` first, then `wiki/index.md`, then specific pages. Don't skip the cache. |
+| 2 | OBSERVE (int) | Am I synthesizing from training-data memory when I should be citing wiki pages? Check the source of each claim. |
+| 3 | LISTEN | What is the user's REAL question? The surface query is often a proxy for a deeper need. |
+| 4 | THINK | Quick / standard / deep mode? Match depth to question complexity, not eagerness. |
+| 5 | CONNECT (lat) | Are there pages I missed that would CHANGE the answer? Cross-check related pages before answering. |
+| 6 | CONNECT (sys) | Hot cache + index + wiki-retrieve (when provisioned) layer into a single retrieval pipeline. |
+| 7 | FEEL | Cite specific pages, not vague references. Future-me wants traceability back to the source page. |
+| 8 | ACCEPT | When the wiki doesn't have the answer, say so explicitly. Don't fabricate from training data. |
+| 9 | CREATE | The answer with citations + an offer to file the answer if it's worth keeping. |
+| 10 | GROW | Questions the wiki can't answer are content gaps — log them as autoresearch inputs. |

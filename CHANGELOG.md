@@ -2,6 +2,95 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.9.0] - 2026-05-18 (10-principle thinking framework)
+
+Minor release adding the **10-principle thinking framework** as a first-class layer of the plugin. The framework (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) is integrated at three levels: as the new `/think` skill, as an appendix on every existing SKILL.md, and as the methodology spine for the v1.8.0 pre-push audit (which used it as its phase structure). Skill count: 14 → **15**.
+
+### Added
+
+- **`skills/think/SKILL.md`** — new skill #15. Canonical source for the 10-principle thinking loop. Walks Claude through external observation, metacognition (the often-skipped one), active listening, first-principles analysis (six-cut kernel lives here), lateral connection, system orchestration, intuition, intellectual humility (anti-sycophancy enforcement), generative output, and iterative growth. Triggers on "think this through", "10-principle review", "/think", "OBSERVE LISTEN THINK", "deep think", "systematic thinking", "structured reasoning". Allowed tools: `Read, Grep, Glob, Bash` (read-only; loads structure and discipline, not mutation). ~250 lines covering the 10 principles with one-paragraph definitions, when-to-invoke guidance, stage-by-stage prompts (5 questions per stage), anti-patterns (the common skips), and composition notes with `/best-practices`, `/save`, `/wiki-lint`, `agents/verifier.md`, and `/autoresearch`.
+
+### Changed
+
+- **All 14 existing SKILL.md files** — each receives a unique "## How to think (10-principle mapping)" appendix at the end. Per-skill 10-row table mapping each principle to that skill's specific work. Examples: wiki-mode's OBSERVE-internal is "audit the assumption that mode=generic is the default"; autoresearch's OBSERVE-internal is "am I steering the search toward what I already expect to find? confirmation bias kills research"; wiki-lint's FEEL is "a lint report should empower, not shame". Each appendix is non-trivial and skill-specific (not a template stub), satisfying the plan's verification rule #12.
+
+- **`.claude-plugin/plugin.json` + `marketplace.json`** — version 1.8.2 → 1.9.0. Description unchanged (the framework is additive to the v1.8.0 + v1.8.2 surface).
+
+### Repo hygiene (first-public-release prep)
+
+- **`CONTRIBUTING.md`** (NEW) — workflow, six-cut self-review checklist, commit conventions, test requirements.
+- **`CODE_OF_CONDUCT.md`** (NEW) — adopts Contributor Covenant v2.1 by reference.
+- **`SECURITY.md`** (NEW) — private disclosure policy, response SLA, scope, credit policy.
+- **`.github/ISSUE_TEMPLATE/bug_report.md`** (NEW) — reproduction + environment + skill-affected fields.
+- **`.github/ISSUE_TEMPLATE/feature_request.md`** (NEW) — scope + compatibility + testing fields.
+- **`.github/pull_request_template.md`** (NEW) — six-cut self-review + test results + verifier verdict + CHANGELOG reminder.
+- **`.github/workflows/test.yml`** (NEW) — CI runs `make test` on push/PR + validates SKILL.md frontmatter + agents `tools:` declaration + plugin manifest JSON validity.
+- **Manifest + doc URL updates** — `plugin.json`, `marketplace.json`, and 18 other files updated to reference the canonical repository URL.
+
+### Why this release
+
+Per the v1.8.0 pre-push audit's GROW notes (`docs/audits/v1.8.0-pre-push-audit-2026-05-18.md` §10), the 10-principle framework proved its value as the AUDIT's mental spine — OBSERVE-internal forced explicit bias documentation; GROW forced a feedback-loop section. Shipping it as a first-class skill (and as appendices on all existing skills) makes the discipline available to every future invocation, not just to one-off audits. This is the GROW step of the audit itself, embodied in code.
+
+### Compass axis status after v1.9.0
+
+| Axis | v1.8.0 | v1.9.0 |
+|---|---|---|
+| Compounding wiki primitive | #1 | #1 |
+| Multi-writer safety | #1 | #1 |
+| Retrieval architecture (free tier) | #1 | #1 |
+| License / openness | #1 | #1 |
+| Methodology support | #1 | #1 (deepened by framework integration) |
+| Derivative outputs | NO | NO (v2.0 scope) |
+| GUI / install ergonomics | NO | NO (v2.5+ scope) |
+
+5 of 7 axes #1 (unchanged count, but methodology axis deepens — claude-obsidian is now the only Claude+Obsidian plugin shipping methodology modes AND a first-class thinking-loop framework AND per-skill thinking guidance).
+
+### Migration notes
+
+- v1.8.x vaults: no action needed. All existing skills work identically; the "How to think" appendix is additive guidance, not behavioral change.
+- `/think` is invocable from any project that has this plugin installed; it does not require a vault.
+- The framework can be invoked explicitly (`/think <problem>`) or applied implicitly when an existing skill's appendix references it.
+
+### Composition
+
+- `/think` + `/save` = the canonical compounding loop. Apply the 10 principles to a problem; when done, save the insights worth not re-deriving.
+- `/think` + `/best-practices` = engineering discipline at the THINK stage of the framework. The six-cut kernel IS the inside of stage 4.
+- `/think` + `agents/verifier.md` = an OBSERVE-internal substitute for solo work — fresh-context reviewer that catches biases the chair missed.
+
+## [1.8.2] - 2026-05-18 (pre-push audit closure)
+
+Patch release closing **all 4 HIGH findings + 1 leaked BLOCKER-class hardening** from the v1.8.0 pre-push audit. Audit: [`docs/audits/v1.8.0-pre-push-audit-2026-05-18.md`](docs/audits/v1.8.0-pre-push-audit-2026-05-18.md). Per the audit's strict push gate (any BLOCKER halts), v1.8.2 takes the release from YELLOW (0 BLOCKER / 4 HIGH) to GREEN (0 BLOCKER / 0 HIGH).
+
+### Fixed
+
+- **H1 — `scripts/detect-transport.sh`: implement `manual_override`.** The documented escape hatch for MCP-only users (`"manual_override": true` in `transport.json`) was documented at `wiki/references/transport-fallback.md` but never honored by the script. v1.8.2 parses the existing snapshot BEFORE auto-detection; when `manual_override: true`, the user's `preferred` and `fallback_chain` are preserved across normal cycles AND `--force` refreshes. Auto-detection still runs to refresh the `available.cli.*` informational fields. Field round-trips through the JSON schema (new `"manual_override": <bool>` in every snapshot). Verified by smoke test: a pinned `"preferred": "mcp-obsidian"` survived a `--force` refresh.
+- **H2 — `agents/wiki-ingest.md`: add `Bash` to tools + add `## Mode awareness (v1.8+)` section.** The parallel batch-ingest sub-agent was missing `Bash` in its `tools:` frontmatter despite mandating `bash scripts/wiki-lock.sh acquire/release` in its body — this defeated the v1.7 multi-writer safety guarantee. Sub-agent was also missing v1.8 mode-routing awareness, so batch-ingest in LYT/PARA/Zettelkasten vaults filed to v1.7 generic paths. Both gaps closed.
+- **H3 — `skills/autoresearch/SKILL.md`: new `## Web egress hygiene (v1.8.2+)` section.** Four sub-policies: (1) URL validation (reject `file://`, `javascript:`, RFC1918), (2) content sanitization before write (strip `<script>`/`<iframe>`, escape `[[/]]` injections, reject embedded frontmatter delimiters, 50KB truncation), (3) per-loop cost expectation (~45 WebFetch calls per run), (4) failure mode (log to `wiki/log.md`, never silently swallow). The router's `safe_name()` is the FILENAME guard; this is the BODY-content guard.
+- **H4 — `skills/save/SKILL.md`: prepend `Step 0: Decide the destination root`.** The skill body assumed project-local `wiki/` filing while the global `~/.claude/CLAUDE.md` `/save` rule mandates personal-vault filing for cross-project saves. Step 0 makes the routing decision explicit with three rules in order: user-explicit override → project/global CLAUDE.md `/save` override → project-local `wiki/` default. Path sanitization still applies regardless of destination root. Workflow step 5 now requires a collision check (ASK before overwrite).
+- **wiki/references/transport-fallback.md:** §Manual override now describes the actual v1.8.2 behavior (preserves `preferred`+`fallback_chain` while still refreshing `available.cli.*`; field round-trips through snapshot).
+
+### Changed
+
+- **`.claude-plugin/plugin.json` + `marketplace.json`:** version 1.8.0 → 1.8.2.
+- **`docs/audits/v1.8.0-pre-push-audit-2026-05-18.md`** (NEW): full pre-push audit report. 14 per-skill scores (average 84.6/100), per-tier finding ledger, v1.8.2 fix replay, hook safety, manifest accuracy, push-gate decision tree. Audit methodology used the 10-principle thinking spine (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) as audit phases.
+
+### Verification
+
+- All 8 hermetic test suites green (~1234 assertions): allocate-address, tiling-check, boundary-score, bm25-index, retrieve, wiki-lock, concurrent-write, wiki-mode.
+- v1.8.2 manual_override smoke test: pinned `preferred="mcp-obsidian"` survived `--force` refresh.
+- All path-traversal attack vectors against `route_path()` confirmed sanitized inside vault root (6 dedicated assertions).
+- mkstemp atomic write yields 0600 perms (verified via `stat`).
+- `--mode` preview is non-mutating (verified via mtime).
+
+### Known issues at v1.8.2 (deferred to v1.9 or later)
+
+The pre-push audit also surfaced 14 MEDIUM and 45 LOW findings. None block release. Triage in audit §12. Highlights:
+- `wiki-cli` mcp-obsidian + mcpvault tiers documented as fallback positions 2/3 but unreachable from auto-detection (deferred — manual_override is the workaround until MCP auto-detect ships in v1.7.x patch).
+- No `tests/test_detect_transport.sh` yet for v1.7+ transport script (planned v1.8.3).
+- 7 skills declare incomplete `allowed-tools` lists (missing `Bash` despite shelling out) — works in practice (harness default-allows), but convention violation (planned v1.8.3).
+- `tests/__init__.py` missing → `python3 -m unittest tests.X` form fails (direct invocation works) (planned v1.8.3).
+- Various doc/reality drift around the v1.8 ID format change (14-digit → 20-digit), v1.8 `--mode` flag not yet referenced in consumer docs (deferred LOW polish PR).
+
 ## [1.8.0] - 2026-05-17 (methodology modes — closes compass priority gap 5)
 
 Minor release closing the **5th and final priority gap** from the May 2026 compass artifact: methodology support. Adds the **`wiki-mode`** skill with first-class support for four organizational styles (LYT / PARA / Zettelkasten / Generic). After this release, claude-obsidian is **#1 on 5 of 7 axes per compass framework** — up from 4/7 in v1.7. Full guide: [`docs/methodology-modes-guide.md`](docs/methodology-modes-guide.md).

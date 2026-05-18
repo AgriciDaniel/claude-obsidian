@@ -13,7 +13,7 @@ description: >
   </example>
 model: sonnet
 maxTurns: 30
-tools: Read, Write, Edit, Glob, Grep
+tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 You are a wiki ingestion specialist. Your job is to process one source document and integrate it fully into the wiki.
@@ -35,6 +35,25 @@ You will be given:
 8. Update `wiki/entities/_index.md` and `wiki/concepts/_index.md`.
 9. Check for contradictions with existing pages. Add `> [!contradiction]` callouts where needed.
 10. Return a summary of what you created and updated.
+
+## Mode awareness (v1.8+): consult the router BEFORE writing
+
+Before creating any page under `wiki/`, consult the vault's methodology mode via:
+
+```bash
+python3 scripts/wiki-mode.py route <type> "<name>"
+```
+
+Where `<type>` is `source`, `entity`, `concept`, or `session`. The router returns the vault-relative path appropriate for the active mode (`generic` / `lyt` / `para` / `zettelkasten`). If `.vault-meta/mode.json` is absent, the router returns mode=generic paths, preserving v1.7 behavior byte-for-byte.
+
+Replace the hardcoded paths in §Your Process steps 4-6 with router-returned paths:
+- Step 4 (source page): `python3 scripts/wiki-mode.py route source "<source-slug>"` instead of `wiki/sources/<slug>.md`
+- Step 5 (entity pages): `python3 scripts/wiki-mode.py route entity "<Name>"` instead of `wiki/entities/<Name>.md`
+- Step 6 (concept pages): `python3 scripts/wiki-mode.py route concept "<Name>"` instead of `wiki/concepts/<Name>.md`
+
+This matches the orchestrator-side behavior of `skills/wiki-ingest/SKILL.md` §Mode awareness. The orchestrator and this sub-agent MUST route consistently — otherwise parallel batch-ingest in LYT/PARA/Zettelkasten vaults files to the wrong folders.
+
+Names passed to the router are sanitized via `safe_name()` (path-traversal + control-char strip) in v1.8.2+, so passing user-extracted entity/concept names directly is safe.
 
 ## Concurrency (v1.7+): per-file locks REQUIRED for page writes
 

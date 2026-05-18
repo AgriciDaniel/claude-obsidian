@@ -32,6 +32,7 @@ import argparse
 import json
 import re
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -58,7 +59,7 @@ DEFAULT_CONFIG = {
             "archives_folder": "wiki/archives/",
         },
         "zettelkasten": {
-            "id_format": "YYYYMMDDHHMMSS",
+            "id_format": "YYYYMMDDHHMMSSffffff",
             "no_folders": True,
             "root_folder": "wiki/",
         },
@@ -96,9 +97,18 @@ def load_config():
 
 def save_config(cfg):
     META_DIR.mkdir(parents=True, exist_ok=True)
-    tmp = MODE_PATH.with_suffix(f".{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}.tmp")
-    tmp.write_text(json.dumps(cfg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    tmp.replace(MODE_PATH)
+    payload = json.dumps(cfg, indent=2, ensure_ascii=False) + "\n"
+    fd, tmp_path = tempfile.mkstemp(prefix="mode.", suffix=".tmp", dir=str(META_DIR))
+    try:
+        with open(fd, "w", encoding="utf-8") as fh:
+            fh.write(payload)
+        Path(tmp_path).replace(MODE_PATH)
+    except Exception:
+        try:
+            Path(tmp_path).unlink()
+        except OSError:
+            pass
+        raise
 
 
 def slugify(name):
@@ -110,6 +120,17 @@ def slugify(name):
     s = re.sub(r"[^\w\-]+", "-", name, flags=re.UNICODE)
     s = re.sub(r"-+", "-", s).strip("-")
     return s or "untitled"
+
+
+def safe_name(name):
+    """Sanitize a name that intentionally preserves case + spaces (entity/concept).
+    Strips path separators, null bytes, control characters, and leading dots or
+    hyphens so the returned string cannot escape its parent directory or be
+    interpreted as a hidden file or flag. Spaces and case are preserved.
+    """
+    cleaned = re.sub(r"[/\\\x00-\x1f]+", "", name)
+    cleaned = cleaned.lstrip(".-")
+    return cleaned or "untitled"
 
 
 def mint_zettel_id():
@@ -128,14 +149,16 @@ def route_path(mode, content_type, name, cfg):
         raise SystemExit(4)
     slug = slugify(name)
 
+    raw = safe_name(name)  # case + spaces preserved, but path-traversal stripped
+
     if mode == "generic":
         g = cfg["config"]["generic"]
         mapping = {
             "source":   g["sources_folder"] + slug + ".md",
-            "entity":   g["entities_folder"] + name + ".md",  # preserve capitalization for entities
-            "concept":  g["concepts_folder"] + name + ".md",
+            "entity":   g["entities_folder"] + raw + ".md",  # preserve capitalization for entities
+            "concept":  g["concepts_folder"] + raw + ".md",
             "session":  g["sessions_folder"] + slug + ".md",
-            "research": g["concepts_folder"] + name + ".md",
+            "research": g["concepts_folder"] + raw + ".md",
         }
         return mapping[content_type]
 
@@ -150,8 +173,8 @@ def route_path(mode, content_type, name, cfg):
             # New sources land in resources/<topic>/ (we use a generic 'incoming' bucket;
             # the user will sort into specific topics via their own workflow)
             "source":   p["resources_folder"] + "incoming/" + slug + ".md",
-            "entity":   p["resources_folder"] + "people/" + name + ".md",
-            "concept":  p["resources_folder"] + "concepts/" + name + ".md",
+            "entity":   p["resources_folder"] + "people/" + raw + ".md",
+            "concept":  p["resources_folder"] + "concepts/" + raw + ".md",
             # Session notes land in projects/inbox/; user reroutes to specific projects
             "session":  p["projects_folder"] + "inbox/" + slug + ".md",
             "research": p["resources_folder"] + slug + "/" + slug + ".md",
@@ -176,6 +199,8 @@ def main():
     sp_route = sub.add_parser("route", help="Print suggested vault path for new content")
     sp_route.add_argument("type", choices=VALID_TYPES)
     sp_route.add_argument("name", help="Content name (will be slugified for filenames)")
+    sp_route.add_argument("--mode", choices=VALID_MODES, default=None,
+                          help="Preview routing under MODE without writing mode.json (default: use current vault mode)")
 
     sp_set = sub.add_parser("set", help="Write a mode to .vault-meta/mode.json")
     sp_set.add_argument("mode", choices=VALID_MODES)
@@ -195,7 +220,8 @@ def main():
         return 0
 
     if args.cmd == "route":
-        path = route_path(cfg["mode"], args.type, args.name, cfg)
+        active_mode = args.mode if args.mode else cfg["mode"]
+        path = route_path(active_mode, args.type, args.name, cfg)
         print(path)
         return 0
 

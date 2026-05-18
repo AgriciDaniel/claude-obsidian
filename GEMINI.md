@@ -58,5 +58,5 @@ On first session:
 
 ## Project Links
 
-- Plugin: https://github.com/AgriciDaniel/claude-obsidian
+- Plugin: https://github.com/AI-Marketing-Hub/claude-obsidian
 - Pattern: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f

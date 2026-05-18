@@ -174,6 +174,82 @@ def test_slugify():
     assert_eq("empty → 'untitled'", "untitled", wm.slugify(""))
 
 
+# ─── Path-traversal hardening (v1.8.2): entity/concept names cannot escape ──
+def test_safe_name_strips_path_separators():
+    """v1.8.2 fix: names that intentionally preserve case (entity, concept)
+    must not allow path traversal via '../', leading '/', backslashes, NULs,
+    or control characters. Spaces and case are still preserved.
+    """
+    assert_eq("traversal '../' stripped", "etcpasswd", wm.safe_name("../../../etc/passwd"))
+    assert_eq("leading '/' stripped", "etcpasswd", wm.safe_name("/etc/passwd"))
+    assert_eq("backslash stripped", "etcpasswd", wm.safe_name("..\\..\\etc\\passwd"))
+    assert_eq("NUL stripped", "foobar", wm.safe_name("foo\x00bar"))
+    assert_eq("control chars stripped", "foobar", wm.safe_name("foo\x01\x02bar"))
+    assert_eq("leading dot stripped (no hidden files)", "hidden", wm.safe_name(".hidden"))
+    assert_eq("leading hyphen stripped (no flag escapes)", "flag", wm.safe_name("-flag"))
+    assert_eq("spaces + case preserved", "Andrej Karpathy", wm.safe_name("Andrej Karpathy"))
+    assert_eq("empty after strip → 'untitled'", "untitled", wm.safe_name("/"))
+
+
+def test_route_path_blocks_traversal_for_generic_entity_and_concept():
+    """The end-to-end route must not allow the returned path to escape vault root."""
+    import os
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "generic"
+    vault = os.path.abspath(".")
+    for content_type, malicious in [
+        ("entity",  "../../../etc/passwd"),
+        ("concept", "/etc/passwd"),
+        ("entity",  "..\\..\\..\\Windows\\System32"),
+        ("research","../escape"),
+    ]:
+        p = wm.route_path("generic", content_type, malicious, cfg)
+        abs_p = os.path.abspath(p)
+        assert_true(f"generic {content_type}({malicious!r}) stays inside vault",
+                    abs_p.startswith(vault + os.sep), hint=f"got {abs_p}")
+
+
+def test_route_path_blocks_traversal_for_para_entity_and_concept():
+    import os
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "para"
+    vault = os.path.abspath(".")
+    for content_type, malicious in [
+        ("entity",  "../../../etc/passwd"),
+        ("concept", "/etc/shadow"),
+    ]:
+        p = wm.route_path("para", content_type, malicious, cfg)
+        abs_p = os.path.abspath(p)
+        assert_true(f"para {content_type}({malicious!r}) stays inside vault",
+                    abs_p.startswith(vault + os.sep), hint=f"got {abs_p}")
+
+
+# ─── CLI --mode preview override (v1.8.2) ───────────────────────────────────
+def test_cli_route_mode_override_previews_without_writing():
+    """`route --mode lyt source X` must return an lyt path even when current
+    mode is generic, and must NOT modify .vault-meta/mode.json."""
+    before = subprocess.run([sys.executable, str(HELPER), "get"],
+                            capture_output=True, text=True, timeout=5).stdout.strip()
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "route", "--mode", "lyt", "source", "Preview Test"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli route --mode rc=0", 0, result.returncode)
+    path = result.stdout.strip()
+    assert_true("preview returns lyt notes/ path",
+                path.startswith("wiki/notes/"), hint=path)
+    after = subprocess.run([sys.executable, str(HELPER), "get"],
+                           capture_output=True, text=True, timeout=5).stdout.strip()
+    assert_eq("current mode unchanged by preview", before, after)
+
+
+def test_cli_route_mode_override_rejects_invalid():
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "route", "--mode", "bogus", "source", "X"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_true("preview rejects bogus mode", result.returncode != 0,
+                hint=f"rc={result.returncode}")
+
+
 # ─── Invalid content type raises ───────────────────────────────────────────
 def test_invalid_content_type_raises():
     cfg = dict(wm.DEFAULT_CONFIG)
@@ -255,6 +331,11 @@ def main():
     test_mint_zettel_id_collision_resistance()
     test_slugify()
     test_slugify_extended_unicode()
+    test_safe_name_strips_path_separators()
+    test_route_path_blocks_traversal_for_generic_entity_and_concept()
+    test_route_path_blocks_traversal_for_para_entity_and_concept()
+    test_cli_route_mode_override_previews_without_writing()
+    test_cli_route_mode_override_rejects_invalid()
     test_invalid_content_type_raises()
     test_cli_get_returns_mode()
     test_cli_id_returns_timestamp()

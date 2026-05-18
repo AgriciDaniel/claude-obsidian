@@ -68,6 +68,43 @@ mkdir -p "$META_DIR" || {
   exit 2
 }
 
+# ── 0. Honor manual_override from existing transport.json ────────────────────
+# Users can pin a non-detected transport (mcp-obsidian, mcpvault, or any custom
+# value) by editing transport.json to set:
+#     "manual_override": true
+#     "preferred": "<their-choice>"
+#     "fallback_chain": [...]
+# Auto-detection still runs (to refresh CLI/Obsidian-running flags for visibility),
+# but PREFERRED and CHAIN are preserved from the existing file across both the
+# normal write path AND --force runs. Documented at
+# wiki/references/transport-fallback.md §Manual override.
+MANUAL_OVERRIDE_FLAG=false
+MANUAL_OVERRIDE_PREFERRED=""
+MANUAL_OVERRIDE_CHAIN=""
+if [ -f "$OUTPUT_FILE" ]; then
+  MANUAL_PARSE="$(python3 - "$OUTPUT_FILE" 2>/dev/null <<'PYEOF'
+import json, sys
+try:
+    with open(sys.argv[1]) as fh:
+        data = json.load(fh)
+    if data.get("manual_override") is True:
+        pref = data.get("preferred", "")
+        chain = data.get("fallback_chain", [])
+        # Output: line 1 = preferred; line 2 = comma-separated quoted chain entries.
+        print(pref)
+        print(",".join('"' + str(c) + '"' for c in chain))
+except Exception:
+    pass
+PYEOF
+)" || MANUAL_PARSE=""
+  if [ -n "${MANUAL_PARSE:-}" ]; then
+    MANUAL_OVERRIDE_FLAG=true
+    MANUAL_OVERRIDE_PREFERRED="$(printf '%s\n' "$MANUAL_PARSE" | sed -n '1p')"
+    MANUAL_OVERRIDE_CHAIN="$(printf '%s\n' "$MANUAL_PARSE" | sed -n '2p')"
+    log "manual_override=true; preserving preferred=${MANUAL_OVERRIDE_PREFERRED}"
+  fi
+fi
+
 # ── Freshness check: skip detection if snapshot is recent ────────────────────
 if [ "$MODE" = "write" ] && [ -f "$OUTPUT_FILE" ]; then
   if find "$OUTPUT_FILE" -mtime -${STALE_AFTER_DAYS} -print 2>/dev/null | grep -q .; then
@@ -124,6 +161,14 @@ else
   CHAIN='"filesystem"'
 fi
 
+# ── 3b. Apply manual_override if it was parsed from the existing snapshot ────
+# Auto-detected PREFERRED/CHAIN above are overridden so the user's pinned
+# transport survives every refresh cycle including --force.
+if $MANUAL_OVERRIDE_FLAG; then
+  PREFERRED="$MANUAL_OVERRIDE_PREFERRED"
+  CHAIN="$MANUAL_OVERRIDE_CHAIN"
+fi
+
 # ── 4. Build JSON snapshot ───────────────────────────────────────────────────
 TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 HOSTNAME="$(hostname 2>/dev/null || echo unknown)"
@@ -135,6 +180,7 @@ snapshot() {
   "detected_at": "${TIMESTAMP}",
   "host": "${HOSTNAME}",
   "vault_root": "${VAULT_ROOT}",
+  "manual_override": ${MANUAL_OVERRIDE_FLAG},
   "preferred": "${PREFERRED}",
   "fallback_chain": [${CHAIN}],
   "available": {

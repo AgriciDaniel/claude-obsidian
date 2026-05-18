@@ -99,9 +99,9 @@ python3 "$WM" set "$REQUESTED_MODE"
 
 # ── Seed template folders (optional) ────────────────────────────────────────
 if ! $NO_SEED; then
-  say ""
-  say "Seed template folders for $REQUESTED_MODE? [y/N]: "
   if [ -t 0 ]; then
+    say ""
+    printf "Seed template folders for %s? [y/N]: " "$REQUESTED_MODE"
     read -r seed || seed="n"
   else
     seed="n"

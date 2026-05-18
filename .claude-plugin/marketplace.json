@@ -6,24 +6,24 @@
   },
   "metadata": {
     "description": "claude-obsidian: Claude + Obsidian knowledge companion by AgriciDaniel",
-    "version": "1.8.0"
+    "version": "1.9.0"
   },
   "plugins": [
     {
       "name": "claude-obsidian",
       "source": {
         "source": "github",
-        "repo": "AgriciDaniel/claude-obsidian",
+        "repo": "AI-Marketing-Hub/claude-obsidian",
         "ref": "main"
       },
       "description": "Claude + Obsidian knowledge companion. v1.7 \"Compound Vault\" + v1.8 methodology modes close 5 of 5 priority gaps from the May 2026 compass artifact. Ships: substrate alignment with kepano/obsidian-skills, default Obsidian CLI transport, hybrid retrieval (Anthropic Sept 2024 contextual retrieval pattern: BM25 + cosine rerank), per-file advisory locking for multi-writer safety, pre-commit verifier agent, AND methodology modes (LYT / PARA / Zettelkasten / Generic) — first-class organizational support no other Claude+Obsidian competitor offers. v1.7.x audit fully closed; 50-query retrieval benchmark verified at +32pp top-1 / +41% error-reduction vs v1.6 baseline. Optional DragonScale Memory extension. Pairs with kepano/obsidian-skills (recommended) for canonical Obsidian primitives.",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "author": {
         "name": "AgriciDaniel",
         "url": "https://github.com/AgriciDaniel"
       },
-      "homepage": "https://github.com/AgriciDaniel/claude-obsidian",
-      "repository": "https://github.com/AgriciDaniel/claude-obsidian",
+      "homepage": "https://github.com/AI-Marketing-Hub/claude-obsidian",
+      "repository": "https://github.com/AI-Marketing-Hub/claude-obsidian",
       "license": "MIT",
       "recommendedCompanions": [
         {

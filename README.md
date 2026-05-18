@@ -5,7 +5,7 @@
   <img src="wiki/meta/claude-obsidian-gif-cover-16x9.gif" alt="claude-obsidian" width="100%" />
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/AI-Marketing-Hub/claude-obsidian?style=flat&color=e8734a)](https://github.com/AI-Marketing-Hub/claude-obsidian/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
 [![Blog Post](https://img.shields.io/badge/Deep_Dive-Blog_Post-22c55e)](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain)
@@ -65,7 +65,7 @@ Most Obsidian AI plugins are chat interfaces - they answer questions about your 
 ### Option 1: Clone as vault (recommended: full setup in 2 minutes)
 
 ```bash
-git clone https://github.com/AgriciDaniel/claude-obsidian
+git clone https://github.com/AI-Marketing-Hub/claude-obsidian
 cd claude-obsidian
 bash bin/setup-vault.sh
 ```
@@ -84,7 +84,7 @@ Plugin installation is a two-step process in Claude Code. First add the marketpl
 
 ```bash
 # Step 1: add the marketplace
-claude plugin marketplace add AgriciDaniel/claude-obsidian
+claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
 
 # Step 2: install the plugin
 claude plugin install claude-obsidian@claude-obsidian-marketplace

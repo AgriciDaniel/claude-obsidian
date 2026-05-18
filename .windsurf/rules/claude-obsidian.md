@@ -59,6 +59,6 @@ When the user opens this project in Windsurf:
 
 ## Links
 
-- https://github.com/AgriciDaniel/claude-obsidian
+- https://github.com/AI-Marketing-Hub/claude-obsidian
 - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - https://github.com/kepano/obsidian-skills

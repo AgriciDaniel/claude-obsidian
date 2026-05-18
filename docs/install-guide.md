@@ -1,7 +1,7 @@
 # claude-obsidian — Install Guide
 
 **Claude + Obsidian Knowledge Companion**
-Version 1.6.0 · [github.com/AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
+Version 1.6.0 · [github.com/AI-Marketing-Hub/claude-obsidian](https://github.com/AI-Marketing-Hub/claude-obsidian)
 
 > **Optional: DragonScale Memory extension.** If you want flat extractive log folds, deterministic page addresses, semantic tiling lint, and boundary-first autoresearch topic selection, run `bash bin/setup-dragonscale.sh` after the base install. Extra prerequisites beyond the base: `flock` (standard on Linux; available via `util-linux` on macOS) and `python3` (for the tiling and boundary helpers). Optional: `ollama` with `nomic-embed-text` pulled if you want the semantic tiling lint (Mechanism 3 only; it no-ops gracefully when ollama or the model is unavailable). The boundary-first scorer (Mechanism 4) needs only `python3`, no ollama. See [`docs/dragonscale-guide.md`](./dragonscale-guide.md) for the user-facing guide, `wiki/concepts/DragonScale Memory.md` for the full spec, and `CHANGELOG.md` for what shipped in 1.6.0.
 
@@ -32,7 +32,7 @@ Built on Andrej Karpathy's LLM Wiki pattern.
 Full setup in under 2 minutes.
 
 ```bash
-git clone https://github.com/AgriciDaniel/claude-obsidian
+git clone https://github.com/AI-Marketing-Hub/claude-obsidian
 cd claude-obsidian
 bash bin/setup-vault.sh
 ```
@@ -47,7 +47,7 @@ Plugin installation in Claude Code is a two-step process. First add the marketpl
 
 ```bash
 # Step 1: add the marketplace
-claude plugin marketplace add AgriciDaniel/claude-obsidian
+claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
 
 # Step 2: install the plugin
 claude plugin install claude-obsidian@claude-obsidian-marketplace
@@ -242,8 +242,8 @@ Your executive assistant, coding projects, and content workflows all draw from t
 
 ## Support
 
-- **GitHub**: [github.com/AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
-- **Issues**: [github.com/AgriciDaniel/claude-obsidian/issues](https://github.com/AgriciDaniel/claude-obsidian/issues)
+- **GitHub**: [github.com/AI-Marketing-Hub/claude-obsidian](https://github.com/AI-Marketing-Hub/claude-obsidian)
+- **Issues**: [github.com/AI-Marketing-Hub/claude-obsidian/issues](https://github.com/AI-Marketing-Hub/claude-obsidian/issues)
 - **Community**: [AI Marketing Hub on Skool](https://skool.com)
 
 ---

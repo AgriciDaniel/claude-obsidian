@@ -117,7 +117,7 @@ v1.8.0 closes that gap. After this release, claude-obsidian is **#1 on 5 of 7 ax
 **Philosophy:** atomic notes, unique IDs, dense bidirectional linking. No folders. Every note answers exactly one idea. Notes find each other by ID references.
 
 **Filing convention:**
-- `wiki/<YYYYMMDDHHMMSS>-<slug>.md` — flat under wiki/, timestamped IDs
+- `wiki/<YYYYMMDDHHMMSSffffff>-<slug>.md` — flat under wiki/, timestamped IDs (20 digits = date + microseconds, collision-resistant)
 - Every note has `id:`, `parent_id:` (optional), `child_ids:` (optional) in frontmatter
 - No subdirectories; the wiki/ root is the whole vault
 - All organization is via `parent_id` / `child_ids` / `[[ID]]` references in note bodies
@@ -185,7 +185,7 @@ The file schema:
   "config": {
     "lyt": {"moc_folder": "wiki/mocs/", "notes_folder": "wiki/notes/"},
     "para": {"projects_folder": "...", "areas_folder": "...", "resources_folder": "...", "archives_folder": "..."},
-    "zettelkasten": {"id_format": "YYYYMMDDHHMMSS", "no_folders": true, "root_folder": "wiki/"},
+    "zettelkasten": {"id_format": "YYYYMMDDHHMMSSffffff", "no_folders": true, "root_folder": "wiki/"},
     "generic": {"sources_folder": "wiki/sources/", "entities_folder": "wiki/entities/", "concepts_folder": "wiki/concepts/", "sessions_folder": "wiki/sessions/"}
   }
 }

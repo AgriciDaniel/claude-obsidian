@@ -373,3 +373,22 @@ Needs review before fixing:
 - Deleting orphan pages (they might be intentionally isolated)
 - Resolving contradictions (requires human judgment)
 - Merging duplicate pages
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Scan every page, every wikilink, every frontmatter block. No skipping for size or apparent obviousness. |
+| 2 | OBSERVE (int) | Am I biased toward "looks fine"? Pretend you're a hostile reader looking for what's actually wrong. |
+| 3 | LISTEN | Did the user mention specific concerns this session? Prioritize those over generic checks. |
+| 4 | THINK | Which checks matter? Tier findings by severity (BLOCKER / HIGH / MEDIUM / LOW), not by ease of fix. |
+| 5 | CONNECT (lat) | Orphan + dead-link + frontmatter-gap patterns often co-occur. Cluster findings to expose root causes. |
+| 6 | CONNECT (sys) | Tiling-check + Dataview dashboards + canvas overview — multiple lint surfaces to integrate. |
+| 7 | FEEL | A lint report should empower, not shame. Actionable items beat exhaustive catalog. |
+| 8 | ACCEPT | Some lint findings are deliberate (orphan-by-design, intentional stub). Flag, don't force. |
+| 9 | CREATE | Lint report at `wiki/meta/lint-report-YYYY-MM-DD.md` with tiered findings. |
+| 10 | GROW | Recurring lint findings → process improvement targets, not just one-time fixes. |

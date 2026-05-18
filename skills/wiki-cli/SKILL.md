@@ -157,3 +157,22 @@ obsidian-cli bookmarks "$VAULT"
 - Legacy MCP options (A/B/C/D): [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
 - Concurrency policy (v1.7+): [`skills/wiki-ingest/SKILL.md`](../wiki-ingest/SKILL.md) §Concurrency
 - Detection script: [`scripts/detect-transport.sh`](../../scripts/detect-transport.sh)
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Detect which Obsidian CLI binaries are installed; check if Obsidian app is running. Read `.vault-meta/transport.json` if it exists. |
+| 2 | OBSERVE (int) | Don't be biased toward filesystem fallback when CLI is actually available — verify auto-detection caught what's installed. |
+| 3 | LISTEN | If `manual_override: true` is set in transport.json, the user has spoken — preserve their `preferred` and `fallback_chain`. |
+| 4 | THINK | Compute the right fallback chain for this environment. CLI > MCP > filesystem; freshness check before recomputing. |
+| 5 | CONNECT (lat) | How does this transport choice affect every other skill's write? Six downstream skills depend on this snapshot. |
+| 6 | CONNECT (sys) | Schema stability of transport.json matters more than feature richness — consumers parse the JSON via simple shell idioms. |
+| 7 | FEEL | Error message when no transport works should tell the user EXACTLY what to do (install CLI, configure MCP, etc.). |
+| 8 | ACCEPT | Filesystem fallback is fine. Admit when CLI doesn't exist; don't fabricate a binary that isn't there. |
+| 9 | CREATE | Write transport.json atomically (temp + rename). Round-trip `manual_override` every cycle. |
+| 10 | GROW | As MCP support matures, auto-detection should cover the deferred tiers. Track that as v1.7.x scope. |

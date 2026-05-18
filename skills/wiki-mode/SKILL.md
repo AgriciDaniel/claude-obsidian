@@ -43,7 +43,7 @@ The v1.6 + v1.7 vault structure was opinion-free — `wiki/sources/`, `wiki/enti
 **Philosophy:** atomic notes, unique IDs, dense bidirectional linking. No folders. Every note answers exactly one idea. Notes find each other by ID references.
 
 **Filing convention:**
-- `wiki/<YYYYMMDDHHMMSS>-<slug>.md` — flat, timestamped IDs
+- `wiki/<YYYYMMDDHHMMSSffffff>-<slug>.md` — flat, timestamped IDs (20 digits = date + microseconds, collision-resistant)
 - Every note has `id:`, `parent_id:` (optional), `child_ids:` (optional) in frontmatter
 - No subdirectories; the wiki/ root is the whole vault
 
@@ -94,14 +94,15 @@ To switch modes later: re-run `setup-mode.sh`. Existing files are NOT auto-migra
       "archives_folder": "wiki/archives/"
     },
     "zettelkasten": {
-      "id_format": "YYYYMMDDHHMMSS",
+      "id_format": "YYYYMMDDHHMMSSffffff",
       "no_folders": true,
       "root_folder": "wiki/"
     },
     "generic": {
       "sources_folder": "wiki/sources/",
       "entities_folder": "wiki/entities/",
-      "concepts_folder": "wiki/concepts/"
+      "concepts_folder": "wiki/concepts/",
+      "sessions_folder": "wiki/sessions/"
     }
   }
 }
@@ -192,3 +193,22 @@ After v1.8: claude-obsidian leads on 5 of 7 axes per compass artifact. The remai
 - [`wiki/references/methodology-modes.md`](../../wiki/references/methodology-modes.md) — short decision tree
 - [`docs/compound-vault-guide.md`](../../docs/compound-vault-guide.md) — v1.7 omnibus (v1.8 builds on this)
 - v1.7.0 audit §9 axis 6 (methodology TIE → LEAD): [`docs/audits/v1.7.0-audit-2026-05-17.md`](../../docs/audits/v1.7.0-audit-2026-05-17.md)
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read `.vault-meta/mode.json` to know which mode is active before routing anything. |
+| 2 | OBSERVE (int) | Audit the assumption that mode=generic is the default — the user may be on LYT/PARA/Zettelkasten. |
+| 3 | LISTEN | The mode is the user's organizational instinct, not yours. Respect what they configured. |
+| 4 | THINK | Apply the mode-specific routing rule to the content type at hand (source / entity / concept / session / research). |
+| 5 | CONNECT (lat) | This skill's `safe_name` is the canonical sanitizer — wiki-ingest, save, autoresearch all funnel through here. |
+| 6 | CONNECT (sys) | Three consumer skills depend on `route` output; consistency across consumers is the v1.8 contract. |
+| 7 | FEEL | Does the routed path feel right to the user? `wiki/notes/Foo.md` (LYT) means something different from `wiki/concepts/Foo.md` (generic). |
+| 8 | ACCEPT | Mode choice is the user's call. Accept that PARA users will sometimes want to override the auto-route. |
+| 9 | CREATE | Return the routed path string — a single safe filesystem location. |
+| 10 | GROW | When modes change mid-vault, surface the migration cost honestly; existing pages do NOT auto-migrate. |

@@ -211,3 +211,22 @@ User: "fold the log, dry-run k=3"
 7. Run self-check (frontmatter/table consistency, count verification).
 8. Emit via `cat <<'EOF' ... EOF` to stdout.
 9. Report: "Dry-run complete. Fold ID: {FOLD-ID}. To commit: 'commit the fold'."
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read the last 2^k log entries FULLY. Skimming defeats extractive summarization. |
+| 2 | OBSERVE (int) | Am I tempted to synthesize beyond what the child entries support? Extractive-only is the binding rule. |
+| 3 | LISTEN | Which themes emerge naturally from the child entries? Don't impose themes from outside the children. |
+| 4 | THINK | Extractive only. Every outcome must be traceable to a specific child entry. Count check at the end. |
+| 5 | CONNECT (lat) | Cross-entry patterns ARE the value-add. The single-entry view misses these. |
+| 6 | CONNECT (sys) | DragonScale Mechanism 1 + wiki-lock + address allocator. Folds are part of the memory architecture. |
+| 7 | FEEL | A good fold lets future-me skim a year of work in 5 minutes. Aim for that compression. |
+| 8 | ACCEPT | Dry-run first. Commit only when the self-check passes. Honor the bounded-scope constraint (no fold-of-folds yet). |
+| 9 | CREATE | Fold page at `wiki/folds/<fold-id>.md` linking to all child entries. |
+| 10 | GROW | Fold-of-folds (hierarchical level-stacking) is v_next scope — note as you encounter it, don't sneak it in. |
