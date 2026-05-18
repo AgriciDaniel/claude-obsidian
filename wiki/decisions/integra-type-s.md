@@ -90,7 +90,7 @@ BRZ has aftermarket wheels (RAYS Gram Lights 57DR, 17x9 +38, 5x100) and Perrin e
 ### Other Accessories
 - [ ] Dash cam: VIFO A229 PRO-2 CH (2-channel)
 - [ ] Front plate bracket: unity-performance.com no-drill bracket (specific ITS fitment)
-- [ ] Security: IGLA, or OBD port lock + AirTag (hidden, no speakers) + wheel locks
+- [ ] Security: See detailed stack below
 - [ ] Illuminated door sills: Yes
 - [ ] Mud flaps: No
 - [ ] PPF: Full front + running boards + rear hatch
@@ -99,6 +99,23 @@ BRZ has aftermarket wheels (RAYS Gram Lights 57DR, 17x9 +38, 5x100) and Perrin e
 
 ### Paint Protection
 Full front PPF, running boards, and rear hatch PPF is the planned coverage.
+
+## Security Plan
+
+Context: Samuel previously had two cars stolen (Infiniti G35 S and a '21 Honda Type R). Security is a high priority on this purchase.
+
+Recommended stack for ITS in the Bay Area / Peninsula:
+
+| Layer | Component | Cost | Why |
+|-------|-----------|------|-----|
+| Primary | IGLA 231 immobilizer | $1,200–$1,400 | CAN-bus engine block; stops drive-away theft |
+| Port | BEM Auto "Tune Saver" OBD lock (metal) | $80–$100 | Prevents key cloning via OBD port |
+| Wheels | Advanced wheel locks M14x1.5, 60° conical seat | $150 | Defeats standard extractor sockets |
+| Tracking | Pebblebee Clip (Android, no monthly fee) | $30 | Silent tracker; clip the speaker wire and hide in trunk/carpet |
+| Visual | The Club (yellow) | $40 | Visual deterrent |
+
+- IGLA installer: Sound Innovations (Union City) or West Coast Auto Security (mobile)
+- Use Pebblebee not AirTag (Android ecosystem, no monthly fee, Google Find My Device)
 
 ## Financial Context
 

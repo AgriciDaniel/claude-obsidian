@@ -23,10 +23,18 @@ tags: [interests, hobbies, index]
 
 | Interest | Notes |
 |----------|-------|
-| Video games | Enjoyed more in the past, less time now as an adult |
+| Video games | Monster Hunter Stories 3 (demo, March 2026). Blue Prince (puzzle game, March 2026). Less time now as an adult but still engages. |
+
+## AI Project Ideas (Claude Code Ideas doc, March 2026)
+
+Three ideas Samuel wrote up for AI-assisted personal tools:
+
+1. **"The Loop" Cleaning Manager** — Loop-based task queue (not calendar-based). Tasks cycle; most-stale task always surfaces first. "Cleaning Debt" metric: if task is 2x overdue, UI flags it.
+2. **"The Leftover Alchemist"** — Pantry-first recipe engine. Input 3 expiring ingredients → LLM generates a recipe using those + common staples. "Lazy Level" toggle: 15-min vs. fancy version of same meal.
+3. **"Vibe Check Hub"** — Personal life command center on a wall tablet. Features: Loop cleaning status, Meal of the Day, Energy/Mood 1–5 tracker over time. Ties together home + kitchen context.
 
 ## To Build Over Time
 
 - `anime.md` — shows watched, genres, current follows
-- `gaming.md` — history, current games if any
-- `ai.md` — how he uses AI, what he's built or explored
+- `gaming.md` — MHS3, Blue Prince, history
+- `ai.md` — Claude Code ideas, how he uses AI
