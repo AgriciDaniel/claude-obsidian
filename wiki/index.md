@@ -25,7 +25,6 @@ Navigation: [[overview]] | [[log]] | [[hot]]
 ## Relationships
 
 - [[relationships/_index]]
-- [[relationships/alice-wang]] — girlfriend, ~2 years, core relationship question
 
 ## Family
 
