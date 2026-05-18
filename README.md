@@ -5,10 +5,19 @@
   <img src="wiki/meta/claude-obsidian-gif-cover-16x9.gif" alt="claude-obsidian" width="100%" />
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/AI-Marketing-Hub/claude-obsidian?style=flat&color=e8734a)](https://github.com/AI-Marketing-Hub/claude-obsidian/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/github/v/release/AgriciDaniel/claude-obsidian?label=public%20release)](https://github.com/AgriciDaniel/claude-obsidian/releases)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
+[![Community](https://img.shields.io/badge/AI%20Marketing%20Hub-Pro%20community-purple)](https://www.skool.com/ai-marketing-hub-pro)
 [![Blog Post](https://img.shields.io/badge/Deep_Dive-Blog_Post-22c55e)](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain)
+
+> **Two versions of this skill.** Choose the one that fits how you work:
+>
+> - 🌐 **Public open-source** — [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian) — MIT-licensed, public releases (latest stable: `v1.6.0`), open to anyone. Use this if you want the stable, downloadable, no-membership-required version.
+> - 🔒 **Community private mirror** (this repo) — [`AI-Marketing-Hub/claude-obsidian`](https://github.com/AI-Marketing-Hub/claude-obsidian) — early access to v1.7+/v1.8+/v1.9+ work (Compound Vault, methodology modes, 10-principle thinking framework) and direct collaboration with the [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community. Requires membership.
+>
+> The badges above track the **public** repo (`AgriciDaniel/claude-obsidian`) since the private mirror isn't visible to shields.io.
 
 Claude + Obsidian knowledge companion. A running notetaker that builds and maintains a persistent, compounding wiki vault. Every source you add gets integrated. Every question you ask pulls from everything that has been read. Knowledge compounds like interest.
 
@@ -82,12 +91,17 @@ Open Claude Code in the same folder. Type `/wiki`.
 
 Plugin installation is a two-step process in Claude Code. First add the marketplace catalog, then install the plugin from it.
 
+> ℹ️ **Which version are you installing?**
+>
+> - **Not an AI Marketing Hub Pro member?** Install from the public repo instead → [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian). Swap `AI-Marketing-Hub/claude-obsidian` for `AgriciDaniel/claude-obsidian` and the plugin slug `claude-obsidian@ai-marketing-hub-claude-obsidian` for `claude-obsidian@agricidaniel-claude-obsidian`. Public releases ship there; this private mirror runs ahead of them.
+> - **Pro member?** The commands below install the **community version** with early access to in-development features. They require an authenticated `gh auth login` (or GitHub PAT) session with access to the `AI-Marketing-Hub` org. If `/plugin marketplace add` fails with a 404, your account isn't in the org yet — DM in the [Skool community](https://www.skool.com/ai-marketing-hub-pro) to get added.
+
 ```bash
 # Step 1: add the marketplace
 claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
 
 # Step 2: install the plugin
-claude plugin install claude-obsidian@claude-obsidian-marketplace
+claude plugin install claude-obsidian@ai-marketing-hub-claude-obsidian
 ```
 
 In any Claude Code session: `/wiki`. Claude walks you through vault setup.
