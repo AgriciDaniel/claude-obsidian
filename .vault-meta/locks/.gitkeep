@@ -1,0 +1,4 @@
+# Placeholder so .vault-meta/locks/ exists on fresh clone.
+# Actual lock files are gitignored; this file is whitelisted in .gitignore.
+# scripts/wiki-lock.sh ensure_dirs() also creates this directory at runtime
+# if absent, but having it pre-created avoids first-acquire side-effect.
