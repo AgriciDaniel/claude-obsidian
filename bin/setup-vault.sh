@@ -14,7 +14,7 @@ echo "Setting up claude-obsidian vault at: $VAULT"
 
 # ── 1. Create directories ─────────────────────────────────────────────────────
 mkdir -p "$OBSIDIAN/snippets"
-mkdir -p "$VAULT/.raw"
+mkdir -p "$VAULT/raw"
 mkdir -p "$VAULT/wiki/concepts" "$VAULT/wiki/entities" "$VAULT/wiki/sources" "$VAULT/wiki/meta"
 mkdir -p "$VAULT/_templates"
 
@@ -86,6 +86,12 @@ if [ -f "$EXCALIDRAW/manifest.json" ] && [ ! -f "$EXCALIDRAW/main.js" ]; then
 elif [ -f "$EXCALIDRAW/main.js" ]; then
   echo "✓ Excalidraw main.js already present"
 fi
+
+# ── 6. Wire Claude Code discovery (symlinks for git-clone users) ─────────────
+mkdir -p "$VAULT/.claude"
+ln -sf "$VAULT/commands" "$VAULT/.claude/commands"
+ln -sf "$VAULT/skills" "$VAULT/.claude/skills"
+ln -sf "$VAULT/hooks/hooks.json" "$VAULT/.claude/hooks.json"
 
 echo ""
 echo "✓ Setup complete."

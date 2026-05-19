@@ -10,7 +10,7 @@ Use when: "build a sitemap wiki for my website", "map content gaps", "SEO audit 
 
 ```
 vault/
-├── .raw/              # crawl exports, analytics, scraped pages, GSC data
+├── raw/              # crawl exports, analytics, scraped pages, GSC data
 ├── wiki/
 │   ├── pages/         # one note per URL: status, meta, content summary
 │   ├── structure/     # site architecture, nav hierarchy, internal link map
@@ -55,7 +55,7 @@ Use when: "map my codebase", "architecture wiki for my repo", "understand this p
 
 ```
 vault/
-├── .raw/              # README, git log exports, code dumps, issue exports
+├── raw/              # README, git log exports, code dumps, issue exports
 ├── wiki/
 │   ├── modules/       # one note per major module / package / service
 │   ├── components/    # reusable UI or functional components
@@ -97,7 +97,7 @@ Use when: "project wiki", "competitive intelligence", "team knowledge base", "me
 
 ```
 vault/
-├── .raw/              # meeting transcripts, Slack exports, docs, emails
+├── raw/              # meeting transcripts, Slack exports, docs, emails
 ├── wiki/
 │   ├── stakeholders/  # people, companies, decision-makers
 │   ├── decisions/     # key decisions with rationale and date
@@ -136,7 +136,7 @@ Use when: "personal second brain", "track my goals", "journal synthesis", "life 
 
 ```
 vault/
-├── .raw/              # journal entries, articles, podcast notes, voice transcripts
+├── raw/              # journal entries, articles, podcast notes, voice transcripts
 ├── wiki/
 │   ├── goals/         # personal and professional goals with progress tracking
 │   ├── learning/      # concepts being mastered, skill development
@@ -177,7 +177,7 @@ Use when: "research wiki on [topic]", "track papers I'm reading", "build a thesi
 
 ```
 vault/
-├── .raw/              # PDFs, web clips, data files, raw notes
+├── raw/              # PDFs, web clips, data files, raw notes
 ├── wiki/
 │   ├── papers/        # paper summaries with key claims and methodology
 │   ├── concepts/      # extracted concepts, models, frameworks
@@ -218,7 +218,7 @@ Use when: "companion wiki for a book", "course notes wiki", "as I read [title]"
 
 ```
 vault/
-├── .raw/              # chapter notes, highlights, exercises
+├── raw/              # chapter notes, highlights, exercises
 ├── wiki/
 │   ├── characters/    # characters, personas, agents, experts (adapt to content)
 │   ├── themes/        # major themes with supporting evidence

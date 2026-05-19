@@ -69,7 +69,7 @@ status: developing
 related:
   - "[[Any Wiki Page Mentioned]]"
 sources:
-  - "[[.raw/source-if-applicable.md]]"
+  - "[[raw/source-if-applicable.md]]"
 ---
 ```
 
