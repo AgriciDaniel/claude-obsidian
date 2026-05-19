@@ -31,10 +31,11 @@ You will be given:
 4. Create a source summary page in `wiki/sources/`. Use proper frontmatter.
 5. For each significant person, org, product, or repo mentioned: check the index. Create or update the entity page in `wiki/entities/`.
 6. For each significant concept, idea, or framework: check the index. Create or update the concept page in `wiki/concepts/`.
-7. Update relevant domain pages. Add a brief mention and wikilink to new pages.
-8. Update `wiki/entities/_index.md` and `wiki/concepts/_index.md`.
-9. Check for contradictions with existing pages. Add `> [!contradiction]` callouts where needed.
-10. Return a summary of what you created and updated.
+7. **Bilingual term detection (opt-in)**: if the vault's `CLAUDE.md` references `docs/bilingual-terminology-policy.md`, classify native-language candidates per `skills/wiki-ingest/SKILL.md` § *Bilingual Term Detection*. Set `dnt_class:` (`term-of-art` | `eigenname` | `coined` | `hybrid`) and `lang:` in frontmatter; ensure `aliases:` contains both the native form and an English gloss. Include each classified term in the Output Format report so the orchestrator can update `wiki/meta/termbase.md` in a single post-pass.
+8. Update relevant domain pages. Add a brief mention and wikilink to new pages.
+9. Update `wiki/entities/_index.md` and `wiki/concepts/_index.md`.
+10. Check for contradictions with existing pages. Add `> [!contradiction]` callouts where needed.
+11. Return a summary of what you created and updated.
 
 ## DragonScale address assignment (opt-in, single-writer)
 
@@ -63,5 +64,8 @@ Source: [title]
 Created: [[Page 1]], [[Page 2]], [[Page 3]]
 Updated: [[Page 4]], [[Page 5]]
 Contradictions: [[Page 6]] conflicts with [[Page 7]] on [topic]
+Bilingual terms (if opt-in active):
+  - [[Page Title]]: dnt_class=term-of-art, aliases=["IHK", "chamber of commerce"], confidence=high
+  - [[Other Page]]: dnt_class=hybrid, aliases=["KI-Berater", "AI consultant"], confidence=medium
 Key insight: [one sentence on the most important new information]
 ```

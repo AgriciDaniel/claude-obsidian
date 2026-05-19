@@ -1,0 +1,7 @@
+{
+  "title": "Ingest a German-domain source and detect DNT terms",
+  "tests": "wiki-ingest correctly classifies IHK and Gewerbesteuer as eigenname / term-of-art, assigns aliases with native + English forms, includes them in the output report so the orchestrator can update wiki/meta/termbase.md",
+  "created": "2026-05-19",
+  "status_after_run": "manual",
+  "evaluator_notes": "Requires a live wiki-ingest run. Capture the agent's output, compare created pages against expected-pages.txt, verify each created page's frontmatter against expected-frontmatter.yaml. Use grading.md as the LLM-judge prompt."
+}

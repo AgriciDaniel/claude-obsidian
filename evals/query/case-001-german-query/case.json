@@ -1,0 +1,7 @@
+{
+  "title": "German query resolves to native page via English alias",
+  "tests": "wiki-query reaches the IHK page when the user asks in German ('Was muss ich bei der IHK-Anmeldung wissen?'), and also reaches it when the user asks in English ('How does the German chamber of commerce work?'). Dual-form retrieval working end-to-end.",
+  "created": "2026-05-19",
+  "status_after_run": "manual",
+  "evaluator_notes": "Requires a live wiki-query run. Provide vault/ to the agent, run question.md as the prompt, compare cited pages against expected-citations.txt."
+}

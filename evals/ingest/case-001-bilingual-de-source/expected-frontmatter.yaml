@@ -1,0 +1,26 @@
+# Per-page frontmatter expectations. The runner checks that each listed
+# field exists on the created page with a matching value. List values
+# are checked as subsets (page may have more aliases than listed here,
+# but must have all of these).
+
+wiki/entities/IHK.md:
+  dnt_class: eigenname
+  lang: de
+  aliases:
+    - IHK
+    - Industrie- und Handelskammer
+    # Plus at least one English gloss — "chamber of commerce" or similar
+
+wiki/concepts/Gewerbesteuer.md:
+  dnt_class: term-of-art
+  lang: de
+  aliases:
+    - Gewerbesteuer
+    # Plus at least one English gloss — "trade tax" or "business tax Germany"
+
+wiki/concepts/Gewerbeanmeldung.md:
+  dnt_class: term-of-art
+  lang: de
+  aliases:
+    - Gewerbeanmeldung
+    # Plus at least one English gloss — "trade registration" or similar

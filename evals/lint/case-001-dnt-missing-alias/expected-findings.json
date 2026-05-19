@@ -1,0 +1,12 @@
+[
+  {
+    "severity": "ERROR",
+    "check": "missing-alias",
+    "path": "concepts/AGB.md"
+  },
+  {
+    "severity": "WARN",
+    "check": "termbase-drift",
+    "path": "concepts/Vorstand.md"
+  }
+]

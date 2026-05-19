@@ -1,0 +1,7 @@
+{
+  "title": "lint-terminology catches DNT pages missing English alias",
+  "tests": "scripts/lint-terminology.py emits ERROR missing-alias for a page with dnt_class set but fewer than 2 aliases, and WARN termbase-drift for a DNT page not listed in wiki/meta/termbase.md",
+  "created": "2026-05-19",
+  "status_after_run": "automated",
+  "evaluator_notes": "Fully deterministic. Runner invokes the script against vault/, compares against expected-findings.json."
+}

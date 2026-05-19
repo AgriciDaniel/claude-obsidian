@@ -1,0 +1,8 @@
+# One expected wiki page path per line, relative to the vault root.
+# Lines starting with `#` and empty lines are ignored.
+# Order is not significant.
+
+wiki/sources/ihk-pflicht-und-gewerbesteuer-solo-gruender.md
+wiki/entities/IHK.md
+wiki/concepts/Gewerbesteuer.md
+wiki/concepts/Gewerbeanmeldung.md

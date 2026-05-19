@@ -27,6 +27,8 @@ Work through these in order:
 8. **Stale index entries**. Items in `wiki/index.md` pointing to renamed or deleted pages.
 9. **Address validity** (DragonScale Mechanism 2). For every page that has an `address:` frontmatter field, validate the format. See the **Address Validation** section below.
 10. **Semantic tiling** (DragonScale Mechanism 3, opt-in). Flag candidate duplicate pages (across all scanned types, not just concepts) via embedding cosine similarity. See the **Semantic Tiling** section below.
+11. **Title overlap** (lightweight duplicate pre-filter). Pages whose filename tokens overlap above a Jaccard threshold (`scripts/lint-title-overlap.py`). See the **Title Overlap** section below.
+12. **Bilingual terminology checks** (opt-in). Deterministic and judgment-based checks on DNT-classified pages. See the **Bilingual Terminology Checks** section below.
 
 ---
 
@@ -345,6 +347,92 @@ See [[tiling-report-YYYY-MM-DD]] for the full pair listing.
 - No auto-merge. Duplicates are listed, never resolved.
 - Cache is incremental and model-scoped. Unchanged pages are not re-embedded.
 - Exit codes: `0` ok, `2` usage error, `3` cache corrupt, `4` scale hard-fail, `10` ollama unreachable, `11` model missing. Surface all of them; do not collapse into a single "unknown" bucket.
+
+---
+
+## Title Overlap
+
+Lightweight duplicate-page pre-filter, no embeddings. Runs `scripts/lint-title-overlap.py` over `wiki/**/*.md` and reports pairs whose filename tokens overlap above a Jaccard threshold (default 0.55).
+
+### When to use
+
+- Always — the script is fast (O(N²) Jaccard on tokenized stems, < 1s for 1000 pages) and dependency-free.
+- Complements Semantic Tiling (Mechanism 3) at the cheap end of the precision/recall curve: catches near-duplicates with similar names that humans accidentally created, misses semantic duplicates with no shared tokens.
+
+### Invocation
+
+```bash
+python3 scripts/lint-title-overlap.py wiki 0.55
+```
+
+The output is `score\tpath-a\tpath-b` lines, sorted by score descending. Pipe to the lint report's *Title Overlap* section.
+
+### Report section
+
+```markdown
+## Title Overlap (Jaccard ≥ 0.55)
+- 0.83  wiki/concepts/KI-Berater-Tagessatz-DE.md  ↔  wiki/concepts/KI-Berater-DACH.md
+- 0.60  wiki/entities/LangDock.md                 ↔  wiki/entities/LangDock-Berlin.md
+```
+
+### Severity
+
+- `≥ 0.80`: error — almost certainly duplicates.
+- `0.55 - 0.80`: review — human eyeballs.
+- `< 0.55`: not emitted.
+
+Never auto-merge. List, let the user decide.
+
+---
+
+## Bilingual Terminology Checks (opt-in)
+
+**Opt-in feature.** Bilingual checks run only if the vault's `CLAUDE.md` references `docs/bilingual-terminology-policy.md`. Otherwise, skip this section.
+
+Combines deterministic checks (run by `scripts/lint-terminology.py`) and judgment-based checks (run in this skill body during the lint pass).
+
+### Deterministic checks (run script first)
+
+```bash
+python3 scripts/lint-terminology.py wiki
+```
+
+The script emits a structured report with these findings:
+
+| Check | Trigger | Severity | Suggested fix |
+|---|---|---|---|
+| **Missing alias** | Page has `dnt_class:` but `aliases:` has fewer than 2 entries | error | Add native form and English gloss to `aliases:` |
+| **Termbase drift** | Page has `dnt_class:` but is not listed in `wiki/meta/termbase.md` | warn | Add row to termbase index |
+| **Orphan termbase entry** | `wiki/meta/termbase.md` references a page that does not exist or no longer has `dnt_class:` | warn | Remove row or restore `dnt_class:` |
+| **Invalid dnt_class value** | `dnt_class:` is set to anything other than `term-of-art`, `eigenname`, `coined`, `hybrid` | error | Use one of the four valid values |
+| **Hyphenated-slug alias** | An alias contains spaces but the wiki convention is hyphenated; lint flags potential resolution drift | info | Hyphenate the alias OR confirm it is a display-form, not a target-form |
+
+### Judgment-based checks (run during this skill)
+
+After running the script, do a reading pass for these issues. They are LLM-judgment calls and cannot be deterministically detected:
+
+1. **Inconsistent surface forms**. Scan for the same concept appearing as different strings on different pages — e.g., `IHK`, `Industrie- und Handelskammer`, `chamber of commerce`, `chambers` used interchangeably. Report the divergence; do not auto-rewrite.
+2. **Missing first-use gloss**. On any page that mentions a DNT term for the first time without an inline gloss `Term (English meaning, frame)`. Report the page and the term. Do not insert a gloss automatically.
+3. **Redundant glossing**. The same native term re-glossed on every mention within a page (gloss should appear once per page, then the term alone).
+4. **Suspect translation**. A native term-of-art rendered as an English near-synonym that may have changed the referent — e.g., `Geschäftsführer` written as `CEO`, `Vorstand` as `board of directors`, `AGB` as `T&C`. Flag for review against the termbase.
+5. **Retrieval-surface gaps**. A page about a native concept that is not reachable via its English gloss (alias missing or misspelled), or vice versa. Suggest the missing alias.
+
+### Report section
+
+```markdown
+## Bilingual Terminology
+- Deterministic: see `wiki/meta/lint-terminology-YYYY-MM-DD.txt`
+- Judgment findings:
+  - **Inconsistent surface form**: "IHK" / "chamber of commerce" / "chambers" appear on [[Page A]], [[Page B]], [[Page C]]. Termbase says canonical = "IHK". Suggest unifying.
+  - **Missing first-use gloss**: [[Page D]] introduces `Mitbestimmung` without inline English context. Suggest: "Mitbestimmung (Germany's employee codetermination framework)".
+  - **Suspect translation**: [[Page E]] writes "Vorstand" as "board of directors". Vorstand is the management board in a two-tier system; this changes the referent. Review.
+```
+
+### Invariants
+
+- Read-only. `lint-terminology.py` never modifies wiki pages.
+- No auto-rewrite of glosses or aliases. Surface, do not fix.
+- "I don't know the English equivalent" is a valid finding; do not invent one.
 
 ---
 

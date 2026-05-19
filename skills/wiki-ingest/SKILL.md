@@ -105,11 +105,12 @@ Steps:
 3. **Create** source summary in `wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
 4. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. Assign addresses to new entity pages.
 5. **Create or update** concept pages for significant ideas and frameworks. Assign addresses to new concept pages.
-6. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
-7. **Update** `wiki/overview.md` if the big picture changed.
-8. **Update** `wiki/index.md`. Add entries for all new pages.
-9. **Update** `wiki/hot.md` with this ingest's context.
-10. **Append** to `wiki/log.md` (new entries at the TOP):
+6. **Detect native-language term candidates** (see *Bilingual Term Detection* below, if vault opted in). Classify and propose termbase additions before writing.
+7. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
+8. **Update** `wiki/overview.md` if the big picture changed.
+9. **Update** `wiki/index.md`. Add entries for all new pages.
+10. **Update** `wiki/hot.md` with this ingest's context.
+11. **Append** to `wiki/log.md` (new entries at the TOP):
     ```markdown
     ## [YYYY-MM-DD] ingest | Source Title
     - Source: `.raw/articles/filename.md`
@@ -118,7 +119,7 @@ Steps:
     - Pages updated: [[Page 3]], [[Page 4]]
     - Key insight: One sentence on what is new.
     ```
-11. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
+12. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
 
 ---
 
@@ -135,6 +136,58 @@ Steps:
 5. Report: "Processed N sources. Created X pages, updated Y pages. Here are the key connections I found."
 
 Batch ingest is less interactive. For 30+ sources, expect significant processing time. Check in with the user after every 10 sources.
+
+---
+
+## Bilingual Term Detection (opt-in)
+
+**Opt-in feature.** Bilingual term detection runs only if the vault's `CLAUDE.md` references `docs/bilingual-terminology-policy.md`. Otherwise, skip this section.
+
+When ingesting a source that contains native-language content (German, by default), step 6 above detects and classifies candidate terms before page creation.
+
+### Candidate detection signals
+
+A term in the source becomes a *candidate* for the termbase when any of these apply:
+
+- Capitalized noun not yet in `wiki/index.md` and not obvious-English (recognized acronyms like API, SaaS, MVP are ignored).
+- Legal reference: any token matching `§ \d+|Art\. \d+|Abs\. \d+|BGB|EStG|UStG|HGB|AktG|GewO` or similar.
+- Compound containing `-DE`, `-DACH`, `KI-`, `Förder`, `Bundes-`, `Landes-`, `Steuer-`, `Gesetz`, `Verordnung`, `kammer`, `amt`.
+- Recurring (≥ 2 mentions) German noun phrase that cannot be straightforwardly translated.
+
+### Classification procedure (per candidate)
+
+1. **Decide class** per `docs/bilingual-terminology-policy.md` § 3:
+   - `term-of-art` — defined legal/regulatory meaning (`AGB`, `Gewerbesteuer`, `Geschäftsführer`).
+   - `eigenname` — institution/statute/scheme without equivalent (`IHK`, `BGB`, `Mittelstand-Digital-Zentrum`).
+   - `coined` — wiki's own vocabulary (project names, conventions).
+   - `hybrid` — bilingual compound where the compound is the unit of meaning (`KI-Berater`, `AI-Engineer-Rolle-DE`).
+   - `translatable` — descriptive vocabulary, generic concepts. No special handling.
+
+2. **Surface the decision to the user** when judgment is involved. Format:
+   ```
+   New term candidate: "Vorstand"
+   Proposed: dnt_class = term-of-art (German two-tier board, distinct from "board of directors")
+   Aliases: ["management board", "executive board"]
+   Confidence: high | medium | low
+   Confirm? [y/n/edit]
+   ```
+   Do **not** silently add or change termbase entries.
+
+3. **Write the page** with:
+   - `dnt_class: <class>` in frontmatter
+   - `lang: de` (or other native code)
+   - `aliases:` containing **both** the native form and the English gloss — minimum two entries
+   - First mention of the native term in the page body uses the gloss form: `IHK (Industrie- und Handelskammer, Germany's chamber of commerce)`. Subsequent mentions use the native term alone.
+
+4. **Update `wiki/meta/termbase.md`** with a new row. If the page does not exist, create it from the template scaffold in `docs/bilingual-terminology-policy.md` § 5.
+
+5. **Never** fabricate an English equivalent that does not exist. "I don't know the English gloss for this term" is the correct answer — record `aliases:` with only the native form and flag for the user.
+
+### Conservative defaults
+
+- When in doubt between `term-of-art` and `translatable`: ask. Native preservation is safer than silent translation.
+- When in doubt between `term-of-art` and `eigenname`: prefer `eigenname` only for institutions/statutes/schemes. Everything else with a defined legal meaning is `term-of-art`.
+- When in doubt between `hybrid` and `coined`: `hybrid` for bilingual compounds in active external use; `coined` for purely internal vocabulary.
 
 ---
 

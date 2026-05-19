@@ -1,0 +1,2 @@
+# Both variants must cite this page.
+wiki/entities/IHK.md

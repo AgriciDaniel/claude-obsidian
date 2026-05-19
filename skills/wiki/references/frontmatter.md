@@ -33,6 +33,27 @@ sources:
 
 ---
 
+## Bilingual Terminology Fields (opt-in)
+
+When the vault opts into the Bilingual Terminology Policy (see `docs/bilingual-terminology-policy.md`), pages that preserve a native-language term carry two additional fields:
+
+```yaml
+dnt_class: term-of-art   # term-of-art | eigenname | coined | hybrid
+lang: de                 # ISO 639-1 code for the native language; default "en" (and field can be omitted)
+```
+
+**dnt_class values:**
+- `term-of-art`: defined legal, regulatory, or institutional meaning (`AGB`, `Geschäftsführer`, `Gewerbesteuer`).
+- `eigenname`: institution, statute, or scheme without equivalent (`IHK`, `BGB`, `Mittelstand-Digital-Zentrum`).
+- `coined`: the wiki's internal vocabulary (project names, conventions).
+- `hybrid`: bilingual compound where the compound itself is the unit of meaning (`KI-Berater`, `AI-Engineer-Rolle-DE`).
+
+When `dnt_class` is set, the `aliases:` field **must** contain both the native form and the English gloss. Lint enforces this deterministically (`scripts/lint-terminology.py`).
+
+Translatable pages omit both fields. Default = translatable.
+
+---
+
 ## Type-Specific Additions
 
 ### source
@@ -56,6 +77,9 @@ key_claims:
 entity_type: person     # person | organization | product | repository | place
 role: ""
 first_mentioned: "[[Source Title]]"
+aliases:                # required when dnt_class is set; otherwise optional
+  - "alternative name"
+  - "english gloss"
 ```
 
 ### concept
@@ -63,7 +87,7 @@ first_mentioned: "[[Source Title]]"
 ```yaml
 complexity: intermediate  # basic | intermediate | advanced
 domain: ""
-aliases:
+aliases:                # required when dnt_class is set; otherwise optional
   - "alternative name"
   - "abbreviation"
 ```
