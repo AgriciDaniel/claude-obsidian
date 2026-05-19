@@ -1,3 +1,7 @@
+# Private wiki content — stored in separate private repo (saketananddotme/wiki-vault)
+wiki/
+.raw/
+
 # Obsidian
 # workspace.json is intentionally tracked — ships with pre-configured graph view
 # .obsidian/workspace.json
