@@ -13,18 +13,18 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ## Delta Tracking
 
-Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.
+Before ingesting any file, check `raw/.manifest.json` to avoid re-processing unchanged sources.
 
 ```bash
 # Check if manifest exists
-[ -f .raw/.manifest.json ] && echo "exists" || echo "no manifest yet"
+[ -f raw/.manifest.json ] && echo "exists" || echo "no manifest yet"
 ```
 
 **Manifest format** (create if missing):
 ```json
 {
   "sources": {
-    ".raw/articles/article-slug-2026-04-08.md": {
+    "raw/articles/article-slug-2026-04-08.md": {
       "hash": "abc123",
       "ingested_at": "2026-04-08",
       "pages_created": ["wiki/sources/article-slug.md", "wiki/entities/Person.md"],
@@ -57,14 +57,14 @@ Steps:
 1. **Fetch** the page using WebFetch.
 2. **Clean** (optional): if `defuddle` is available (`which defuddle 2>/dev/null`), run `defuddle [url]` to strip ads, nav, and clutter. Typically saves 40-60% tokens. Fall back to raw WebFetch output if not installed.
 3. **Derive slug** from the URL path (last segment, lowercased, spaces→hyphens, strip query strings).
-4. **Save** to `.raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
+4. **Save** to `raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
    ```markdown
    ---
    source_url: [url]
    fetched: [YYYY-MM-DD]
    ---
    ```
-5. Proceed with **Single Source Ingest** starting at step 2 (file is now in `.raw/`).
+5. Proceed with **Single Source Ingest** starting at step 2 (file is now in `raw/`).
 
 ---
 
@@ -76,7 +76,7 @@ Steps:
 
 1. **Read** the image file using the Read tool. Claude can process images natively.
 2. **Describe** the image contents: extract all text (OCR), identify key concepts, entities, diagrams, and data visible in the image.
-3. **Save** the description to `.raw/images/[slug]-[YYYY-MM-DD].md`:
+3. **Save** the description to `raw/images/[slug]-[YYYY-MM-DD].md`:
    ```markdown
    ---
    source_type: image
@@ -96,7 +96,7 @@ Use cases: whiteboard photos, screenshots, diagrams, infographics, document scan
 
 ## Single Source Ingest
 
-Trigger: user drops a file into `.raw/` or pastes content.
+Trigger: user drops a file into `raw/` or pastes content.
 
 Steps:
 
@@ -112,7 +112,7 @@ Steps:
 10. **Append** to `wiki/log.md` (new entries at the TOP):
     ```markdown
     ## [YYYY-MM-DD] ingest | Source Title
-    - Source: `.raw/articles/filename.md`
+    - Source: `raw/articles/filename.md`
     - Summary: [[Source Title]]
     - Pages created: [[Page 1]], [[Page 2]]
     - Pages updated: [[Page 3]], [[Page 4]]
@@ -177,7 +177,7 @@ Do not silently overwrite old claims. Flag and let the user decide.
 
 ## What Not to Do
 
-- **Source files under `.raw/` are immutable.** Do not modify the files that users drop there (articles, transcripts, images). The `.raw/.manifest.json` delta tracker and its `address_map` (DragonScale Mechanism 2) are the only files under `.raw/` that `wiki-ingest` itself maintains. Treat every other file under `.raw/` as read-only source content.
+- **Source files under `raw/` are immutable.** Do not modify the files that users drop there (articles, transcripts, images). The `raw/.manifest.json` delta tracker and its `address_map` (DragonScale Mechanism 2) are the only files under `raw/` that `wiki-ingest` itself maintains. Treat every other file under `raw/` as read-only source content.
 - Do not create duplicate pages. Always check the index and search before creating.
 - Do not skip the log entry. Every ingest must be recorded.
 - Do not skip the hot cache update. It is what keeps future sessions fast.
@@ -223,7 +223,7 @@ ADDR=$(./scripts/allocate-address.sh)
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
-**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add wiki/ .raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
+**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add wiki/ raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
 
 ### Helper modes
 
@@ -235,9 +235,9 @@ ADDR=$(./scripts/allocate-address.sh)
 
 1. Before writing a new non-meta page, call `./scripts/allocate-address.sh` and capture the output.
 2. Include `address: c-XXXXXX` in the page's frontmatter.
-3. Record the path-to-address mapping in `.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
+3. Record the path-to-address mapping in `raw/.manifest.json` under a new top-level key `address_map` (see schema below).
 
-### `address_map` in `.raw/.manifest.json`
+### `address_map` in `raw/.manifest.json`
 
 ```json
 {

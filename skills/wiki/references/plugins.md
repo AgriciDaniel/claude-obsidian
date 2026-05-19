@@ -79,11 +79,11 @@ Optional additions:
 
 ## Web Clipper
 
-The Obsidian Web Clipper browser extension converts web articles to markdown and sends them to `.raw/` in one click.
+The Obsidian Web Clipper browser extension converts web articles to markdown and sends them to `raw/` in one click.
 
 Install for Chrome, Firefox, or Safari from the Obsidian website.
 
-Set the default folder to `.raw/` in the extension settings.
+Set the default folder to `raw/` in the extension settings.
 
 ---
 

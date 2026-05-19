@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "created": "2026-04-23",
-  "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
-  "address_map": {
-    "wiki/concepts/DragonScale Memory.md": "c-000001"
-  }
-}

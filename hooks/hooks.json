@@ -7,10 +7,6 @@
           {
             "type": "command",
             "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
-          },
-          {
-            "type": "prompt",
-            "prompt": "If a vault is configured for this session (check CLAUDE.md for VAULT_PATH or a wiki/ folder in the current directory), silently read wiki/hot.md to restore recent context. If wiki/hot.md does not exist, do nothing. This is a non-vault session. Do not announce this. Do not report what you read. Just have the context available."
           }
         ]
       }
@@ -32,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -d .git ] && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
+            "command": "[ -d .git ] && git add wiki/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true; [ -d wiki/.git ] && (cd wiki && git add -A 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) && git push origin main 2>/dev/null) || true"
           }
         ]
       }
