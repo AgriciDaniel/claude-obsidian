@@ -1,8 +1,8 @@
-# claude-obsidian — Claude + Obsidian Wiki Vault
+# agentic-knowledge-management — Claude + Obsidian Wiki Vault
 
 This folder is both a Claude Code plugin and an Obsidian vault.
 
-**Plugin name:** `claude-obsidian`
+**Plugin name:** `agentic-knowledge-management`
 **Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`
 **Vault path:** This directory (open in Obsidian directly)
 

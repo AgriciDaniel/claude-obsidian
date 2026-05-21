@@ -1,16 +1,16 @@
 {
-  "name": "claude-obsidian-marketplace",
+  "name": "akm-marketplace",
   "owner": {
     "name": "philippsied",
     "url": "https://github.com/philippsied"
   },
   "metadata": {
-    "description": "claude-obsidian: Claude + Obsidian knowledge companion by philippsied",
+    "description": "agentic-knowledge-management: Claude + Obsidian knowledge companion by philippsied",
     "version": "1.6.0"
   },
   "plugins": [
     {
-      "name": "claude-obsidian",
+      "name": "agentic-knowledge-management",
       "source": {
         "source": "github",
         "repo": "philippsied/agent-based-knowledge-management",
