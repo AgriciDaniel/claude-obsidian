@@ -77,5 +77,5 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Repo Locations
 
-- Working: `~/Desktop/claude-obsidian/`
-- Public: https://github.com/AgriciDaniel/claude-obsidian
+- Working: `~/AI-powered_workbench/agent-based-knowledge-management/`
+- Public: https://github.com/philippsied/agent-based-knowledge-management
