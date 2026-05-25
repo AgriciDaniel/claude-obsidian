@@ -25,6 +25,13 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-05-25] save | ScrumFlow DoR実装セッション
+- Type: session + concept
+- Locations:
+  - `wiki/meta/2026-05-25-scrumflow-dor-session.md` (新規: セッションサマリー)
+  - `wiki/concepts/Definition of Ready Framework.md` (新規: 5カテゴリ19項目フレームワーク)
+- From: ScrumFlow バックログ管理画面への準備完了チェック機能実装（ReadinessCheckDialog、グラジエントボタン、ボタン上下中央揃え）
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)

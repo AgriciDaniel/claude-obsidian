@@ -20,6 +20,8 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
 
+2026-05-25: ScrumFlow（Next.js 15 スクラム管理ツール）のバックログ管理画面に DoR（Definition of Ready）ゲート機能を実装。`ReadinessCheckDialog`（19項目・5セクション）を新規作成し、バックログカードの「準備完了にする」グラジエントボタン押下時に起動。19/19チェックが揃うまでステータス変更を遮断。ボタン群の配置を上下中央揃えに変更（`flex-col justify-center` 独立カラム）。受け入れ条件フィールドは ReadinessCheck と補完関係にあるため維持。コミット `e769ac5`。詳細: [[2026-05-25-scrumflow-dor-session]] / [[Definition of Ready Framework]]。
+
 2026-04-24 (late night): v1.6.0 public release notes shipped. `docs/releases/v1.6.0.md` (Karpathy-style, 346 lines) establishes the release-notes convention. Three original SVGs at `wiki/meta/dragonscale-{mechanism-overview,6-test-flow,frontier-graph}.svg` carry the visual load; Wikipedia dragon curve referenced by text link only (no binary vendoring). R4 codex verifier ACCEPT WITH FIXES, 3 wording fixes applied. User runs `gh release create v1.6.0 --notes-file docs/releases/v1.6.0.md` when ready. Commits `85515bb` (docs), plus wiki/meta/ auto-commits for SVGs.
 
 2026-04-24 (night): DragonScale end-to-end validation pass. Six-test menu run via Teams orchestration (codex gpt-5.4 for M1 dry-run, M1 commit, M4 autoresearch; chair for ollama pull, M2 allocate, M3 full tiling). All six green. First real fold committed (`wiki/folds/fold-k3-from-2026-04-23-to-2026-04-24-n8.md`, 115 lines, 8 children). First real tiling report at `wiki/meta/tiling-report-2026-04-24.md` (0 errors, 15 review pairs). M2 counter advanced 2 to 3, `c-000002` reserved-unassigned. M4 autoresearch filed 3 new concept pages (`Persistent Wiki Artifact`, `Source-First Synthesis`, `Query-Time Retrieval`) extending `[[How does the LLM Wiki pattern work?]]` with Karpathy gist + RAG + MemGPT + Obsidian docs as sources. v1.6.0 validated.

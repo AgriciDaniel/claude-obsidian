@@ -23,7 +23,7 @@ related:
 
 # Wiki Index
 
-Last updated: 2026-04-15 | Total pages: 34 | Sources ingested: 2
+Last updated: 2026-05-25 | Total pages: 36 | Sources ingested: 2
 
 Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
 
@@ -31,6 +31,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Concepts
 
+- [[Definition of Ready Framework]] — スクラムにおける準備完了の5カテゴリ19チェック項目フレームワーク（status: developing）
 - [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
 - [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
 - [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
@@ -76,6 +77,12 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 - [[Wiki vs RAG]] — when to use a wiki knowledge base versus RAG; verdict: wiki wins at <1000 pages
 - [[claude-obsidian-ecosystem]] — feature matrix of 16+ Claude+Obsidian projects; where claude-obsidian wins and gaps
+
+---
+
+## ScrumFlow
+
+- [[2026-05-25-scrumflow-dor-session]] — Definition of Ready 実装セッション。ReadinessCheckDialog（19項目）、グラジエントボタン、上下中央揃えレイアウト（status: complete）
 
 ---
 
