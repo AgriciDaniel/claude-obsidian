@@ -107,7 +107,8 @@ INGEST (one-time + incremental):
   scripts/contextual-prefix.py
        │  ├─ chunks on paragraph boundaries (~500 tokens target, 200 char overlap)
        │  └─ generates 1-2 sentence prefix per chunk
-       │       tier 1: ANTHROPIC_API_KEY  → Anthropic API (Haiku, prompt-cached)
+       │       tier 1: ANTHROPIC_API_KEY  → Anthropic API (Haiku, prompt-cached
+       │                                    when body ≥ ~16 KB / Haiku 4.5 floor)
        │       tier 2: claude on PATH    → `claude -p` subprocess
        │       tier 3: synthetic          → frontmatter title + first paragraph
        │

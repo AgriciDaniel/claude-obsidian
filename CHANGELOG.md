@@ -2,6 +2,37 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
+
+Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.
+
+### Changed
+
+- **Cache only above the Haiku floor** (`scripts/contextual-prefix.py`). The page-body `cache_control` marker is now attached only when the body clears the Haiku 4.5 minimum cacheable size (`HAIKU_CACHE_MIN_CHARS = 16384`, ~4096 tokens × 4 chars/token). Below the floor the Anthropic API silently ignores the marker, so the prior unconditional marker was a no-op that misled the reader. Extracted as the pure, unit-tested `cache_control_for()`.
+- `.claude-plugin/plugin.json` + `marketplace.json` version 1.9.1 → 1.9.2.
+
+### Added
+
+- **Cache telemetry** (`scripts/contextual-prefix.py`). The tier-1 path now logs `cache: wrote=<N> read=<N> tok` from the response `usage` fields — integers only, never page content, preserving the v1.7.1 data-egress posture. Implements the docs' "monitor cache hit rates" guidance and reveals whether the body cache is actually firing given the floor.
+- **Sequential-invariant note** at the chunk loop (`process_page`), documenting that cache reads depend on chunk 0's response landing before chunk 1 is sent (Anthropic prompt-caching concurrency rule). Guards against a future parallelization silently zeroing every cache read.
+- `tests/test_contextual_prefix.py` — hermetic coverage of the `cache_control_for()` floor decision (below / at / above floor, empty body, floor constant matches the documented Haiku minimum). Wired into `make test` (now 9 suites) + `make test-contextual`.
+
+### Documented
+
+- Tier-1 "prompt-cached" claim now states the ~16 KB Haiku floor in the `contextual-prefix.py` module docstring and the ingest diagrams in `docs/compound-vault-guide.md` and `skills/wiki-retrieve/SKILL.md`, so docs match runtime behavior.
+
+### Fixed
+
+- **Explicit missing or out-of-vault page paths now fail cleanly** (`scripts/contextual-prefix.py`). A single explicit path that does not exist exits 3 (was: silent exit 0, swallowed by the `is_file()` filter in `main()`); a path resolving outside the vault exits 2 with a message (was: a raw `ValueError` traceback from `relative_to()`). `--all` runs are unaffected.
+- Removed the dead `EXIT_NO_ADDRESS` (exit 5) constant and its docstring entry — it was defined and documented but never raised. Renamed the shadowed `prefix` progress-label variable in `process_page` to `progress`.
+
+### Verification
+
+- `make test`: 9 hermetic suites green; the contextual suite now mocks the API payload to assert `cache_control` attaches only above the floor and the model reply is truncated to one line. No regressions.
+- Explicit-path exit codes confirmed by run: missing in-vault path → 3, out-of-vault path → 2, valid page → 0, `--all` unaffected.
+- `python3 scripts/contextual-prefix.py wiki/getting-started.md --peek`: tier selection unchanged (synthetic without `--allow-egress`).
+- Live tier-1 telemetry leg (sends page bodies off-machine) requires explicit `--allow-egress` and is left to operator verification per the repo's consent design.
+
 ## [1.9.1] - 2026-05-18 (v1.9.0 audit hardening)
 
 Patch release closing **6 of 6 remaining HIGH/MEDIUM** findings from the v1.9.0 pre-public-promotion audit ([`docs/audits/v1.9.0-pre-public-promotion-audit-2026-05-18.md`](docs/audits/v1.9.0-pre-public-promotion-audit-2026-05-18.md)) plus 3 LOW hardening items. Composite score moves from 91.6 to ~94 raw average. Public-promotion ship verdict remains GREEN.

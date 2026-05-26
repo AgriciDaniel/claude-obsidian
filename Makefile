@@ -2,8 +2,8 @@
 # Test runner entry points for DragonScale and vault tooling.
 
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
-        test-lock test-concurrent test-mode setup-dragonscale setup-retrieve \
-        setup-mode clean-test-state help
+        test-lock test-concurrent test-mode test-contextual setup-dragonscale \
+        setup-retrieve setup-mode clean-test-state help
 
 help:
 	@echo "claude-obsidian developer targets:"
@@ -16,12 +16,13 @@ help:
 	@echo "  make test-lock        scripts/wiki-lock.sh tests (shell, hermetic)"
 	@echo "  make test-concurrent  multi-writer correctness gate (shell, hermetic)"
 	@echo "  make test-mode        scripts/wiki-mode.py tests (python, hermetic)"
+	@echo "  make test-contextual  scripts/contextual-prefix.py cache-floor tests (python, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
 	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual
 	@echo ""
 	@echo "All tests passed."
 
@@ -56,6 +57,10 @@ test-concurrent:
 test-mode:
 	@echo "=== test_wiki_mode.py ==="
 	@python3 tests/test_wiki_mode.py
+
+test-contextual:
+	@echo "=== test_contextual_prefix.py ==="
+	@python3 tests/test_contextual_prefix.py
 
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh

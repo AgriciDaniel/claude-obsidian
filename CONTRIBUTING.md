@@ -61,7 +61,7 @@ Follow the six-cut kernel:
 - Evidence over intuition (tests for new behavior)
 - Failure-mode + undo plan documented
 
-If you add a new skill, agent, script, or hook, also add a test under `tests/`. The 8 hermetic test suites are the project's safety net.
+If you add a new skill, agent, script, or hook, also add a test under `tests/`. The 9 hermetic test suites are the project's safety net.
 
 ### 5. Run the tests
 
@@ -69,7 +69,7 @@ If you add a new skill, agent, script, or hook, also add a test under `tests/`. 
 make test
 ```
 
-All 8 suites must pass (~1234 assertions). Tests are hermetic: no network, no ollama, no Anthropic API. If your change adds a network call, gate it behind a `--consent`/`--allow-egress`/env-var pattern matching `scripts/contextual-prefix.py` or `scripts/tiling-check.py`.
+All 9 suites must pass (~1240 assertions). Tests are hermetic: no network, no ollama, no Anthropic API. If your change adds a network call, gate it behind a `--consent`/`--allow-egress`/env-var pattern matching `scripts/contextual-prefix.py` or `scripts/tiling-check.py`.
 
 ### 6. Run the verifier (optional but recommended)
 

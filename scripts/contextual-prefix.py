@@ -9,7 +9,10 @@ retrieval accuracy (Anthropic measured 35-49% failure reduction).
 
 Three-tier prefix generation (chosen per-run automatically):
   1. If ANTHROPIC_API_KEY is set      → direct Anthropic API call (Haiku 4.5)
-                                         with prompt caching on the page body.
+                                         with prompt caching on the page body
+                                         (only when the body clears the ~16 KB
+                                         Haiku 4.5 cache floor; see
+                                         cache_control_for()).
                                          ~$12 / 1000 docs per Anthropic figures.
                                          REQUIRES --allow-egress (sends bodies off-machine).
   2. Elif `claude` binary on PATH     → `claude -p` subprocess (uses CC subscription;
@@ -57,7 +60,6 @@ Exit codes:
   2 — usage error
   3 — page file missing or unreadable
   4 — chunk dir creation failed
-  5 — page has no `address:` and synthetic-address derivation also failed
 """
 
 import argparse
@@ -87,11 +89,21 @@ ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_TIMEOUT_SEC = 30
 CLAUDE_CLI_TIMEOUT_SEC = 60
 
+# Anthropic prompt caching ignores any cached prefix below the model's minimum
+# cacheable size — 4,096 tokens for Haiku 4.5 (verified against the prompt-caching
+# docs, 2026-05). At ~4 chars/token that is ~16 KB. We attach cache_control only
+# when the body clears this floor so the marker reflects reality: below the floor
+# the API treats it as a silent no-op. The per-call cache telemetry in
+# anthropic_api_prefix() is what actually measures hit rate. The check counts the
+# body only — a deliberately conservative ~370-char underestimate that ignores the
+# system_msg + <page> wrapper also inside the cached prefix — so near the boundary
+# it errs toward not-marking, never toward a wrongly-attached marker.
+HAIKU_CACHE_MIN_CHARS = 16384  # 4096 tokens * 4 chars/token
+
 EXIT_OK = 0
 EXIT_USAGE = 2
 EXIT_PAGE_MISSING = 3
 EXIT_CHUNK_DIR = 4
-EXIT_NO_ADDRESS = 5
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 ADDRESS_RE = re.compile(r"^address:\s*(c-\d{6})\s*$", re.MULTILINE)
@@ -177,27 +189,43 @@ def synthetic_prefix(fm, body, chunk_text):
     return f"This passage is from the wiki page \"{title}\". The page opens: {first}"
 
 
+def cache_control_for(page_body):
+    """Ephemeral cache_control dict when the page body clears the Haiku cache
+    floor, else None. Pure function so the floor decision is unit-testable
+    without the network (the API call itself stays egress-gated).
+    """
+    if len(page_body) >= HAIKU_CACHE_MIN_CHARS:
+        return {"type": "ephemeral"}
+    return None
+
+
 def anthropic_api_prefix(api_key, page_title, page_body, chunk_text):
-    """Tier-1 prefix: direct Anthropic API call, Haiku, prompt-cached page body."""
+    """Tier-1 prefix: direct Anthropic API call, Haiku, prompt-cached page body.
+
+    The page body is the stable prefix shared by every chunk of a page, so it
+    goes in `system` behind a cache breakpoint and the variable chunk goes in
+    `messages`. Cache reads only land because chunks are processed sequentially
+    (chunk 0 warms the prefix) — see the loop note in process_page().
+    """
     system_msg = (
         "You are a retrieval-augmentation assistant. Given a wiki page and one "
         "chunk extracted from it, write a single short sentence (under 35 words) "
         "that situates the chunk within the page's scope and topic. Output only "
         "the sentence — no prefix, no quotation marks, no commentary."
     )
+    page_block = {
+        "type": "text",
+        "text": f"<page title=\"{page_title}\">\n{page_body}\n</page>",
+    }
+    cc = cache_control_for(page_body)
+    if cc:
+        page_block["cache_control"] = cc
     payload = {
         "model": ANTHROPIC_MODEL,
         "max_tokens": 100,
         "system": [
-            {
-                "type": "text",
-                "text": system_msg,
-            },
-            {
-                "type": "text",
-                "text": f"<page title=\"{page_title}\">\n{page_body}\n</page>",
-                "cache_control": {"type": "ephemeral"},
-            },
+            {"type": "text", "text": system_msg},
+            page_block,
         ],
         "messages": [
             {
@@ -223,6 +251,13 @@ def anthropic_api_prefix(api_key, page_title, page_body, chunk_text):
     try:
         with urllib.request.urlopen(req, timeout=ANTHROPIC_TIMEOUT_SEC) as resp:
             data = json.loads(resp.read().decode("utf-8"))
+            # Cache telemetry: integer token counts only, never page content, so
+            # the data-egress posture holds. Confirms whether the body cache is
+            # actually firing given the Haiku floor (wrote>0 on chunk 0, read>0
+            # on later chunks of the same page).
+            usage = data.get("usage", {})
+            log(f"  cache: wrote={usage.get('cache_creation_input_tokens', 0)} "
+                f"read={usage.get('cache_read_input_tokens', 0)} tok")
             for block in data.get("content", []):
                 if block.get("type") == "text":
                     return block["text"].strip().splitlines()[0]
@@ -325,19 +360,23 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
     chunks = chunk_body(content)
     tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress)
 
-    prefix = (progress_label + " ") if progress_label else ""
+    progress = (progress_label + " ") if progress_label else ""
     if not chunks:
         # v1.7.2 / closes audit M6: previously this logged "chunks=0" with no
         # explanation and silently produced no index entries. Now: explicit WARN
         # so the user notices empty-body pages (often frontmatter-only stubs).
-        log(f"{prefix}WARN: {page_path.relative_to(VAULT_ROOT)} has no chunkable body content "
+        log(f"{progress}WARN: {page_path.relative_to(VAULT_ROOT)} has no chunkable body content "
             f"(empty after frontmatter strip). Skipping; no chunks written.")
         return {"address": address, "written": [], "skipped": 0, "tier": tier}
 
-    log(f"{prefix}-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
+    log(f"{progress}-> {page_path.relative_to(VAULT_ROOT)}  address={address}  chunks={len(chunks)}  tier={tier}")
 
     written = []
     skipped = 0
+    # Keep this loop sequential. The tier-1 Anthropic path caches the page body;
+    # a cache entry is only readable after the first response begins (Anthropic
+    # prompt-caching concurrency rule), so chunk 0 warms the prefix and chunks
+    # 1..N read it. Parallelizing here would silently zero every cache read.
     for idx, raw in enumerate(chunks):
         chunk_path = chunk_dir / f"chunk-{idx:03d}.json"
         body_hash = sha256(raw)
@@ -424,6 +463,18 @@ def main():
         args.path = "--all"
 
     pages = collect_pages(args.path)
+    # Explicit single-path invocations must point at a readable file inside the
+    # vault. --all only ever yields in-vault files, so this guard is explicit-only.
+    # Without it a typo'd path exited 0 silently, and an out-of-vault path raised
+    # a raw ValueError from relative_to().
+    if args.path != "--all":
+        target = pages[0].resolve()
+        if not target.is_relative_to(VAULT_ROOT):
+            log(f"ERR: {args.path} resolves outside the vault ({VAULT_ROOT}).")
+            return EXIT_USAGE
+        if not target.is_file():
+            log(f"ERR: {args.path} is not a readable file.")
+            return EXIT_PAGE_MISSING
     # Filter to actual files up front so progress counter is meaningful
     # (v1.7.2; closes audit L2: tier-2 over 47 pages can take 5+ min — the
     # user needs a count, not just per-page log lines).
