@@ -1,6 +1,6 @@
 # WIKI.md — LLM Wiki Schema
 
-> If you are using the claude-obsidian plugin, the skills handle everything here automatically.
+> If you are using the agentic-knowledge-management plugin, the skills handle everything here automatically.
 > This file is the reference document. Read it to understand how the system works.
 > Based on Andrej Karpathy's LLM Wiki pattern.
 

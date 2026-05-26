@@ -1,11 +1,11 @@
 
-# claude-obsidian
+# agentic-knowledge-management
 
 <p align="center">
   <img src="wiki/meta/claude-obsidian-gif-cover-16x9.gif" alt="claude-obsidian" width="100%" />
 </p>
 
-[![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/philippsied/agent-based-knowledge-management?style=flat&color=e8734a)](https://github.com/philippsied/agent-based-knowledge-management/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
 [![Blog Post](https://img.shields.io/badge/Deep_Dive-Blog_Post-22c55e)](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain)
@@ -37,11 +37,11 @@ At the end of every session, Claude updates a hot cache. The next session starts
 
 ---
 
-## Why claude-obsidian?
+## Why agentic-knowledge-management?
 
-Most Obsidian AI plugins are chat interfaces - they answer questions about your existing notes. claude-obsidian is a knowledge engine - it creates, organizes, maintains, and evolves your notes autonomously.
+Most Obsidian AI plugins are chat interfaces - they answer questions about your existing notes. agentic-knowledge-management is a knowledge engine - it creates, organizes, maintains, and evolves your notes autonomously.
 
-| Capability | claude-obsidian | Smart Connections | Copilot |
+| Capability | agentic-knowledge-management | Smart Connections | Copilot |
 |---|---|---|---|
 | **Auto-organize notes** | Creates entities, concepts, cross-references | No | No |
 | **Contradiction flagging** | `[!contradiction]` callouts with sources | No | No |
@@ -63,12 +63,12 @@ Most Obsidian AI plugins are chat interfaces - they answer questions about your 
 ### Option 1: Clone as vault (recommended: full setup in 2 minutes)
 
 ```bash
-git clone https://github.com/AgriciDaniel/claude-obsidian
-cd claude-obsidian
+git clone https://github.com/philippsied/agent-based-knowledge-management
+cd agent-based-knowledge-management
 bash bin/setup-vault.sh
 ```
 
-Open the folder in Obsidian: **Manage Vaults → Open folder as vault → select `claude-obsidian/`**
+Open the folder in Obsidian: **Manage Vaults → Open folder as vault → select `agent-based-knowledge-management/`**
 
 Open Claude Code in the same folder. Type `/wiki`.
 
@@ -285,7 +285,7 @@ The page renders a full-width header image in Obsidian. Works great for hub page
 ## File Structure
 
 ```
-claude-obsidian/
+agent-based-knowledge-management/
 ├── .claude-plugin/
 │   ├── plugin.json              # manifest
 │   └── marketplace.json         # distribution

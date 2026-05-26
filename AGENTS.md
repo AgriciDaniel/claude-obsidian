@@ -1,4 +1,4 @@
-# claude-obsidian: Agent Instructions
+# agentic-knowledge-management: Agent Instructions
 
 This repo is a Claude Code plugin **and** an Obsidian vault that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It works with **any AI coding agent** that supports the Agent Skills standard, including Codex CLI, OpenCode, and similar.
 
@@ -10,10 +10,10 @@ All skills live in `skills/<name>/SKILL.md`. Codex / OpenCode / other Agent Skil
 
 ```bash
 # Codex CLI
-ln -s "$(pwd)/skills" ~/.codex/skills/claude-obsidian
+ln -s "$(pwd)/skills" ~/.codex/skills/agentic-knowledge-management
 
 # OpenCode
-ln -s "$(pwd)/skills" ~/.opencode/skills/claude-obsidian
+ln -s "$(pwd)/skills" ~/.opencode/skills/agentic-knowledge-management
 ```
 
 Or run the bundled installer:
@@ -57,6 +57,6 @@ When the user opens this project for the first time:
 
 ## Reference
 
-- Plugin homepage: https://github.com/AgriciDaniel/claude-obsidian
+- Plugin homepage: https://github.com/philippsied/agent-based-knowledge-management
 - Pattern source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - Cross-reference: https://github.com/kepano/obsidian-skills (authoritative Obsidian-specific skills)
