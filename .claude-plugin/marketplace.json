@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "agentic-knowledge-management: Claude + Obsidian knowledge companion by philippsied",
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
         "ref": "main"
       },
       "description": "Claude + Obsidian knowledge companion. Sets up a persistent, compounding wiki vault. Covers memory management, session notetaking, knowledge organization, and agent context across projects. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection.",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "author": {
         "name": "philippsied",
         "url": "https://github.com/philippsied"
