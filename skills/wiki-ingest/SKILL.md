@@ -1,6 +1,7 @@
 ---
 name: wiki-ingest
-description: "Ingest sources into the Obsidian wiki vault. Reads a source, extracts entities and concepts, creates or updates wiki pages, cross-references, and logs the operation. Supports files, URLs, and batch mode. Triggers on: ingest, process this source, add this to the wiki, read and file this, batch ingest, ingest all of these, ingest this url."
+description: "Ingest sources into the Obsidian wiki vault. Reads a source, extracts entities and concepts, creates or updates wiki pages, cross-references, and logs the operation. Supports files, URLs, and batch mode. Optional `review` flag adds a pre-ingest human-in-the-loop gate that flags doubtful URL content (ads, nav, off-topic) with annotated recommendations before writing to .raw/. Triggers on: ingest, process this source, add this to the wiki, read and file this, batch ingest, ingest all of these, ingest this url."
+argument-hint: "[file-or-url] [review] [force]"
 ---
 
 # wiki-ingest: Source Ingestion
@@ -52,19 +53,87 @@ Skip delta checking if the user says "force ingest" or "re-ingest".
 
 Trigger: user passes a URL starting with `https://`.
 
+**Flags.** Read the invocation arguments from `$ARGUMENTS` and treat these bare-word tokens as optional flags, position-independent (a token equal to the word anywhere in `$ARGUMENTS` sets the flag). The first non-flag token is the source (`$0` — the URL or file path).
+
+- `review` — enable the **Review Gate** (see below). Off by default. Inserts a human-in-the-loop checkpoint between cleaning and `.raw/` so doubtful content (ads, nav, off-topic filler) can be flagged and pruned *before* it becomes an immutable source.
+- `force` — skip delta-tracking and re-ingest even if the source hash is unchanged (see *Delta Tracking*).
+
+> These are not formally parsed options — Claude Code does no flag validation. The skill recognizes them by scanning `$ARGUMENTS` for the exact words `review` / `force`. An unknown token is ignored, not an error. The `argument-hint` (`[file-or-url] [review] [force]`) only drives autocomplete display.
+
 Steps:
 
 1. **Fetch** the page using WebFetch.
-2. **Clean** (optional): if `defuddle` is available (`which defuddle 2>/dev/null`), run `defuddle [url]` to strip ads, nav, and clutter. Typically saves 40-60% tokens. Fall back to raw WebFetch output if not installed.
+2. **Clean** (optional): if `defuddle` is available (`which defuddle 2>/dev/null`), run `defuddle parse [url] --md` to strip ads, nav, and clutter. Typically saves 40-60% tokens. Fall back to raw WebFetch output if not installed.
 3. **Derive slug** from the URL path (last segment, lowercased, spaces→hyphens, strip query strings).
-4. **Save** to `.raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
+4. **Branch on the `review` flag:**
+   - **`review` NOT set (default)** — Save the cleaned markdown to `.raw/articles/[slug]-[YYYY-MM-DD].md` with the frontmatter header below, then continue to step 5.
+   - **`review` set** — Run the **Review Gate** (next section) on the cleaned markdown held in `$TMPDIR`. Only after the user resolves the annotations do you write the pruned-and-cleaned result to `.raw/articles/[slug]-[YYYY-MM-DD].md` with the header below.
+
+   Frontmatter header:
    ```markdown
    ---
    source_url: [url]
    fetched: [YYYY-MM-DD]
    ---
    ```
+   > `.raw/` is immutable once written. The `review` gate operates on a working copy in `$TMPDIR`; the file that lands in `.raw/` is the final, user-approved version. Because the project hook blocks `Write`/`Edit` under `.raw/`, write the final file with a Bash heredoc/`mv`, not the Write tool.
 5. Proceed with **Single Source Ingest** starting at step 2 (file is now in `.raw/`).
+
+---
+
+## Review Gate (opt-in via `review` flag)
+
+A pre-ingest, human-in-the-loop checkpoint for **URL ingests**. `defuddle` strips structural clutter deterministically, but vendor ads, calls-to-action, navigation remnants, and off-topic filler routinely survive and would otherwise be baked into the immutable `.raw/` source and propagate into wiki pages. The Review Gate makes Claude flag those passages with a recommendation and lets the user decide before anything is committed.
+
+Run this section **only** when the `review` flag is set. It sits between cleaning (step 2) and the `.raw/` write (step 4).
+
+### Procedure
+
+1. **Hold the cleaned markdown in `$TMPDIR`** (e.g. `$TMPDIR/[slug]-candidate.md`) — do not write to `.raw/` yet.
+2. **Read** the candidate fully and **annotate doubtful blocks inline** with an HTML comment placed on the line *immediately above* the block it refers to:
+   ```markdown
+   <!-- REVIEW[CODE » recommendation]: one-line reason (why it may not belong) -->
+   ```
+   - HTML comments don't render in Obsidian and are trivially removable with `rg`/grep.
+   - Annotate **only** doubtful content. Do not annotate clean, on-topic prose.
+   - One annotation per contiguous block. Don't pepper every sentence.
+3. **Present a compact summary** to the user: a numbered list of every annotation with its `CODE`, recommendation, a short preview of the flagged block, and the reason. State the default action explicitly (all `remove`-recommended blocks will be deleted unless the user says otherwise).
+4. **Apply the user's decision.** The user may accept all recommendations, keep specific blocks, or remove additional ones. Default when the user just says "go"/"ok": delete every block recommended `remove`, keep the rest.
+5. **Strip all remaining `<!-- REVIEW ... -->` comments** from the working copy — annotations are a review artifact and must never reach `.raw/`.
+6. **Write the pruned, comment-free markdown to `.raw/articles/...`** (Bash, not the Write tool — see the `.raw/` immutability note above), then return to URL-ingest step 5.
+
+### Annotation codes
+
+| Code | Meaning | Default recommendation |
+|---|---|---|
+| `AD` | Advertisement / vendor promo / sponsored block | `remove` |
+| `CTA` | Marketing call-to-action, sign-up / "start free" pitch | `remove` |
+| `NAV` | Navigation, header/footer, breadcrumb, related-links remnant | `remove` |
+| `OT` | Off-topic — unrelated to the source's core subject | `remove` |
+| `DUP` | Duplicate / redundant restatement already captured elsewhere | `remove` |
+| `LOW` | Low-signal filler, fluff, padding | `review` |
+| `BIAS` | On-topic but promotional/non-neutral framing worth noting | `keep` |
+| `?` | Unclear — genuine judgment call, needs the user | `review` |
+
+Recommendation vocabulary: `remove` (delete from the source), `keep` (leave as-is), `review` (user judgment required — no safe default).
+
+### Example
+
+````markdown
+<!-- REVIEW[AD » remove]: MindStudio "Remy" product promo, interleaved vendor advertising, not topical -->
+## Seven tools to build an app. Or just Remy.
+Editor, preview, AI agents, deploy — all in one tab. Nothing to install.
+
+<!-- REVIEW[CTA » remove]: vendor sign-up pitch / deploy upsell, not part of the methodology -->
+## Deploying Your Optimized Skill with MindStudio
+You can start free at mindstudio.ai.
+````
+
+### Conservative defaults
+
+- When unsure whether content is doubtful at all, **annotate it `?` / `review`** rather than silently keeping or removing it. Surfacing is safer than a silent decision.
+- Never delete a block without an annotation and a user decision. The gate's whole purpose is that removals are visible and approved.
+- If the user declines the gate mid-flow ("just ingest it"), strip the comments and proceed with the full cleaned text.
 
 ---
 
