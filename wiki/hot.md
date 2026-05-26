@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-04-24T13:10:00
+updated: 2026-05-22T11:30:00
 tags:
   - meta
   - hot-cache
@@ -19,6 +19,10 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-05-22 (Laba Production Super App — access redesign + brand pass): шипнули повну заміну ролей у SuperApp. Стара модель `admin / editor / reader` глобально на весь shell → нова `(email, product, project)` з email-whitelist onboarding (no invitation emails, signup-page action + Postgres trigger on auth.users перевіряють whitelist), hardcoded owners з SQL seed + invite-form toggle для нових owners, soft-disable + confirmed delete forever. **Шість гейтів defense-in-depth**: signup action / DB trigger / middleware / page server-render / embed proxy 403 / RLS. Active project живе в cookie + supported as `?project=` deep-link. Materials data — per-project (PK migrated to `(item_id, project_id)`). Tool URLs — default per-product + optional per-project overrides. Filed [[SuperApp Access Control Model]] (15 locked decisions + schema + gates). **Brand pass** — два захода: перший на Tailwind v4 + cream Researchius v1 шипнув broken (v4 silently drops utilities на Next 14 — карточки/borders/padding зникали) → revert PR #11. Другий на Tailwind v3 + Laba Brand Book v1.0 (monochrome + lime + Urbanist) пройшов: login splash без рамки з big wordmark "Laba Super App" по центру bg-page, shell з grid-cols-[1fr_auto_1fr] для true-viewport-center табів і lime active stage tab як 1% акцент, admin таблиця з plain-text semantic-colored statuses замість pill chips, всі inline-контроли уніфіковані на h-9 + text-small. Урок: `next build` зеленим не значить ОК — preview-через-скріншот до merge обов'язковий. Filed [[Applying Laba Brand Book to a New Product]] (working stack + failed stack + surface rules + composition recipes + 1% lime applied). 21 PR замерджено на main `temson94/production-super-app`. Залишилось: Vercel production deploys стопаються в Blocked, потрібен ручний promote (Deployment Protection ймовірно ввімкнено).
+
+---
 
 2026-04-24 (late night): v1.6.0 public release notes shipped. `docs/releases/v1.6.0.md` (Karpathy-style, 346 lines) establishes the release-notes convention. Three original SVGs at `wiki/meta/dragonscale-{mechanism-overview,6-test-flow,frontier-graph}.svg` carry the visual load; Wikipedia dragon curve referenced by text link only (no binary vendoring). R4 codex verifier ACCEPT WITH FIXES, 3 wording fixes applied. User runs `gh release create v1.6.0 --notes-file docs/releases/v1.6.0.md` when ready. Commits `85515bb` (docs), plus wiki/meta/ auto-commits for SVGs.
 

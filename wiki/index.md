@@ -31,6 +31,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Concepts
 
+- [[Applying Laba Brand Book to a New Product]] — canonical recipe for bolting Laba MVP Brand Book v1.0 onto a new Next.js product. Stack that worked (Tailwind v3 + Urbanist + jose JWT), stack that failed (Tailwind v4 silently drops utilities on Next 14), token paste-block, surface rules, composition recipes for brand vs function surfaces, "1% lime" applied to a shell, preview-screenshot validation workflow (status: current)
 - [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
 - [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
 - [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
@@ -81,6 +82,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Decisions
 
+- [[SuperApp Access Control Model]] — 15 locked decisions defining the Laba Production Super App access model: (email, product, project) grants, email-whitelist signup, hardcoded owners, defense-in-depth gates (UI / signup action / DB trigger / middleware / proxy / RLS) (status: active)
 - [[2026-04-14-community-cta-rollout]] - Skool community CTA footer added to 6 skill repos with per-tool frequency rules (status: active)
 - [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
 - [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)

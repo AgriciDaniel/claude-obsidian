@@ -25,6 +25,16 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-05-22] save | SuperApp Access Control Model
+- Type: decision
+- Location: wiki/meta/SuperApp Access Control Model.md
+- From: long grill-me session for the Laba Production Super App access redesign. Replaced global admin/editor/reader roles with per-(email, product, project) grants + email-whitelist onboarding + hardcoded owners. Captures all 15 locked decisions, the schema, six layers of defense-in-depth, and the late owner-vs-regular toggle on the invite form. PLAN.md in the repo is the implementation companion.
+
+## [2026-05-22] save | Applying Laba Brand Book to a New Product
+- Type: concept
+- Location: wiki/concepts/Applying Laba Brand Book to a New Product.md
+- From: same SuperApp session — second attempt at the brand pass after Tailwind v4 + cream-Researchius palette shipped broken. Captures: the working stack (Tailwind v3 + Urbanist via next/font/google + lucide + custom tokens block), the failed stack (Tailwind v4 on Next 14 silently drops utilities — `next build` is not enough), surface rules, composition recipes for brand-surface (no card, big wordmark) vs function-surface (white card on bg-page), the "1% lime" rule applied to a shell, and the preview-route validation workflow.
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)
