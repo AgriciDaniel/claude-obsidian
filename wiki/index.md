@@ -29,6 +29,13 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ---
 
+## Projects
+
+- [[InkWeave Product Overview]] — AI snippet-to-book platform; UK-first, paid tiers, session remote control (status: planning)
+- [[khutba.io Product Overview]] — Live auto-translation display system for masjids; Birmingham launch (status: planning)
+
+---
+
 ## Concepts
 
 - [[JobFilter Hub]] — **central node** for all JobFilter knowledge. Start here. (status: evergreen)
