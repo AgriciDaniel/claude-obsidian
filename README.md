@@ -1,5 +1,5 @@
 
-# claude-obsidian: Self-Organizing AI Wiki for Obsidian + Claude Code
+# claude-obsidian: Self-Organizing AI Second Brain for Obsidian + Claude Code
 
 <p align="center">
   <img src="wiki/meta/claude-obsidian-gif-cover-16x9.gif" alt="claude-obsidian: persistent compounding wiki vault for Claude Code and Obsidian" width="100%" />
@@ -7,24 +7,22 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/AgriciDaniel/claude-obsidian?style=flat&color=e8734a)](https://github.com/AgriciDaniel/claude-obsidian/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v1.9.2-blue)](https://github.com/AI-Marketing-Hub/claude-obsidian/releases/latest)
-[![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/AI-Marketing-Hub/claude-obsidian/actions)
+[![Release](https://img.shields.io/github/v/release/AgriciDaniel/claude-obsidian?color=blue)](https://github.com/AgriciDaniel/claude-obsidian/releases/latest)
+[![CI](https://github.com/AgriciDaniel/claude-obsidian/actions/workflows/test.yml/badge.svg)](https://github.com/AgriciDaniel/claude-obsidian/actions/workflows/test.yml)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
 [![Obsidian](https://img.shields.io/badge/Obsidian-v1.9.10%2B-7c3aed)](https://obsidian.md)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Compatible-blue)](https://agentskills.io)
 [![Community](https://img.shields.io/badge/AI%20Marketing%20Hub-Pro%20community-purple)](https://www.skool.com/ai-marketing-hub-pro)
 [![Blog Post](https://img.shields.io/badge/Deep_Dive-Blog_Post-22c55e)](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain)
 
-Claude + Obsidian knowledge companion. A running notetaker that builds and maintains a persistent, compounding wiki vault. Every source you add gets integrated. Every question you ask pulls from everything that has been read. Knowledge compounds like interest.
+Claude + Obsidian knowledge companion and self-organizing AI second brain. A running AI notetaker that builds and maintains a persistent, compounding wiki vault. Every source you add gets integrated. Every question you ask pulls from everything that has been read. Knowledge compounds like interest.
 
-Open-source Obsidian AI plugin for personal knowledge management (PKM), second-brain workflows, and Notion AI alternatives. **15 Claude Code skills**, multi-agent support, multi-writer safe (v1.7+), first-class methodology modes (LYT / PARA / Zettelkasten / Generic via v1.8), and the 10-principle thinking framework (v1.9). Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+Open-source Obsidian AI plugin for AI note-taking, personal knowledge management (PKM), second-brain workflows, and a private Notion alternative. **15 Claude Code skills**, multi-agent support, multi-writer safe (v1.7+), first-class methodology modes (LYT / PARA / Zettelkasten / Generic via v1.8), and the 10-principle thinking framework (v1.9). Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
 
 > **Two ways to get this skill.** Pick the one that fits how you work.
 >
-> - 🌐 **Public open-source build** (latest stable: `v1.6.0`): the free, MIT-licensed release on [Daniel Agrici's GitHub](https://github.com/AgriciDaniel/claude-obsidian). Open to anyone, no membership required.
-> - 🔒 **Community early-access build** (latest: `v1.9.2`): newest releases ship first to the [AI Marketing Hub](https://github.com/AI-Marketing-Hub) GitHub org for [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro) community members. Includes v1.7+ Compound Vault, v1.8 methodology modes, v1.9 thinking framework + audit hardening, and direct collaboration with the community.
->
-> ℹ️ **Star count** tracks the public repo (shields.io cannot read private mirrors). **Release** and **CI** badges are pinned static for the private mirror (currently `v1.9.2`, tests green). When v1.7+ work promotes to the public canonical, these will return to live shields.io tracking.
+> - 🌐 **Public open-source build** (latest: `v1.9.2`, recommended): the free, MIT-licensed release on [Daniel Agrici's GitHub](https://github.com/AgriciDaniel/claude-obsidian). Open to anyone, no membership required. Ships everything: v1.7 Compound Vault, v1.8 methodology modes, and the v1.9 thinking framework plus audit hardening.
+> - ⚡ **AI Marketing Hub Pro**: the same MIT-licensed core, plus earliest access to in-development features before they land here, direct collaboration, and the [Pro community](https://www.skool.com/ai-marketing-hub-pro). Pro members install from the [AI Marketing Hub](https://github.com/AI-Marketing-Hub) org mirror (swap note under Option 2 below).
 
 > ✨ **v1.7 "Compound Vault" refoundation**: Obsidian CLI as default transport, hybrid retrieval (contextual prefix + BM25 + cosine rerank per [Anthropic's Sept 2024 research](https://www.anthropic.com/news/contextual-retrieval)), per-file advisory locking that closes a latent multi-writer corruption hole, and substrate alignment with [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). Full guide: [docs/compound-vault-guide.md](docs/compound-vault-guide.md). Optional [DragonScale Memory](docs/dragonscale-guide.md) extension (log folds, deterministic page addresses, semantic tiling lint, boundary-first autoresearch).
 
@@ -112,12 +110,12 @@ Most Obsidian AI plugins are chat interfaces. They answer questions about your e
 
 ## Quick Start
 
-> ℹ️ The commands below show the **community early-access** URLs. If you are **not an AI Marketing Hub Pro member**, replace every `AI-Marketing-Hub/claude-obsidian` with `AgriciDaniel/claude-obsidian` to install the public stable release instead. Option 2 also requires swapping the plugin slug (see the disclaimer under that option).
+> ℹ️ The commands below install the **public open-source build** from `AgriciDaniel/claude-obsidian` (recommended, no membership needed). **AI Marketing Hub Pro members** who want early access to in-development features can swap `AgriciDaniel/claude-obsidian` for `AI-Marketing-Hub/claude-obsidian` (Option 2 also swaps the plugin slug; see the note under that option).
 
 ### Option 1: Clone as vault (recommended, full setup in 2 minutes)
 
 ```bash
-git clone https://github.com/AI-Marketing-Hub/claude-obsidian
+git clone https://github.com/AgriciDaniel/claude-obsidian
 cd claude-obsidian
 bash bin/setup-vault.sh
 ```
@@ -136,15 +134,15 @@ Plugin installation is a two-step process. First add the marketplace catalog, th
 
 > ℹ️ **Which version are you installing?**
 >
-> - **Not an AI Marketing Hub Pro member?** Install from the public repo instead: [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian). Swap `AI-Marketing-Hub/claude-obsidian` for `AgriciDaniel/claude-obsidian` and the plugin slug `claude-obsidian@ai-marketing-hub-claude-obsidian` for `claude-obsidian@agricidaniel-claude-obsidian`. Public releases ship there; this private mirror runs ahead of them.
-> - **Pro member?** The commands below install the **community version** with early access to in-development features. They require an authenticated `gh auth login` (or GitHub PAT) session with access to the `AI-Marketing-Hub` org. If `/plugin marketplace add` fails with a 404, your account is not in the org yet. DM in the [Skool community](https://www.skool.com/ai-marketing-hub-pro) to get added.
+> - **Public (recommended, no membership):** the commands below install the free, MIT-licensed release from [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian). Nothing to sign up for.
+> - **AI Marketing Hub Pro member?** For early access to in-development features, swap `AgriciDaniel/claude-obsidian` for `AI-Marketing-Hub/claude-obsidian` and the plugin slug `claude-obsidian@agricidaniel-claude-obsidian` for `claude-obsidian@ai-marketing-hub-claude-obsidian`. The org mirror requires an authenticated `gh auth login` (or GitHub PAT) with access to the `AI-Marketing-Hub` org. If `/plugin marketplace add` returns a 404, your account is not in the org yet. DM in the [Skool community](https://www.skool.com/ai-marketing-hub-pro) to get added.
 
 ```bash
 # Step 1: add the marketplace
-claude plugin marketplace add AI-Marketing-Hub/claude-obsidian
+claude plugin marketplace add AgriciDaniel/claude-obsidian
 
 # Step 2: install the plugin
-claude plugin install claude-obsidian@ai-marketing-hub-claude-obsidian
+claude plugin install claude-obsidian@agricidaniel-claude-obsidian
 ```
 
 In any Claude Code session: `/wiki`. Claude walks you through vault setup.
@@ -485,7 +483,7 @@ claude-obsidian/
 ├── hooks/
 │   └── hooks.json               # SessionStart + Stop + PostToolUse hooks
 ├── scripts/                      # 12 helper scripts (transport, locking, retrieval, etc.)
-├── tests/                        # 8 hermetic test suites (~1234 assertions, make test)
+├── tests/                        # 9 hermetic test suites (~1240 assertions, make test)
 ├── bin/                          # 5 setup scripts (setup-vault, setup-retrieve, setup-mode, etc.)
 ├── _templates/                   # Obsidian Templater templates
 ├── wiki/                         # seeded vault content (demo)
@@ -550,6 +548,18 @@ claude plugin install AgriciDaniel/claude-canvas
 
 ## FAQ
 
+**What is the best AI second brain app?**
+The best AI second brain keeps your data yours. claude-obsidian stores everything as plain Markdown files you own (no database, no lock-in, no subscription) and lets Claude read, link, and organize them into one connected knowledge graph. It is free and open source (MIT).
+
+**How do I build a second brain with AI?**
+Drop any source into the vault. Claude reads it, extracts the entities and concepts, links them to what you already have, and files it into a structured Obsidian vault. You ask questions; it answers from everything it has read and cites the pages. The knowledge base gets richer and more connected with every session.
+
+**How do I connect Claude to Obsidian as a second brain?**
+Two lines: `git clone https://github.com/AgriciDaniel/claude-obsidian`, then `cd claude-obsidian && bash bin/setup-vault.sh`. Open the folder as an Obsidian vault, open Claude Code in the same folder, and type `/wiki`. Full steps in [Quick Start](#quick-start).
+
+**Is there a good Notion alternative for a private, AI-powered knowledge base?**
+Yes. claude-obsidian is an open-source, local-first alternative: your notes are plain Markdown on your own disk instead of a hosted database, and AI organizes them for you. No vendor lock-in and no monthly fee.
+
 **Does this auto-sync across devices?**
 Not on its own. The vault is a plain folder of Markdown files. Pair with Obsidian Sync, Obsidian Git, or any file-sync tool (Syncthing, iCloud, Dropbox) for cross-device sync.
 
@@ -571,8 +581,8 @@ Methodology Modes (v1.8+) control **how** pages are organized: folder structure 
 **Does this send my notes to Anthropic?**
 No by default. The optional `/wiki-retrieve` skill has API egress (`contextual-prefix.py`) gated behind the `--allow-egress` consent flag. Without that flag, retrieval is fully local (BM25 + optional ollama rerank). Web egress in `/autoresearch` follows the same opt-in principle.
 
-**Can I use the private (AI Marketing Hub) version without paying?**
-The public version ([`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian)) has the same MIT-licensed core. The private mirror gets early access (Pro community) and unreleased features. No paid features in either core.
+**What is the difference between the public build and AI Marketing Hub Pro?**
+Both share the same MIT-licensed core on [`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian), which is the recommended install for everyone. AI Marketing Hub Pro members get earliest access to in-development features before they ship here, plus direct collaboration and the community. There are no paid-only features in the core.
 
 **What is DragonScale Memory?**
 An optional opt-in extension (`bash bin/setup-dragonscale.sh`) that adds four memory mechanisms: log folds (rollup of past entries), deterministic page addresses (counter-based unique IDs), semantic tiling lint (chunk-boundary validation via ollama), and boundary-first autoresearch (research the vault's "frontier" first). Not required for normal use. Full guide: [`docs/dragonscale-guide.md`](docs/dragonscale-guide.md).
@@ -603,8 +613,8 @@ An optional opt-in extension (`bash bin/setup-dragonscale.sh`) that adds four me
 Plugin install:
 
 ```bash
-claude plugin uninstall claude-obsidian@ai-marketing-hub-claude-obsidian
-claude plugin marketplace remove AI-Marketing-Hub/claude-obsidian
+claude plugin uninstall claude-obsidian@agricidaniel-claude-obsidian
+claude plugin marketplace remove AgriciDaniel/claude-obsidian
 ```
 
 Clone install (delete the folder):
@@ -623,7 +633,7 @@ PRs welcome. Read these first:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): workflow, six-cut self-review checklist, commit conventions, hermetic test requirements
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md): Contributor Covenant v2.1
-- [`SECURITY.md`](SECURITY.md): private security disclosure policy
+- [`SECURITY.md`](SECURITY.md): responsible security disclosure policy
 - [`CHANGELOG.md`](CHANGELOG.md): version history (latest: v1.9.2)
 
 Issue + PR templates available under [`.github/`](.github/). CI runs `make test` + SKILL.md frontmatter validation + plugin manifest JSON validity on every PR. The pre-commit verifier agent at [`agents/verifier.md`](agents/verifier.md) applies the six-cut + agent kernel to staged diffs.
@@ -643,6 +653,7 @@ Issue + PR templates available under [`.github/`](.github/). CI runs `make test`
 
 - 📝 [**Blog post**](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain): deep dive with competitor analysis, data charts, and workflow demos
 - 💬 [**AI Marketing Hub**](https://www.skool.com/ai-marketing-hub): 2,800+ members, free community
+- ⚡ [**AI Marketing Hub Pro**](https://www.skool.com/ai-marketing-hub-pro): early access to in-development features and direct collaboration
 - 🎬 [**YouTube**](https://www.youtube.com/@AgriciDaniel): tutorials and demos
 - 🔧 [**All open-source tools**](https://github.com/AgriciDaniel): claude-seo, claude-ads, claude-blog, and more
 

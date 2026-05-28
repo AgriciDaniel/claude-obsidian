@@ -1,11 +1,12 @@
 {
-  "name": "ai-marketing-hub-claude-obsidian",
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agricidaniel-claude-obsidian",
   "owner": {
     "name": "AgriciDaniel",
     "url": "https://github.com/AgriciDaniel"
   },
   "metadata": {
-    "description": "claude-obsidian: Claude + Obsidian knowledge companion by AgriciDaniel (AI Marketing Hub private mirror — v1.7+/v1.8+/v1.9+ early access)",
+    "description": "claude-obsidian: a self-organizing AI second brain for Obsidian + Claude Code by AgriciDaniel. A persistent, compounding wiki vault of plain Markdown you own, based on Karpathy's LLM Wiki pattern.",
     "version": "1.9.2"
   },
   "plugins": [
@@ -20,15 +21,7 @@
       },
       "homepage": "https://github.com/AgriciDaniel/claude-obsidian",
       "repository": "https://github.com/AgriciDaniel/claude-obsidian",
-      "license": "MIT",
-      "recommendedCompanions": [
-        {
-          "marketplace": "kepano/obsidian-skills",
-          "rationale": "Canonical substrate for Obsidian primitives (obsidian-markdown, obsidian-bases, json-canvas, obsidian-cli) authored by Obsidian CEO. claude-obsidian's overlapping skills (obsidian-markdown, obsidian-bases, canvas) defer to these when available and fall back to self-contained implementations when not.",
-          "install": "claude plugin marketplace add kepano/obsidian-skills",
-          "repo": "https://github.com/kepano/obsidian-skills"
-        }
-      ]
+      "license": "MIT"
     }
   ]
 }

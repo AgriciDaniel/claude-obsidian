@@ -32,7 +32,7 @@ cd claude-obsidian
 git checkout -b your-feature-name
 ```
 
-> ℹ️ AI Marketing Hub Pro members working from the early-access mirror (`AI-Marketing-Hub/claude-obsidian`) should also raise PRs against the public canonical — community work lands there first and gets backported.
+> ℹ️ The public repo (`AgriciDaniel/claude-obsidian`) is the canonical source of truth. Raise all PRs against it. AI Marketing Hub Pro members working from the early-access mirror (`AI-Marketing-Hub/claude-obsidian`) should target the public canonical too, so contributions land in one place.
 
 Branch names: `fix/...`, `feat/...`, `docs/...`, `refactor/...`.
 
