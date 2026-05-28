@@ -130,11 +130,11 @@ if command -v obsidian-cli >/dev/null 2>&1; then
   CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
 elif command -v obsidian >/dev/null 2>&1; then
   # Obsidian 1.12+ ships `obsidian` as the CLI binary on some platforms.
-  # We treat it as cli-capable if it accepts a --cli or --version flag without launching the GUI.
-  if obsidian --version >/dev/null 2>&1; then
+  # We treat it as cli-capable if `obsidian version` returns cleanly without launching the GUI.
+  if obsidian version >/dev/null 2>&1; then
     CLI_PRESENT=true
     CLI_BINARY="obsidian"
-    CLI_VERSION_RAW="$(obsidian --version 2>/dev/null | head -1 || echo unknown)"
+    CLI_VERSION_RAW="$(obsidian version 2>/dev/null | head -1 || echo unknown)"
     CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
   fi
 fi
