@@ -204,13 +204,13 @@ def rerank(query, candidates, top_k=5, allow_remote=False):
     if not alive:
         log("ollama unreachable — no-op rerank")
         for c in candidates:
-            c["rerank_score"] = float(c.get("score", 0.0))
+            c["rerank_score"] = float(c.get("bm25_score", c.get("score", 0.0)))
             c["rerank_source"] = "noop-no-ollama"
         return candidates[:top_k]
     if DEFAULT_MODEL not in models:
         log(f"model {DEFAULT_MODEL} not pulled — no-op rerank")
         for c in candidates:
-            c["rerank_score"] = float(c.get("score", 0.0))
+            c["rerank_score"] = float(c.get("bm25_score", c.get("score", 0.0)))
             c["rerank_source"] = "noop-no-model"
         return candidates[:top_k]
 
@@ -221,7 +221,7 @@ def rerank(query, candidates, top_k=5, allow_remote=False):
     except Exception as e:
         log(f"query embed failed: {e}")
         for c in candidates:
-            c["rerank_score"] = float(c.get("score", 0.0))
+            c["rerank_score"] = float(c.get("bm25_score", c.get("score", 0.0)))
             c["rerank_source"] = "noop-embed-error"
         return candidates[:top_k]
 
@@ -240,7 +240,7 @@ def rerank(query, candidates, top_k=5, allow_remote=False):
                 emb = embed_one(url, DEFAULT_MODEL, text)
             except Exception as e:
                 log(f"embed failed for {c.get('chunk_id')}: {e}")
-                c["rerank_score"] = float(c.get("score", 0.0))
+                c["rerank_score"] = float(c.get("bm25_score", c.get("score", 0.0)))
                 c["rerank_source"] = "embed-error"
                 continue
             cache[cache_key] = emb
