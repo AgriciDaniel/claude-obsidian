@@ -7,27 +7,33 @@ page, generates a 1-2 sentence prefix situating the chunk in its source. The
 prefixed text is what gets BM25-indexed and embedded, materially improving
 retrieval accuracy (Anthropic measured 35-49% failure reduction).
 
-Three-tier prefix generation (chosen per-run automatically):
-  1. If ANTHROPIC_API_KEY is set      → direct Anthropic API call (Haiku 4.5)
-                                         with prompt caching on the page body
-                                         (only when the body clears the ~16 KB
-                                         Haiku 4.5 cache floor; see
-                                         cache_control_for()).
-                                         ~$12 / 1000 docs per Anthropic figures.
-                                         REQUIRES --allow-egress (sends bodies off-machine).
-  2. Elif `claude` binary on PATH     → `claude -p` subprocess (uses CC subscription;
-                                         no API key needed; slower per call).
-                                         REQUIRES --allow-egress (subprocess egresses).
-  3. Else (default)                   → synthetic prefix from page frontmatter +
-                                         first paragraph (zero-cost floor; loses
-                                         most of the contextual benefit but BM25
-                                         and vector channels still work).
+Four-tier prefix generation (chosen per-run automatically, highest to lowest quality):
+  1. If --allow-egress + ANTHROPIC_API_KEY → direct Anthropic API call (Haiku 4.5)
+                                              with prompt caching on the page body
+                                              (only when the body clears the ~16 KB
+                                              Haiku 4.5 cache floor; see
+                                              cache_control_for()).
+                                              ~$12 / 1000 docs per Anthropic figures.
+  2. Elif --allow-egress + `claude` on PATH → `claude -p` subprocess (uses CC subscription;
+                                              no API key needed; slower per call).
+  2.5. Elif ollama reachable                → `/api/chat` call to local ollama (or remote
+                                              with --allow-remote-ollama). Default-on
+                                              for local; on-machine LLM-quality prefixes
+                                              with zero egress. Model defaults to
+                                              qwen2.5:7b-instruct; override with
+                                              --ollama-model.
+  3. Else                                   → synthetic prefix from page frontmatter +
+                                              first paragraph (zero-cost floor; loses
+                                              most of the contextual benefit but BM25
+                                              and vector channels still work).
 
-Data-egress posture (v1.7.1+):
-  Tiers 1 and 2 send wiki page bodies off-machine. Both are GATED behind
-  --allow-egress (default off). Without the flag, pick_prefix_tier() always
-  returns "synthetic" regardless of env vars or claude binary presence.
-  Mirror of scripts/tiling-check.py:351 --allow-remote-ollama precedent.
+Data-egress posture (v1.7.1+; tier 2.5 added v1.9.3+):
+  Tiers 1 and 2 send wiki page bodies off-machine to Anthropic. Both are GATED
+  behind --allow-egress (default off).
+  Tier 2.5 sends bodies to ollama. Local ollama is default-on (no flag); non-
+  localhost OLLAMA_URL requires --allow-remote-ollama, mirroring
+  scripts/tiling-check.py:351 precedent. Pass --no-ollama to skip the tier
+  entirely. Tier 3 (synthetic) is the always-available floor.
 
 Chunk schema written to .vault-meta/chunks/<page-address>/chunk-NNN.json:
 {
@@ -88,6 +94,13 @@ ANTHROPIC_MODEL = "claude-haiku-4-5-20251001"
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_TIMEOUT_SEC = 30
 CLAUDE_CLI_TIMEOUT_SEC = 60
+
+# Tier 2.5: local ollama. Default-on when reachable; remote ollama is gated by
+# --allow-remote-ollama (mirrors tiling-check.py:351). Model is overrideable via
+# --ollama-model so the user can match what's pulled on their machine.
+OLLAMA_DEFAULT_MODEL = "qwen2.5:7b-instruct"
+OLLAMA_TIMEOUT_SEC = 60
+OLLAMA_REACHABILITY_TIMEOUT_SEC = 3
 
 # Anthropic prompt caching ignores any cached prefix below the model's minimum
 # cacheable size — 4,096 tokens for Haiku 4.5 (verified against the prompt-caching
@@ -267,6 +280,71 @@ def anthropic_api_prefix(api_key, page_title, page_body, chunk_text):
     return None
 
 
+def ollama_url():
+    """Resolve OLLAMA_URL with default localhost. No trailing slash."""
+    return os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
+
+
+def ollama_is_local(url):
+    """True when OLLAMA_URL points at a loopback address.
+    Matches the allow-list ollama itself recommends and that setup-retrieve.sh
+    line 103 already uses.
+    """
+    return url.startswith(("http://127.0.0.1:",
+                            "http://localhost:",
+                            "http://[::1]:"))
+
+
+def ollama_reachable():
+    """Probe OLLAMA_URL/api/tags. Cheap, fails fast, used once per run."""
+    try:
+        with urllib.request.urlopen(
+            ollama_url() + "/api/tags",
+            timeout=OLLAMA_REACHABILITY_TIMEOUT_SEC,
+        ) as resp:
+            return resp.status == 200
+    except (urllib.error.URLError, OSError):
+        return False
+
+
+def ollama_prefix(model, page_title, page_body, chunk_text):
+    """Tier-2.5 prefix: local (or remote-with-consent) ollama via /api/chat.
+
+    Mirrors claude_cli_prefix's prompt shape; same 4 KB body truncation cap so
+    small models don't blow context. temperature=0.2 keeps outputs stable for
+    cache hits on rebuilds; num_predict=100 caps the 35-word sentence at a
+    comfortable token margin.
+    """
+    prompt = (
+        f"Wiki page \"{page_title}\":\n\n"
+        f"---\n{page_body[:4000]}\n---\n\n"
+        f"Chunk:\n<chunk>\n{chunk_text}\n</chunk>\n\n"
+        "Write one short sentence (under 35 words) situating this chunk within "
+        "the page's scope. Output only the sentence — no preamble, no quotes."
+    )
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "stream": False,
+        "options": {"temperature": 0.2, "num_predict": 100},
+    }
+    req = urllib.request.Request(
+        ollama_url() + "/api/chat",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=OLLAMA_TIMEOUT_SEC) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            content = (data.get("message") or {}).get("content", "")
+            if content:
+                return content.strip().splitlines()[0]
+    except (urllib.error.URLError, json.JSONDecodeError, KeyError) as e:
+        log(f"  ollama call failed: {e}")
+    return None
+
+
 def claude_cli_prefix(page_title, page_body, chunk_text):
     """Tier-2 prefix: `claude -p` subprocess (uses CC subscription, no API key)."""
     prompt = (
@@ -292,27 +370,39 @@ def claude_cli_prefix(page_title, page_body, chunk_text):
     return None
 
 
-def pick_prefix_tier(force_synthetic, allow_egress=False):
+def pick_prefix_tier(force_synthetic, allow_egress=False,
+                     allow_remote_ollama=False, no_ollama=False):
     """Choose the contextual-prefix generation tier.
 
-    Without allow_egress=True, ALWAYS returns "synthetic" regardless of
-    env vars or claude binary availability. This is the v1.7.1 data-egress
-    guard: tiers 1 (Anthropic API) and 2 (claude CLI subprocess) both send
-    wiki page bodies off-machine, so they require explicit user consent via
-    the --allow-egress flag at the CLI layer.
+    Order of preference (highest to lowest quality):
+      1. anthropic-api  — gated by --allow-egress + ANTHROPIC_API_KEY
+      2. claude-cli     — gated by --allow-egress + `claude` on PATH
+      3. ollama         — default-on if reachable AND local (or remote with
+                          --allow-remote-ollama). On-machine LLM tier; no
+                          page bodies leave the host without consent.
+      4. synthetic      — zero-cost floor; template-based, no LLM.
 
-    Mirrors scripts/tiling-check.py:351 --allow-remote-ollama default-deny.
+    Egress posture (v1.7.1):
+      --allow-egress alone gates tiers 1+2 (Anthropic). Tier 3 (ollama) has
+      its own gate: --allow-remote-ollama for non-localhost OLLAMA_URL,
+      mirroring scripts/tiling-check.py:351. Local ollama needs no flag.
     """
-    if force_synthetic or not allow_egress:
+    if force_synthetic:
         return "synthetic"
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        return "anthropic-api"
-    if shutil.which("claude"):
-        return "claude-cli"
+    if allow_egress:
+        if os.environ.get("ANTHROPIC_API_KEY"):
+            return "anthropic-api"
+        if shutil.which("claude"):
+            return "claude-cli"
+    if not no_ollama:
+        url = ollama_url()
+        if ollama_is_local(url) or allow_remote_ollama:
+            if ollama_reachable():
+                return "ollama"
     return "synthetic"
 
 
-def generate_prefix(tier, fm, body, chunk_text):
+def generate_prefix(tier, fm, body, chunk_text, ollama_model=OLLAMA_DEFAULT_MODEL):
     """Asymmetric fallback by design:
       - tier="anthropic-api" → on failure, try claude-cli (subprocess,
         free) before synthetic. The API is the user's stated preference,
@@ -320,6 +410,10 @@ def generate_prefix(tier, fm, body, chunk_text):
       - tier="claude-cli"    → on failure, go straight to synthetic. The
         user has either no API key or has not opted into one; climbing
         back to the API would silently spend money they did not authorize.
+      - tier="ollama"        → on failure, go straight to synthetic. Do not
+        climb to claude-cli/anthropic-api: ollama was picked precisely
+        because no-egress was the user's posture; auto-egressing on local
+        LLM failure would violate that.
       - tier="synthetic"     → always synthetic.
     """
     title = fm.get("title") or "(untitled)"
@@ -339,11 +433,17 @@ def generate_prefix(tier, fm, body, chunk_text):
         if result:
             return result, "claude-cli"
         return synthetic_prefix(fm, body, chunk_text), "synthetic"
+    if tier == "ollama":
+        result = ollama_prefix(ollama_model, title, body, chunk_text)
+        if result:
+            return result, "ollama"
+        return synthetic_prefix(fm, body, chunk_text), "synthetic"
     return synthetic_prefix(fm, body, chunk_text), "synthetic"
 
 
 def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
-                 allow_egress=False, progress_label=""):
+                 allow_egress=False, allow_remote_ollama=False, no_ollama=False,
+                 ollama_model=OLLAMA_DEFAULT_MODEL, progress_label=""):
     body = read_page(page_path)
     fm, content = parse_frontmatter(body)
     address = fm.get("address") or derive_synthetic_address(page_path)
@@ -358,7 +458,9 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
             raise SystemExit(EXIT_CHUNK_DIR)
 
     chunks = chunk_body(content)
-    tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress)
+    tier = pick_prefix_tier(force_synthetic, allow_egress=allow_egress,
+                             allow_remote_ollama=allow_remote_ollama,
+                             no_ollama=no_ollama)
 
     progress = (progress_label + " ") if progress_label else ""
     if not chunks:
@@ -395,7 +497,8 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
             log(f"   would write {chunk_path.name} ({len(raw)} chars)")
             continue
 
-        prefix, prefix_source = generate_prefix(tier, fm, content, raw)
+        prefix, prefix_source = generate_prefix(tier, fm, content, raw,
+                                                 ollama_model=ollama_model)
         contextualized = f"{prefix}\n\n{raw}" if prefix else raw
 
         record = {
@@ -447,9 +550,21 @@ def main():
     parser.add_argument("--allow-egress", action="store_true",
                         help="Allow tier-1 (Anthropic API) or tier-2 (claude CLI "
                              "subprocess) prefix generation. Without this flag, page "
-                             "bodies stay on-machine and only the tier-3 synthetic "
-                             "prefix is used. Mirror of tiling-check.py's "
+                             "bodies stay on-machine; the local ollama tier (2.5) or "
+                             "synthetic tier (3) is used. Mirror of tiling-check.py's "
                              "--allow-remote-ollama guard.")
+    parser.add_argument("--allow-remote-ollama", action="store_true",
+                        help="Permit the tier-2.5 ollama call when OLLAMA_URL points "
+                             "off-localhost (e.g., a Tailscale-reachable LLM host). "
+                             "Default-deny mirrors tiling-check.py:351. Local ollama "
+                             "needs no flag.")
+    parser.add_argument("--no-ollama", action="store_true",
+                        help="Skip the tier-2.5 ollama check even if reachable. Forces "
+                             "fall-through to synthetic when egress is also off.")
+    parser.add_argument("--ollama-model", default=OLLAMA_DEFAULT_MODEL,
+                        help=f"Ollama model tag for tier-2.5 prefix generation. "
+                             f"Default: {OLLAMA_DEFAULT_MODEL}. Override to match "
+                             f"what's pulled locally (e.g., qwen2.5-coder:14b).")
     parser.add_argument("--rebuild", action="store_true",
                         help="Re-process chunks even if body_hash matches.")
     parser.add_argument("--peek", action="store_true",
@@ -492,6 +607,9 @@ def main():
             rebuild=args.rebuild,
             peek=args.peek,
             allow_egress=args.allow_egress,
+            allow_remote_ollama=args.allow_remote_ollama,
+            no_ollama=args.no_ollama,
+            ollama_model=args.ollama_model,
             progress_label=f"[{i}/{total}]",
         )
         total_written += len(result["written"])
