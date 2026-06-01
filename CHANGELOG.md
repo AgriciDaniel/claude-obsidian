@@ -2,6 +2,12 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- Removed unsupported prompt-type `SessionStart` and `PostCompact` plugin hooks from `hooks/hooks.json`. Claude Code v2.1.140+ rejects prompt hooks on these lifecycle events, creating a validation banner on every configured vault session. The command-type `SessionStart` hot-cache hook remains the canonical context restore path.
+
 ## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
 
 Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.
