@@ -8,6 +8,7 @@ Official form: <https://openai.com/form/codex-for-oss/>
 
 - GitHub username: `AgriciDaniel` (confirm before submission)
 - Repository URL: <https://github.com/AgriciDaniel/claude-obsidian>
+- Public project name: Compound Vault
 - License: MIT
 - Visibility: public
 - Current public signals checked on 2026-06-03: 5,977 stars, 689 forks, 49 open issues
@@ -27,7 +28,7 @@ If submitted by a collaborator without repository ownership, use `Core maintaine
 Form limit: 500 characters.
 
 ```text
-claude-obsidian is a public MIT project with 5.9k+ stars and 680+ forks. It helps OSS users maintain Codex-assisted Obsidian knowledge bases with skills for wiki setup, ingestion, query, lint, session memory, and optional DragonScale maintenance scripts. The project has active issues, releases, and tests.
+Compound Vault is a public MIT project with 5.9k+ stars and 680+ forks. It helps OSS users maintain Codex-assisted Markdown knowledge bases: source ingestion, linked wiki pages, cited local query, lint, durable session context, and optional DragonScale maintenance scripts.
 ```
 
 ## Interest
@@ -44,7 +45,7 @@ API credits for my project
 Form limit: 500 characters.
 
 ```text
-We will use Codex and API credits for maintainer workflows: reviewing pull requests, triaging issues, improving docs, testing wiki-ingest and wiki-lint behavior, running release checks, and maintaining DragonScale scripts. Credits will support public OSS maintenance, not private vault content.
+We will use Codex and API credits for maintainer workflows: reviewing pull requests, triaging issues, improving docs, testing wiki-ingest and wiki-lint behavior, running release checks, and maintaining DragonScale scripts. Credits will support public OSS mechanisms, not private vault content.
 ```
 
 ## Anything Else We Should Know?
@@ -52,7 +53,7 @@ We will use Codex and API credits for maintainer workflows: reviewing pull reque
 Form limit: 500 characters.
 
 ```text
-The public repo intentionally ships only mechanisms, templates, seed examples, and tests. Private vault contents are excluded. Codex is a strong fit because the project itself is an agent-maintained knowledge system, and many maintainer tasks involve code review, docs repair, regression checks, and safe automation.
+Compound Vault intentionally ships only mechanisms, templates, seed examples, and tests. Private vault contents are excluded. Codex is a strong fit because the project itself is an agent-maintained knowledge system: its core work is code review, docs repair, regression checks, and safe automation.
 ```
 
 ## Submission Guardrails

@@ -1,8 +1,8 @@
 # Privacy Boundary
 
-`claude-obsidian` is published as a mechanism, not as a copy of a private vault.
+Compound Vault is published as a mechanism, not as a copy of a private vault.
 
-The public project should help maintainers and users reproduce the workflow without receiving anyone's personal records, source imports, or generated outputs.
+The public project should help maintainers and users reproduce the compounding-wiki workflow without receiving anyone's personal records, source imports, or generated outputs.
 
 ## Public Package
 

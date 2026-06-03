@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: claude-obsidian
+title: Compound Vault
 message: >-
   If you use this software, please cite it using the metadata from this file.
 type: software
@@ -12,7 +12,7 @@ version: 1.9.2
 date-released: '2026-05-28'
 keywords:
   - obsidian
-  - claude-code
+  - codex
   - knowledge-management
   - second-brain
   - pkm

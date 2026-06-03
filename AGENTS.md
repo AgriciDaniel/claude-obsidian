@@ -1,12 +1,12 @@
-# claude-obsidian: Agent Instructions
+# Compound Vault: Agent Instructions
 
-This repository is an Obsidian vault scaffold and a Codex skill package for building persistent, compounding Markdown knowledge bases.
+This repository is the public Compound Vault mechanism: an Obsidian-compatible vault scaffold and Codex skill package for building persistent, compounding Markdown knowledge bases.
 
 The public repo contains the reusable mechanism only: skills, commands, templates, setup scripts, tests, and seed examples. Do not add private vault contents, personal logs, client files, source imports, finance data, or generated user outputs to this repository.
 
 ## Supported Agent Surface
 
-The polished public surface is Codex + Obsidian. Keep other agent integrations out of the public pitch unless they are deliberately reintroduced, documented, and tested.
+The polished public surface is Compound Vault for Codex + Obsidian. Keep other agent integrations out of the public pitch unless they are deliberately reintroduced, documented, and tested.
 
 ## Skills Discovery
 
@@ -15,8 +15,10 @@ All skills live in `skills/<name>/SKILL.md`.
 For Codex:
 
 ```bash
-ln -s "$(pwd)/skills" ~/.codex/skills/claude-obsidian
+ln -s "$(pwd)/skills" ~/.codex/skills/compound-vault
 ```
+
+Existing local installs may still use the old `claude-obsidian` symlink name for compatibility.
 
 ## Available Skills
 

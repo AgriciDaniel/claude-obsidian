@@ -8,7 +8,7 @@
 
 ## Why "Compound Vault"
 
-The v1.7 line introduces a system name — **Compound Vault** — that names the architecture, distinct from the plugin name (`claude-obsidian`). The plugin name stays for SEO continuity and the existing 4.1k+ stars; the system name covers the 13 cohering skills that make the architecture work.
+The v1.7 line introduces the system name **Compound Vault**. It names the architecture instead of the historical repository slug (`claude-obsidian`): 13 cohering skills, an Obsidian-compatible Markdown substrate, retrieval helpers, lint workflows, and optional DragonScale mechanics.
 
 Three-clause positioning:
 
@@ -39,14 +39,14 @@ v1.7 ships in four workstreams (§3.1 substrate / §3.2 transport / §3.3 retrie
 
 ## §3.1 Substrate dependency on kepano/obsidian-skills
 
-**What it is:** Three claude-obsidian skills (`obsidian-markdown`, `obsidian-bases`, `canvas`) overlap with skills in `kepano/obsidian-skills` (by Steph Ango, Obsidian's CEO). In v1.6 we soft-deferred ("if kepano is installed, prefer it"). In v1.7 we hard-prefer: kepano is canonical; our copies are the floor.
+**What it is:** Three Compound Vault fallback skills (`obsidian-markdown`, `obsidian-bases`, `canvas`) overlap with skills in `kepano/obsidian-skills` (by Steph Ango, Obsidian's CEO). In v1.6 we soft-deferred ("if kepano is installed, prefer it"). In v1.7 we hard-prefer: kepano is canonical; our copies are the floor.
 
 **Why:** Continuing to ship parallel implementations of platform-owner primitives is a structural losing fight. The kepano marketplace has 30.5k+ stars; we have 4.1k+. Adopting kepano as substrate signals alignment and frees us to invest in the *workflow* layer (ingest, query, lint, autoresearch, save, retrieve) that no one else owns.
 
 **What changed in the codebase:**
 - `skills/obsidian-markdown/SKILL.md:11` — preface rewrites to "This skill is a self-contained fallback. Prefer `kepano/obsidian-skills`."
 - `skills/obsidian-bases/SKILL.md:11` — same pattern.
-- `skills/canvas/SKILL.md:14` — same pattern (json-canvas spec defers to kepano; wiki-scoped workflows stay claude-obsidian's).
+- `skills/canvas/SKILL.md:14` — same pattern (json-canvas spec defers to kepano; wiki-scoped workflows stay Compound Vault's).
 - `skills/defuddle/SKILL.md:11` — documented as canonical (kepano does not ship a defuddle skill).
 - `.claude-plugin/marketplace.json` — `recommendedCompanions` array names `kepano/obsidian-skills` with install hint, rationale, and repo link.
 
