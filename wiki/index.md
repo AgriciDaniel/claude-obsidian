@@ -33,6 +33,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 - [[InkWeave Product Overview]] — AI snippet-to-book platform; UK-first, paid tiers, session remote control (status: planning)
 - [[khutba.io Product Overview]] — Live auto-translation display system for masjids; Birmingham launch (status: planning)
+- [[OpenFlowKit Product Overview]] — Privacy-first browser voice dictation; 6 writing modes, Speak-to-Share, local-first. Deployed: openflowkit.vercel.app (status: current)
 
 ---
 
