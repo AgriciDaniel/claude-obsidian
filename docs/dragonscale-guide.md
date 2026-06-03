@@ -1,6 +1,6 @@
 # DragonScale Memory Guide
 
-DragonScale Memory is an optional extension for `claude-obsidian`. It adds conservative helpers for log rollups, stable page addresses, duplicate-page linting, and frontier topic suggestion. Start with [docs/install-guide.md](./install-guide.md). For the design spec and rationale, read [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md).
+DragonScale Memory is an optional extension for Compound Vault. It adds conservative helpers for log rollups, stable page addresses, duplicate-page linting, and frontier topic suggestion. Start with [docs/install-guide.md](./install-guide.md). For the design spec and rationale, read [wiki/concepts/DragonScale Memory.md](../wiki/concepts/DragonScale%20Memory.md).
 
 This page stays close to shipped behavior in `v1.6.0`. It explains what setup creates, what each mechanism actually does, what it needs, and how to turn it off safely without uninstalling the repo.
 
@@ -468,7 +468,7 @@ Note that `.vault-meta/` is a shared gate for Mechanisms 2, 3, and 4. Do not rem
 
 DragonScale assumes a single writer for the address-assignment path. The allocator is flock-guarded, which protects the counter from simple races. It does not turn the whole wiki into a safe multi-writer system.
 
-The ingest skill is explicit here. Do not run parallel ingests from multiple Claude sessions or sub-agents that assign addresses.
+The ingest skill is explicit here. Do not run parallel ingests from multiple agent sessions or sub-agents that assign addresses.
 
 The safe operating policy is:
 

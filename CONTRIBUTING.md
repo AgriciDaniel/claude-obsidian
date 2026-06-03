@@ -1,6 +1,6 @@
-# Contributing to claude-obsidian
+# Contributing to Compound Vault
 
-Thanks for your interest in improving this plugin. claude-obsidian is a small, focused project; contributions that match its philosophy land quickly.
+Thanks for your interest in improving Compound Vault. This is a small, focused project; contributions that match its philosophy land quickly.
 
 ## Philosophy
 
@@ -10,7 +10,7 @@ Three constraints shape every change:
 2. **Smallest unit that works.** No speculative abstraction. Complexity is earned, not anticipated. Three real callers minimum before an abstraction lands.
 3. **Failure is the spec.** Every new failure mode needs explicit handling. Untrusted input, network calls, and state changes need an explicit blast-radius answer.
 
-The full kernel lives in [`/best-practices`](https://github.com/AgriciDaniel/best-practices) (composable Claude Code skill). The pre-commit verifier agent at [`agents/verifier.md`](agents/verifier.md) enforces it for non-trivial changes.
+The full kernel lives in [`/best-practices`](https://github.com/AgriciDaniel/best-practices) as a composable agent skill. The pre-commit verifier agent at [`agents/verifier.md`](agents/verifier.md) enforces it for non-trivial changes.
 
 ## Workflow
 
@@ -32,13 +32,13 @@ cd claude-obsidian
 git checkout -b your-feature-name
 ```
 
-> ℹ️ The public repo (`AgriciDaniel/claude-obsidian`) is the canonical source of truth. Raise all PRs against it. AI Marketing Hub Pro members working from the early-access mirror (`AI-Marketing-Hub/claude-obsidian`) should target the public canonical too, so contributions land in one place.
+> The public repo (`AgriciDaniel/claude-obsidian`) is the canonical source of truth for Compound Vault. Raise all PRs against it.
 
 Branch names: `fix/...`, `feat/...`, `docs/...`, `refactor/...`.
 
 ### 3. Set up locally
 
-The plugin runs anywhere Claude Code runs. For development:
+The skill package runs in Codex or a compatible local agent session. For development:
 
 ```bash
 # Run the hermetic test suite — required before submitting a PR
@@ -77,7 +77,7 @@ For multi-file changes:
 
 ```bash
 # After git add, before git commit, dispatch the verifier agent
-# (Claude Code: invoke agents/verifier.md on the staged diff)
+# Invoke agents/verifier.md on the staged diff.
 ```
 
 The verifier applies the six-cut + agent kernel to your staged diff and returns findings in BLOCKER / HIGH / MEDIUM / LOW tiers. Address BLOCKER + HIGH before committing.

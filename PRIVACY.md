@@ -2,15 +2,15 @@
 
 ## Data Handling
 
-claude-obsidian is a Claude Code plugin and Obsidian vault that runs entirely on
-your local machine. Your vault is plain Markdown on your own filesystem. The core
-skill does not collect, transmit, or store any personal data, and there is no
-telemetry, analytics, or usage tracking.
+Compound Vault is a Codex + Obsidian mechanism that runs on your local machine.
+Your vault is plain Markdown on your own filesystem. The core skills do not
+collect, transmit, or store any personal data, and there is no telemetry,
+analytics, or usage tracking.
 
 ## What Stays Local
 
 - Ingesting sources, answering queries, linting, and updating the hot cache all
-  run inside your local Claude Code session.
+  run inside your local Codex or compatible agent session.
 - All wiki content (`wiki/`) is plain Markdown saved to your local filesystem.
 - The `/wiki-retrieve` BM25 index and optional ollama-based reranking run fully
   locally. Without an explicit opt-in flag, retrieval never leaves your machine.
