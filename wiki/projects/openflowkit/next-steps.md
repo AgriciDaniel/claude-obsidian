@@ -28,15 +28,17 @@ sources: []
 - Platform: Vercel (auto-deploy on push to main)
 - Stack: Vite + React + TypeScript, Web Speech API
 - Status: deployed, core flow functional
+- Terminal bridge: shipped (HTTP server on port 7373 + WebSocket component, clipboard + keystroke injection)
 
 ## Implementation Priorities
 
 ### P0 — Core Functionality (must work before any marketing)
 
-- [ ] All 6 writing modes implemented and tested across browsers
-- [ ] Web Speech API fallback handling (browsers without support)
-- [ ] Speak-to-Share URL encoding and decoding working end-to-end
-- [ ] Clipboard copy working across browser/OS combinations
+- [x] All 6 writing modes implemented and tested across browsers
+- [x] Web Speech API fallback handling (browsers without support)
+- [x] Speak-to-Share URL encoding and decoding working end-to-end
+- [x] Clipboard copy working across browser/OS combinations
+- [x] Terminal bridge (HTTP + WebSocket, clipboard/keystroke injection)
 - [ ] Free tier mode gate (3 modes, prompt to upgrade for others)
 
 ### P1 — Auth and Payments (required before Pro launch)

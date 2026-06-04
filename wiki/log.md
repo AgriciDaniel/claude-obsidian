@@ -25,6 +25,19 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-06-04] session | Multi-repo sync — JobFilter merge, OpenFlowKit terminal bridge, BuildScout research, Obsidian vault update
+- Type: sync + implementation + research
+- Locations (new): `wiki/projects/jobfilter/research/BuildScout Competitive Analysis.md`
+- Locations (modified): `wiki/projects/openflowkit/next-steps.md`, `wiki/log.md`
+- Shipped:
+  - **JobFilterV1**: Merged `codex/lead-audit-migration` branch into `main` (resolved BUILD_PROMPTS.md + Supabase migration conflicts), pushed to origin. Branch contained lead audit engine, daily digest automation, Obsidian vault agent docs, and 6-month revenue prompts.
+  - **OpenFlowKit**: Implemented terminal bridge — `bridge/server.ts` (local HTTP server on port 7373, clipboard + keystroke injection across Windows/macOS/Linux), `src/hooks/useTerminalBridge.ts` (React hook with health polling), integrated into `DictationLab.tsx` with "Send to terminal" button and connection status. Merged with remote work that included `TerminalBridge.tsx` (WebSocket), `VoiceCapture.tsx`, capture pipeline, and `docs/REPORT_2026-06-03.md`. Pushed to origin.
+  - **BuildScout research**: Deep audit of buildscout.co.uk (pricing £199-£499/mo, FMB partnership, physical-mail-only model, broken QR attribution). Compiled competitive analysis documenting 10 weaknesses and 5 moats JobFilter should build.
+  - **Zawiyah Growth Hub**: Verified clean state — no uncommitted changes. Latest work: Gold Reports suite, Notion audit, interfaith initiative.
+- Open:
+  - JobFilter `codex/fix-stripe-webhook-status` branch was identified as destructive (deletes app code) — skipped.
+  - OpenFlowKit Phase 2 (Tauri/Electron desktop wrapper) and Phase 3 (cloud team features) remain planned.
+
 ## [2026-04-29] session | JobFilter build session (intake weapon + CI fix + wiki canon)
 - Type: build session
 - Locations (new): `wiki/meta/2026-04-29-jobfilter-build-session.md`, `wiki/concepts/JobFilter Status.md`, 6 product concept pages, 1 feedback memory
