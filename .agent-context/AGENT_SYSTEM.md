@@ -7,7 +7,7 @@ Read it before starting work. Write back to it when done.
 ## On Session Start — MANDATORY
 1. Pull latest vault:
    ```
-   git -C C:\Users\manaz\claude-obsidian pull origin main
+   git -C C:\Users\manaz\claude-obsidian pull fork main
    ```
 2. Read relevant project context:
    - InkWeave    → wiki/projects/inkweave/
@@ -33,7 +33,7 @@ status: {completed|blocked|in-progress}
 ```
 git -C C:\Users\manaz\claude-obsidian add -A
 git -C C:\Users\manaz\claude-obsidian commit -m "session: {project} {YYYY-MM-DD}"
-git -C C:\Users\manaz\claude-obsidian push origin main
+git -C C:\Users\manaz\claude-obsidian push fork main
 ```
 
 ## Project Paths
