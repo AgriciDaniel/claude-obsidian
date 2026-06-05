@@ -139,6 +139,93 @@ def test_rerank_truncates_to_top_k():
         assert_eq("rerank truncates to top_k", 3, len(out))
 
 
+# ─── nomic task prefixes (search_query:/search_document:) ────────────────────
+def test_with_task_prefix_query():
+    """nomic models must get the 'search_query:' instruction prefix."""
+    out = rerank.with_task_prefix("how does locking work", "query", model="nomic-embed-text")
+    assert_eq("query prefix applied", "search_query: how does locking work", out)
+
+
+def test_with_task_prefix_document():
+    """nomic models must get the 'search_document:' instruction prefix."""
+    out = rerank.with_task_prefix("the lock is age-based", "document", model="nomic-embed-text")
+    assert_eq("document prefix applied", "search_document: the lock is age-based", out)
+
+
+def test_with_task_prefix_noop_for_non_nomic():
+    """Non-nomic embedders use a different convention — leave text untouched."""
+    out = rerank.with_task_prefix("some text", "query", model="mxbai-embed-large")
+    assert_eq("non-nomic prefix is a no-op", "some text", out)
+
+
+def test_with_task_prefix_rejects_bad_role():
+    try:
+        rerank.with_task_prefix("x", "passage", model="nomic-embed-text")
+    except ValueError:
+        print("OK   with_task_prefix rejects unknown role")
+        return
+    raise Fail("FAIL with_task_prefix should reject unknown role")
+
+
+def test_rerank_sends_task_prefixes_to_embedder():
+    """End-to-end through rerank(): the query is embedded with 'search_query:' and
+    the chunk body with 'search_document:'. We capture every text sent to embed_one."""
+    sent = []
+
+    def fake_embed_one(url, model, text):
+        sent.append(text)
+        # Return a deterministic non-zero vector so cosine() is well-defined.
+        return [float(len(text) % 7) + 1.0, 2.0, 3.0]
+
+    chunk = {
+        "body_hash": "sha256:deadbeef",
+        "contextualized_text": "advisory locks are age-based",
+        "raw_text": "advisory locks are age-based",
+    }
+    with unittest.mock.patch.object(rerank, "ollama_alive", return_value=(True, ["nomic-embed-text"])), \
+         unittest.mock.patch.object(rerank, "ollama_url", return_value="http://127.0.0.1:11434"), \
+         unittest.mock.patch.object(rerank, "embed_one", side_effect=fake_embed_one), \
+         unittest.mock.patch.object(rerank, "load_chunk", return_value=chunk), \
+         unittest.mock.patch.object(rerank, "load_cache", return_value={}), \
+         unittest.mock.patch.object(rerank, "save_cache"):
+        candidates = [{"chunk_id": "c-001:0", "score": 5.0, "path": "x.json"}]
+        rerank.rerank("how does locking work", candidates, top_k=1)
+
+    assert_true("query embedded with search_query: prefix",
+                "search_query: how does locking work" in sent, hint=f"sent={sent}")
+    assert_true("document embedded with search_document: prefix",
+                "search_document: advisory locks are age-based" in sent, hint=f"sent={sent}")
+    assert_true("no un-prefixed text leaked to embedder",
+                all(t.startswith("search_query: ") or t.startswith("search_document: ") for t in sent),
+                hint=f"sent={sent}")
+
+
+def test_rerank_cache_key_includes_scheme():
+    """Old prefix-less cache entries (keyed without EMBED_SCHEME) must be ignored,
+    so we never mix prefixed and prefix-less vectors in the same cosine space."""
+    body_hash = "sha256:deadbeef"
+    stale_key = f"{rerank.DEFAULT_MODEL}:{body_hash}"  # pre-fix key shape
+    poisoned_cache = {stale_key: [99.0, 99.0, 99.0]}   # would be reused if key unchanged
+    embedded = []
+
+    def fake_embed_one(url, model, text):
+        embedded.append(text)
+        return [1.0, 2.0, 3.0]
+
+    chunk = {"body_hash": body_hash, "contextualized_text": "x", "raw_text": "x"}
+    with unittest.mock.patch.object(rerank, "ollama_alive", return_value=(True, ["nomic-embed-text"])), \
+         unittest.mock.patch.object(rerank, "ollama_url", return_value="http://127.0.0.1:11434"), \
+         unittest.mock.patch.object(rerank, "embed_one", side_effect=fake_embed_one), \
+         unittest.mock.patch.object(rerank, "load_chunk", return_value=chunk), \
+         unittest.mock.patch.object(rerank, "load_cache", return_value=poisoned_cache), \
+         unittest.mock.patch.object(rerank, "save_cache"):
+        candidates = [{"chunk_id": "c-001:0", "score": 5.0, "path": "x.json"}]
+        rerank.rerank("q", candidates, top_k=1)
+
+    assert_true("stale prefix-less cache entry is NOT reused (doc re-embedded)",
+                any(t.startswith("search_document: ") for t in embedded), hint=f"embedded={embedded}")
+
+
 # ─── retrieve.py CLI: exit 10 when not provisioned ────────────────────────────
 def test_retrieve_exits_10_without_index():
     """End-to-end CLI test: with no .vault-meta/bm25/index.json, retrieve.py must exit 10."""
@@ -332,6 +419,12 @@ def main():
     test_rerank_noop_when_ollama_unreachable()
     test_rerank_noop_when_model_missing()
     test_rerank_truncates_to_top_k()
+    test_with_task_prefix_query()
+    test_with_task_prefix_document()
+    test_with_task_prefix_noop_for_non_nomic()
+    test_with_task_prefix_rejects_bad_role()
+    test_rerank_sends_task_prefixes_to_embedder()
+    test_rerank_cache_key_includes_scheme()
     test_retrieve_exits_10_without_index()
     test_end_to_end_with_synthetic_chunks()
     test_explain_flag_adds_diagnostics_block()
