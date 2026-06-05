@@ -6,9 +6,12 @@ upstream stage) and reorders them using semantic similarity.
 
 v1.7 strategy (in preference order, automatically chosen at runtime):
   1. If ollama is reachable AND nomic-embed-text is pulled
-       → embed the query, embed each candidate's contextualized_text,
-         rank by cosine. Caches per-chunk embeddings in
-         .vault-meta/embed-cache.json keyed by body_hash.
+       → embed the query (with the "search_query:" task prefix) and each
+         candidate's contextualized_text (with the "search_document:" prefix),
+         rank by cosine. The nomic task prefixes are required for correct
+         asymmetric retrieval; omitting them degrades ranking quality.
+         Caches per-chunk embeddings in .vault-meta/embed-cache.json keyed by
+         body_hash + EMBED_SCHEME (so a convention change invalidates old vectors).
   2. Otherwise
        → no-op rerank: return candidates in input order with a synthesized
          note. Caller (retrieve.py) still gets a useful result; downstream
@@ -65,6 +68,39 @@ DEFAULT_MODEL = "nomic-embed-text"
 OLLAMA_TIMEOUT_SEC = 3
 EMBED_TIMEOUT_SEC = 30
 MAX_RESPONSE_BYTES = 4 * 1024 * 1024
+
+# Nomic task prefixes. nomic-embed-text is trained with asymmetric task
+# instruction prefixes ("search_query:" for the query, "search_document:" for
+# the indexed text). Omitting them places query and document in a sub-optimal
+# region of the embedding space and measurably degrades retrieval quality — see
+# https://huggingface.co/nomic-ai/nomic-embed-text-v1.5#task-instruction-prefixes
+# We only apply them for nomic-* models; other embedding models (mxbai, bge, …)
+# either use different prefixes or none, so for those with_task_prefix() is a
+# no-op and the raw text is embedded as before.
+QUERY_TASK_PREFIX = "search_query: "
+DOC_TASK_PREFIX = "search_document: "
+
+# Bump when the embedding *input* convention changes (e.g. adding the task
+# prefixes above). It is part of the embed-cache key, so changing it transparently
+# invalidates vectors produced under the old convention instead of silently mixing
+# prefixed and prefix-less embeddings in the same cosine space.
+EMBED_SCHEME = "nomic-prefix-v1"
+
+
+def with_task_prefix(text, role, model=None):
+    """Prepend the nomic task-instruction prefix for `role` ('query'|'document').
+
+    No-op (returns text unchanged) for non-nomic models, so swapping DEFAULT_MODEL
+    to an embedder with a different convention stays correct.
+    """
+    model = model or DEFAULT_MODEL
+    if not model.lower().startswith("nomic"):
+        return text
+    if role == "query":
+        return QUERY_TASK_PREFIX + text
+    if role == "document":
+        return DOC_TASK_PREFIX + text
+    raise ValueError(f"role must be 'query' or 'document', got {role!r}")
 
 EXIT_OK = 0
 EXIT_USAGE = 2
@@ -217,7 +253,7 @@ def rerank(query, candidates, top_k=5, allow_remote=False):
     cache = load_cache()
     cache_dirty = False
     try:
-        q_emb = embed_one(url, DEFAULT_MODEL, query)
+        q_emb = embed_one(url, DEFAULT_MODEL, with_task_prefix(query, "query"))
     except Exception as e:
         log(f"query embed failed: {e}")
         for c in candidates:
@@ -232,12 +268,12 @@ def rerank(query, candidates, top_k=5, allow_remote=False):
             c["rerank_source"] = "missing-chunk"
             continue
         body_hash = chunk.get("body_hash", "")
-        cache_key = f"{DEFAULT_MODEL}:{body_hash}"
+        cache_key = f"{DEFAULT_MODEL}:{EMBED_SCHEME}:{body_hash}"
         emb = cache.get(cache_key)
         if not emb:
             text = chunk.get("contextualized_text") or chunk.get("raw_text", "")
             try:
-                emb = embed_one(url, DEFAULT_MODEL, text)
+                emb = embed_one(url, DEFAULT_MODEL, with_task_prefix(text, "document"))
             except Exception as e:
                 log(f"embed failed for {c.get('chunk_id')}: {e}")
                 c["rerank_score"] = float(c.get("score", 0.0))
