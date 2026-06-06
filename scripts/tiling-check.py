@@ -27,19 +27,6 @@ Usage:
 """
 
 import argparse
-import sys
-if sys.platform == "win32":
-    import msvcrt
-    def _flock_ex(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
-    def _flock_un(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
-else:
-    import fcntl
-    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX)
-    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 import hashlib
 import json
 import math
@@ -51,6 +38,22 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "nomic-embed-text"

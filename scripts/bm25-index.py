@@ -46,24 +46,27 @@ Exit codes:
 """
 
 import argparse
-import sys
-if sys.platform == "win32":
-    import msvcrt
-    def _flock_ex(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
-    def _flock_un(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
-else:
-    import fcntl
-    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 import json
 import math
 import os
 import re
 import sys
+
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path

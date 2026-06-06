@@ -42,23 +42,9 @@ Exit codes:
 """
 
 import argparse
-import sys
-if sys.platform == "win32":
-    import msvcrt
-    def _flock_ex(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
-    def _flock_un(fd):
-        os.lseek(fd, 0, os.SEEK_SET)
-        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
-else:
-    import fcntl
-    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 import json
 import math
 import os
-import shutil
 import sys
 import time
 import urllib.error
@@ -66,6 +52,25 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        try:
+            msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+        except OSError as e:
+            raise BlockingIOError(e.errno, e.strerror) from e
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 
 VAULT_ROOT = Path(__file__).resolve().parent.parent
 META_DIR = VAULT_ROOT / ".vault-meta"
