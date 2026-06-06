@@ -29,6 +29,8 @@ BM25 = ROOT / "scripts" / "bm25-index.py"
 
 def import_script(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load module spec for {path}")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -137,6 +139,23 @@ def test_rerank_truncates_to_top_k():
         candidates = [{"chunk_id": f"c-{i:03}:0", "score": float(i), "path": "x"} for i in range(10)]
         out = rerank.rerank("query", candidates, top_k=3)
         assert_eq("rerank truncates to top_k", 3, len(out))
+
+
+class FakeWindowsLockError(OSError):
+    def __init__(self, winerror, errno=13, strerror="permission denied"):
+        super().__init__(errno, strerror)
+        self.winerror = winerror
+
+
+def test_windows_lock_contention_detection():
+    assert_true("winerror 32 treated as contention",
+                rerank._is_windows_lock_contention(FakeWindowsLockError(32)))
+    assert_true("winerror 33 treated as contention",
+                rerank._is_windows_lock_contention(FakeWindowsLockError(33)))
+    assert_true("other winerror not treated as contention",
+                not rerank._is_windows_lock_contention(FakeWindowsLockError(5)))
+    assert_true("missing winerror not treated as contention",
+                not rerank._is_windows_lock_contention(OSError(13, "permission denied")))
 
 
 # ─── retrieve.py CLI: exit 10 when not provisioned ────────────────────────────
@@ -332,6 +351,7 @@ def main():
     test_rerank_noop_when_ollama_unreachable()
     test_rerank_noop_when_model_missing()
     test_rerank_truncates_to_top_k()
+    test_windows_lock_contention_detection()
     test_retrieve_exits_10_without_index()
     test_end_to_end_with_synthetic_chunks()
     test_explain_flag_adds_diagnostics_block()

@@ -53,6 +53,13 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+WINDOWS_LOCK_CONTENTION_WINERRORS = frozenset({32, 33})
+
+
+def _is_windows_lock_contention(exc):
+    return getattr(exc, "winerror", None) in WINDOWS_LOCK_CONTENTION_WINERRORS
+
+
 if sys.platform == "win32":
     import msvcrt
 
@@ -61,7 +68,9 @@ if sys.platform == "win32":
         try:
             msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
         except OSError as e:
-            raise BlockingIOError(e.errno, e.strerror) from e
+            if _is_windows_lock_contention(e):
+                raise BlockingIOError(e.errno, e.strerror) from e
+            raise
 
     def _flock_un(fd):
         os.lseek(fd, 0, os.SEEK_SET)
