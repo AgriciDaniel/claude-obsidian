@@ -27,7 +27,19 @@ Usage:
 """
 
 import argparse
-import fcntl
+import sys
+if sys.platform == "win32":
+    import msvcrt
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 import hashlib
 import json
 import math
@@ -164,7 +176,7 @@ def _lock_cache():
     META_DIR.mkdir(exist_ok=True)
     fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
+        _flock_ex(fd)
     except OSError:
         os.close(fd)
         raise
@@ -173,7 +185,7 @@ def _lock_cache():
 
 def _unlock_cache(fd: int) -> None:
     try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
+        _flock_un(fd)
     finally:
         os.close(fd)
 
