@@ -45,13 +45,32 @@ Full production DB layer overhaul. App was silently broken — all Supabase quer
 - 91ae26d feat: add Chrome Extension card to settings + fix settings API key names
 - 388fea1 fix: redirect to sign-in instead of 401 for protected routes
 
-## Remaining Todos
+## Additional Fixes (same session)
+
+- `fix: Clerk catch-all routes for sign-in/sign-up` — MFA + email verification flows
+- `fix: remove duplicate html/body/ClerkProvider from route group layouts`
+- `feat: NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding` (added to Vercel env)
+- `feat: NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/library` (added to Vercel env)
+
+## Smoke Test (final deploy recall-7tpvdvrka)
+
+| Route | Status |
+|-------|--------|
+| `/` | 200 ✓ |
+| `/pricing` | 200 ✓ |
+| `/sign-in` | 200 ✓ |
+| `/sign-up` | 200 ✓ |
+| `/library` (unauth) | 307 → /sign-in?redirect_url=%2Flibrary ✓ |
+| `/capture` (unauth) | 307 → /sign-in?redirect_url=%2Fcapture ✓ |
+| `/api/health` | `{status:"ok", db:{status:"ok", latency:91ms}}` ✓ |
+
+## Remaining Todos (user action required)
 
 | Task | Status | Blocker |
 |------|--------|---------|
 | Clerk production keys | Manual | User must upgrade at dashboard.clerk.com |
-| OPENAI_API_KEY in Vercel | Manual | Need API key value |
-| LemonSqueezy keys | Manual | Need LemonSqueezy account |
+| OPENAI_API_KEY in Vercel | Manual | Need API key value (users can configure in /onboarding) |
+| LemonSqueezy keys | Manual | Need LemonSqueezy account setup |
 | userecall.app custom domain | Manual | DNS setup at registrar |
 
 ## Architecture Notes
