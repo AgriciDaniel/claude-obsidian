@@ -17,6 +17,7 @@ CLI:
   wiki-mode.py config                   # print full config JSON
   wiki-mode.py route TYPE NAME          # print suggested path for new content
                                         # TYPE: source|entity|concept|session|research
+                                        #       |module|component|dependency|flow|decision
   wiki-mode.py set MODE                 # write mode (lyt|para|zettelkasten|generic)
   wiki-mode.py id                       # mint a Zettelkasten ID (timestamp)
   wiki-mode.py templates                # list per-mode template files
@@ -41,7 +42,11 @@ META_DIR = VAULT_ROOT / ".vault-meta"
 MODE_PATH = META_DIR / "mode.json"
 
 VALID_MODES = ("generic", "lyt", "para", "zettelkasten")
-VALID_TYPES = ("source", "entity", "concept", "session", "research")
+# source/entity/concept/session/research are the v1.7/v1.8 prose types.
+# module/component/dependency/flow/decision are the v1.10 Mode B code types —
+# content types (not a new methodology mode), routed within each mode below.
+VALID_TYPES = ("source", "entity", "concept", "session", "research",
+               "module", "component", "dependency", "flow", "decision")
 
 DEFAULT_CONFIG = {
     "schema_version": 1,
@@ -68,6 +73,12 @@ DEFAULT_CONFIG = {
             "entities_folder": "wiki/entities/",
             "concepts_folder": "wiki/concepts/",
             "sessions_folder": "wiki/sessions/",
+            # Mode B code pages (v1.10). Kept user-overridable via mode.json.
+            "modules_folder": "wiki/modules/",
+            "components_folder": "wiki/components/",
+            "dependencies_folder": "wiki/dependencies/",
+            "flows_folder": "wiki/flows/",
+            "decisions_folder": "wiki/decisions/",
         },
     },
 }
@@ -159,6 +170,12 @@ def route_path(mode, content_type, name, cfg):
             "concept":  g["concepts_folder"] + raw + ".md",
             "session":  g["sessions_folder"] + slug + ".md",
             "research": g["concepts_folder"] + raw + ".md",
+            # Mode B code pages — slug-style filenames (like source/session).
+            "module":     g["modules_folder"] + slug + ".md",
+            "component":  g["components_folder"] + slug + ".md",
+            "dependency": g["dependencies_folder"] + slug + ".md",
+            "flow":       g["flows_folder"] + slug + ".md",
+            "decision":   g["decisions_folder"] + slug + ".md",
         }
         return mapping[content_type]
 
@@ -178,6 +195,12 @@ def route_path(mode, content_type, name, cfg):
             # Session notes land in projects/inbox/; user reroutes to specific projects
             "session":  p["projects_folder"] + "inbox/" + slug + ".md",
             "research": p["resources_folder"] + slug + "/" + slug + ".md",
+            # Code pages are reference material → resources/code/<type>/
+            "module":     p["resources_folder"] + "code/modules/" + slug + ".md",
+            "component":  p["resources_folder"] + "code/components/" + slug + ".md",
+            "dependency": p["resources_folder"] + "code/dependencies/" + slug + ".md",
+            "flow":       p["resources_folder"] + "code/flows/" + slug + ".md",
+            "decision":   p["resources_folder"] + "code/decisions/" + slug + ".md",
         }
         return mapping[content_type]
 
