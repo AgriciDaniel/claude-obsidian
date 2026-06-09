@@ -101,6 +101,10 @@ Code pages document a slice of a codebase. They are created and kept in sync by
 `/wiki-code-ingest`. Add these after the universal fields:
 
 ```yaml
+aliases:                # REQUIRED on code pages: list the page title verbatim.
+  - "Module Title"      #   Obsidian resolves [[X]] to a file named X.md or a page aliasing X —
+                        #   NEVER by the `title:` field. The router writes slug/dashed filenames,
+                        #   so without this alias every [[Title]] link to this page is unresolved.
 source_type: code       # marks this as a code-derived page
 status: active          # active | deprecated | experimental | planned
 language: ""            # primary language; "" when mixed/unknown
@@ -133,3 +137,7 @@ SHA for directories; the lint compares whichever git returns, so directory ancho
 4. Wikilinks in YAML fields must be quoted: `"[[Page Name]]"`.
 5. Keep `related` and `sources` as wikilinks, not plain URLs.
 6. Update `updated` every time you edit the page content.
+7. Mode B code pages MUST carry an `aliases:` entry equal to their `title` (or have a filename that
+   exactly equals the title). Obsidian resolves `[[Title]]` by filename/alias, never by the `title:`
+   field, so a slug filename without this alias breaks every inbound link. Avoid `/` in a title — it
+   is a path separator inside a wikilink and cannot be linked even with an alias.

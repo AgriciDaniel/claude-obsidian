@@ -31,6 +31,7 @@ You will be given:
 3. Route the page path: `python3 scripts/wiki-mode.py route module "<Module Name>"` (use `component`/`dependency`/`flow`/`decision` if the orchestrator assigned that type).
 4. Acquire the lock, write the page, release the lock (see Concurrency below).
 5. Write the Mode B code-page frontmatter (`skills/wiki/references/frontmatter.md` → "module / component / …") INCLUDING drift anchors pulled from your `git.json` slice:
+   - `aliases`: a single entry equal to the page title (e.g. `"Crawler Worker"`) — the router writes a dashed/slug filename, so without this `[[Title]]` links to your page do not resolve in Obsidian
    - `source_paths`: the path(s) this page documents
    - `code_anchors`: flat `"<path>@<sha>"` strings, sha from `git.json.anchors[path]` (tree sha for a dir, blob sha for a file); omit any path not present in anchors
    - `ingest_commit`: `git.json.head`; `ingested_at`: today

@@ -371,6 +371,8 @@ See [[tiling-report-YYYY-MM-DD]] for the full pair listing.
 
 The watched code repo is usually **separate** from the vault. Point the checker at it with `--repo` or the `CODE_REPO_ROOT` env var; the default is the vault root.
 
+> **See also `/wiki-code-lint`** — the dedicated code-fidelity lint. This section is the shallow drift check; `/wiki-code-lint` adds ingest-staleness, coverage-gap, and Obsidian link-resolution checks and writes its own `code-lint-report-`. Use it for a deep code-wiki audit.
+
 ### Detection and delegation
 
 ```bash

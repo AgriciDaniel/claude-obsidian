@@ -73,7 +73,7 @@ For a single-path ingest add `--subpath app/workers/crawler` to each. These five
    bash scripts/wiki-lock.sh acquire "$P" && { : write page ; bash scripts/wiki-lock.sh release "$P"; }
    ```
    Read **3-5 of the module's real top files** (via `tree.json`) for the body — do not read the whole module. Body covers: purpose, key files, public surface, and dependencies as `[[wikilinks]]` derived from `edges.json` (intra-repo edges where `external:false`). Add a `> [!gap]` callout where `edges.json` was ambiguous (regex edges are best-effort).
-   Write the frontmatter using the **Mode B code-page schema** (`skills/wiki/references/frontmatter.md` → "module / component / …"), including the **drift anchors** (Step 3).
+   Write the frontmatter using the **Mode B code-page schema** (`skills/wiki/references/frontmatter.md` → "module / component / …"), including the **drift anchors** (Step 3) and an **`aliases:` entry equal to the page title** — the router writes a dashed/slug filename (`wiki/modules/Crawler-Worker.md`), so without the alias `[[Crawler Worker]]` does not resolve and every inbound link to the page breaks. `/wiki-code-lint` flags this; emit the alias here so it never fires.
 6. **Dependencies** — from `deps.json`, synthesize `wiki/dependencies/` pages (one per ecosystem, or per significant external dep): `type: dependency`, version, a one-line risk/role note.
 7. **Flows** — from `edges.json` adjacency, trace notable request/data paths (entrypoint → service → worker). `edges.json` is the scaffold; you draw the real flow. `type: flow`.
 8. **Key overview pages** (the Mode B set): `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`.
@@ -97,6 +97,10 @@ Every code page records where in the repo it came from and the git content hash 
 
 ```yaml
 type: module
+title: "Crawler Worker"
+aliases:                       # MUST equal the page title — Obsidian resolves [[Crawler Worker]] by
+  - "Crawler Worker"           #   filename/alias, not by `title:`. The router writes a dashed/slug
+                               #   filename, so omitting this breaks every inbound link to this page.
 source_type: code
 status: active
 language: python
@@ -142,6 +146,7 @@ For a repo with many modules, dispatch the `wiki-code-ingest` sub-agent (`agents
 - Do not invent `depends_on` edges — derive them from `edges.json`; flag ambiguity with `> [!gap]`.
 - Do not regenerate overview/untouched pages in single-path or `--sync` mode — PATCH.
 - Do not skip the drift anchors — without them `wiki-lint` cannot detect drift and `--sync` cannot target pages.
+- Do not omit the `aliases:` title-entry — without it (or a Title-matching filename) `[[Title]]` links do not resolve in Obsidian, and `/wiki-code-lint`'s link check flags every such page.
 
 ---
 
