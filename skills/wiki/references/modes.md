@@ -68,16 +68,22 @@ vault/
 └── CLAUDE.md
 ```
 
-Frontmatter for `wiki/modules/` notes:
+Frontmatter for `wiki/modules/` notes (see [`frontmatter.md`](frontmatter.md) → "module / component /
+dependency / flow / decision" for the authoritative schema):
 ```yaml
 ---
-type: module           # module | component | decision | dependency | flow
-path: "src/auth/"
+type: module           # module | component | dependency | flow | decision
+source_type: code
 status: active         # active | deprecated | experimental | planned
 language: typescript
 purpose: ""
+source_paths:          # repo-relative paths this page documents (replaces the old singular `path:`)
+  - "src/auth/"
+code_anchors:          # flat "path@sha" list — git blob/tree SHA at ingest (drift anchors)
+  - "src/auth/@<sha>"
+ingest_commit: ""      # repo HEAD at ingest
+ingested_at: YYYY-MM-DD
 maintainer: ""
-last_updated: YYYY-MM-DD
 linked_issues: []
 depends_on: []
 used_by: []
@@ -86,6 +92,9 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 ```
+
+This is `/wiki-code-ingest`'s output schema. The `source_paths` + `code_anchors` + `ingest_commit`
+fields let `wiki-lint` detect when the underlying code has drifted from the page.
 
 Key wiki pages to create: `[[Architecture Overview]]`, `[[Data Flow]]`, `[[Tech Stack]]`, `[[Dependency Graph]]`, `[[Key Decisions]]`
 

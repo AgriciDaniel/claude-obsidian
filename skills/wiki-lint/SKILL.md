@@ -39,6 +39,7 @@ Work through these in order:
 8. **Stale index entries**. Items in `wiki/index.md` pointing to renamed or deleted pages.
 9. **Address validity** (DragonScale Mechanism 2). For every page that has an `address:` frontmatter field, validate the format. See the **Address Validation** section below.
 10. **Semantic tiling** (DragonScale Mechanism 3, opt-in). Flag candidate duplicate pages (across all scanned types, not just concepts) via embedding cosine similarity. See the **Semantic Tiling** section below.
+11. **Code drift** (Mode B, opt-in). For every code page that carries `code_anchors` (written by `/wiki-code-ingest`), flag pages whose source has changed, moved, or fallen out of the git tree since ingest. See the **Code Drift** section below.
 
 ---
 
@@ -81,6 +82,10 @@ status: developing
 
 ## Cross-Reference Gaps
 - [[Entity Name]] mentioned in [[Page A]] without a wikilink.
+
+## Code Drift
+- [[Crawler Worker]] (`wiki/modules/Crawler-Worker.md`): `app/workers/crawler/` a1b2c3d → e4f5g6h. Re-ingest to refresh.
+- [[Token Store]]: `src/auth/tokens.ts` not found at HEAD. Suggest: update source_paths or archive.
 ```
 
 ---
@@ -357,6 +362,55 @@ See [[tiling-report-YYYY-MM-DD]] for the full pair listing.
 - No auto-merge. Duplicates are listed, never resolved.
 - Cache is incremental and model-scoped. Unchanged pages are not re-embedded.
 - Exit codes: `0` ok, `2` usage error, `3` cache corrupt, `4` scale hard-fail, `10` ollama unreachable, `11` model missing. Surface all of them; do not collapse into a single "unknown" bucket.
+
+---
+
+## Code Drift (Mode B, opt-in)
+
+**Opt-in feature.** For wiki pages produced by `/wiki-code-ingest` (those carrying `code_anchors`), `scripts/code-anchor-check.py` recomputes each anchored path's current git object SHA and flags pages whose source has **drifted** (SHA changed), **moved/deleted** (path no longer in HEAD), or gone **untracked** (on disk but outside the git tree) since ingest. Read-only; re-ingest (`/wiki-code-ingest --sync`) is the fix, never this lint.
+
+The watched code repo is usually **separate** from the vault. Point the checker at it with `--repo` or the `CODE_REPO_ROOT` env var; the default is the vault root.
+
+> **See also `/wiki-code-lint`** — the dedicated code-fidelity lint. This section is the shallow drift check; `/wiki-code-lint` adds ingest-staleness, coverage-gap, and Obsidian link-resolution checks and writes its own `code-lint-report-`. Use it for a deep code-wiki audit.
+
+### Detection and delegation
+
+```bash
+if [ -x ./scripts/code-anchor-check.py ] && command -v python3 >/dev/null 2>&1; then
+  ./scripts/code-anchor-check.py --peek > /tmp/code-drift-peek.json 2>/dev/null
+  PEEK_EXIT=$?
+  case $PEEK_EXIT in
+    0)  CODE_DRIFT_READY=1 ;;                              # ready (peek reports git + anchored-page count)
+    3)  CODE_DRIFT_READY=0 ; echo "code-drift skipped: wiki dir unreadable (exit 3)" ;;
+    10) CODE_DRIFT_READY=0 ; echo "code-drift skipped: git binary not found (exit 10)" ;;
+    11) CODE_DRIFT_READY=0 ; echo "code-drift skipped: --repo is not a git work tree (exit 11)" ;;
+    *)  CODE_DRIFT_READY=0 ; echo "code-drift ERROR: unexpected exit $PEEK_EXIT; inspect /tmp/code-drift-peek.json" ;;
+  esac
+else
+  CODE_DRIFT_READY=0
+  echo "code-drift skipped: scripts/code-anchor-check.py or python3 not available"
+fi
+```
+
+Inspect `/tmp/code-drift-peek.json` (`{git, repo, is_git_repo, anchored_pages}`) when status is ambiguous. If `anchored_pages` is 0, there are no Mode B code pages — the check is a clean no-op.
+
+When `CODE_DRIFT_READY=1`:
+
+```bash
+# point --repo at the watched code repo (default: vault root or $CODE_REPO_ROOT)
+./scripts/code-anchor-check.py --repo "${CODE_REPO_ROOT:-.}" --report wiki/meta/lint-report-YYYY-MM-DD.md
+case $? in
+  0)  echo "code-drift section appended" ;;
+  *)  echo "code-drift ERROR during --report; see stderr" ;;
+esac
+```
+
+### Invariants
+
+- Read-only and git-only — no language parsing, no network. Works for any repo/language because git content-addressing is language-agnostic.
+- Directory anchors compare the git **tree** SHA, file anchors the **blob** SHA; the checker compares whatever `git rev-parse HEAD:<path>` returns, so a directory page drifts only when something inside it changes.
+- Drift is a **finding**, not a script error: the script exits `0` even when pages have drifted (like tiling reporting duplicate pairs). Reserve the non-zero exits for the skip/error conditions above.
+- No auto-fix. The Code Drift report section tells the user which pages to re-ingest.
 
 ---
 

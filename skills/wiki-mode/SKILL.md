@@ -102,7 +102,12 @@ To switch modes later: re-run `setup-mode.sh`. Existing files are NOT auto-migra
       "sources_folder": "wiki/sources/",
       "entities_folder": "wiki/entities/",
       "concepts_folder": "wiki/concepts/",
-      "sessions_folder": "wiki/sessions/"
+      "sessions_folder": "wiki/sessions/",
+      "modules_folder": "wiki/modules/",
+      "components_folder": "wiki/components/",
+      "dependencies_folder": "wiki/dependencies/",
+      "flows_folder": "wiki/flows/",
+      "decisions_folder": "wiki/decisions/"
     }
   }
 }
@@ -131,6 +136,7 @@ The routing table:
 | New concept | `wiki/concepts/<Name>.md` | `wiki/notes/<Name>.md` + concept MOC | `wiki/resources/concepts/<Name>.md` | `wiki/<ID>-<name>.md` |
 | Session note (`/save`) | `wiki/sessions/<date>-<topic>.md` | `wiki/notes/<date>-<topic>.md` + session MOC | `wiki/projects/<project>/<date>-<topic>.md` | `wiki/<ID>-session-<topic>.md` |
 | Research output (`/autoresearch`) | `wiki/concepts/<topic>.md` | `wiki/notes/<topic>.md` + topic MOC | `wiki/resources/<topic>/<topic>.md` | `wiki/<ID>-<topic>.md` |
+| Code page — module/component/dependency/flow/decision (`/wiki-code-ingest`) | `wiki/<type>s/<slug>.md` | `wiki/notes/<slug>.md` + add to Architecture MOC | `wiki/resources/code/<type>s/<slug>.md` | `wiki/<ID>-<slug>.md` |
 
 ---
 
