@@ -96,6 +96,22 @@ def parse_frontmatter(text):
     return fm
 
 
+def normalise_list(value):
+    """Return a list of strings from a block list, an inline `["a", "b"]` scalar, or a
+    bare scalar. Real vaults carry both block and inline `code_anchors` (the flat-YAML
+    rule prefers block, but `/wiki-code-ingest` has emitted inline); without this, an
+    inline string is iterated character-by-character and every char looks 'malformed'."""
+    if isinstance(value, list):
+        return [v for v in value if isinstance(v, str) and v]
+    if isinstance(value, str):
+        s = value.strip()
+        if s.startswith("[") and s.endswith("]"):
+            inner = s[1:-1].strip()
+            return [p.strip().strip('"').strip("'") for p in inner.split(",") if p.strip()] if inner else []
+        return [s] if s else []
+    return []
+
+
 def iter_code_pages(vault_root=VAULT_ROOT):
     """Yield (rel_path, title, fm, anchors) for every wiki page with code_anchors."""
     wiki_dir = vault_root / "wiki"
@@ -112,7 +128,7 @@ def iter_code_pages(vault_root=VAULT_ROOT):
         fm = parse_frontmatter(text)
         if fm.get("type") in EXCLUDE_TYPES:
             continue
-        anchors = [a for a in fm.get("code_anchors", []) if isinstance(a, str) and a]
+        anchors = [a for a in normalise_list(fm.get("code_anchors")) if a]
         if not anchors:
             continue
         title = fm.get("title") or p.stem
@@ -160,6 +176,18 @@ def split_anchor(anchor):
     return path.strip(), sha.strip()
 
 
+def same_object(current, stored):
+    """True if the recorded SHA and the current SHA name the same git object.
+
+    /wiki-code-ingest records *abbreviated* SHAs (e.g. 12 chars) while
+    `git rev-parse HEAD:<path>` returns the full 40-char SHA. Git abbreviations
+    are unambiguous prefixes, so prefix-matching either direction is the correct
+    equality test — an exact `==` would report every abbreviated anchor as drifted."""
+    if not current or not stored:
+        return False
+    return current.startswith(stored) or stored.startswith(current)
+
+
 # ── core scan ────────────────────────────────────────────────────────────────
 def scan(repo, vault_root=VAULT_ROOT):
     findings = {"drifted": [], "moved": [], "untracked": [], "malformed": []}
@@ -182,7 +210,7 @@ def scan(repo, vault_root=VAULT_ROOT):
                 else:
                     findings["moved"].append({"page": rel, "title": title, "path": path})
                 page_clean = False
-            elif current != stored:
+            elif not same_object(current, stored):
                 findings["drifted"].append({"page": rel, "title": title, "path": path,
                                             "was": stored, "now": current})
                 page_clean = False

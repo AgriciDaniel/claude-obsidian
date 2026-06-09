@@ -112,6 +112,34 @@ def test_malformed_anchor():
         assert_true("anchor without @ is MALFORMED", len(findings["malformed"]) == 1, hint=str(findings))
 
 
+def test_abbreviated_anchor_is_clean():
+    # /wiki-code-ingest records abbreviated SHAs; object_sha returns the full 40-char SHA.
+    # A prefix match must count as clean, not drift.
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = make_repo(tmp)
+        full = obj_sha(repo, "app/main.py")
+        vault = make_vault(tmp, [f"app/main.py@{full[:12]}"])
+        findings, checked, clean = cac.scan(str(repo), vault)
+        assert_true("abbreviated anchor matches full sha → clean",
+                    clean == 1 and not findings["drifted"], hint=str(findings))
+
+
+def test_inline_code_anchors_parsed():
+    # Real vaults carry inline `code_anchors: ["path@sha"]`; it must parse as ONE anchor,
+    # not be iterated character-by-character (which made every char look malformed).
+    with tempfile.TemporaryDirectory() as tmp:
+        repo = make_repo(tmp)
+        full = obj_sha(repo, "app/main.py")
+        vault = Path(tmp) / "vault"
+        (vault / "wiki" / "modules").mkdir(parents=True)
+        body = ["---", "type: module", 'title: "X"', "source_type: code",
+                f'code_anchors: ["app/main.py@{full[:12]}"]', "---", "", "# X", ""]
+        (vault / "wiki" / "modules" / "X.md").write_text("\n".join(body), encoding="utf-8")
+        findings, checked, clean = cac.scan(str(repo), vault)
+        assert_true("inline anchor parsed as one clean anchor",
+                    checked == 1 and clean == 1 and not findings["malformed"], hint=str(findings))
+
+
 def test_cli_exit_11_non_git_repo():
     with tempfile.TemporaryDirectory() as tmp:
         repo = make_repo(tmp)
@@ -158,6 +186,8 @@ def main():
     test_moved_when_path_absent()
     test_untracked_when_on_disk_not_in_head()
     test_malformed_anchor()
+    test_abbreviated_anchor_is_clean()
+    test_inline_code_anchors_parsed()
     test_cli_exit_11_non_git_repo()
     test_cli_report_written()
     test_cli_peek()
