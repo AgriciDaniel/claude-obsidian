@@ -4,7 +4,8 @@
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
         test-lock test-concurrent test-mode test-contextual \
         test-code-scan test-code-manifests test-code-signals test-code-drift test-code-sync \
-        test-code-watch setup-dragonscale setup-retrieve setup-mode clean-test-state help
+        test-code-watch test-code-coverage test-link-resolve \
+        setup-dragonscale setup-retrieve setup-mode clean-test-state help
 
 help:
 	@echo "claude-obsidian developer targets:"
@@ -24,12 +25,14 @@ help:
 	@echo "  make test-code-drift     scripts/code-anchor-check.py tests (python, hermetic, needs git)"
 	@echo "  make test-code-sync      scripts/code-sync-check.py tests (python, hermetic, needs git)"
 	@echo "  make test-code-watch     bin/setup-code-watch.sh integration test (shell, hermetic, needs git)"
+	@echo "  make test-code-coverage  scripts/code-coverage-check.py tests (python, hermetic, needs git)"
+	@echo "  make test-link-resolve   scripts/wiki-link-resolve-check.py tests (python, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
 	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual test-code-scan test-code-manifests test-code-signals test-code-drift test-code-sync test-code-watch
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual test-code-scan test-code-manifests test-code-signals test-code-drift test-code-sync test-code-watch test-code-coverage test-link-resolve
 	@echo ""
 	@echo "All tests passed."
 
@@ -92,6 +95,14 @@ test-code-sync:
 test-code-watch:
 	@echo "=== test_code_watch_setup.sh ==="
 	@bash tests/test_code_watch_setup.sh
+
+test-code-coverage:
+	@echo "=== test_code_coverage_check.py ==="
+	@python3 tests/test_code_coverage_check.py
+
+test-link-resolve:
+	@echo "=== test_wiki_link_resolve_check.py ==="
+	@python3 tests/test_wiki_link_resolve_check.py
 
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh

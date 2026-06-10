@@ -2,8 +2,8 @@
 
 This folder is both a Claude Code plugin and an Obsidian vault.
 
-**Plugin name:** `claude-obsidian` (v1.7+ "Compound Vault" — see [docs/compound-vault-guide.md](docs/compound-vault-guide.md); v1.8+ adds methodology modes — see [docs/methodology-modes-guide.md](docs/methodology-modes-guide.md))
-**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-cli` (v1.7), `/wiki-retrieve` (v1.7, opt-in), `/wiki-mode` (v1.8)
+**Plugin name:** `claude-obsidian` (v1.7+ "Compound Vault" — see [docs/compound-vault-guide.md](docs/compound-vault-guide.md); v1.8+ adds methodology modes — see [docs/methodology-modes-guide.md](docs/methodology-modes-guide.md); v1.10+ adds the code wiki — Mode B architecture mapping via `/wiki-code`)
+**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-cli` (v1.7), `/wiki-retrieve` (v1.7, opt-in), `/wiki-mode` (v1.8), `/wiki-code` (v1.10)
 **Vault path:** This directory (open in Obsidian directly)
 
 ## What This Vault Is For
@@ -61,6 +61,17 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `/wiki-retrieve` (v1.7) | Hybrid contextual + BM25 + cosine-rerank retrieval (opt-in via `bash bin/setup-retrieve.sh`) |
 | `/wiki-mode` (v1.8) | Methodology modes (LYT / PARA / Zettelkasten / Generic). Set via `bash bin/setup-mode.sh`; consumed by wiki-ingest / save / autoresearch for routing new pages |
 | `/think` (v1.9) | The 10-principle thinking loop (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) as an invocable workflow. Apply to architectural decisions, audits, post-mortems, ambiguous user requests. Every other skill has a "How to think" appendix mapping this framework to its specific work |
+| `/wiki-code` (v1.10) | The `/wiki` for codebases. Code-wiki status dashboard, first-run scaffold + map, and routing to the code sub-skills. Umbrella over `wiki-code-ingest` / `wiki-code-lint` / `wiki-code-watch` |
+
+## Code Wiki (v1.10+)
+
+`/wiki-code` is the code-focused counterpart of `/wiki` — the umbrella entry point for **Mode B (GitHub / Repository)** architecture maps. Bare `/wiki-code` is a read-only status dashboard (vault, code pages, watched repos, pending drift); `/wiki-code <repo>` scaffolds a minimal vault if needed and maps the repo. It routes to, but never re-implements, the code engines:
+
+- **`wiki-code-ingest`** (skill + `agents/wiki-code-ingest.md` + `bin/setup-code-watch.sh` via `--sync`) — turns a repo into modules / components / flows / dependencies / decisions pages with **drift anchors** (`code_anchors` + `ingest_commit`).
+- **`wiki-code-lint`** (skill) — code-fidelity audit: drift (anchored SHAs vs HEAD), staleness, coverage gaps, Obsidian link resolution → dated report under `wiki/meta/`.
+- **`wiki-code-watch`** (command → `bin/setup-code-watch.sh`) — commit-triggered auto-sync; in-session drain is the safe default, `--autonomous` opts into headless sync.
+
+Code questions ("which modules depend on X") route to the existing `/wiki-query`, which already reads code pages. `/wiki-code` coexists with `/wiki` (which keeps its natural-language code routing) as the explicit, status-aware code entry point.
 
 ## Transport (v1.7+)
 

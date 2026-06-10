@@ -17,7 +17,7 @@
 
 Claude + Obsidian knowledge companion and self-organizing AI second brain. A running AI notetaker that builds and maintains a persistent, compounding wiki vault. Every source you add gets integrated. Every question you ask pulls from everything that has been read. Knowledge compounds like interest.
 
-Open-source Obsidian AI plugin for AI note-taking, personal knowledge management (PKM), second-brain workflows, and a private Notion alternative. **15 Claude Code skills**, multi-agent support, multi-writer safe (v1.7+), first-class methodology modes (LYT / PARA / Zettelkasten / Generic via v1.8), and the 10-principle thinking framework (v1.9). Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+Open-source Obsidian AI plugin for AI note-taking, personal knowledge management (PKM), second-brain workflows, and a private Notion alternative. **18 Claude Code skills**, multi-agent support, multi-writer safe (v1.7+), first-class methodology modes (LYT / PARA / Zettelkasten / Generic via v1.8), and the 10-principle thinking framework (v1.9). Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
 
 > **Two ways to get this skill.** Pick the one that fits how you work.
 >
@@ -189,6 +189,11 @@ Then scaffold the full wiki structure.
 | `/canvas zone [name]` | Add a new labeled zone to organize visual content |
 | `/canvas from banana` | Capture recently generated images onto the canvas |
 | `/think [problem]` | Apply the 10-principle thinking loop to a non-trivial problem |
+| `/wiki-code` | Code-wiki status dashboard, or map a repo's architecture (Mode B) |
+| `/wiki-code [repo]` | Scaffold (if needed) and map a repo into modules / flows / dependencies / decisions pages with drift anchors |
+| `/wiki-code-ingest --sync` | Re-ingest only the code paths that changed since last sync |
+| `/wiki-code-watch [repo]` | Install commit hooks to keep the code wiki in sync |
+| `/wiki-code-lint` | Code-fidelity check: drift, staleness, coverage, link resolution |
 | `lint the wiki` | Health check: orphans, dead links, gaps, suggestions |
 | `update hot cache` | Refresh hot.md with latest context summary |
 
@@ -459,7 +464,7 @@ claude-obsidian/
 ├── .claude-plugin/
 │   ├── plugin.json              # manifest
 │   └── marketplace.json         # distribution
-├── skills/                       # 15 Claude Code skills (v1.9.2)
+├── skills/                       # 18 Claude Code skills (v1.10)
 │   ├── wiki/                    # orchestrator + references
 │   ├── wiki-ingest/             # source ingestion
 │   ├── wiki-query/              # answer questions from the vault
@@ -468,6 +473,9 @@ claude-obsidian/
 │   ├── wiki-retrieve/           # hybrid retrieval (v1.7+, opt-in)
 │   ├── wiki-mode/               # methodology modes router (v1.8+)
 │   ├── wiki-fold/               # log rollup (DragonScale opt-in)
+│   ├── wiki-code/               # the /wiki for codebases — umbrella (v1.10+)
+│   ├── wiki-code-ingest/        # repo → Mode B architecture map (v1.10+)
+│   ├── wiki-code-lint/          # code-fidelity drift/coverage check (v1.10+)
 │   ├── save/                    # /save: file conversations to wiki
 │   ├── autoresearch/            # autonomous research loop
 │   ├── canvas/                  # visual layer (images, PDFs, notes)
@@ -478,13 +486,14 @@ claude-obsidian/
 ├── agents/
 │   ├── verifier.md              # pre-commit audit agent (v1.7.1+)
 │   ├── wiki-ingest.md           # parallel batch ingestion agent
+│   ├── wiki-code-ingest.md      # parallel per-module code ingestion agent (v1.10+)
 │   └── wiki-lint.md             # health check agent
 ├── commands/                     # slash command entry points
 ├── hooks/
 │   └── hooks.json               # SessionStart + Stop + PostToolUse hooks
-├── scripts/                      # 12 helper scripts (transport, locking, retrieval, etc.)
-├── tests/                        # 9 hermetic test suites (~1240 assertions, make test)
-├── bin/                          # 5 setup scripts (setup-vault, setup-retrieve, setup-mode, etc.)
+├── scripts/                      # 19 helper scripts (transport, locking, retrieval, code signals, etc.)
+├── tests/                        # 17 hermetic test suites (make test)
+├── bin/                          # 7 setup/launcher scripts (setup-vault, setup-retrieve, setup-mode, setup-code-watch, etc.)
 ├── _templates/                   # Obsidian Templater templates
 ├── wiki/                         # seeded vault content (demo)
 │   ├── canvases/                # welcome.canvas + main.canvas
