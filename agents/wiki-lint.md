@@ -36,19 +36,21 @@ You will be given:
 6. Identify pages with status `seed` that have not been updated in over 30 days.
 7. **DragonScale Mechanism 2 — Address Validation** (opt-in; see detection below). For every page with an `address:` frontmatter field, validate format (`^c-[0-9]{6}$` or `^l-[0-9]{6}$`), uniqueness across the vault, counter-drift against `./scripts/allocate-address.sh --peek`, and consistency with `.raw/.manifest.json` `address_map`. Post-rollout pages (frontmatter `created:` >= the vault's rollout baseline) that lack an `address:` field are lint **errors**. Legacy pages are informational.
 8. **DragonScale Mechanism 3 — Semantic Tiling** (opt-in; see detection below). If `scripts/tiling-check.py` is present AND `./scripts/tiling-check.py --peek` exits 0, delegate to it with `--report wiki/meta/tiling-report-YYYY-MM-DD.md`. Surface exit codes 0/2/3/4/10/11 distinctly — do not collapse into "unknown".
+9. **Mode B — Code Drift** (opt-in; see detection below). If `scripts/code-anchor-check.py` is present AND `./scripts/code-anchor-check.py --peek` exits 0, delegate with `--repo "${CODE_REPO_ROOT:-.}" --report wiki/meta/lint-report-YYYY-MM-DD.md`. It flags Mode B code pages whose anchored source has drifted/moved since ingest. Surface exit codes 0/3/10/11 distinctly — do not collapse into "unknown". Drift is a finding (exit 0), not an error.
 
-## DragonScale feature detection
+## DragonScale + Mode B feature detection
 
-Both items 7 and 8 are opt-in. Before running them:
+Items 7, 8, and 9 are opt-in. Before running them:
 
 ```bash
 [ -x ./scripts/allocate-address.sh ] && [ -f ./.vault-meta/address-counter.txt ] && DRAGONSCALE_ADDR=1 || DRAGONSCALE_ADDR=0
 [ -x ./scripts/tiling-check.py ] && command -v python3 >/dev/null 2>&1 && DRAGONSCALE_TILE=1 || DRAGONSCALE_TILE=0
+[ -x ./scripts/code-anchor-check.py ] && command -v python3 >/dev/null 2>&1 && CODE_DRIFT=1 || CODE_DRIFT=0
 ```
 
-If the vault has not adopted DragonScale, skip items 7 and 8. The other checks still run.
+If a feature is not adopted, skip its item. The other checks still run.
 
-Full procedure, schema for the `## Address Validation` and `## Semantic Tiling` sub-sections of the lint report, and banded-threshold behavior are documented in `skills/wiki-lint/SKILL.md`. This agent follows that skill spec.
+Full procedure and report-section schemas for `## Address Validation`, `## Semantic Tiling`, and `## Code Drift` are documented in `skills/wiki-lint/SKILL.md`. This agent follows that skill spec.
 
 ## Output
 

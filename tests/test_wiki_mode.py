@@ -136,6 +136,53 @@ def test_zettelkasten_routing():
     assert_true("zettel ID is 20 digits", parts[0].isdigit() and len(parts[0]) == 20, hint=fname)
 
 
+# ─── Mode B code-type routing (modules/components/deps/flows/decisions) ─────
+def test_code_type_routing():
+    """v1.10: the five Mode B code content types route correctly under every
+    methodology mode. Code pages use slug-style filenames (like source/session),
+    not case-preserving safe_name (entity/concept)."""
+    code_types = ("module", "component", "dependency", "flow", "decision")
+    generic_folders = {
+        "module":     "wiki/modules/",
+        "component":  "wiki/components/",
+        "dependency": "wiki/dependencies/",
+        "flow":       "wiki/flows/",
+        "decision":   "wiki/decisions/",
+    }
+    # generic: each code type → its Mode B folder, slug-style filename
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "generic"
+    for t in code_types:
+        p = wm.route_path("generic", t, "Crawler Worker", cfg)
+        assert_eq(f"generic {t}", generic_folders[t] + "Crawler-Worker.md", p)
+    # lyt: code types flatten into wiki/notes/ like every other type
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "lyt"
+    for t in code_types:
+        p = wm.route_path("lyt", t, "Crawler Worker", cfg)
+        assert_true(f"lyt {t} → notes/", p.startswith("wiki/notes/"), hint=p)
+    # para: code types land under resources/code/<type>/ (reference material)
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "para"
+    for t in code_types:
+        p = wm.route_path("para", t, "Crawler Worker", cfg)
+        assert_true(f"para {t} → resources/code/", p.startswith("wiki/resources/code/"), hint=p)
+    # zettelkasten: flat, timestamp-prefixed, type-agnostic
+    cfg = dict(wm.DEFAULT_CONFIG); cfg["mode"] = "zettelkasten"
+    for t in code_types:
+        p = wm.route_path("zettelkasten", t, "Crawler Worker", cfg)
+        assert_true(f"zettel {t} flat", p.count("/") == 1 and p.startswith("wiki/"), hint=p)
+
+
+def test_cli_route_code_type_returns_path():
+    """End-to-end: `route module NAME` is now a valid argparse choice."""
+    result = subprocess.run(
+        [sys.executable, str(HELPER), "route", "module", "Auth Service"],
+        capture_output=True, text=True, timeout=5,
+    )
+    assert_eq("cli route module rc=0", 0, result.returncode)
+    path = result.stdout.strip()
+    assert_true("cli route module returns wiki/ path", path.startswith("wiki/"), hint=path)
+    assert_true("cli route module .md path", path.endswith(".md"), hint=path)
+
+
 # ─── Zettel ID format ───────────────────────────────────────────────────────
 def test_mint_zettel_id_format():
     zid = wm.mint_zettel_id()
@@ -327,6 +374,8 @@ def main():
     test_lyt_routing()
     test_para_routing()
     test_zettelkasten_routing()
+    test_code_type_routing()
+    test_cli_route_code_type_returns_path()
     test_mint_zettel_id_format()
     test_mint_zettel_id_collision_resistance()
     test_slugify()

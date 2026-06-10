@@ -103,6 +103,9 @@ Route to the correct operation based on what the user says:
 |-----------|-----------|-----------|
 | "scaffold", "set up vault", "create wiki" | SCAFFOLD | this skill |
 | "ingest [source]", "process this", "add this" | INGEST | `wiki-ingest` |
+| "/wiki-code", "code wiki", "code wiki status", "set up code wiki" | CODE WIKI | `wiki-code` (umbrella: status, scaffold, route) |
+| "map my codebase", "ingest this repo", "architecture wiki", "document this service" | CODE INGEST | `wiki-code-ingest` |
+| "watch this repo", "keep the wiki in sync with the code" | CODE WATCH | `wiki-code-ingest` (via `bin/setup-code-watch.sh`) |
 | "what do you know about X", "query:" | QUERY | `wiki-query` |
 | "lint", "health check", "clean up" | LINT | `wiki-lint` |
 | "save this", "file this", "/save" | SAVE | `save` |

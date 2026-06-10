@@ -2,6 +2,36 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+Makes **Mode B (GitHub / Repository)** a real feature instead of a folder template. A codebase can now be ingested into the wiki as modules / flows / dependencies / decisions pages with git drift anchors, drift can be detected by `wiki-lint`, and a watched repo can keep its wiki in sync on every commit. Language-agnostic by construction (git content-addressing + extension maps); additive and backward-compatible (no change to prose ingestion).
+
+### Added
+
+- **`/wiki-code` umbrella skill + command** (`skills/wiki-code/SKILL.md`, `commands/wiki-code.md`) — the `/wiki` for codebases. The status-aware entry point over the Mode B code family: bare `/wiki-code` is a **read-only status dashboard** (vault, code-page counts, watched repos via `code-sync-check.py --status`, anchored pages via `code-anchor-check.py --peek`); `/wiki-code <repo>` scaffolds a minimal vault (`bin/setup-vault.sh`) if needed and hands off to `wiki-code-ingest`, honoring its scope + module-list checkpoints. Routes ingest / sync / watch / lint to the existing engines and code questions to `/wiki-query` (no new query skill); never re-implements them. Coexists with `/wiki`'s natural-language code routing.
+- **`/wiki-code-ingest` skill + `wiki-code-ingest` sub-agent** (`skills/wiki-code-ingest/SKILL.md`, `agents/wiki-code-ingest.md`, `commands/wiki-code-ingest.md`). Guided code ingestion: deterministic signals first, LLM synthesis second. Whole-repo bootstrap, single-path ingest, and `--sync` (re-ingest only changed paths) modes; one-page-per-module parallel fan-out mirroring `wiki-ingest`.
+- **Three signal scripts** (`scripts/code-scan.py`, `code-manifests.py`, `code-signals.py`). Tree/language/LOC, dependency-manifest parsing (npm/pypi/go/cargo/rubygems/composer), and git anchors + churn + best-effort import edges. **Gitignore guarantee:** enumeration uses `git ls-files --cached --others --exclude-standard`, so ignored / vendored / build-output files are never indexed. Pure stdlib.
+- **Code-drift lint** (`scripts/code-anchor-check.py`, wired into `skills/wiki-lint/SKILL.md` check #11 and `agents/wiki-lint.md` check #9). Recomputes each page's `code_anchors` (git blob/tree SHA via `git rev-parse HEAD:<path>`) and reports DRIFTED / MOVED / UNTRACKED pages. Read-only; drift is a finding (exit 0), with `10`/`11` skip codes when git/repo are absent.
+- **`/wiki-code-lint` skill** (`skills/wiki-code-lint/SKILL.md`, `commands/wiki-code-lint.md`) + two read-only check scripts (`scripts/code-coverage-check.py`, `scripts/wiki-link-resolve-check.py`). The code-fidelity counterpart to the generic `wiki-lint`: code drift (anchored SHAs vs HEAD), ingest staleness (commits behind), coverage gaps (repo packages with no page), and Obsidian link-resolution (every `[[Title]]` resolves via real filename/alias, not title — the trap that silently breaks navigation). Writes a dated, tiered report under `wiki/meta/`; each finding names its fix (`/wiki-code-ingest --sync` or an alias backfill).
+- **Commit-triggered auto-sync** (`bin/setup-code-watch.sh`, `scripts/code-sync-check.py`, `bin/code-sync-launch.sh`, `commands/wiki-code-watch.md`). `/wiki-code-watch <repo>` installs `post-commit`/`post-merge`/`post-rewrite` git hooks into a watched repo that **enqueue-only** (never block the commit, no LLM). Default drain is **in-session** via a new `SessionStart` hook that surfaces drift; opt-in `--autonomous` mode debounces and launches a single-flighted detached headless `claude -p` sync (requires `ANTHROPIC_API_KEY`; degrades to enqueue-only without it). Loop-guarded: refuses to watch the vault's own repo.
+- **Eight new hermetic test suites** wired into `make test` (now 17 suites): `test-code-scan`, `test-code-manifests`, `test-code-signals`, `test-code-drift`, `test-code-sync`, `test-code-watch`, `test-code-coverage`, `test-link-resolve`. Each builds throwaway git repos; gitignore exclusion, drift detection, coverage/staleness gaps, link-resolution, and the hook installer (incl. existing-hook chaining + loop guard) are all covered. (`test-code-coverage` + `test-link-resolve` cover the two `wiki-code-lint` check scripts, which previously shipped untested-in-CI.)
+
+### Changed
+
+- **Router learns the five Mode B code types** (`scripts/wiki-mode.py`). `module|component|dependency|flow|decision` added to `VALID_TYPES`, the generic `DEFAULT_CONFIG` folders, and the generic + PARA routing maps (LYT/Zettelkasten route them automatically). Mirrored in `skills/wiki-mode/SKILL.md` config + routing table. `test_wiki_mode.py` gains `test_code_type_routing` + a CLI route test.
+- **Frontmatter schema gains a code-page block** (`skills/wiki/references/frontmatter.md`): `source_type: code`, plus `source_paths`, `code_anchors` (flat `"path@sha"` strings — honors the no-nested-objects rule), `ingest_commit`, `ingested_at`. The Mode B template in `references/modes.md` was reconciled to this schema (`path:` → `source_paths:`, anchors added).
+- **New `SessionStart` hook** (`hooks/hooks.json`) runs `code-sync-check.py` only when a code-sync queue exists, so it is a silent no-op for non-watching vaults and non-vault sessions. `skills/wiki/SKILL.md` Operations table routes "map my codebase" / "watch this repo".
+- **`/wiki` router gains an explicit CODE WIKI row** (`skills/wiki/SKILL.md` Operations table) pointing `/wiki-code` / "code wiki" / "code wiki status" at the new umbrella, alongside the existing natural-language CODE INGEST / CODE WATCH rows. `CLAUDE.md` (Skills line, Plugin Skills table, new "Code Wiki" section) and `README.md` (skill count 15 → 18, code-wiki command rows, File Structure tree) document the code family.
+- **Version bump** — `.claude-plugin/plugin.json` + `marketplace.json` 1.9.2 → 1.10.0.
+
+### Documented
+
+- `hooks/README.md` gains a **Code-Watch** section explaining the two-hook-system split (declarative Claude plugin hooks vs. installed git hooks), the in-session vs autonomous drain modes, and the loop-safety guarantee.
+
+### Verification
+
+- `make test` → 17/17 suites green (9 pre-existing + 8 new), exit 0. The auto-sync integration test exercises a real `git commit` → queue enqueue end-to-end and asserts existing-hook preservation, the vault-repo loop guard, and unwatch cleanup.
+
 ## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
 
 Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.

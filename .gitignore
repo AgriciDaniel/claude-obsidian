@@ -132,3 +132,14 @@ _attachments/
 # v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
 .vault-meta/mode.json
 .vault-meta/mode.*.tmp
+
+# Mode B code-watch runtime artifacts (regenerable / host-specific: paths + SHAs
+# are local to this machine). Must be ignored — the PostToolUse hook git-adds
+# .vault-meta/ and .raw/ after every tool use, so without these rules an
+# auto-commit loop would commit the queue/state/locks on every interaction.
+.vault-meta/code-sync-queue.jsonl
+.vault-meta/code-sync-state.json
+.vault-meta/.code-sync*.lock
+.vault-meta/.code-sync-launch.lock.d/
+# Deterministic code-signal dumps, regenerated on every ingest (cache, not source)
+.raw/code/
