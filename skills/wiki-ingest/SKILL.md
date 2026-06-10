@@ -185,6 +185,10 @@ Steps:
     - Key insight: One sentence on what is new.
     ```
 11. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
+12. **Add navigation** to every newly created or updated page that has 3+ `##` sections. Apply the `obsidian-nav` skill pattern:
+    - Insert `## 目录` heading + `[!note]+ 📑 目录` folded TOC callout after frontmatter
+    - Add `[[#目录|↑ 返回目录]]` at the end of every `##` and `###` section
+    - Add `📚 导航` cross-page footer at the bottom linking sibling pages
 
 ---
 
