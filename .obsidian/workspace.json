@@ -183,9 +183,17 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "realclaudian:Open Claudian": false,
+      "obsidian-git:Open Git source control": false,
+      "templater-obsidian:Templater": false
     }
   },
   "active": "a31de1b302cdc5cf",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "obsidian-cli/obsidian-cli/Welcome.md",
+    "obsidian-cli/obsidian-cli",
+    "obsidian-cli",
+    "New folder"
+  ]
 }
