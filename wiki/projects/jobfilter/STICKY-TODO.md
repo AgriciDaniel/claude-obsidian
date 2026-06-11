@@ -1,5 +1,15 @@
 # JobFilter STICKY-TODO — Manual Founder Actions
-**Last updated:** 2026-06-02 23:25 UTC
+**Last updated:** 2026-06-11 (Batch B session)
+
+---
+
+## 🔴 NEW 2026-06-11 — activate Batch B (PR #252)
+
+- [ ] **Run migration** `supabase/migrations/20260611_intake_and_profile_metadata.sql` in Supabase SQL editor (creates `intake_submissions`, adds `profiles.whatsapp_number`, fixes signup metadata trigger)
+- [ ] **Set `CRON_SECRET`** in Vercel (any long random string) — enables the 7am daily-scan cron
+- [ ] **Set WhatsApp env vars** in Vercel: `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_TO` (your number, E.164) — GOLD alerts use Meta WhatsApp Cloud API via `server/services/sms.ts`
+- [ ] **Merge PRs**: Codex batch A PR + Claude PR #252 into `fix/mobile-nav-rebuild`, then that branch → main
+- [ ] **Test end-to-end**: submit intake with Emergency + £5,000 budget → row in `intake_submissions` + WhatsApp received; then `curl -H "Authorization: Bearer $CRON_SECRET" https://jobfilter.uk/api/cron/daily-scan`
 
 These are tasks that ONLY the founder can complete — they require login access, secrets, payment setup, or human decisions. Code is already written and waiting for these to be unblocked.
 
