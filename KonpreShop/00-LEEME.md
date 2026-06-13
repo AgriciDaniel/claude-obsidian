@@ -22,6 +22,16 @@
 |---|---|
 | `01-Workflows-Generacion-Imagenes.md` | El sistema de "recetas" para generar imágenes (8 workflows), explicado fácil + plantillas de prompt. |
 | `02-Plan-Auditoria-Web.md` | Soluciones concretas a los 3 hallazgos de tu auditoría (hero, mega menú, portadas) con datos reales. |
+| `03-Mapa-Estrategico.md` | **El mapa completo:** qué tenemos, qué está roto (195 colecciones, duplicados, shops fantasma), cómo acomodarlo, y la dirección creativa nano-banana (personajes, stylist, look editorial). |
+| `04-Direccion-Creativa-Banana.md` | Dirección creativa aplicando la skill **banana**: casting de 7 personajes recurrentes, modos por dominio, ratios, y Reasoning Briefs reales listos para generar. |
+
+### 🖼️ Vista interactiva
+| Archivo | Qué es |
+|---|---|
+| `catalogo-dashboard.html` | **Ábrelo en tu navegador** (doble clic). Las 585 fichas con fotos reales, filtros por tienda/marca/categoría/género + flags de error. |
+
+### 🎨 Herramienta de imágenes
+Skill **banana** instalada (`~/.claude/skills/banana/`) + preset de marca `~/.banana/presets/konpreshop.json`. Falta API key de Gemini para generar (`/banana setup`).
 
 ## Lo más importante de un vistazo
 - **585 productos**, 579 activos, 2,260 imágenes (promedio 3.86 c/u).
