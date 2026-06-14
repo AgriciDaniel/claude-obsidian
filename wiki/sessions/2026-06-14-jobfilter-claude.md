@@ -34,6 +34,28 @@ sprawl, pick highest-value unimplemented item from TODO.md / code TODOs and ship
 - `.next/types/validator.ts` has a stale reference to a non-existent
   `app/api/cron/daily-scan/route.ts` — pre-existing tsc error, unrelated, regenerates on `next build`.
 
+## Round 2 — "do 5 most impact things" from mega-prompt
+- PR: https://github.com/manazoid4/JobFilterV1/pull/259 (branch `fix/security-seo-quickwins`)
+- 5 shipped:
+  1. `app/robots.ts` — was missing entirely (no robots.txt at all)
+  2. `app/sitemap.ts` — `BASE_URL` was `jobfilter.co.uk`, everywhere else in
+     codebase uses `jobfilter.uk` — sitemap pointed search engines at wrong domain
+  3. `next.config.ts` — added security headers (X-Frame-Options, nosniff,
+     Referrer-Policy, Permissions-Policy)
+  4. `server/routes/leadsSearch.ts` `sanitizeRadius()` — threw 422 if
+     `radiusMiles` omitted; now defaults to 25
+  5. New `server/lib/nextRateLimit.ts` (in-memory, Next route handler compatible)
+     applied to `/api/stripe/checkout` (10/min) and `/api/waitlist` (5/min) —
+     both previously unprotected
+- Tried `npm audit fix` for react-router DoS CVE first — it bumped next
+  16.2.7→16.2.9 and made total vuln count WORSE (7→14, new undici issue).
+  Reverted package-lock.json + re-ran `npm install`. Dep vuln fixes left as
+  known issue, not safe to auto-fix without testing.
+- Verified `/api/leads/search` IS reachable in prod (curled jobfilter.uk,
+  got expected 422 for missing radiusMiles before the fix) — so the
+  api/index.ts + app/api/* coexistence on Vercel works fine, no
+  "Frankenstein stack" routing crisis as apple-audit implied.
+
 ## Remaining for next session
 - The 20-deliverable mega-audit was NOT done (deliberately, user chose narrow path).
   If user wants the full audit later, start from existing AUDIT-REPORT.md /
