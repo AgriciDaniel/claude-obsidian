@@ -15,7 +15,6 @@ UK construction lead intelligence platform. Scores, filters, and routes construc
 
 - GitHub: https://github.com/manazoid4/JobFilterV1
 - Local PC location: `C:\Users\manaz\Desktop\jobfilter\jobfilterv1`
-- Alternate local checkout: `C:\Users\manaz\Desktop\JobFilterV1`
 - Live URL: https://jobfilter.uk
 - Stack: Next.js 15, Supabase, Stripe, Tailwind, Vercel
 

@@ -19,11 +19,6 @@ sources: []
 
 # InkWeave — Project Outline
 
-## Project Metadata
-
-- GitHub: https://github.com/manazoid4/inkweave
-- Local PC location: `C:\Users\manaz\Desktop\inkweave`
-
 ## Stage 1: MVP (Build Now)
 
 Goal: prove the core loop works. User submits snippets → gets a full book back.

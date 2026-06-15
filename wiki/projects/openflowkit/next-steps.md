@@ -23,8 +23,6 @@ sources: []
 
 ## Current Deployment State
 
-- GitHub: https://github.com/manazoid4/openflowkit
-- Local PC location: `C:\Users\manaz\Desktop\openflowkit`
 - Live URL: openflowkit.vercel.app
 - Platform: Vercel (auto-deploy on push to main)
 - Stack: Vite + React + TypeScript, Web Speech API

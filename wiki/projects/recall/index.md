@@ -15,7 +15,6 @@ tags: [recall, index]
 
 - GitHub: https://github.com/manazoid4/recall
 - Local PC location: `C:\Users\manaz\saved-brain`
-- Git remote on disk: https://github.com/manazoid4/saved-brain.git
 - Deploy: Vercel — manazir-s-projects1/recall
 - Auth: Clerk (app_3EuOr3cocpxjRhljbOgUYe10Z46)
 - DB: Supabase tcfwhkqxirdrqolkygqd (eu-central-1) + SQLite fallback

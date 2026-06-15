@@ -1,16 +1,16 @@
 ---
-title: Projects — GitHub and PC Locations
+title: Project Locations
 type: index
 created: 2026-06-15
 updated: 2026-06-15
 tags: [projects, github, locations]
 ---
 
-# Projects
+# Project Locations
 
-Primary project map for local PC folders and GitHub repositories.
+Clean map of active projects, local PC folders, and GitHub repositories.
 
-| Project | Local PC location | GitHub |
+| Project | PC location | GitHub |
 |---|---|---|
 | JobFilter | `C:\Users\manaz\Desktop\jobfilter\jobfilterv1` | https://github.com/manazoid4/JobFilterV1 |
 | InkWeave | `C:\Users\manaz\Desktop\inkweave` | https://github.com/manazoid4/inkweave |
@@ -23,9 +23,9 @@ Primary project map for local PC folders and GitHub repositories.
 
 ## Project Notes
 
-- [[jobfilter/index|JobFilter — Project Index]]
-- [[inkweave/overview|InkWeave Product Overview]]
-- [[openflowkit/overview|OpenFlowKit Product Overview]]
+- [[jobfilter/index|JobFilter]]
+- [[inkweave/overview|InkWeave]]
+- [[openflowkit/overview|OpenFlowKit]]
 - [[flipsignal/index|FlipSignal]]
-- [[khutba.io/overview|khutba.io Product Overview]]
-- [[recall/index|Recall — Project Index]]
+- [[khutba.io/overview|khutba.io]]
+- [[recall/index|Recall]]

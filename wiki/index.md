@@ -31,13 +31,13 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Projects
 
-- [[projects/project-locations|Projects — GitHub and PC Locations]] — local folder and GitHub map for active projects
-- [[projects/jobfilter/index|JobFilter — Project Index]] — UK construction lead intelligence platform; live at jobfilter.uk (status: current)
-- [[projects/inkweave/overview|InkWeave Product Overview]] — AI snippet-to-book platform; UK-first, paid tiers, session remote control (status: planning)
-- [[projects/khutba.io/overview|khutba.io Product Overview]] — Live auto-translation display system for masjids; Birmingham launch (status: planning)
-- [[projects/openflowkit/overview|OpenFlowKit Product Overview]] — Privacy-first browser voice dictation; 6 writing modes, Speak-to-Share, local-first. Deployed: openflowkit.vercel.app (status: current)
-- [[projects/flipsignal/index|FlipSignal]] — marketplace arbitrage engine; phase 1 scaffolded (status: active)
-- [[projects/recall/index|Recall — Project Index]] — saved social content knowledge base (status: current)
+- [[projects/project-locations|Project Locations]] — local PC folders and GitHub repos
+- [[projects/jobfilter/index|JobFilter]]
+- [[projects/inkweave/overview|InkWeave]]
+- [[projects/openflowkit/overview|OpenFlowKit]]
+- [[projects/flipsignal/index|FlipSignal]]
+- [[projects/khutba.io/overview|khutba.io]]
+- [[projects/recall/index|Recall]]
 
 ---
 

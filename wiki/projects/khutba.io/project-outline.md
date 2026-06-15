@@ -19,11 +19,6 @@ sources: []
 
 # khutba.io — Project Outline
 
-## Project Metadata
-
-- GitHub: https://github.com/manazoid4/khutba-io
-- Local PC location: `C:\Users\manaz\Desktop\khutba-io`
-
 ## Phase 1 — MVP (weeks 1–3)
 
 | Task | Detail |
