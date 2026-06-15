@@ -1,8 +1,11 @@
-# claude-obsidian Hooks
+# vault-os Hooks
 
-Plugin hooks for the claude-obsidian wiki vault. All hooks are defined in `hooks.json`.
+Plugin hooks for the vault-os wiki vault. Two files live here:
 
-## Events
+- `hooks.json` — Claude Code hook config (uses Claude's event names + prompt-injection hook type).
+- `cursor-hooks.json` — Cursor hook config (uses Cursor's event names; prompt-injection lives in `rules/vault-os.mdc` instead).
+
+## Claude Code Events (`hooks.json`)
 
 | Event | Type | Purpose |
 |---|---|---|
@@ -10,6 +13,18 @@ Plugin hooks for the claude-obsidian wiki vault. All hooks are defined in `hooks
 | `PostCompact` | prompt | Re-loads `wiki/hot.md` after context compaction. Hook-injected context does NOT survive compaction (only `CLAUDE.md` does), so this hook restores the hot cache mid-session. |
 | `PostToolUse` | command | Auto-commits any wiki/ or .raw/ changes after Write or Edit tool calls. Guarded by `[ -d .git ]` so it never errors in non-git directories, and by `git diff --cached --quiet` so it never creates empty commits. |
 | `Stop` | prompt | Updates `wiki/hot.md` at the end of every Claude response with a brief summary of what changed. |
+
+## Cursor Events (`cursor-hooks.json`)
+
+Cursor doesn't support prompt-injection hooks; the equivalent guidance is folded into `rules/vault-os.mdc` (always-applied rule). Only command-type behaviors map here:
+
+| Event | Purpose | Maps from |
+|---|---|---|
+| `sessionStart` | `cat wiki/hot.md` if present (safe in non-vault sessions). | Claude `SessionStart` command hook |
+| `afterFileEdit` | Auto-commits wiki/.raw/.vault-meta changes. Same one-liner as Claude. | Claude `PostToolUse` (Write\|Edit) |
+| `stop` | Emits `WIKI_CHANGED:` reminder when wiki/ has uncommitted changes so the agent updates `wiki/hot.md`. | Claude `Stop` prompt hook |
+
+Note: per [forum.cursor.com](https://forum.cursor.com/t/cursor-cli-doesnt-send-all-events-defined-in-hooks/148316), `stop` fires in the Cursor IDE but is not reliably emitted in cloud agents. Acceptable for v1; the always-applied rule covers end-of-session behavior in environments where the hook doesn't fire.
 
 ## Known Issue: Plugin Hooks STDOUT Bug
 

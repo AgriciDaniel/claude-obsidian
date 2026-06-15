@@ -9,8 +9,11 @@ vault-os = upstream wiki skills + custom extensions, shipped as one plugin.
 |-----------|-------|-----------|
 | `skills/` (existing upstream skills) | upstream (claude-obsidian) | **No** — merge conflicts |
 | `agents/` (existing upstream agents) | upstream (claude-obsidian) | **No** — merge conflicts |
-| `hooks/`, `commands/` | upstream (claude-obsidian) | **No** — merge conflicts |
+| `hooks/hooks.json`, `commands/` | upstream (claude-obsidian) | **No** — merge conflicts |
 | `.claude-plugin/`, `README.md`, `ATTRIBUTION.md` | vault-os (branded) | Yes |
+| `.cursor-plugin/` | vault-os (branded, Cursor manifest) | Yes |
+| `rules/` (plugin-shipped Cursor rules) | vault-os (custom) | Yes |
+| `hooks/cursor-hooks.json` | vault-os (custom, Cursor hook config) | Yes |
 | `skills/<new-skill>/` (new dirs) | vault-os (custom) | Yes — this is where you build |
 | `agents/<new-agent>.md` (new files) | vault-os (custom) | Yes |
 | `docs/`, `bin/` | vault-os (custom) | Yes |

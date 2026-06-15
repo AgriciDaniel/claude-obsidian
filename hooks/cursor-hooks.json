@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "[ -d .git ] && git add wiki/ .raw/ .vault-meta/ 2>/dev/null && (git diff --cached --quiet || git commit -m \"wiki: auto-commit $(date '+%Y-%m-%d %H:%M')\" 2>/dev/null) || true"
+      }
+    ],
+    "stop": [
+      {
+        "command": "[ -d wiki ] && [ -d .git ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && echo 'WIKI_CHANGED: update wiki/hot.md with a brief summary (<500 words, factual, overwrite). Format: Last Updated, Key Recent Facts, Recent Changes, Active Threads.' || true"
+      }
+    ]
+  }
+}

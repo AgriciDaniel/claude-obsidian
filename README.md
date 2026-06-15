@@ -7,6 +7,7 @@ A schema-agnostic context bus for AI agents. Load the right knowledge, from the 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-8B5CF6)](https://code.claude.com/docs/en/discover-plugins)
+[![Cursor](https://img.shields.io/badge/Cursor-plugin-1e1e1e)](https://cursor.com/docs/plugins)
 [![Upstream](https://img.shields.io/badge/upstream-claude--obsidian-orange)](https://github.com/AgriciDaniel/claude-obsidian)
 [![Blog Post](https://img.shields.io/badge/Deep_Dive-Blog_Post-22c55e)](https://agricidaniel.com/blog/claude-obsidian-ai-second-brain)
 
@@ -70,7 +71,7 @@ Most knowledge systems accumulate notes and RAG from scratch every time. vault-o
 
 ## What It Does Today
 
-A Claude Code plugin that manages a persistent, compounding wiki vault in Obsidian.
+A Claude Code **and Cursor** plugin that manages a persistent, compounding wiki vault in Obsidian.
 
 | Command | What it does |
 |---------|------------|
@@ -96,10 +97,33 @@ A Claude Code plugin that manages a persistent, compounding wiki vault in Obsidi
 
 ## Quick Start
 
+### Claude Code
+
 ```bash
-# Install as Claude Code plugin
 claude plugin marketplace add saixso/vault-os
 claude plugin install vault-os@vault-os-marketplace
+```
+
+### Cursor
+
+Once approved on the official marketplace:
+
+```
+Open Cursor → Marketplace → search "vault-os" → Install
+```
+
+Until then, self-hosted install from this repo:
+
+```
+Settings → Plugins → Add marketplace → saixso/vault-os
+```
+
+### Other agents (Codex CLI, OpenCode, Gemini CLI, Windsurf)
+
+```bash
+git clone https://github.com/saixso/vault-os.git
+cd vault-os
+bash bin/setup-multi-agent.sh
 ```
 
 In any session: `/wiki`.

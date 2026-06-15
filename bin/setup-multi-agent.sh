@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
-# claude-obsidian: multi-agent skill installer
+# vault-os: multi-agent skill installer
 # Symlinks the skills/ directory into each AI agent's expected location.
 # Idempotent: safe to run multiple times.
 #
 # Supported agents:
 #   - Claude Code    : auto-discovered via .claude-plugin/ (no symlink needed)
-#   - Codex CLI      : symlink to ~/.codex/skills/claude-obsidian
-#   - OpenCode       : symlink to ~/.opencode/skills/claude-obsidian
-#   - Gemini CLI     : symlink to ~/.gemini/skills/claude-obsidian
-#   - Cursor         : symlink to .cursor/skills (in repo)
+#   - Cursor         : auto-discovered via .cursor-plugin/ when installed from
+#                      the marketplace; the .cursor/skills symlink is only
+#                      created for in-repo dev work (see CURSOR_DEV_SYMLINK).
+#   - Codex CLI      : symlink to ~/.codex/skills/vault-os
+#   - OpenCode       : symlink to ~/.opencode/skills/vault-os
+#   - Gemini CLI     : symlink to ~/.gemini/skills/vault-os
 #   - Windsurf       : symlink to .windsurf/skills (in repo)
 #
-# Bootstrap files (AGENTS.md, GEMINI.md, .cursor/rules/, .windsurf/rules/,
+# Bootstrap files (AGENTS.md, GEMINI.md, rules/vault-os.mdc, .windsurf/rules/,
 # .github/copilot-instructions.md) are already committed in the repo.
 # This script just wires up the skills directory.
+#
+# Set CURSOR_DEV_SYMLINK=1 to force-create the .cursor/skills symlink even
+# when .cursor-plugin/plugin.json exists. Useful when you're editing skills
+# in this repo and want them picked up by the local Cursor agent without
+# going through the plugin loader.
 
 set -euo pipefail
 
@@ -62,26 +69,34 @@ echo "Repo: $REPO_ROOT"
 echo
 
 # Codex CLI
-link_if_missing "$SKILLS_DIR" "$HOME/.codex/skills/claude-obsidian" "Codex CLI"
+link_if_missing "$SKILLS_DIR" "$HOME/.codex/skills/vault-os" "Codex CLI"
 
 # OpenCode
-link_if_missing "$SKILLS_DIR" "$HOME/.opencode/skills/claude-obsidian" "OpenCode"
+link_if_missing "$SKILLS_DIR" "$HOME/.opencode/skills/vault-os" "OpenCode"
 
 # Gemini CLI
-link_if_missing "$SKILLS_DIR" "$HOME/.gemini/skills/claude-obsidian" "Gemini CLI"
+link_if_missing "$SKILLS_DIR" "$HOME/.gemini/skills/vault-os" "Gemini CLI"
 
-# Cursor (workspace-local)
-link_if_missing "$SKILLS_DIR" "$REPO_ROOT/.cursor/skills" "Cursor"
+# Cursor (workspace-local).
+# Skip the symlink when the repo ships .cursor-plugin/plugin.json AND the user
+# hasn't explicitly opted into the dev symlink. With the plugin manifest in
+# place, Cursor discovers skills/ on its own once installed from the
+# marketplace, and a stale .cursor/skills symlink can shadow that.
+if [ -f "$REPO_ROOT/.cursor-plugin/plugin.json" ] && [ "${CURSOR_DEV_SYMLINK:-0}" != "1" ]; then
+  echo -e "${GRAY}[Cursor] .cursor-plugin/plugin.json found — skipping .cursor/skills symlink (set CURSOR_DEV_SYMLINK=1 to force).${NC}"
+else
+  link_if_missing "$SKILLS_DIR" "$REPO_ROOT/.cursor/skills" "Cursor"
+fi
 
 # Windsurf (workspace-local)
 link_if_missing "$SKILLS_DIR" "$REPO_ROOT/.windsurf/skills" "Windsurf"
 
 echo
-echo -e "${GREEN}Done.${NC} Bootstrap files (AGENTS.md, GEMINI.md, .cursor/rules/, .windsurf/rules/, .github/copilot-instructions.md) are already in this repo."
+echo -e "${GREEN}Done.${NC} Bootstrap files (AGENTS.md, GEMINI.md, rules/vault-os.mdc, .windsurf/rules/, .github/copilot-instructions.md) are already in this repo."
 echo
 echo "To verify each agent picks up the skills:"
 echo "  - Claude Code: open the project, type /wiki"
-echo "  - Codex CLI:   codex --list-skills | grep claude-obsidian"
-echo "  - Cursor:      open the project, ask 'what skills do you have?'"
-echo "  - Windsurf:    open in Cascade, ask the same"
+echo "  - Cursor:      install via marketplace (saixso/vault-os) or set CURSOR_DEV_SYMLINK=1 and rerun"
+echo "  - Codex CLI:   codex --list-skills | grep vault-os"
+echo "  - Windsurf:    open in Cascade, ask 'what skills do you have?'"
 echo "  - Gemini CLI:  gemini --list-skills (if supported)"

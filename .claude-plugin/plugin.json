@@ -1,6 +1,6 @@
 {
   "name": "vault-os",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Opinionated Claude Code + Obsidian knowledge companion. Persistent, compounding wiki vault with harness and hooks. Optional DragonScale Memory extension adds hierarchical log folds, deterministic page addresses, embedding-based semantic tiling lint, and boundary-first autoresearch topic selection. Fork of claude-obsidian by AgriciDaniel.",
   "author": {
     "name": "saixso",

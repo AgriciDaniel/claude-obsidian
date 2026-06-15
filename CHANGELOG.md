@@ -2,6 +2,23 @@
 
 All notable changes to vault-os and upstream claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [2.4.0] - 2026-06-15 (vault-os)
+
+### Added
+
+- **Cursor plugin support.** vault-os is now installable as a first-class Cursor plugin alongside Claude Code.
+  - `.cursor-plugin/plugin.json` — Cursor plugin manifest declaring skills, commands, agents, rules, and hooks.
+  - `.cursor-plugin/marketplace.json` — self-hosted marketplace manifest so users can install from `saixso/vault-os` before official approval.
+  - `rules/vault-os.mdc` — plugin-shipped always-applied rule, ported from `.cursor/rules/claude-obsidian.mdc`. Folds in the hot-cache restore + post-compact behaviors that Claude Code did via `SessionStart` / `PostCompact` prompt hooks (Cursor hooks can't inject prompts).
+  - `hooks/cursor-hooks.json` — Cursor-flavored hooks. Maps `SessionStart` → `sessionStart`, `PostToolUse` → `afterFileEdit`, `Stop` → `stop`. Existing Claude `hooks/hooks.json` is untouched.
+- `bin/setup-multi-agent.sh` now skips the `.cursor/skills` symlink when `.cursor-plugin/plugin.json` is present (Cursor discovers `skills/` natively via the plugin manifest). Set `CURSOR_DEV_SYMLINK=1` to force the symlink for in-repo development.
+
+### Changed
+
+- README, AGENTS.md, CLAUDE.md updated with the Cursor install path and the new `.cursor-plugin/` + `rules/` ownership rows.
+- `bin/setup-multi-agent.sh` rebranded the Codex/OpenCode/Gemini symlink suffix from `claude-obsidian` to `vault-os`.
+- Synced upstream `claude-obsidian` changes through `v1.9.2` (Compound Vault transport/retrieval/locking line, methodology modes, verifier tooling, and audit/test assets).
+
 ## [2.3.1] - 2026-04-27 (vault-os)
 
 ### Fixed

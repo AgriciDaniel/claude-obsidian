@@ -1,25 +1,29 @@
-# claude-obsidian: Agent Instructions
+# vault-os: Agent Instructions
 
-This repo is a Claude Code plugin **and** an Obsidian vault that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It works with **any AI coding agent** that supports the Agent Skills standard, including Codex CLI, OpenCode, and similar.
+This repo is a Claude Code + Cursor plugin **and** an Obsidian vault that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It works with **any AI coding agent** that supports the Agent Skills standard, including Codex CLI, OpenCode, Cursor, and similar.
 
 Originally built for Claude Code, the skills follow the cross-platform Agent Skills spec. Newer skills (`wiki-fold`, `wiki-ingest`, `wiki-lint`) use only `name` and `description` frontmatter (kepano convention). Some older skills still carry an optional `allowed-tools` field for Claude Code compatibility; cross-platform agents that do not recognize it should ignore it.
 
 ## Skills Discovery
 
-All skills live in `skills/<name>/SKILL.md`. Codex / OpenCode / other Agent Skills compatible agents will auto-discover them when you symlink the directory:
+All skills live in `skills/<name>/SKILL.md`. Discovery depends on the agent:
 
-```bash
-# Codex CLI
-ln -s "$(pwd)/skills" ~/.codex/skills/claude-obsidian
-
-# OpenCode
-ln -s "$(pwd)/skills" ~/.opencode/skills/claude-obsidian
-```
-
-Or run the bundled installer:
+- **Claude Code**: auto-discovered via `.claude-plugin/plugin.json` (install from the `vault-os-marketplace`).
+- **Cursor**: auto-discovered via `.cursor-plugin/plugin.json` once the plugin is installed from the marketplace (`saixso/vault-os`) or as a self-hosted marketplace. No symlink needed.
+- **Codex CLI / OpenCode / Gemini CLI / Windsurf**: still need a symlink. Run:
 
 ```bash
 bash bin/setup-multi-agent.sh
+```
+
+Or manually:
+
+```bash
+# Codex CLI
+ln -s "$(pwd)/skills" ~/.codex/skills/vault-os
+
+# OpenCode
+ln -s "$(pwd)/skills" ~/.opencode/skills/vault-os
 ```
 
 ## Available Skills
@@ -57,7 +61,8 @@ When the user opens this project for the first time:
 
 ## Reference
 
-- Plugin homepage (public canonical): https://github.com/AgriciDaniel/claude-obsidian
-- Community early-access mirror (Pro): https://github.com/AI-Marketing-Hub
+- Plugin source: https://github.com/saixso/vault-os
+- Upstream: https://github.com/AgriciDaniel/claude-obsidian
+- Upstream mirror (early-access): https://github.com/AI-Marketing-Hub
 - Pattern source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - Cross-reference: https://github.com/kepano/obsidian-skills (authoritative Obsidian-specific skills)

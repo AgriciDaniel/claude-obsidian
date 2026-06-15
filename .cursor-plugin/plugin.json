@@ -1,0 +1,29 @@
+{
+  "name": "vault-os",
+  "displayName": "vault-os",
+  "description": "Persistent, compounding Obsidian wiki vault for AI agents. 11 skills, optional DragonScale memory extension. Fork of claude-obsidian.",
+  "version": "2.4.0",
+  "author": {
+    "name": "saixso",
+    "url": "https://github.com/saixso"
+  },
+  "homepage": "https://github.com/saixso/vault-os",
+  "repository": "https://github.com/saixso/vault-os",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "wiki",
+    "knowledge-base",
+    "memory",
+    "second-brain",
+    "llm-wiki",
+    "karpathy",
+    "pkm",
+    "canvas"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "rules": "./rules/",
+  "hooks": "./hooks/cursor-hooks.json"
+}

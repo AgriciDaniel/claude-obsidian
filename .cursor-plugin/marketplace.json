@@ -1,0 +1,25 @@
+{
+  "name": "vault-os-marketplace",
+  "owner": {
+    "name": "saixso"
+  },
+  "metadata": {
+    "description": "vault-os: persistent Obsidian wiki vault for AI agents",
+    "version": "2.4.0"
+  },
+  "plugins": [
+    {
+      "name": "vault-os",
+      "source": ".",
+      "description": "Persistent, compounding Obsidian wiki vault — 11 skills, DragonScale memory.",
+      "version": "2.4.0",
+      "author": {
+        "name": "saixso",
+        "url": "https://github.com/saixso"
+      },
+      "homepage": "https://github.com/saixso/vault-os",
+      "repository": "https://github.com/saixso/vault-os",
+      "license": "MIT"
+    }
+  ]
+}
