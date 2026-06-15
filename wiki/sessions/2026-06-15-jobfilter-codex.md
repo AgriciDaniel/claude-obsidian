@@ -5,19 +5,24 @@ agent: codex
 status: completed
 ---
 ## What I did
-- Updated `AGENTS.md` with verified repo commands, lead-engine regression commands, and current cron/WhatsApp workflow notes.
-- Added a short TODO noting that founder notes mention `/api/cron/daily-scan`, but that route is not present in this repo snapshot.
-- Opened PR #274 from `agents/update-agents-md`.
+- Read JobFilter memory and project context, then checked recent GitHub PRs for current product state.
+- Researched adjacent construction lead products, especially Buildscout and 2BuildUK, to validate the patch-check and early-signal positioning.
+- Built a tighter conversion path around scan -> check patch -> pricing.
+- Opened PR #275: https://github.com/manazoid4/JobFilterV1/pull/275
 
 ## Files changed
-- `C:\Users\manaz\.codex\worktrees\6deb\JobFilterV1\AGENTS.md`
+- `src/components/TopNav.tsx`
+- `src/pages/HomePage.tsx`
+- `src/pages/PricingPage.tsx`
+- `src/pages/TerritoriesPage.tsx`
+- `app/territory/page.tsx`
 
 ## Decisions made
-- Kept the edit minimal and only added commands/workflows confirmed in `package.json`, `vercel.json`, `AGENT_RUNNING_MODEL.md`, and current source files.
-- Did not add the `daily-scan` command to agent instructions because the route is not present on this branch.
-- Recorded verification failure as environment-related because `node_modules` is missing in this worktree.
+- Prioritised a real patch-check form over more static territory scarcity copy.
+- Routed "Claim Patch" CTAs to the territory flow before pricing, reducing ambiguity and avoiding fake instant availability.
+- Left unrelated dirty repo files untouched, including existing lead-engine outcome-learning work.
 
 ## Next steps
-- Review and merge PR #274 if the AGENTS additions look right.
-- If `daily-scan` exists on another branch, sync that route before documenting it here.
-- Install dependencies in the worktree if command verification is needed locally.
+- Merge PR #275 after review.
+- Consider adding structured patch-check persistence later instead of encoding the request through the current waitlist table.
+- Add browser screenshot coverage when Playwright or the Browser plugin is available in the repo environment.
