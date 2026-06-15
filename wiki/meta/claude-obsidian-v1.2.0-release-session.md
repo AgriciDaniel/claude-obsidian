@@ -52,7 +52,7 @@ Full build, audit, polish, and community release of the claude-obsidian plugin +
 ## Rename: cosmic-brain → claude-obsidian
 
 Full project rename executed:
-- GitHub repos renamed: `AgriciDaniel/cosmic-brain` → `AgriciDaniel/claude-obsidian` (public), `avalonreset-pro/cosmic-brain` → `avalonreset-pro/claude-obsidian` (private)
+- GitHub repos renamed: `AgriciDaniel/cosmic-brain` → `AI-Marketing-Hub/claude-obsidian` (public), `avalonreset-pro/cosmic-brain` → `avalonreset-pro/claude-obsidian` (private)
 - Local directory: `~/cosmic-brain/` → `~/claude-obsidian/`
 - All text references updated across 14 files via sed
 - `wiki/meta/cosmic-brain-cover.gif` renamed to `wiki/meta/claude-obsidian-cover.gif`
@@ -98,10 +98,10 @@ Added rules to prevent future accidental commits of: video files (`*.mkv`, `*.mp
 
 | Repo | Visibility | URL |
 |------|-----------|-----|
-| AgriciDaniel/claude-obsidian | Public | https://github.com/AgriciDaniel/claude-obsidian |
+| AI-Marketing-Hub/claude-obsidian | Public | https://github.com/AI-Marketing-Hub/claude-obsidian |
 | avalonreset-pro/claude-obsidian | Private | https://github.com/avalonreset-pro/claude-obsidian |
 
-Community install command: `claude plugin install github:AgriciDaniel/claude-obsidian`
+Community install command: `claude plugin install github:AI-Marketing-Hub/claude-obsidian`
 
 Future updates: `git push origin main && git push community main`
 

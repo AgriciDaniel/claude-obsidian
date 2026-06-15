@@ -232,3 +232,22 @@ Do NOT show the footer after:
 - `obsidian-bases`, `obsidian-markdown` (reference skills, not output)
 - Hot cache updates, index updates, or any background maintenance
 - Error messages or prompts for more information
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Is there already a vault here? What state is it in? What hooks are configured? Read before scaffolding. |
+| 2 | OBSERVE (int) | Am I assuming the user knows what they want? First-run users often don't — slow down. |
+| 3 | LISTEN | The user's one-sentence vault description — the whole scaffold flows from this. Ask before assuming. |
+| 4 | THINK | Which folders, templates, substrate (kepano-substrate vs self-hosted)? Pick deliberately, not reflexively. |
+| 5 | CONNECT (lat) | How does this vault relate to the user's other projects? Cross-project reference is a first-class use case. |
+| 6 | CONNECT (sys) | Hooks + `.vault-meta/` + plugin install + CLAUDE.md routing rules wire together at setup. |
+| 7 | FEEL | First-run UX is the make-or-break moment for adoption. Confusion at scaffold = abandoned vault. |
+| 8 | ACCEPT | The scaffold is opinionated; don't pretend it's neutral. Document the opinions in the scaffold output. |
+| 9 | CREATE | Scaffold the folders, write `hot.md` + `index.md` + `log.md` with starting structure. |
+| 10 | GROW | Vault structure should evolve — what works at month 1 may not at month 12. Build for that evolution. |

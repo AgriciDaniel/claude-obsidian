@@ -11,6 +11,72 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ---
 
+## Transport (v1.7+)
+
+Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
+
+- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md` (or `append`, `property:set`); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note` and friends; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
+- **filesystem** — Claude's `Write`/`Edit` tools with absolute vault-rooted paths (final floor; always works)
+
+Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/references/transport-fallback.md).
+
+---
+
+## Mode awareness (v1.8+)
+
+Before creating any new wiki page, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
+
+```bash
+SRC_PATH=$(python3 scripts/wiki-mode.py route source "Karpathy 2025 LLM Wiki essay")
+# generic:      wiki/sources/Karpathy-2025-LLM-Wiki-essay.md
+# lyt:          wiki/notes/Karpathy-2025-LLM-Wiki-essay.md  (also update relevant MOC)
+# para:         wiki/resources/incoming/Karpathy-2025-LLM-Wiki-essay.md
+# zettelkasten: wiki/20260517123456-Karpathy-2025-LLM-Wiki-essay.md
+
+ENT_PATH=$(python3 scripts/wiki-mode.py route entity "Andrej Karpathy")
+CON_PATH=$(python3 scripts/wiki-mode.py route concept "Compounding Vault Pattern")
+```
+
+If `.vault-meta/mode.json` is absent, the router returns mode=generic paths (identical to v1.7 behavior). No special-casing needed in this skill.
+
+Mode-specific follow-up:
+- **LYT**: after filing the atomic note, update the relevant MOC (`wiki/mocs/<topic>-moc.md`) to link the new note. If no MOC exists for the topic, create one using `skills/wiki-mode/templates/lyt/moc-template.md`.
+- **Zettelkasten**: filename already includes the timestamp ID. Populate the `id:` frontmatter field to match.
+- **PARA**: new ingests land in `wiki/resources/incoming/` by default. Do NOT auto-guess the topic; leave in incoming/ for user review.
+
+## Concurrency (v1.7+)
+
+**Multi-writer is safe in v1.7.** The latent corruption bug from v1.6 — where two parallel sub-agents writing to the same page could silently trample each other — is closed by per-file advisory locking. Every wiki page write MUST be preceded by `wiki-lock acquire <path>`.
+
+```bash
+# Acquire — blocks (returns 75 EX_TEMPFAIL) if another writer holds the lock
+if bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md; then
+  # ... do the write via the §Transport-selected method ...
+  bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+else
+  # rc=75: another writer is in flight. Retry once after 2s; if still held,
+  # log to wiki/log.md and skip this page rather than overwrite.
+  sleep 2
+  bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md && {
+    # write …
+    bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+  } || echo "skipped wiki/concepts/Foo.md (locked); logged to wiki/log.md"
+fi
+```
+
+Properties:
+- **Per-file granularity.** Locks key on `sha1(<vault-relative-path>)`; concurrent writes to DIFFERENT pages run in parallel.
+- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `scripts/wiki-lock.sh` header for the full semantics.
+- **Cross-process release.** Release is `rm -f` (no PID match required). Skill authors are trusted to release locks they acquire; cross-skill release is allowed by design (a janitor running `wiki-lock clear-stale --max-age 0` is the canonical recovery path).
+- **The PostToolUse hook now defers `git add` if any locks are currently held**, so the auto-commit doesn't fire mid-ingest and produce torn commits. See `hooks/hooks.json`.
+
+`wiki-lock` is unconditional in v1.7+ — there is no feature gate, no fallback. Skills that don't acquire locks are racing against any other writer. The script is in core, not opt-in.
+
+Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `scripts/allocate-address.sh`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `agents/wiki-ingest.md`.
+
+---
+
 ## Delta Tracking
 
 Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.
@@ -274,3 +340,22 @@ On a page rename, the skill must update the `address_map` key (old path -> new p
 ### Batch ingest
 
 Assign addresses sequentially during single-source-ingest for each source. Do not pre-reserve a block of counter values. The helper is cheap (one lock, one integer read/write).
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Read the source file completely before extracting anything. No shortcuts on long sources. |
+| 2 | OBSERVE (int) | Am I biased toward the source's framing? Where do my disagreements live? Note them as contradiction callouts. |
+| 3 | LISTEN | The user's source-selection intent — what made THIS source worth ingesting, and what is the user hoping to extract? |
+| 4 | THINK | Which entities deserve pages? Which concepts? What cross-references? What contradictions with existing pages? |
+| 5 | CONNECT (lat) | This source's claims vs other sources already in the wiki. Contradictions are the highest-signal finding. |
+| 6 | CONNECT (sys) | `wiki-mode.py route` for paths + `wiki-lock.sh` for safety + index/log/hot for consumer visibility. |
+| 7 | FEEL | A page that compounds — useful in 6 months, not just today. Skip filler; favor synthesis over transcription. |
+| 8 | ACCEPT | Not every claim is wiki-worthy. Editorial judgment is part of ingest, not a bug to remove. |
+| 9 | CREATE | Source + entity + concept pages with full frontmatter; cross-references; contradiction callouts where needed. |
+| 10 | GROW | Contradictions found mid-ingest are the most valuable wiki signal. File them as questions for follow-up, not silently. |

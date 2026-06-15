@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" role="img" aria-labelledby="locking-title locking-desc">
+  <title id="locking-title">Multi-writer safety: per-file advisory locking via wiki-lock.sh</title>
+  <desc id="locking-desc">Diagram showing two parallel ingest writers attempting to acquire a lock on the same wiki page. The lock manager grants one writer access while the other waits and retries on the next pass, preventing corruption.</desc>
+
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="480" fill="#ffffff" />
+
+  <text x="600" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#0f172a">Multi-writer safety: per-file advisory locks (v1.7+)</text>
+  <text x="600" y="54" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#64748b">Closes the latent corruption hole when parallel agents target the same page.</text>
+
+  <!-- Writer A -->
+  <rect x="40" y="100" width="200" height="90" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+  <text x="140" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#1e3a8a">Writer A</text>
+  <text x="140" y="152" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">/wiki-ingest sub-agent</text>
+  <text x="140" y="170" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#3b82f6">processing source-1.md</text>
+
+  <!-- Writer B -->
+  <rect x="40" y="320" width="200" height="90" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+  <text x="140" y="350" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#92400e">Writer B</text>
+  <text x="140" y="372" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">/wiki-ingest sub-agent</text>
+  <text x="140" y="390" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#d97706">processing source-2.md</text>
+
+  <!-- Arrows to lock manager -->
+  <line x1="240" y1="145" x2="400" y2="220" stroke="#475569" stroke-width="2" marker-end="url(#arrow2)" />
+  <text x="290" y="170" font-family="system-ui, sans-serif" font-size="11" fill="#475569">acquire wiki/concepts/Foo.md</text>
+
+  <line x1="240" y1="365" x2="400" y2="260" stroke="#475569" stroke-width="2" marker-end="url(#arrow2)" />
+  <text x="290" y="335" font-family="system-ui, sans-serif" font-size="11" fill="#475569">acquire wiki/concepts/Foo.md</text>
+
+  <!-- Lock manager -->
+  <rect x="400" y="180" width="280" height="120" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" />
+  <text x="540" y="212" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#5b21b6">scripts/wiki-lock.sh</text>
+  <text x="540" y="236" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">atomic acquire / release</text>
+  <text x="540" y="254" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">.vault-meta/locks/&lt;hash&gt;.lock</text>
+  <text x="540" y="276" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#7c3aed">stale reap: 60s default</text>
+
+  <!-- Outcomes -->
+  <line x1="680" y1="210" x2="800" y2="160" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow-green)" />
+  <text x="720" y="178" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#15803d">✓ granted</text>
+
+  <line x1="680" y1="270" x2="800" y2="340" stroke="#d97706" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-amber)" />
+  <text x="700" y="320" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#b45309">✗ waits + retries</text>
+
+  <!-- Outcome boxes -->
+  <rect x="800" y="100" width="350" height="120" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+  <text x="975" y="130" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#15803d">Writer A writes the page</text>
+  <text x="975" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Write/Edit via selected transport</text>
+  <text x="975" y="173" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">(Obsidian CLI / MCP / filesystem)</text>
+  <text x="975" y="195" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#16a34a">then releases the lock</text>
+
+  <rect x="800" y="290" width="350" height="130" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+  <text x="975" y="320" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#92400e">Writer B logs the skip</text>
+  <text x="975" y="346" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">wiki/log.md gets a skip-line</text>
+  <text x="975" y="364" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Page picked up on next pass</text>
+  <text x="975" y="390" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#d97706">No corruption. No half-written page.</text>
+
+  <!-- Bottom note -->
+  <text x="600" y="450" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">PostToolUse hook checks the lock list before auto-committing. Active locks defer the commit.</text>
+  <text x="600" y="466" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Path validation rejects absolute paths, `..` segments, newlines, NUL bytes. Tests: 22 assertions across test_wiki_lock.sh + test_concurrent_write.sh</text>
+</svg>

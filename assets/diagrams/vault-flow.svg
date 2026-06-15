@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="vault-flow-title vault-flow-desc">
+  <title id="vault-flow-title">claude-obsidian vault flow: sources to ingest to wiki pages to index to query</title>
+  <desc id="vault-flow-desc">Horizontal architecture diagram showing source documents flowing into the wiki-ingest agent, which extracts entities, concepts, and sources into the wiki. The index is updated, and the wiki-query interface answers questions by reading the hot cache, index, and pages in order.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+    <linearGradient id="bg-card" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fafafa" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" fill="#ffffff" />
+
+  <text x="600" y="30" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#0f172a">Vault flow: from raw source to cited answer</text>
+
+  <!-- Sources -->
+  <rect x="40" y="160" width="170" height="90" rx="10" fill="url(#bg-card)" stroke="#3b82f6" stroke-width="2" />
+  <text x="125" y="195" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#1e3a8a">.raw/ sources</text>
+  <text x="125" y="218" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">PDFs · markdown</text>
+  <text x="125" y="234" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">URLs · transcripts</text>
+
+  <line x1="210" y1="205" x2="270" y2="205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Ingest -->
+  <rect x="270" y="150" width="200" height="110" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2" />
+  <text x="370" y="180" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#5b21b6">/wiki-ingest</text>
+  <text x="370" y="202" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">read · extract entities</text>
+  <text x="370" y="218" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">extract concepts</text>
+  <text x="370" y="234" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">cross-reference</text>
+  <text x="370" y="250" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#7c3aed">acquires wiki-lock per page</text>
+
+  <line x1="470" y1="180" x2="540" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="470" y1="205" x2="540" y2="205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="470" y1="230" x2="540" y2="290" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Output pages -->
+  <rect x="540" y="95" width="170" height="60" rx="8" fill="#ecfeff" stroke="#06b6d4" stroke-width="2" />
+  <text x="625" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#155e75">wiki/entities/</text>
+  <text x="625" y="140" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">people · orgs · products</text>
+
+  <rect x="540" y="175" width="170" height="60" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" />
+  <text x="625" y="200" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#166534">wiki/concepts/</text>
+  <text x="625" y="220" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">ideas · patterns · frameworks</text>
+
+  <rect x="540" y="255" width="170" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+  <text x="625" y="280" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#92400e">wiki/sources/</text>
+  <text x="625" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#475569">source summaries</text>
+
+  <line x1="710" y1="125" x2="770" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="710" y1="205" x2="770" y2="205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="710" y1="285" x2="770" y2="215" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Index -->
+  <rect x="770" y="160" width="180" height="90" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="860" y="190" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#991b1b">wiki/index.md</text>
+  <text x="860" y="212" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">master catalog</text>
+  <text x="860" y="228" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">+ wiki/hot.md cache</text>
+  <text x="860" y="244" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#dc2626">+ wiki/log.md append</text>
+
+  <line x1="950" y1="205" x2="1010" y2="205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Query -->
+  <rect x="1010" y="150" width="150" height="110" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+  <text x="1085" y="180" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="#92400e">/wiki-query</text>
+  <text x="1085" y="202" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">read hot</text>
+  <text x="1085" y="218" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">read index</text>
+  <text x="1085" y="234" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">read pages</text>
+  <text x="1085" y="250" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-style="italic" fill="#b45309">synthesize + cite</text>
+
+  <!-- Bottom annotation -->
+  <text x="600" y="365" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Every page is gated by per-file advisory locks (v1.7+). Mode router (v1.8+) picks the destination folder per active methodology.</text>
+  <text x="600" y="385" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Hot cache is refreshed on Stop hook. Index + log update atomically. Compounds with every ingest.</text>
+</svg>

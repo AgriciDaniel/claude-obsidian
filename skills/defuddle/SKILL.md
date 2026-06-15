@@ -10,6 +10,8 @@ Defuddle extracts the meaningful content from a web page and drops everything el
 
 Use this before any URL ingestion. It is optional but strongly recommended. It cuts token usage by 40-60% on typical web articles and produces cleaner wiki pages.
 
+**Substrate note (v1.7+)**: Unlike `obsidian-markdown` / `obsidian-bases` / `json-canvas` (where we defer to kepano/obsidian-skills as upstream), the `defuddle` skill is original to claude-obsidian — kepano's marketplace does not ship a defuddle skill. This is the canonical version. The underlying `defuddle-cli` is independent of either marketplace and lives at [github.com/kepano/defuddle](https://github.com/kepano/defuddle).
+
 ---
 
 ## Install
@@ -82,3 +84,22 @@ The `/wiki-ingest` skill checks for defuddle automatically when a URL is passed.
 To manually clean a page and save before ingesting:
 1. Run the save command above
 2. Then: `ingest .raw/articles/[slug].md`
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | Which URL? What's actually on the page? Don't assume the title matches the content. |
+| 2 | OBSERVE (int) | Am I assuming the page has the content the user expects? Verify before extracting. |
+| 3 | LISTEN | Did the user say "the article" (main content only) or "the link" (everything visible)? |
+| 4 | THINK | Strip boilerplate, preserve structure, capture metadata. Quote URLs in shell to avoid injection. |
+| 5 | CONNECT (lat) | How does this domain typically render? Some sites mangle defuddle's heuristics; track those. |
+| 6 | CONNECT (sys) | Shells out to defuddle-cli (kepano); output lands in `.raw/` for wiki-ingest pickup. |
+| 7 | FEEL | Clean markdown that reads like the original, not boilerplate residue. |
+| 8 | ACCEPT | Some pages don't extract well. Flag and move on; don't force when the heuristic loses. |
+| 9 | CREATE | Markdown to stdout, redirected to `.raw/articles/<slug>-<date>.md`. |
+| 10 | GROW | Extraction failures suggest defuddle-cli upgrade or alternative extractor — track them as backlog. |

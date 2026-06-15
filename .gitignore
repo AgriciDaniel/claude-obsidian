@@ -2,6 +2,7 @@
 # workspace.json is intentionally tracked — ships with pre-configured graph view
 # .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/workspace-visual.json
 .obsidian/plugins/*/data.json
 !.obsidian/plugins/calendar/data.json
 !.obsidian/plugins/thino/data.json
@@ -99,6 +100,13 @@ _attachments/images/skool-hub/
 # Archive of old versions (cosmic-brain, GIF assets)
 claude-obsidian-archive/
 
+# Sibling-plugin marketing assets that landed in working tree (claude-canvas covers / tutorials)
+claude-canvas-covers and stuff/
+claude-canvas/
+
+# Codex CLI sentinel marker (0-byte read-only file created by `codex` runs)
+.codex
+
 # User-specific attachments
 _attachments/
 
@@ -107,3 +115,20 @@ _attachments/
 .vault-meta/.tiling.lock
 .vault-meta/tiling-cache.json
 .vault-meta/tiling-cache.*.tmp
+
+# v1.7 Compound Vault runtime artifacts (regenerable; host-specific)
+.vault-meta/.wiki-lock.meta
+.vault-meta/.bm25.lock
+.vault-meta/.embed-cache.lock
+.vault-meta/locks/*
+!.vault-meta/locks/.gitkeep
+.vault-meta/chunks/
+.vault-meta/bm25/
+.vault-meta/embed-cache.json
+.vault-meta/embed-cache.*.tmp
+.vault-meta/transport.json
+.vault-meta/transport.*.tmp
+.vault-meta/hook.log
+# v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
+.vault-meta/mode.json
+.vault-meta/mode.*.tmp

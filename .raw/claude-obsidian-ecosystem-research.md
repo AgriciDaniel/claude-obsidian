@@ -16,14 +16,14 @@ sources:
 ---
 
 # Claude + Obsidian Ecosystem Research
-> Researched: 2026-04-08 | Goal: cherry-pick best features for AgriciDaniel/claude-obsidian
+> Researched: 2026-04-08 | Goal: survey the Claude + Obsidian ecosystem and identify strong patterns and prior art relevant to claude-obsidian.
 
 ---
 
 ## Summary
 
 16+ active projects found combining Claude/AI with Obsidian. Organized into 4 categories:
-1. **LLM Wiki Pattern plugins** (Claude Code skill-based, direct competitors)
+1. **LLM Wiki Pattern plugins** (Claude Code skill-based, closest in approach)
 2. **Native Obsidian plugins** (TypeScript, embedded UI)
 3. **MCP servers** (bridge protocols)
 4. **In-vault AI plugins** (traditional Obsidian community plugins)
@@ -32,7 +32,7 @@ sources:
 
 ## Category 1: LLM Wiki Pattern (Claude Code Plugins)
 
-### AgriciDaniel/claude-obsidian ⭐ OUR PROJECT
+### AgriciDaniel/claude-obsidian (this project)
 - URL: https://github.com/AgriciDaniel/claude-obsidian
 - Version: 1.2.0
 - Skills: /wiki, /wiki-ingest, /wiki-query, /wiki-lint, /save, /autoresearch, /canvas

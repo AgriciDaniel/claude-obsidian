@@ -8,7 +8,7 @@ allowed-tools: Read Write
 
 Obsidian Bases (launched 2025) turns vault notes into queryable, dynamic views. Tables, cards, lists, maps. Defined in `.base` files. No plugin required; it is a core Obsidian feature.
 
-**Authoritative reference**: If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-bases skill. Otherwise, use the reference below. Official docs: https://help.obsidian.md/bases/syntax
+**Substrate preference (v1.7+)**: This skill is a self-contained fallback. **Prefer `kepano/obsidian-skills`** as the authoritative substrate — its `obsidian-bases` skill is the canonical reference for Bases YAML, formulas, and view definitions. If you see an `obsidian-bases` skill available without the `claude-obsidian:` namespace, that is kepano's version: use it. The reference below is provided so the plugin remains functional when kepano's marketplace is not installed. Install: `claude plugin marketplace add kepano/obsidian-skills`. Official Bases docs: https://help.obsidian.md/bases/syntax
 
 ---
 
@@ -291,3 +291,22 @@ Store `.base` files in `wiki/meta/` for vault dashboards:
 - Do not use `sort:` at the root level: sorting is per-view via `order:` and `groupBy:`
 - Do not put `.base` files outside the vault: they only render inside Obsidian
 - Do not reference `formula.X` in `order:` without defining `X` in `formulas:`
+
+---
+
+## How to think (10-principle mapping)
+
+When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+
+| # | Principle | Application here |
+|---|-----------|-------------------|
+| 1 | OBSERVE (ext) | The `.base` YAML the user is composing — read it carefully before suggesting changes. |
+| 2 | OBSERVE (int) | Am I documenting yesterday's spec or today's? Bases evolves fast post-GA. |
+| 3 | LISTEN | The user's specific Bases use-case (dashboard, filter chain, computed property). |
+| 4 | THINK | Which filter operators, formula syntax, view types apply? Validate against the current spec. |
+| 5 | CONNECT (lat) | How do Bases relate to Dataview queries? Properties? Canvas overlays? Map the deltas. |
+| 6 | CONNECT (sys) | Obsidian Bases is post-1.10 GA; substrate-defer to kepano/obsidian-skills when present. |
+| 7 | FEEL | Examples that actually parse and render. Pseudo-syntax wastes the user. |
+| 8 | ACCEPT | Bases spec evolves; some features in this doc may have changed. Keep the version note current. |
+| 9 | CREATE | Schema docs + worked examples that render in the user's actual Obsidian version. |
+| 10 | GROW | As Bases features ship, refresh the reference. Track upstream releases. |

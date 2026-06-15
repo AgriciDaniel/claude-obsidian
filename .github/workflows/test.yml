@@ -1,0 +1,124 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Hermetic test suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Python version
+        run: python3 --version
+
+      - name: Verify Bash + GNU coreutils
+        run: bash --version && date --version | head -1
+
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh scripts/*.py bin/*.sh tests/*.sh 2>/dev/null || true
+
+      - name: Run hermetic test suite
+        run: make test
+
+      - name: Verify wiki-mode CLI surfaces
+        run: |
+          python3 scripts/wiki-mode.py get
+          python3 scripts/wiki-mode.py config | python3 -m json.tool > /dev/null
+          python3 scripts/wiki-mode.py id
+          python3 scripts/wiki-mode.py templates
+
+      - name: Verify transport detection
+        run: bash scripts/detect-transport.sh --peek | python3 -m json.tool > /dev/null
+
+  lint-skills:
+    name: Skill frontmatter validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate every SKILL.md has valid YAML frontmatter
+        run: |
+          python3 <<'PYEOF'
+          import os, sys, yaml
+          errors = []
+          for root, dirs, files in os.walk('skills'):
+              for f in files:
+                  if f == 'SKILL.md':
+                      path = os.path.join(root, f)
+                      with open(path) as fh:
+                          content = fh.read()
+                      if not content.startswith('---'):
+                          errors.append(f"{path}: missing frontmatter")
+                          continue
+                      try:
+                          end = content.index('\n---', 4)
+                          frontmatter = yaml.safe_load(content[4:end])
+                          if not frontmatter.get('name'):
+                              errors.append(f"{path}: missing 'name' in frontmatter")
+                          if not frontmatter.get('description'):
+                              errors.append(f"{path}: missing 'description' in frontmatter")
+                      except Exception as e:
+                          errors.append(f"{path}: frontmatter parse error: {e}")
+          if errors:
+              print("\n".join(errors))
+              sys.exit(1)
+          print("All SKILL.md files have valid frontmatter.")
+          PYEOF
+
+      - name: Validate every agent has tools declared
+        run: |
+          python3 <<'PYEOF'
+          import os, sys, yaml
+          errors = []
+          for f in os.listdir('agents'):
+              if f.endswith('.md'):
+                  path = os.path.join('agents', f)
+                  with open(path) as fh:
+                      content = fh.read()
+                  if not content.startswith('---'):
+                      errors.append(f"{path}: missing frontmatter")
+                      continue
+                  try:
+                      end = content.index('\n---', 4)
+                      frontmatter = yaml.safe_load(content[4:end])
+                      if not frontmatter.get('tools'):
+                          errors.append(f"{path}: missing 'tools' in frontmatter")
+                  except Exception as e:
+                      errors.append(f"{path}: frontmatter parse error: {e}")
+          if errors:
+              print("\n".join(errors))
+              sys.exit(1)
+          print("All agents have tools declared.")
+          PYEOF
+
+      - name: Validate plugin.json + marketplace.json
+        run: |
+          python3 -c "import json; json.load(open('.claude-plugin/plugin.json'))"
+          python3 -c "import json; json.load(open('.claude-plugin/marketplace.json'))"
+          python3 -c "import json; json.load(open('hooks/hooks.json'))"
+          echo "All plugin manifests are valid JSON."
