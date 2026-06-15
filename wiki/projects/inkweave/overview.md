@@ -5,7 +5,7 @@ complexity: basic
 domain: product
 aliases: ["inkweave overview", "InkWeave"]
 created: 2026-05-28
-updated: 2026-05-28
+updated: 2026-06-15
 tags:
   - concept
   - inkweave
@@ -19,6 +19,11 @@ sources: []
 ---
 
 # InkWeave — Product Overview
+
+## Project Metadata
+
+- GitHub: https://github.com/manazoid4/inkweave
+- Local PC location: `C:\Users\manaz\Desktop\inkweave`
 
 ## Definition
 

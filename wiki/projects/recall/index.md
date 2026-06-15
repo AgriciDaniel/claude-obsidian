@@ -3,6 +3,7 @@ title: Recall — Project Index
 project: recall
 type: index
 created: 2026-06-09
+updated: 2026-06-15
 tags: [recall, index]
 ---
 
@@ -10,8 +11,11 @@ tags: [recall, index]
 
 > Turn everything you save on Instagram, X, and TikTok into a searchable, AI-enriched knowledge base.
 
-- Repo: https://github.com/manazoid4/recall
-- Local: `C:\Users\manaz\saved-brain`
+## Project Metadata
+
+- GitHub: https://github.com/manazoid4/recall
+- Local PC location: `C:\Users\manaz\saved-brain`
+- Git remote on disk: https://github.com/manazoid4/saved-brain.git
 - Deploy: Vercel — manazir-s-projects1/recall
 - Auth: Clerk (app_3EuOr3cocpxjRhljbOgUYe10Z46)
 - DB: Supabase tcfwhkqxirdrqolkygqd (eu-central-1) + SQLite fallback

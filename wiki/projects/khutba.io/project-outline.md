@@ -5,7 +5,7 @@ complexity: basic
 domain: product
 aliases: ["khutba outline"]
 created: 2026-05-01
-updated: 2026-05-01
+updated: 2026-06-15
 tags:
   - concept
   - khutba
@@ -18,6 +18,11 @@ sources: []
 ---
 
 # khutba.io — Project Outline
+
+## Project Metadata
+
+- GitHub: https://github.com/manazoid4/khutba-io
+- Local PC location: `C:\Users\manaz\Desktop\khutba-io`
 
 ## Phase 1 — MVP (weeks 1–3)
 

@@ -5,7 +5,7 @@ complexity: basic
 domain: product
 aliases: ["khutba overview", "khutba.io"]
 created: 2026-05-01
-updated: 2026-05-01
+updated: 2026-06-15
 tags:
   - concept
   - khutba
@@ -19,6 +19,11 @@ sources: []
 ---
 
 # khutba.io — Product Overview
+
+## Project Metadata
+
+- GitHub: https://github.com/manazoid4/khutba-io
+- Local PC location: `C:\Users\manaz\Desktop\khutba-io`
 
 ## Definition
 

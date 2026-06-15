@@ -5,7 +5,7 @@ complexity: basic
 domain: product
 aliases: ["Open Flow roadmap", "OpenFlowKit implementation"]
 created: 2026-06-03
-updated: 2026-06-03
+updated: 2026-06-15
 tags:
   - concept
   - openflowkit
@@ -23,7 +23,8 @@ sources: []
 
 ## Current Deployment State
 
-- Repo: github.com/manazoid4/openflowkit
+- GitHub: https://github.com/manazoid4/openflowkit
+- Local PC location: `C:\Users\manaz\Desktop\openflowkit`
 - Live URL: openflowkit.vercel.app
 - Platform: Vercel (auto-deploy on push to main)
 - Stack: Vite + React + TypeScript, Web Speech API

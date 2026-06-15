@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Wiki Index"
-updated: 2026-04-07
+updated: 2026-06-15
 tags:
   - meta
   - index
@@ -23,7 +23,7 @@ related:
 
 # Wiki Index
 
-Last updated: 2026-05-28 | Total pages: 38 | Sources ingested: 2
+Last updated: 2026-06-15 | Sources ingested: 2
 
 Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
 
@@ -31,9 +31,13 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Projects
 
-- [[InkWeave Product Overview]] — AI snippet-to-book platform; UK-first, paid tiers, session remote control (status: planning)
-- [[khutba.io Product Overview]] — Live auto-translation display system for masjids; Birmingham launch (status: planning)
-- [[OpenFlowKit Product Overview]] — Privacy-first browser voice dictation; 6 writing modes, Speak-to-Share, local-first. Deployed: openflowkit.vercel.app (status: current)
+- [[projects/project-locations|Projects — GitHub and PC Locations]] — local folder and GitHub map for active projects
+- [[projects/jobfilter/index|JobFilter — Project Index]] — UK construction lead intelligence platform; live at jobfilter.uk (status: current)
+- [[projects/inkweave/overview|InkWeave Product Overview]] — AI snippet-to-book platform; UK-first, paid tiers, session remote control (status: planning)
+- [[projects/khutba.io/overview|khutba.io Product Overview]] — Live auto-translation display system for masjids; Birmingham launch (status: planning)
+- [[projects/openflowkit/overview|OpenFlowKit Product Overview]] — Privacy-first browser voice dictation; 6 writing modes, Speak-to-Share, local-first. Deployed: openflowkit.vercel.app (status: current)
+- [[projects/flipsignal/index|FlipSignal]] — marketplace arbitrage engine; phase 1 scaffolded (status: active)
+- [[projects/recall/index|Recall — Project Index]] — saved social content knowledge base (status: current)
 
 ---
 

@@ -2,6 +2,7 @@
 project: flipsignal
 status: phase-1-scaffolded
 repo: manazoid4/flipsignal
+local_path: C:\Users\manaz\Desktop\flipsignal
 vercel: manazir-s-projects1/flipsignal
 created: 2026-06-15
 ---
@@ -13,7 +14,9 @@ Marketplace, eBay, Gumtree), models resale value/risk, ranks opportunity by
 expected ROI, and tracks flips from discovery to sold.
 
 ## Status
-- Repo created and pushed: https://github.com/manazoid4/flipsignal
+- GitHub: https://github.com/manazoid4/flipsignal
+- Local PC location: `C:\Users\manaz\Desktop\flipsignal`
+- Repo created and pushed
 - Vercel project linked + GitHub auto-deploy connected (main branch)
 - Phase 1 scaffold complete: Clerk auth, Prisma schema (17 models), dashboard
   shell (deal feed, deal detail, portfolio, copilot, reports, alerts,

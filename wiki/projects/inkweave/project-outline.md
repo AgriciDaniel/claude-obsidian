@@ -5,7 +5,7 @@ complexity: intermediate
 domain: product
 aliases: ["inkweave outline"]
 created: 2026-05-28
-updated: 2026-05-28
+updated: 2026-06-15
 tags:
   - inkweave
   - project
@@ -18,6 +18,11 @@ sources: []
 ---
 
 # InkWeave — Project Outline
+
+## Project Metadata
+
+- GitHub: https://github.com/manazoid4/inkweave
+- Local PC location: `C:\Users\manaz\Desktop\inkweave`
 
 ## Stage 1: MVP (Build Now)
 

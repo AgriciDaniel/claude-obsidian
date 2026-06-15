@@ -5,7 +5,7 @@ complexity: basic
 domain: product
 aliases: ["Open Flow", "OpenFlowKit", "openflowkit overview"]
 created: 2026-06-03
-updated: 2026-06-03
+updated: 2026-06-15
 tags:
   - concept
   - openflowkit
@@ -27,7 +27,8 @@ sources: []
 Privacy-first browser voice dictation app. Speak into the browser, get clean, context-shaped text out. No backend for core flow. Nothing leaves the device without explicit consent.
 
 - Brand name: Open Flow
-- Repo: github.com/manazoid4/openflowkit
+- GitHub: https://github.com/manazoid4/openflowkit
+- Local PC location: `C:\Users\manaz\Desktop\openflowkit`
 - Deployed: openflowkit.vercel.app (Vercel)
 
 ## Core Flow
