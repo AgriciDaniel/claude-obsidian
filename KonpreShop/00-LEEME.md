@@ -24,6 +24,19 @@
 | `02-Plan-Auditoria-Web.md` | Soluciones concretas a los 3 hallazgos de tu auditoría (hero, mega menú, portadas) con datos reales. |
 | `03-Mapa-Estrategico.md` | **El mapa completo:** qué tenemos, qué está roto (195 colecciones, duplicados, shops fantasma), cómo acomodarlo, y la dirección creativa nano-banana (personajes, stylist, look editorial). |
 | `04-Direccion-Creativa-Banana.md` | Dirección creativa aplicando la skill **banana**: casting de 7 personajes recurrentes, modos por dominio, ratios, y Reasoning Briefs reales listos para generar. |
+| `05-Investigacion-Prompting-Realista.md` | Cómo lograr realismo extremo: weighting en Gemini, anti-"plastic skin", casting atractivo real, do/don'ts fashion, códigos Banana Republic, candid reportaje, modelo NB2. |
+| `06-Mapa-Web-Estilos-Imagen.md` | Mapa de cada espacio con imagen de la web → qué estilo va en cada uno. |
+| `07-Workflow-Produccion-Galeria.md` | Workflow anti-errores visuales (`gallery.py`) + checklist QA + estilo por tienda. |
+| `08-Casting-y-Asignacion.md` | El casting de 6 modelos (3H+3M) + asignación de productos + `shoot.py`. |
+| `09-Plan-Styling-Pose.md` | **El plan final:** look Levi's MX natural pro — styling completo + librería de poses + shot list por producto. |
+
+### 🛠️ Scripts (carpeta `scripts/`)
+| Archivo | Qué es |
+|---|---|
+| `shoot.py` | **Motor final.** Modelo del casting + producto real → galería styleada (look completo + pose por toma + luz Levi's). Nano Banana 2 @ 2K. |
+| `gallery.py` | Versión previa (Gap limpio, 4 tomas) — base del workflow anti-errores. |
+
+> Imágenes generadas (casting, lote, pruebas) viven en `assets/` — NO versionadas (reproducibles con los scripts). El casting base está en `assets/casting/`.
 
 ### 🖼️ Vista interactiva
 | Archivo | Qué es |
