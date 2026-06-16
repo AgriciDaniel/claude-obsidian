@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/agricidaniel-claude-obsidian-badge.png)](https://mseep.ai/app/agricidaniel-claude-obsidian)
+
 
 # claude-obsidian: Self-Organizing AI Second Brain for Obsidian + Claude Code
 
