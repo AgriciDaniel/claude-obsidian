@@ -23,6 +23,7 @@ UK construction lead intelligence platform. Scores, filters, and routes construc
 - [[STICKY-TODO]] — founder setup actions
 - [[BuildScout Competitive Analysis]]
 - [[2026-06-02-2146-deep-research-prompts]]
+- [[2026-06-18-claude-launch-readiness-loop]] — full autonomous launch-readiness build prompt
 
 ## Project Rules
 
