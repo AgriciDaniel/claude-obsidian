@@ -30,3 +30,32 @@ status: completed
 
 - Paste the prompt into Claude Code while opened in the JobFilter repository.
 - Review Claude's durable launch-state file and PR rather than relying only on its chat summary.
+
+---
+
+## WhatsApp direct-chat investigation
+
+### What I did
+
+- Traced every WhatsApp action on `/leads`, `/leads/[id]`, `/dashboard`, and `/find-jobs`.
+- Traced buyer-phone data from lead fetchers through normalization, the search API, local tracking storage, and `wa.me` URL construction.
+- Inspected the requested dirty worktree without editing it, including the uncommitted Meta WhatsApp route rewrite.
+- Inspected the separate `agents/whatsapp-direct-chat` worktree and its uncommitted regression test without modifying that agent's work.
+
+### Files changed
+
+- No JobFilter repository files changed.
+- This session note only.
+
+### Decisions made
+
+- Root cause is missing buyer-phone propagation, not the existing `wa.me` links: normalized scan leads do not expose `rawContact.phone`, the frontend lead contract omits `buyerPhone`, and tracked leads are saved without `phone`.
+- The only fetcher currently setting `rawContact.phone` uses the placeholder `available`, so any propagation fix must validate a real dialable number before storing it.
+- The separate direct-chat worktree fixes frontend propagation and replaces the accidental SMS action, but it does not populate `buyerPhone` in the lead normalizer; by itself it cannot make scanned leads open a client chat.
+- Existing direct-chat URL normalization is duplicated and mishandles `0044...`; a shared validated UK normalization helper is the smallest safe implementation boundary.
+
+### Next steps
+
+- Complete the in-progress `agents/whatsapp-direct-chat` work by adding validated backend phone propagation from `rawContact.phone`.
+- Keep generic WhatsApp contact-picker behavior for leads without a verified number and label it honestly.
+- Do not merge or overwrite the unrelated dirty changes in `agents/protect-dev-routes`.
