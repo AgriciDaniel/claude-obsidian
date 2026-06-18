@@ -2,7 +2,7 @@
 date: 2026-06-18
 project: jobfilter
 agent: codex
-status: completed
+status: blocked
 ---
 
 ## What I did
@@ -59,3 +59,29 @@ status: completed
 - Complete the in-progress `agents/whatsapp-direct-chat` work by adding validated backend phone propagation from `rawContact.phone`.
 - Keep generic WhatsApp contact-picker behavior for leads without a verified number and label it honestly.
 - Do not merge or overwrite the unrelated dirty changes in `agents/protect-dev-routes`.
+
+---
+
+## Uncommitted diff review
+
+### What I did
+
+- Pulled the squad vault and read current JobFilter project context.
+- Confirmed the requested dirty worktree and review scope without editing JobFilter files.
+- Installed CodeRabbit CLI 0.6.1 in WSL because it was not present.
+- Started the required agent authentication flow and opened its browser login URL.
+
+### Files changed
+
+- No JobFilter repository files changed.
+- This session note only.
+
+### Decisions made
+
+- The configured code-review workflow forbids substituting a manual review when CodeRabbit authentication or execution fails.
+- The review could not run because CodeRabbit remained unauthenticated after the browser login window.
+
+### Next steps
+
+- Run `~/.local/bin/coderabbit auth login --agent` in WSL and complete the browser sign-in.
+- Re-run the uncommitted JobFilter diff review after `~/.local/bin/coderabbit auth status --agent` reports authenticated.
