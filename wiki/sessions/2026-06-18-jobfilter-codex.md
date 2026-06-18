@@ -4,27 +4,36 @@ project: jobfilter
 agent: codex
 status: completed
 ---
+
 ## What I did
-- Reconciled GitHub `origin/main`, the shared Claude Obsidian vault, and the embedded JobFilter vault.
-- Fixed the tracked-lead response action so it opens WhatsApp rather than SMS.
-- Preserved `buyerPhone` from lead-engine results through local tracking and the quick response kit.
-- Added a message-only WhatsApp fallback when a source does not expose a direct phone number.
-- Evaluated BidStats pricing and API suitability.
-- Opened PR #281: https://github.com/manazoid4/JobFilterV1/pull/281
+
+Researched current BidStats pricing and API availability plus free official UK procurement data sources. Verified live unauthenticated responses from Find a Tender, Contracts Finder, and Public Contracts Scotland. Compared current coverage after the 24 February 2025 Procurement Act transition and documented the recommended ingestion stack.
 
 ## Files changed
-- `src/lib/types.ts`
-- `src/pages/FindJobsPage.tsx`
-- `src/lib/chaseTemplates.ts`
-- `src/components/QuickResponseKit.tsx`
-- `codex-output/whatsapp-direct-chat-regression.mjs`
+
+- `wiki/concepts/BidStats and UK public procurement APIs for JobFilter.md`
+- `wiki/sources/BidStats Pricing and Insights API.md`
+- `wiki/sources/Find a Tender OCDS API.md`
+- `wiki/sources/Contracts Finder Transition and OCDS API.md`
+- `wiki/sources/UK Procurement OCDS Bulk and Regional Feeds.md`
+- `wiki/projects/jobfilter/index.md`
+- `wiki/index.md`
+- `wiki/log.md`
+- `wiki/hot.md`
+- `wiki/sessions/2026-06-18-jobfilter-codex.md`
+
+No JobFilter code was edited.
 
 ## Decisions made
-- Do not buy BidStats for API access now. BidStats API connectivity is in its Insights tier, starting at £5,000/year.
-- Continue using the official free Contracts Finder and Find a Tender OCDS APIs already integrated in JobFilter.
-- Revisit BidStats only if decision-maker contacts, proprietary pre-procurement intelligence, or CRM-ready enrichment proves valuable enough to justify the cost.
+
+- Use Find a Tender OCDS as the primary live tender source.
+- Add Public Contracts Scotland for Scottish below-threshold coverage.
+- Use Contracts Finder for historical and legacy lifecycle continuity.
+- Defer BidStats Insights at its current starting price of £5,000 per year.
+- Do not rely on Sell2Wales until its expired TLS certificate is repaired.
 
 ## Next steps
-- Review and merge PR #281.
-- Confirm the WhatsApp action on production with a lead that contains `buyerPhone`.
-- Consider a separate enrichment experiment for buyer contact details; official OCDS feeds frequently omit direct phone numbers.
+
+- If implementation is approved later, design an OCDS normalization and deduplication model keyed by `ocid`.
+- Recheck Sell2Wales TLS status before adding a Welsh regional connector.
+- Reassess BidStats after JobFilter has enough paid users and evidence that enriched signals improve lead conversion.
