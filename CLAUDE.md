@@ -1,5 +1,17 @@
 # claude-obsidian — Claude + Obsidian Wiki Vault
 
+## Canonical Location
+
+The unified vault lives at `C:\Users\manaz\Desktop\Obsidian Main Vault`.
+
+- `Personal/`: notes merged from the previous main Obsidian vault.
+- `wiki/`: shared compounding wiki and agent memory.
+- `Local Knowledge/`: SwarmVault ingestion, graph, retrieval, inbox, and generated digest.
+- `Projects/JobFilter/`: current JobFilter vault material.
+- `Archive/Legacy JobFilter Vault/`: older JobFilter vault snapshot retained to avoid data loss.
+
+All agents must use this vault. Do not create another general vault.
+
 This folder is both a Claude Code plugin and an Obsidian vault.
 
 **Plugin name:** `claude-obsidian` (v1.7+ "Compound Vault" — see [docs/compound-vault-guide.md](docs/compound-vault-guide.md); v1.8+ adds methodology modes — see [docs/methodology-modes-guide.md](docs/methodology-modes-guide.md))

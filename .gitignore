@@ -132,3 +132,9 @@ _attachments/
 # v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
 .vault-meta/mode.json
 .vault-meta/mode.*.tmp
+# Unified-vault imports are local knowledge and must not be pushed by the
+# claude-obsidian plugin repository unless explicitly reviewed.
+Personal/
+Local Knowledge/
+Projects/
+Archive/
