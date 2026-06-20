@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Wiki Index"
-updated: 2026-06-15
+updated: 2026-06-18
 tags:
   - meta
   - index
@@ -23,7 +23,7 @@ related:
 
 # Wiki Index
 
-Last updated: 2026-06-15 | Sources ingested: 2
+Last updated: 2026-06-18 | Sources ingested: 6
 
 Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
 
@@ -67,6 +67,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 - [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object, distinct from ephemeral chat turns (status: developing)
 - [[Source-First Synthesis]]: provenance discipline; raw sources stay immutable while the wiki layer is synthesized and cited (status: developing)
 - [[Query-Time Retrieval]]: wiki query path synthesizes with citations; complementary to Obsidian's in-vault search (status: developing)
+- [[BidStats and UK public procurement APIs for JobFilter]]: recommendation and source stack for free UK tender ingestion (status: current)
 
 ---
 
@@ -86,6 +87,10 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 ## Sources
 
 - [[claude-obsidian-ecosystem-research]] — 2026-04-08 | web research across 16+ repos | 8 wiki pages created
+- [[BidStats Pricing and Insights API]] — official BidStats plan and API-tier pricing
+- [[Find a Tender OCDS API]] — official current UK procurement retrieval API
+- [[Contracts Finder Transition and OCDS API]] — legacy API and 2025 transition guidance
+- [[UK Procurement OCDS Bulk and Regional Feeds]] — OCP registry, Scotland, Wales, and data.gov.uk
 
 ---
 

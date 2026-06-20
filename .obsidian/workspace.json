@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "cb698273c33e48de",
+    "id": "25965855e353803a",
     "type": "split",
     "children": [
       {
-        "id": "477f1cf965ca606e",
+        "id": "84b4000c150a4e36",
         "type": "tabs",
         "children": [
           {
-            "id": "a31de1b302cdc5cf",
+            "id": "8a7d5fc9df481afe",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -23,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "db8d83ac47ae599f",
+    "id": "b61a28a7ec7292c2",
     "type": "split",
     "children": [
       {
-        "id": "554fd2b4fa6f8741",
+        "id": "1914ecf409cbd6b1",
         "type": "tabs",
         "children": [
           {
-            "id": "5565f1231fe95c42",
+            "id": "ef8cfa7c6d5fb07a",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +44,7 @@
             }
           },
           {
-            "id": "832ab43d08cf9e30",
+            "id": "91b3922e865a5e26",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "097e8347bb8aa054",
+            "id": "457c582977e495ce",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -77,15 +77,15 @@
     "width": 300
   },
   "right": {
-    "id": "7092b65be1e76349",
+    "id": "b951853ab2bbdeeb",
     "type": "split",
     "children": [
       {
-        "id": "9f4de9402eae371b",
+        "id": "09e57584624b61bd",
         "type": "tabs",
         "children": [
           {
-            "id": "a32b7215b7814fbb",
+            "id": "64937f7ff6fca4ff",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -103,7 +103,7 @@
             }
           },
           {
-            "id": "7936f8ba26007091",
+            "id": "8dd61fcfd1183298",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -116,7 +116,7 @@
             }
           },
           {
-            "id": "ed8ccb323a603d61",
+            "id": "8b4069dfd197e841",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -131,7 +131,7 @@
             }
           },
           {
-            "id": "b140a331162907cf",
+            "id": "3d003740281c6b79",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -145,7 +145,7 @@
             }
           },
           {
-            "id": "111a21e12ab1a293",
+            "id": "ee03636b4c07d0aa",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -157,23 +157,13 @@
               "icon": "lucide-list",
               "title": "Outline"
             }
-          },
-          {
-            "id": "20a272e103b5d792",
-            "type": "leaf",
-            "state": {
-              "type": "calendar",
-              "state": {},
-              "icon": "lucide-ghost",
-              "title": "calendar"
-            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,9 +173,51 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "mesh-ai:Mesh AI Integration": false,
+      "omnisearch:Omnisearch": false
     }
   },
-  "active": "a31de1b302cdc5cf",
-  "lastOpenFiles": []
+  "active": "8dd61fcfd1183298",
+  "lastOpenFiles": [
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/Footer.tsx",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/layout.tsx",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/TopNav.tsx",
+    "wiki/sessions/2026-06-20-recall-codex.md",
+    "Local Knowledge/state/sessions/2026-06-20T13-38-03-938Z-query-jobfilter.md",
+    "Local Knowledge/wiki/outputs/jobfilter.md",
+    "Local Knowledge/state/retrieval/fts-000.sqlite-shm",
+    "Local Knowledge/state/retrieval/fts-000.sqlite-wal",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Product Map.md",
+    "Local Knowledge/wiki/projects/JobFilter/LinkedIn_30_Day_Strategy.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Product/Letterhead Pack.md",
+    "Projects/JobFilter/System/JobFilter_Research/SAMPLE_LEAD_CARD_SYSTEM.md",
+    "Local Knowledge/wiki/projects/JobFilter/index.md",
+    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_HANDOFF_2026-05-11.txt",
+    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_HANDOFF_2026-05-11-evening.txt",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/TODO.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/README.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/PROJECT_STATUS.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/DESIGN.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/COMPETITOR_STRATEGY_PLAYBOOK.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/CLAUDE.md",
+    "Local Knowledge/wiki/projects/JobFilter/project-docs/AGENTS.md",
+    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_2026-05-03.md",
+    "Local Knowledge/wiki/projects/JobFilter/notes/next-codex-task.md",
+    "Local Knowledge/wiki/projects/JobFilter/notes/api-deep-test-results.md",
+    "Local Knowledge/wiki/projects/JobFilter/notes/analysis-2026-04-25.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/System/Build Agent Prompts/Revenue Feature Sprint - framework.construction.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-24/ultrawork-launch-audit-0305.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-22/master-orchestrator-0341.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-22/master-orchestrator-0340.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/06_Agents/Web_Dev_Agent/schedule.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/06_Agents/Web_Dev_Agent/prompt.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/System/Build Agent Prompts",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-24",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-22",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/06_Agents/Web_Dev_Agent",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/JobFilter Control Map.canvas",
+    "Local Knowledge/wiki/projects/JobFilter/vault/Airdrop Bot/Airdrop Bot Flow.canvas",
+    "Untitled.canvas"
+  ]
 }

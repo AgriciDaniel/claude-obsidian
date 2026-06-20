@@ -1,0 +1,1331 @@
+:root {
+  --mesh-primary: #3c4297;
+  --mesh-secondary: #81a0ed;
+  --mesh-tertiary: #694daa;
+  --mesh-quaternary: #cd99e2;
+  --mesh-background: var(--background-secondary);
+  --mesh-border: var(--background-modifier-border);
+}
+
+/* Mesh View Container */
+.mesh-view-container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mesh-form-container {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.mesh-card {
+  border: solid 1px var(--mesh-border);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease !important;
+  overflow: visible;
+  background-color: color-mix(in sRGB, var(--background-secondary) 80%, transparent);
+}
+
+.mesh-card::before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(to right, var(--mesh-primary), var(--mesh-quaternary));
+  border-radius: 12px 12px 0 0;
+}
+
+.mesh-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.mesh-card-title {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-normal);
+  text-align: center;
+  text-transform: lowercase;
+  letter-spacing: 1px;
+}
+
+.mesh-card:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(to bottom, var(--mesh-secondary), var(--mesh-tertiary));
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mesh-provider-select,
+.mesh-input-source-select,
+.mesh-pattern-select {
+  width: 100%;
+  height: 45px;
+  padding: 0 15px;
+  font-size: 14px;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+  appearance: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mesh-output-filename-input {
+  width: 100% !important;
+  height: 45px !important;
+  padding: 0 15px !important;
+  font-size: 14px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+
+  /* Improvements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.mesh-output-filename-input:focus {
+  border-color: var(--interactive-accent) !important;
+  box-shadow: 0 0 0 2px var(--interactive-accent-hover) !important;
+}
+
+.mesh-output-filename-input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7 !important;
+}
+
+.tavily-search-container {
+  overflow: hidden;
+  width: 100%;
+  height: fit-content;
+}
+
+.mesh-tavily-input {
+  width: 96% !important;
+  height: 45px !important;
+  padding: 0 15px !important;
+  font-size: 14px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+
+  /* Improvements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.mesh-tavily-input:focus {
+  border-color: var(--interactive-accent) !important;
+  box-shadow: 0 0 0 2px var(--interactive-accent-hover) !important;
+}
+
+.mesh-tavily-input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7 !important;
+}
+
+.mesh-tavily-input.tavily-hidden {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  height: 0px !important;
+}
+
+.mesh-tavily-input:not(.tavily-hidden) {
+  margin-top: 20px;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.mesh-provider-select:focus,
+.mesh-input-source-select:focus,
+.mesh-tavily-input:focus,
+.mesh-output-filename-input:focus,
+.mesh-pattern-select:focus {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgba(var(--interactive-accent-rgb), 0.2);
+  outline: none;
+}
+
+.mesh-submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: var(--interactive-accent-hover);
+}
+
+.pattern-search-container {
+  position: relative;
+}
+
+.pattern-results {
+  position: absolute;
+  top: 100%;
+  left: -1%;
+  width: 92%;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: none;
+  margin-left: 5%;
+  margin-top: 2.3px;
+}
+
+.pattern-results:not(:empty) {
+  display: block;
+}
+
+.pattern-result {
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pattern-result:hover {
+  background-color: var(--background-secondary);
+}
+
+.selected-patterns-container {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+  transition: slide 0.3s ease;
+}
+
+.selected-pattern {
+  background-color: var(--background-modifier-hover);
+  border-radius: 16px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  width: fit-content;
+  margin-bottom: 5px;
+}
+
+.remove-pattern {
+  margin-left: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.remove-pattern:hover {
+  opacity: 1;
+}
+
+
+.mesh-loading {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+#particles-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#particles-js canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mesh-selected-patterns-title {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-normal);
+  margin-top: 20px;
+  text-transform: lowercase;
+}
+
+.pattern-stitching-container {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mesh-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-modifier-hover);
+  transition: .4s;
+}
+
+.mesh-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--interactive-accent);
+  transition: .4s;
+}
+
+.input-toggle-slider.mesh-slider::before {
+  display: none;
+}
+
+input:checked + .mesh-slider:before {
+  transform: translateX(20px);
+}
+
+.mesh-slider.round {
+  border-radius: 20px;
+}
+
+.mesh-slider.round:before {
+  border-radius: 50%;
+}
+
+.pattern-stitching-label {
+  margin-left: 10px;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: lowercase;
+}
+
+.mesh-card.patterns {
+  position: relative;
+  padding-bottom: 40px; /* Ensure space for the toggle */
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px 0 rgba(var(--interactive-accent-rgb), 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px 0 rgba(var(--interactive-accent-rgb), 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px 0 rgba(var(--interactive-accent-rgb), 0.5);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mesh-card.processing {
+  opacity: 0.7;
+  animation: pulse-glow 2s infinite;
+}
+
+.mesh-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  border: none;
+  border-radius: 12px;
+}
+
+.mesh-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--background-secondary);
+  border-top: 5px solid var(--interactive-accent);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.rotating {
+  animation: rotate 2s ease-in-out infinite;  
+}
+
+.mesh-card {
+  transition: all 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+@keyframes rotate-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 25% 50%;
+  }
+
+  50% {
+    background-position: 50% 50%;
+  }
+
+  75% {
+    background-position: 75% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.mesh-submit-button-container {
+  position: relative;
+  display: inline-block;
+  padding: 3px; /* This creates space for the border */
+  border-radius: 5px; /* Matches the button's border radius */
+  width: 100%;
+}
+
+.mesh-submit-button-container.processing {
+  background: linear-gradient(90deg, var(--mesh-quaternary), var(--mesh-primary), var(--mesh-quaternary), var(--mesh-primary));
+  background-size: 400% 400%;
+  animation: rotate-gradient 3s ease infinite;
+  color: var(--text-on-accent);
+}
+
+.mesh-submit-button {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to right, var(--mesh-primary), var(--mesh-quaternary));
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px; /* Slightly smaller than the container */
+  cursor: pointer;
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mesh-submit-button-container.processing .mesh-submit-button {
+  background-color: var(--background-primary); /* Ensure button background stays solid */
+}
+
+.mesh-submit-button {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.mesh-submit-button.processing::after {
+  content: 'processing...';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-primary);
+  color: var(--text-normal) !important;
+}
+
+.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 50%;
+  left: 100%;
+  margin-top: -0.5em;
+  margin-left: 0.5em;
+  border: 2px solid var(--interactive-accent);
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.rotating {
+  animation: rotate 2s ease-out .05s infinite;
+}
+
+.input-toggle-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 75%;
+  margin: 0 auto;
+  background-color: var(--background-primary-alt);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  height: 40px;
+}
+
+.input-toggle-label {
+  flex: 1;
+  text-align: center;
+  z-index: 1;
+}
+
+.input-toggle-input {
+  display: none;
+}
+
+.input-toggle-text {
+  display: block;
+  cursor: pointer;
+  transition: color 0.3s;
+  position: relative;
+  z-index: 2;
+  margin-right: 4px;
+}
+
+.input-toggle-icon {
+  font-size: 20px;
+}
+
+.input-toggle-slider {
+  position: absolute;
+  width: 33.33%;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--interactive-accent), var(--interactive-accent-hover));
+  border-radius: 17px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.input-toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  height: 85%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0));
+  border-radius: 15px;
+}
+
+.input-toggle-input:checked + .input-toggle-text {
+  color: var(--text-on-accent);
+}
+
+.input-toggle-input:checked ~ .input-toggle-slider {
+  transform: translateX(100%);
+}
+
+.input-toggle-container:hover .input-toggle-slider {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pattern-search-input {
+  width: 100% !important;
+  height: 45px !important;
+  padding: 0 15px !important;
+  font-size: 14px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+
+  /* Improvements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.pattern-search-input:focus {
+  border-color: var(--interactive-accent) !important;
+  box-shadow: 0 0 0 2px var(--interactive-accent-hover) !important;
+}
+
+.pattern-search-input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7 !important;
+}
+
+.input-toggle-slider[data-position="0"] {
+  transform: translateX(0) !important;
+}
+
+.input-toggle-slider[data-position="1"] {
+  transform: translateX(100%) !important;
+}
+
+.input-toggle-slider[data-position="2"] {
+  transform: translateX(200%) !important;
+}
+
+.mesh-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.mesh-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pattern-results .selected {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.modal {
+  padding: 40px;
+}
+
+/* Modal Container */
+.mesh-modal {
+  background-color: var(--background-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 25px !important;
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+}
+
+/* Modal Header */
+.mesh-modal .modal-header {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 8px;
+}
+
+/* Input Fields */
+.mesh-modal input[type="text"],
+.mesh-modal textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  color: var(--text-normal);
+  margin-bottom: 12px;
+  transition: border-color 0.3s ease;
+}
+
+.mesh-modal input[type="text"]:focus,
+.mesh-modal textarea:focus {
+  border-color: var(--interactive-accent);
+  outline: none;
+}
+
+/* Buttons */
+.mesh-modal button {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.mesh-modal button:hover {
+  background-color: var(--interactive-accent-hover);
+}
+
+/* Pattern Results */
+.mesh-modal .pattern-results {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  margin-top: 8px;
+}
+
+.mesh-modal .pattern-result {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mesh-modal .pattern-result:hover,
+.mesh-modal .pattern-result.selected {
+  background-color: var(--background-modifier-hover);
+}
+
+/* Selected Patterns */
+.mesh-modal .selected-patterns-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mesh-modal .selected-pattern {
+  background-color: var(--background-modifier-hover);
+  border-radius: 16px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.mesh-modal .remove-pattern {
+  margin-left: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.mesh-modal .remove-pattern:hover {
+  opacity: 1;
+}
+
+/* Toggle Switch */
+.mesh-modal .switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.mesh-modal .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mesh-modal .mesh-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-modifier-border);
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.mesh-modal .mesh-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--background-primary);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.mesh-modal input:checked + .mesh-slider {
+  background-color: var(--interactive-accent);
+}
+
+.mesh-modal input:checked + .mesh-slider:before {
+  transform: translateX(20px);
+}
+
+.mesh-modal-tavily {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: var(--background-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mesh-modal-tavily-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mesh-modal-tavily-search-container {
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  margin-bottom: 20px;
+  height: 50px;
+}
+
+.mesh-tavily-input {
+  width: 98% !important;
+  margin-left: 1%;
+  margin-bottom: 10px;
+  height: 40px !important;
+  padding: 0 50px 0 20px !important;
+  font-size: 16px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 2px solid var(--interactive-accent) !important;
+  border-radius: 25px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.pattern-search-input {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 0 50px 0 20px !important;
+  font-size: 16px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 2px solid var(--interactive-accent) !important;
+  border-radius: 25px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.mesh-output-filename-input {
+  width: 100% !important;
+  height: 40px !important;
+  padding: 0 50px 0 20px !important;
+  font-size: 16px !important;
+  color: var(--text-normal) !important;
+  background-color: var(--background-primary) !important;
+  border: 2px solid var(--interactive-accent) !important;
+  border-radius: 25px !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+
+.mesh-tavily-input:focus {
+  box-shadow: 0 0 0 3px var(--interactive-accent-hover) !important;
+}
+
+.mesh-tavily-input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7 !important;
+}
+
+.mesh-modal-tavily-search-icon {
+  position: absolute;
+  right: 15px;
+  top: 30% !important;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 50px; /* Match the height of the input */
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 18px; /* Adjust as needed for your icon */
+}
+
+.mesh-modal-tavily-button {
+  background-color: var(--interactive-accent) !important;
+  color: var(--text-on-accent) !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 10px 20px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.mesh-modal-tavily-button:hover {
+  background-color: var(--interactive-accent-hover) !important;
+}
+
+.mesh-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.mesh-loading-spinner {
+  border: 4px solid var(--background-primary);
+  border-top: 4px solid var(--interactive-accent);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stitching-enabled {
+  background-color: color-mix(in sRGB, var(--caret-color) 50%, var(--background-primary)) !important;
+}
+
+.mesh-modal .pattern-results {
+  top: 22px;
+  width: 100%;
+  margin-left: 4px;
+}
+
+
+.mesh-model-container {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  text-align: center;
+  justify-content: center;
+}
+
+.mesh-model-text {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin: 0;
+}
+
+.mesh-powered-by {
+  color: var(--text-muted);
+  margin-right: 5px;
+}
+
+.mesh-model-name {
+  color: var(--interactive-accent);
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  perspective: 1000px;
+}
+
+.mesh-model-edit-icon {
+  cursor: pointer;
+  margin-left: 5px;
+  color: var(--text-muted);
+  transition: color 0.7s ease;
+}
+
+.mesh-model-edit-icon:hover {
+  color: var(--interactive-accent);
+}
+
+.mesh-model-name-old,
+.mesh-model-name-new {
+  backface-visibility: hidden;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease-in-out;
+}
+
+.mesh-model-name-old {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateX(0deg);
+}
+
+.mesh-model-name-new {
+  transform: rotateX(-180deg);
+}
+
+.mesh-model-name.changing .mesh-model-name-old {
+  transform: rotateX(180deg);
+}
+
+.mesh-model-name.changing .mesh-model-name-new {
+  transform: rotateX(0deg);
+}
+
+.mesh-provider-container {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 5px;
+}
+
+.mesh-provider-container h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.mesh-provider-container {
+  position: relative;
+}
+
+.mesh-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.mesh-overlay p {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
+
+.mesh-pathway-widget {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.mesh-pathway-button {
+    display: flex;
+    align-items: center;
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mesh-pathway-button:hover {
+    background-color: var(--interactive-accent-hover);
+}
+
+.mesh-pathway-button .lucide-brain {
+    margin-right: 4px;
+}
+
+/* AnalyzePathwaysModal specific styles */
+.mesh-analyze-pathways-modal {
+  background-color: var(--background-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  max-width: 600px;
+  max-height: 70%;
+  width: 100%;
+  margin: auto;
+  position: relative; /* Add this to position the scroll indicator */
+  padding-bottom: 60px; /* Increase bottom padding to make room for the Create All button */
+}
+
+.mesh-analyze-pathways-modal .modal-header {
+  font-size: 1.6em;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 12px;
+}
+
+.mesh-analyze-pathways-modal .pathway-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  padding-right: 10px; /* Add some padding for the scrollbar */
+}
+
+.mesh-analyze-pathways-modal .pathway-item {
+  margin-bottom: 20px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.mesh-analyze-pathways-modal .pathway-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mesh-analyze-pathways-modal .pathway-backlink {
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+.mesh-analyze-pathways-modal button {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.mesh-analyze-pathways-modal button:hover {
+  background-color: var(--interactive-accent-hover);
+}
+
+.mesh-analyze-pathways-modal .create-all-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 50px);
+  margin-top: 20px;
+  z-index: 2; /* Ensure the button is above the scroll indicator */
+}
+
+.mesh-analyze-pathways-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.mesh-analyze-pathways-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--background-primary);
+  border-top: 5px solid var(--interactive-accent);
+  border-radius: 50%;
+  animation: mesh-analyze-pathways-spin 1s linear infinite;
+}
+
+@keyframes mesh-analyze-pathways-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.mesh-analyze-pathways-modal .potential-links-list {
+  margin-top: 12px;
+  padding-left: 16px;
+  border-left: 2px solid var(--background-modifier-border);
+}
+
+.mesh-analyze-pathways-modal .potential-link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mesh-analyze-pathways-modal .potential-link-text {
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+.mesh-analyze-pathways-modal .delete-pathway-button,
+.mesh-analyze-pathways-modal .delete-link-button {
+  background-color: var(--text-error-bg);
+  color: var(--text-error);
+}
+
+.mesh-analyze-pathways-modal .delete-pathway-button:hover,
+.mesh-analyze-pathways-modal .delete-link-button:hover {
+  background-color: var(--text-error);
+  color: var(--background-primary);
+}
+
+.mesh-warning-message {
+  background-color: var(--text-warning-bg);
+  color: var(--text-warning);
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 0.9em;
+}
+
+.mesh-analyze-pathways-modal .potential-links-header {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-size: 1em;
+  color: var(--text-muted);
+}
+ 
+.mesh-analyze-pathways-modal .delete-pathway-button,
+.mesh-analyze-pathways-modal .delete-link-button {
+  background-color: var(--text-error-bg);
+  color: var(--text-error);
+  margin-left: 8px;
+}
+
+.mesh-analyze-pathways-modal .delete-pathway-button:hover,
+.mesh-analyze-pathways-modal .delete-link-button:hover {
+  background-color: var(--text-error);
+  color: var(--background-primary);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.mesh-analyze-pathways-modal .mesh-instructions {
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.mesh-analyze-pathways-modal .mesh-instructions ul {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.mesh-analyze-pathways-modal .pathway-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  padding-right: 10px; /* Add some padding for the scrollbar */
+}
+
+.mesh-analyze-pathways-modal .scroll-indicator {
+  position: absolute;
+  bottom: 55px; /* Move the scroll indicator up */
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+  color: var(--text-muted);
+  opacity: 0.7;
+  z-index: 1; /* Ensure the scroll indicator is below the button */
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  40% {
+    transform: translateY(-10px) translateX(-50%);
+  }
+  60% {
+    transform: translateY(-5px) translateX(-50%);
+  }
+}
+
+/* Hide scroll indicator when at the bottom of the list */
+.mesh-analyze-pathways-modal .pathway-list::-webkit-scrollbar-thumb:vertical:active {
+  display: none;
+}

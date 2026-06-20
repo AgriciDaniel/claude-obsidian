@@ -1,0 +1,11 @@
+{
+  "id": "mesh-ai",
+  "name": "Mesh AI",
+  "version": "1.3.1",
+  "minAppVersion": "1.6.5",
+  "description": "Mesh AI prompt manager and gererator",
+  "author": "Chasebank87",
+  "authorUrl": "https://chaseelder.com",
+  "fundingUrl": "https://buymeacoffee.com/chasebank87",
+  "isDesktopOnly": false
+}

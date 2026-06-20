@@ -25,6 +25,13 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-06-18] autoresearch | BidStats and UK public procurement APIs for JobFilter
+- Rounds: 3
+- Sources found: 12 official pages and live endpoints
+- Pages created: [[BidStats and UK public procurement APIs for JobFilter]], [[BidStats Pricing and Insights API]], [[Find a Tender OCDS API]], [[Contracts Finder Transition and OCDS API]], [[UK Procurement OCDS Bulk and Regional Feeds]]
+- Synthesis: [[BidStats and UK public procurement APIs for JobFilter]]
+- Key finding: JobFilter should use free Find a Tender OCDS plus Public Contracts Scotland and defer BidStats Insights at £5,000 per year.
+
 ## [2026-06-04] session | Multi-repo sync — JobFilter merge, OpenFlowKit terminal bridge, BuildScout research, Obsidian vault update
 - Type: sync + implementation + research
 - Locations (new): `wiki/projects/jobfilter/research/BuildScout Competitive Analysis.md`
