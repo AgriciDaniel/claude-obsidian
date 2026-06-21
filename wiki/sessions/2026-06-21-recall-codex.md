@@ -83,3 +83,27 @@ status: completed
 - Connect routed work to evidence boards and cited briefs.
 - Add client-scoped permissions and approval states.
 - Track delivered work and outcomes to strengthen Recall's learning moat.
+
+## Later continuation — research and Instagram API
+
+- Merged the Execution Router work to `main` in PR #1.
+- Researched and classified 100 competitors and substitutes across creative analytics, ad intelligence, social listening, influencer platforms, knowledge tools, content production, agency reporting and AI workflows.
+- Added a research-backed next-step report and exactly five concise build prompts.
+- Merged research PR #2: https://github.com/manazoid4/recall/pull/2
+- Implemented Meta Instagram Business Discovery for public Business/Creator accounts.
+- Added authenticated discovery, explicit preview, per-post selection and provenance-preserving ingestion.
+- Confirmed unsupported boundaries: personal/private accounts, saved folders, Stories, cookies, passwords and background scraping.
+- Added 12 focused Instagram tests; full suite reached 39 passing tests.
+- Merged Instagram PR #3: https://github.com/manazoid4/recall/pull/3
+- Removed the redundant token-based Vercel deploy workflow; Vercel Git integration remains the single deployment path.
+- Merged CI cleanup PR #4: https://github.com/manazoid4/recall/pull/4
+
+### Instagram activation blocker
+
+The implementation is on `main`, but Vercel has no Meta credentials. Founder must set:
+
+- `INSTAGRAM_BUSINESS_ACCOUNT_ID`
+- `INSTAGRAM_ACCESS_TOKEN`
+- `META_GRAPH_API_VERSION=v25.0`
+
+Then deploy and test a known public Business or Creator username from `/upload`.
