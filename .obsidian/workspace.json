@@ -11,10 +11,14 @@
             "id": "8a7d5fc9df481afe",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Competitor Deep Dive - 2026-05-19"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "linkedin",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from Competitor Deep Dive - 2026-05-19"
             }
           },
           {
@@ -178,8 +184,9 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "8dd61fcfd1183298",
+  "active": "8a7d5fc9df481afe",
   "lastOpenFiles": [
+    "wiki/sessions/2026-06-21-recall-codex.md",
     "Local Knowledge/wiki/projects/JobFilter/project-docs/Footer.tsx",
     "Local Knowledge/wiki/projects/JobFilter/project-docs/layout.tsx",
     "Local Knowledge/wiki/projects/JobFilter/project-docs/TopNav.tsx",
@@ -215,7 +222,6 @@
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/System/Build Agent Prompts",
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-24",
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Agent Runs/2026-05-22",
-    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/06_Agents/Web_Dev_Agent",
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/JobFilter Control Map.canvas",
     "Local Knowledge/wiki/projects/JobFilter/vault/Airdrop Bot/Airdrop Bot Flow.canvas",
     "Untitled.canvas"

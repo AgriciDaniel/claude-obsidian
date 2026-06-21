@@ -107,3 +107,11 @@ The implementation is on `main`, but Vercel has no Meta credentials. Founder mus
 - `META_GRAPH_API_VERSION=v25.0`
 
 Then deploy and test a known public Business or Creator username from `/upload`.
+
+## Audit follow-up
+
+- Verified on 2026-06-21 that Recall PRs #1 through #4 are merged into `origin/main`.
+- Confirmed the session changed 29 files relative to the prior Recall baseline: 2,429 insertions and 244 deletions.
+- Confirmed the merged deliverables include the Execution Router, 100-product competitor research, five ordered build prompts, Instagram Business Discovery, and removal of the duplicate Vercel deployment workflow.
+- Confirmed Instagram activation remains blocked until the three Meta environment variables are configured and the authenticated import flow is tested.
+- Confirmed the local checkout remains on `agents/remove-legacy-vercel-deploy`, one merge commit behind `origin/main`, with two pre-existing untracked secure-social-ingestion planning documents.
