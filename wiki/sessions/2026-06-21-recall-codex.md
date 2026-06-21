@@ -115,3 +115,11 @@ Then deploy and test a known public Business or Creator username from `/upload`.
 - Confirmed the merged deliverables include the Execution Router, 100-product competitor research, five ordered build prompts, Instagram Business Discovery, and removal of the duplicate Vercel deployment workflow.
 - Confirmed Instagram activation remains blocked until the three Meta environment variables are configured and the authenticated import flow is tested.
 - Confirmed the local checkout remains on `agents/remove-legacy-vercel-deploy`, one merge commit behind `origin/main`, with two pre-existing untracked secure-social-ingestion planning documents.
+
+## Multi-agent pre-mortem
+
+- Ran independent product, sales and integrated product-market-commercial reviews.
+- All three concluded Recall is conditionally worth pursuing as a paid validation sprint, but not worth another broad feature cycle.
+- Identified the narrow wedge as source-cited creative briefs for boutique social and creative agencies.
+- Defined 30-day paid-pilot evidence gates and explicit kill/pivot conditions.
+- Saved the combined decision memo to `wiki/outputs/2026-06-21-recall-pre-mortem.md`.
