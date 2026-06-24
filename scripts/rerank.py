@@ -42,7 +42,15 @@ Exit codes:
 """
 
 import argparse
-import fcntl
+try:
+    import fcntl
+except ModuleNotFoundError:  # Windows has no fcntl; advisory locks become no-ops (single-user vault).
+    class _NoFcntl:
+        LOCK_EX = LOCK_SH = LOCK_UN = LOCK_NB = 0
+        @staticmethod
+        def flock(*_a, **_k):
+            return None
+    fcntl = _NoFcntl()
 import json
 import math
 import os
