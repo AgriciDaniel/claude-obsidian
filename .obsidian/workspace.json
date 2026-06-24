@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
+                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Competitor Deep Dive - 2026-05-19"
+              "title": "13 Split Batches Codex vs Claude"
             }
           }
         ]
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
+                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Competitor Deep Dive - 2026-05-19"
+              "title": "Outgoing links from 13 Split Batches Codex vs Claude"
             }
           },
           {
@@ -156,16 +156,27 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of 13 Split Batches Codex vs Claude"
+            }
+          },
+          {
+            "id": "9086d0c9243e7c05",
+            "type": "leaf",
+            "state": {
+              "type": "mesh-view",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Mesh AI"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -181,11 +192,13 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "mesh-ai:Mesh AI Integration": false,
-      "omnisearch:Omnisearch": false
+      "omnisearch:Omnisearch": false,
+      "grimoire:Open Grimoire": false
     }
   },
   "active": "8a7d5fc9df481afe",
   "lastOpenFiles": [
+    "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
     "wiki/sessions/2026-06-21-supabase-mcp-codex.md",
     "wiki/sessions/2026-06-21-jobfilter-codex.md",
     "Local Knowledge/wiki/projects/JobFilter/project-docs/Product_Context.txt",
@@ -221,7 +234,6 @@
     "Local Knowledge/wiki/projects/JobFilter/notes/next-codex-task.md",
     "Local Knowledge/wiki/projects/JobFilter/notes/api-deep-test-results.md",
     "Local Knowledge/wiki/projects/JobFilter/notes/analysis-2026-04-25.md",
-    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/System/Build Agent Prompts/Revenue Feature Sprint - framework.construction.md",
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/JobFilter Control Map.canvas",
     "Local Knowledge/wiki/projects/JobFilter/vault/Airdrop Bot/Airdrop Bot Flow.canvas",
     "Untitled.canvas"
