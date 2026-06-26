@@ -132,3 +132,12 @@ _attachments/
 # v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
 .vault-meta/mode.json
 .vault-meta/mode.*.tmp
+# v1.10 session interaction counter (local runtime state)
+.vault-meta/interaction-count.txt
+
+# Local workspace (dev scratch, not for public repo)
+workspace/
+
+# GTD personal buckets (not committed — local brain only)
+wiki/gtd/actions/
+wiki/gtd/reference/

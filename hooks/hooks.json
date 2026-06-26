@@ -11,10 +11,6 @@
           {
             "type": "command",
             "command": "[ -x scripts/wiki-lock.sh ] && bash scripts/wiki-lock.sh clear-stale --max-age 3600 >/dev/null 2>&1 || true"
-          },
-          {
-            "type": "prompt",
-            "prompt": "If a vault is configured for this session (check CLAUDE.md for VAULT_PATH or a wiki/ folder in the current directory), silently read wiki/hot.md to restore recent context. If wiki/hot.md does not exist, do nothing. This is a non-vault session. Do not announce this. Do not report what you read. Just have the context available."
           }
         ]
       }
@@ -47,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$PWD\" && [ -d wiki ] && [ -d .git ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && echo 'WIKI_CHANGED: Wiki pages were modified this session. Please update wiki/hot.md with a brief summary of what changed (under 500 words). Use the hot cache format: Last Updated, Key Recent Facts, Recent Changes, Active Threads. Keep it factual. Overwrite the file completely. It is a cache, not a journal.' || true"
+            "command": "[ -x scripts/session-counter.sh ] && bash scripts/session-counter.sh || true; cd \"$PWD\" && [ -d wiki ] && [ -d .git ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && echo 'WIKI_CHANGED: Wiki pages were modified this session. Please update wiki/hot.md with a brief summary of what changed (under 500 words). Use the hot cache format: Last Updated, Key Recent Facts, Recent Changes, Active Threads. Keep it factual. Overwrite the file completely. It is a cache, not a journal.' || true"
           }
         ]
       }

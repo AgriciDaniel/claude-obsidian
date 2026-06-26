@@ -1,6 +1,6 @@
 ---
 name: wiki-mode
-description: "Methodology modes for the Compound Vault. Lets the vault declare an organizational style (LYT / PARA / Zettelkasten / Generic) that wiki-ingest, save, and autoresearch consult before filing new pages. Reads `.vault-meta/mode.json`; defaults to `generic` (v1.6/v1.7 behavior) when absent. Per the May 2026 compass artifact, methodology support was priority gap 5 — no other Claude+Obsidian competitor ships it as a first-class skill. Triggers on: set vault mode, switch to PARA, use LYT, what's my vault mode, zettelkasten setup, wiki mode, methodology mode, change mode, configure mode."
+description: "Methodology modes for the Compound Vault. Lets the vault declare an organizational style (LYT / PARA / Zettelkasten / GTD / Generic) that wiki-ingest, save, autoresearch, and wiki-triage consult before filing new pages. Reads `.vault-meta/mode.json`; defaults to `generic` (v1.6/v1.7 behavior) when absent. Per the May 2026 compass artifact, methodology support was priority gap 5 — no other Claude+Obsidian competitor ships it as a first-class skill. Triggers on: set vault mode, switch to PARA, use LYT, what's my vault mode, zettelkasten setup, gtd mode, wiki mode, methodology mode, change mode, configure mode."
 allowed-tools: Read, Write, Bash
 ---
 
@@ -8,13 +8,15 @@ allowed-tools: Read, Write, Bash
 
 The v1.6 + v1.7 vault structure was opinion-free — `wiki/sources/`, `wiki/entities/`, `wiki/concepts/`, and so on. That works for power-users with their own organizational instincts. It does NOT serve the large segment of Obsidian users who want a named methodology to follow.
 
-**v1.8 ships `wiki-mode` to close that gap.** A vault declares a mode (LYT, PARA, Zettelkasten, or Generic) in `.vault-meta/mode.json`; the other skills consult it before deciding where to file new pages. Mode = `generic` is the default and preserves v1.6/v1.7 behavior exactly.
+**v1.8 ships `wiki-mode` to close that gap.** A vault declares a mode (LYT, PARA, Zettelkasten, GTD, or Generic) in `.vault-meta/mode.json`; the other skills consult it before deciding where to file new pages. Mode = `generic` is the default and preserves v1.6/v1.7 behavior exactly.
 
-**Per May 2026 compass artifact**: This was priority gap 5 of the 5 identified. Ideaverse Pro 2.0 ($200 paid vault) ships LYT as an opinionated structure; no Claude+Obsidian competitor ships PARA / Zettelkasten / mode-aware routing as a first-class skill. v1.8 takes us from TIE → LEAD on the audit §9 methodology-support axis (5 of 7 axes #1).
+**v1.10 adds GTD** as a 5th mode alongside a new `wiki-triage` skill that walks the capture → actionability → 2-min rule → delegate → bucket decision tree and files via the router.
+
+**Per May 2026 compass artifact**: This was priority gap 5 of the 5 identified. Ideaverse Pro 2.0 ($200 paid vault) ships LYT as an opinionated structure; no Claude+Obsidian competitor ships PARA / Zettelkasten / GTD / mode-aware routing as a first-class skill. v1.8 takes us from TIE → LEAD on the audit §9 methodology-support axis (5 of 7 axes #1).
 
 ---
 
-## The four modes
+## The five modes
 
 ### LYT (Linking Your Thinking — Nick Milo)
 
@@ -49,6 +51,21 @@ The v1.6 + v1.7 vault structure was opinion-free — `wiki/sources/`, `wiki/enti
 
 **When to use:** academics, researchers, long-term thinkers building permanent knowledge artifacts. Highest discipline; smallest filing surface.
 
+### GTD (David Allen — v1.10)
+
+**Philosophy:** capture everything; then decide: actionable or not? If actionable: 2 minutes → do it; delegate → waiting; today → today; later → backlog. If not: trash, someday, or reference.
+
+**Filing convention:**
+- `wiki/gtd/today/` — must happen today
+- `wiki/gtd/backlog/` — dated or undated future actions
+- `wiki/gtd/waiting/` — delegated items, waiting on someone
+- `wiki/gtd/someday/` — incubating ideas and possible future projects
+- `wiki/gtd/reference/` — pure reference, no action expected (all non-action types route here)
+
+**Triage:** use `wiki-triage` skill to walk the decision tree interactively. The router accepts `--bucket` and `--due` flags for `type=action`.
+
+**When to use:** active GTD practitioners; anyone who wants strict capture → triage → bucket discipline; users who find PARA too coarse for their action horizon.
+
 ### Generic (default — v1.7 behavior)
 
 **Filing convention:** preserves the v1.6/v1.7 default — `wiki/sources/`, `wiki/entities/`, `wiki/concepts/`, `wiki/<domain>/`. No opinion imposed.
@@ -63,7 +80,7 @@ The v1.6 + v1.7 vault structure was opinion-free — `wiki/sources/`, `wiki/enti
 bash bin/setup-mode.sh
 ```
 
-Interactive prompt: pick one of the 4 modes. Writes `.vault-meta/mode.json`. Optionally seeds template folders (LYT `mocs/`, PARA `projects/areas/resources/archives/`).
+Interactive prompt: pick one of the 5 modes. Writes `.vault-meta/mode.json`. Optionally seeds template folders (LYT `mocs/`, PARA `projects/areas/resources/archives/`, GTD `gtd/{today,backlog,waiting,someday,reference}/`).
 
 To check the current mode programmatically:
 
@@ -80,7 +97,7 @@ To switch modes later: re-run `setup-mode.sh`. Existing files are NOT auto-migra
 ```json
 {
   "schema_version": 1,
-  "mode": "lyt|para|zettelkasten|generic",
+  "mode": "lyt|para|zettelkasten|generic|gtd",
   "configured_at": "ISO-8601 timestamp",
   "config": {
     "lyt": {
@@ -103,12 +120,19 @@ To switch modes later: re-run `setup-mode.sh`. Existing files are NOT auto-migra
       "entities_folder": "wiki/entities/",
       "concepts_folder": "wiki/concepts/",
       "sessions_folder": "wiki/sessions/"
+    },
+    "gtd": {
+      "today_folder": "wiki/gtd/today/",
+      "backlog_folder": "wiki/gtd/backlog/",
+      "waiting_folder": "wiki/gtd/waiting/",
+      "someday_folder": "wiki/gtd/someday/",
+      "reference_folder": "wiki/gtd/reference/"
     }
   }
 }
 ```
 
-The `config` block always includes ALL four modes; the active one is named by `mode`. This lets you switch modes without losing custom folder overrides.
+The `config` block always includes ALL five modes; the active one is named by `mode`. This lets you switch modes without losing custom folder overrides.
 
 ---
 
@@ -124,13 +148,14 @@ Each consults `.vault-meta/mode.json` (via `cat` or direct Read). If absent → 
 
 The routing table:
 
-| Content type | Generic | LYT | PARA | Zettelkasten |
-|---|---|---|---|---|
-| New source ingest | `wiki/sources/foo.md` | `wiki/notes/foo.md` + add to topic MOC | `wiki/resources/<topic>/foo.md` | `wiki/<ID>-foo.md` |
-| New entity | `wiki/entities/<Name>.md` | `wiki/notes/<Name>.md` + entity MOC | `wiki/resources/people/<Name>.md` | `wiki/<ID>-<name>.md` |
-| New concept | `wiki/concepts/<Name>.md` | `wiki/notes/<Name>.md` + concept MOC | `wiki/resources/concepts/<Name>.md` | `wiki/<ID>-<name>.md` |
-| Session note (`/save`) | `wiki/sessions/<date>-<topic>.md` | `wiki/notes/<date>-<topic>.md` + session MOC | `wiki/projects/<project>/<date>-<topic>.md` | `wiki/<ID>-session-<topic>.md` |
-| Research output (`/autoresearch`) | `wiki/concepts/<topic>.md` | `wiki/notes/<topic>.md` + topic MOC | `wiki/resources/<topic>/<topic>.md` | `wiki/<ID>-<topic>.md` |
+| Content type | Generic | LYT | PARA | Zettelkasten | GTD |
+|---|---|---|---|---|---|
+| New source ingest | `wiki/sources/foo.md` | `wiki/notes/foo.md` + add to topic MOC | `wiki/resources/<topic>/foo.md` | `wiki/<ID>-foo.md` | `wiki/gtd/reference/foo.md` |
+| New entity | `wiki/entities/<Name>.md` | `wiki/notes/<Name>.md` + entity MOC | `wiki/resources/people/<Name>.md` | `wiki/<ID>-<name>.md` | `wiki/gtd/reference/<Name>.md` |
+| New concept | `wiki/concepts/<Name>.md` | `wiki/notes/<Name>.md` + concept MOC | `wiki/resources/concepts/<Name>.md` | `wiki/<ID>-<name>.md` | `wiki/gtd/reference/<Name>.md` |
+| Session note (`/save`) | `wiki/sessions/<date>-<topic>.md` | `wiki/notes/<date>-<topic>.md` + session MOC | `wiki/projects/<project>/<date>-<topic>.md` | `wiki/<ID>-session-<topic>.md` | `wiki/gtd/reference/<topic>.md` |
+| Research output (`/autoresearch`) | `wiki/concepts/<topic>.md` | `wiki/notes/<topic>.md` + topic MOC | `wiki/resources/<topic>/<topic>.md` | `wiki/<ID>-<topic>.md` | `wiki/gtd/reference/<topic>.md` |
+| Action (`wiki-triage`) | `wiki/sessions/<slug>.md` | `wiki/notes/<slug>.md` | `wiki/projects/inbox/<slug>.md` | `wiki/<ID>-<slug>.md` | `wiki/gtd/<bucket>/<slug>.md` |
 
 ---
 
@@ -144,6 +169,10 @@ Per-mode templates live at `skills/wiki-mode/templates/`:
 - [`para/area-template.md`](templates/para/area-template.md) — ongoing responsibility
 - [`para/resource-template.md`](templates/para/resource-template.md) — reference material
 - [`zettel/atomic-template.md`](templates/zettel/atomic-template.md) — atomic claim + parent/child IDs
+- [`gtd/action-template.md`](templates/gtd/action-template.md) — actionable item (today or backlog bucket)
+- [`gtd/waiting-template.md`](templates/gtd/waiting-template.md) — delegated item with waiting_on + followed_up fields
+- [`gtd/someday-template.md`](templates/gtd/someday-template.md) — incubating idea with revisit trigger
+- [`gtd/reference-template.md`](templates/gtd/reference-template.md) — pure reference material (no action fields)
 
 Skills that file new pages consult the template matching the (mode, content-type) pair as a structural starting point. Templates are SUGGESTIONS; the skill's own content logic always wins.
 

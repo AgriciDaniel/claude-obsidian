@@ -7,6 +7,7 @@ new content of type X be filed under mode Y." Consumed by:
   - skills/wiki-ingest/SKILL.md  (where to file new source/entity/concept pages)
   - skills/save/SKILL.md         (where to file session notes)
   - skills/autoresearch/SKILL.md (where to file research output)
+  - skills/wiki-triage/SKILL.md  (GTD capture/triage decision tree)
   - bin/setup-mode.sh            (writes .vault-meta/mode.json)
 
 If `.vault-meta/mode.json` is absent → mode = "generic" → behavior identical
@@ -16,8 +17,9 @@ CLI:
   wiki-mode.py get                      # print current mode (default: generic)
   wiki-mode.py config                   # print full config JSON
   wiki-mode.py route TYPE NAME          # print suggested path for new content
-                                        # TYPE: source|entity|concept|session|research
-  wiki-mode.py set MODE                 # write mode (lyt|para|zettelkasten|generic)
+                                        # TYPE: source|entity|concept|session|research|action
+  wiki-mode.py route action NAME --bucket today|backlog|waiting|someday [--due YYYY-MM-DD]
+  wiki-mode.py set MODE                 # write mode (lyt|para|zettelkasten|generic|gtd)
   wiki-mode.py id                       # mint a Zettelkasten ID (timestamp)
   wiki-mode.py templates                # list per-mode template files
 
@@ -26,6 +28,7 @@ Exit codes:
   2 — usage error
   3 — invalid mode string
   4 — invalid content type
+  5 — invalid bucket (gtd mode, type=action only)
 """
 
 import argparse
@@ -40,8 +43,12 @@ VAULT_ROOT = Path(__file__).resolve().parent.parent
 META_DIR = VAULT_ROOT / ".vault-meta"
 MODE_PATH = META_DIR / "mode.json"
 
-VALID_MODES = ("generic", "lyt", "para", "zettelkasten")
-VALID_TYPES = ("source", "entity", "concept", "session", "research")
+VALID_MODES = ("generic", "lyt", "para", "zettelkasten", "gtd")
+VALID_TYPES = ("source", "entity", "concept", "session", "research", "action")
+VALID_BUCKETS = ("today", "backlog", "waiting", "someday")
+# "reference" is a type-based route (type=source), not a bucket.
+
+_DUE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 DEFAULT_CONFIG = {
     "schema_version": 1,
@@ -68,6 +75,13 @@ DEFAULT_CONFIG = {
             "entities_folder": "wiki/entities/",
             "concepts_folder": "wiki/concepts/",
             "sessions_folder": "wiki/sessions/",
+        },
+        "gtd": {
+            "today_folder": "wiki/gtd/today/",
+            "backlog_folder": "wiki/gtd/backlog/",
+            "waiting_folder": "wiki/gtd/waiting/",
+            "someday_folder": "wiki/gtd/someday/",
+            "reference_folder": "wiki/references/",
         },
     },
 }
@@ -143,7 +157,7 @@ def mint_zettel_id():
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S%f")
 
 
-def route_path(mode, content_type, name, cfg):
+def route_path(mode, content_type, name, cfg, bucket=None, due=None):
     """Return the suggested vault-relative path for new content under `mode`."""
     if content_type not in VALID_TYPES:
         raise SystemExit(4)
@@ -159,6 +173,7 @@ def route_path(mode, content_type, name, cfg):
             "concept":  g["concepts_folder"] + raw + ".md",
             "session":  g["sessions_folder"] + slug + ".md",
             "research": g["concepts_folder"] + raw + ".md",
+            "action":   g["sessions_folder"] + slug + ".md",
         }
         return mapping[content_type]
 
@@ -178,6 +193,7 @@ def route_path(mode, content_type, name, cfg):
             # Session notes land in projects/inbox/; user reroutes to specific projects
             "session":  p["projects_folder"] + "inbox/" + slug + ".md",
             "research": p["resources_folder"] + slug + "/" + slug + ".md",
+            "action":   p["projects_folder"] + "inbox/" + slug + ".md",
         }
         return mapping[content_type]
 
@@ -185,6 +201,29 @@ def route_path(mode, content_type, name, cfg):
         z = cfg["config"]["zettelkasten"]
         zid = mint_zettel_id()
         return z["root_folder"] + f"{zid}-{slug}.md"
+
+    if mode == "gtd":
+        g = cfg["config"]["gtd"]
+        if content_type == "action":
+            b = bucket or "backlog"
+            if b not in VALID_BUCKETS:
+                raise SystemExit(5)
+            folder_by_bucket = {
+                "today":   g["today_folder"],
+                "backlog": g["backlog_folder"],
+                "waiting": g["waiting_folder"],
+                "someday": g["someday_folder"],
+            }
+            folder = folder_by_bucket[b]
+            if b == "backlog" and due:
+                if not _DUE_RE.match(due):
+                    raise SystemExit(2)
+                return f"{folder}{due}-{slug}.md"
+            return folder + slug + ".md"
+        # source / entity / concept / session / research are all reference
+        # material under GTD philosophy — no action expected.
+        name_part = raw if content_type in ("entity", "concept") else slug
+        return g["reference_folder"] + name_part + ".md"
 
     raise SystemExit(3)
 
@@ -201,6 +240,11 @@ def main():
     sp_route.add_argument("name", help="Content name (will be slugified for filenames)")
     sp_route.add_argument("--mode", choices=VALID_MODES, default=None,
                           help="Preview routing under MODE without writing mode.json (default: use current vault mode)")
+    sp_route.add_argument("--bucket", choices=VALID_BUCKETS, default=None,
+                          help="GTD bucket for type=action (today|backlog|waiting|someday). "
+                               "Ignored outside gtd mode / non-action types.")
+    sp_route.add_argument("--due", default=None,
+                          help="YYYY-MM-DD due date; only used for gtd backlog filenames.")
 
     sp_set = sub.add_parser("set", help="Write a mode to .vault-meta/mode.json")
     sp_set.add_argument("mode", choices=VALID_MODES)
@@ -221,7 +265,8 @@ def main():
 
     if args.cmd == "route":
         active_mode = args.mode if args.mode else cfg["mode"]
-        path = route_path(active_mode, args.type, args.name, cfg)
+        path = route_path(active_mode, args.type, args.name, cfg,
+                          bucket=args.bucket, due=args.due)
         print(path)
         return 0
 

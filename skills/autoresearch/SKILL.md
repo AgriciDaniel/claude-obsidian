@@ -39,6 +39,7 @@ Before filing research output, consult the vault's methodology mode via `python3
 - **LYT**: `wiki/notes/<topic>.md` + create or update a topic MOC at `wiki/mocs/<topic>-moc.md`
 - **PARA**: `wiki/resources/<topic>/<topic>.md` (topic-named subfolder under resources)
 - **Zettelkasten**: `wiki/<ID>-<topic>.md` (timestamped ID prefix)
+- **GTD**: research output is reference material — file to `wiki/gtd/reference/<topic>.md`. No bucket or due date needed.
 
 If `.vault-meta/mode.json` is absent, the router returns mode=generic paths.
 

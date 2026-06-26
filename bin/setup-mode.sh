@@ -14,7 +14,7 @@
 #
 # Flags:
 #   --mode MODE     Skip the interactive prompt; pick MODE directly.
-#                   Valid: generic | lyt | para | zettelkasten
+#                   Valid: generic | lyt | para | zettelkasten | gtd
 #   --no-seed       Skip the optional folder-seeding step
 #   --check         Print current mode + diagnostics; write nothing
 #
@@ -28,6 +28,18 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VAULT="$(dirname "$SCRIPT_DIR")"
 WM="$VAULT/scripts/wiki-mode.py"
+
+# Detect Python executable — test actual execution, not just presence.
+# Windows has a fake python3.exe stub that opens the Store; skip it.
+_pick_python() {
+  for candidate in "py -X utf8" python3 python; do
+    if $candidate -c "import sys; sys.exit(0)" >/dev/null 2>&1; then
+      echo "$candidate"; return 0
+    fi
+  done
+  return 1
+}
+PY=$(_pick_python) || { echo "ERR: no working Python interpreter found" >&2; exit 3; }
 
 REQUESTED_MODE=""
 NO_SEED=false
@@ -60,12 +72,12 @@ if [ ! -x "$WM" ]; then
 fi
 
 # ── Diagnostics ─────────────────────────────────────────────────────────────
-CURRENT=$(python3 "$WM" get 2>/dev/null || echo "generic")
+CURRENT=$($PY "$WM" get 2>/dev/null || echo "generic")
 say "Current mode: $CURRENT"
 
 if $CHECK_ONLY; then
   say ""
-  python3 "$WM" config
+  $PY "$WM" config
   exit 0
 fi
 
@@ -77,25 +89,27 @@ if [ -z "$REQUESTED_MODE" ]; then
   say "  2) lyt           — Linking Your Thinking (MOCs + atomic notes flat under wiki/notes/)"
   say "  3) para          — Projects / Areas / Resources / Archives"
   say "  4) zettelkasten  — timestamped IDs, flat under wiki/, dense linking"
+  say "  5) gtd           — GTD (David Allen): today/backlog/waiting/someday/reference buckets"
   say ""
-  printf "Pick [1-4, default 1]: "
+  printf "Pick [1-5, default 1]: "
   read -r choice || choice="1"
   case "${choice:-1}" in
     1|generic)       REQUESTED_MODE="generic" ;;
     2|lyt)           REQUESTED_MODE="lyt" ;;
     3|para)          REQUESTED_MODE="para" ;;
     4|zettelkasten)  REQUESTED_MODE="zettelkasten" ;;
+    5|gtd)           REQUESTED_MODE="gtd" ;;
     *) warn "invalid choice: $choice"; exit 3 ;;
   esac
 fi
 
 case "$REQUESTED_MODE" in
-  generic|lyt|para|zettelkasten) ;;
-  *) warn "invalid mode: $REQUESTED_MODE (valid: generic|lyt|para|zettelkasten)"; exit 3 ;;
+  generic|lyt|para|zettelkasten|gtd) ;;
+  *) warn "invalid mode: $REQUESTED_MODE (valid: generic|lyt|para|zettelkasten|gtd)"; exit 3 ;;
 esac
 
 # ── Write the mode ──────────────────────────────────────────────────────────
-python3 "$WM" set "$REQUESTED_MODE"
+$PY "$WM" set "$REQUESTED_MODE"
 
 # ── Seed template folders (optional) ────────────────────────────────────────
 if ! $NO_SEED; then
@@ -126,6 +140,12 @@ if ! $NO_SEED; then
           mkdir -p "$VAULT/wiki/sources" "$VAULT/wiki/entities" \
                    "$VAULT/wiki/concepts" "$VAULT/wiki/sessions"
           say "✓ Created generic folders: sources/, entities/, concepts/, sessions/"
+          ;;
+        gtd)
+          mkdir -p "$VAULT/wiki/gtd/today" "$VAULT/wiki/gtd/backlog" \
+                   "$VAULT/wiki/gtd/waiting" "$VAULT/wiki/gtd/someday" \
+                   "$VAULT/wiki/gtd/reference"
+          say "✓ Created GTD folder structure: gtd/{today,backlog,waiting,someday,reference}/"
           ;;
       esac
       ;;

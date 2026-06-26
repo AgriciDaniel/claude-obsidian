@@ -44,6 +44,7 @@ Mode-specific follow-up:
 - **LYT**: after filing the atomic note, update the relevant MOC (`wiki/mocs/<topic>-moc.md`) to link the new note. If no MOC exists for the topic, create one using `skills/wiki-mode/templates/lyt/moc-template.md`.
 - **Zettelkasten**: filename already includes the timestamp ID. Populate the `id:` frontmatter field to match.
 - **PARA**: new ingests land in `wiki/resources/incoming/` by default. Do NOT auto-guess the topic; leave in incoming/ for user review.
+- **GTD**: new ingests are reference material — file to `wiki/gtd/reference/`. Not a task; no triage needed. If the user wants to capture an action from the source, point them at the wiki-triage skill.
 
 ## Concurrency (v1.7+)
 

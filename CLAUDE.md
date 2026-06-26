@@ -1,9 +1,15 @@
 # claude-obsidian — Claude + Obsidian Wiki Vault
 
+## Reglas de comportamiento obligatorias
+
+**SAVE_REMINDER = acción inmediata, no postergable.** Cuando el Stop hook emite `SAVE_REMINDER`, la PRIMERA acción del turno siguiente es ejecutar `/save`. No responder al usuario antes de guardar. No tratarlo como sugerencia.
+
+**Auto-save proactivo.** Guardar en `wiki/references/` sin que el usuario lo pida cuando haya contexto valioso acumulado (decisiones de arquitectura, cambios de config, resolución de problemas no triviales). El SAVE_REMINDER automático se emite cada 30 interacciones como señal de respaldo.
+
 This folder is both a Claude Code plugin and an Obsidian vault.
 
-**Plugin name:** `claude-obsidian` (v1.7+ "Compound Vault" — see [docs/compound-vault-guide.md](docs/compound-vault-guide.md); v1.8+ adds methodology modes — see [docs/methodology-modes-guide.md](docs/methodology-modes-guide.md))
-**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-cli` (v1.7), `/wiki-retrieve` (v1.7, opt-in), `/wiki-mode` (v1.8)
+**Plugin name:** `claude-obsidian` (v1.7+ "Compound Vault" — see [docs/compound-vault-guide.md](docs/compound-vault-guide.md); v1.8+ adds methodology modes (LYT/PARA/Zettelkasten/Generic); v1.10 adds GTD mode + wiki-triage — see [docs/methodology-modes-guide.md](docs/methodology-modes-guide.md))
+**Skills:** `/wiki`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-cli` (v1.7), `/wiki-retrieve` (v1.7, opt-in), `/wiki-mode` (v1.8), `/wiki-triage` (v1.10)
 **Vault path:** This directory (open in Obsidian directly)
 
 ## What This Vault Is For
@@ -59,7 +65,8 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `/canvas` | Visual layer: add images, PDFs, notes to Obsidian canvas |
 | `/wiki-cli` (v1.7) | Obsidian CLI transport wrapper; default mutation path on desktop |
 | `/wiki-retrieve` (v1.7) | Hybrid contextual + BM25 + cosine-rerank retrieval (opt-in via `bash bin/setup-retrieve.sh`) |
-| `/wiki-mode` (v1.8) | Methodology modes (LYT / PARA / Zettelkasten / Generic). Set via `bash bin/setup-mode.sh`; consumed by wiki-ingest / save / autoresearch for routing new pages |
+| `/wiki-mode` (v1.8) | Methodology modes (LYT / PARA / Zettelkasten / GTD / Generic). Set via `bash bin/setup-mode.sh`; consumed by wiki-ingest / save / autoresearch for routing new pages |
+| `/wiki-triage` (v1.10) | GTD capture/triage: runs the capture → actionable → 2-min/delegate/today/date decision tree on incoming items, files via wiki-mode router |
 | `/think` (v1.9) | The 10-principle thinking loop (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) as an invocable workflow. Apply to architectural decisions, audits, post-mortems, ambiguous user requests. Every other skill has a "How to think" appendix mapping this framework to its specific work |
 
 ## Transport (v1.7+)
@@ -83,12 +90,69 @@ After staging changes for a non-trivial workstream but BEFORE running `git commi
 If you configured the MCP server, Claude can read and write vault notes directly.
 See `skills/wiki/references/mcp-setup.md` for setup instructions.
 
-## Release Blog Post
+## Emotional Awareness
 
-After cutting a new release (git tag + `gh release create`), run:
+Claude infiere el estado emocional y cognitivo del usuario desde el contexto (tono, ritmo, longitud de mensajes, hora, tipo de tarea) y lo taggea internamente con etiquetas `ai-x`. El usuario tiene TDAH — los estados cognitivos son tan importantes como los emocionales.
 
-```
-/release-blog
-```
+**REGLA ABSOLUTA DE VISIBILIDAD:** Los tags ai-x NUNCA aparecen en el texto de respuesta. Ni al final, ni entre backticks, ni entre paréntesis, ni como metadata. Solo pueden aparecer en cuerpos de archivos de memoria (.claude/projects/.../memory/*.md) o en notas de wiki al guardar con /save.
+- MAL: "Buenas noches. `ai-cansancio`"
+- BIEN: "Buenas noches." (tag inferido internamente, nunca escrito en el chat)
 
-This generates a blog post on https://agricidaniel.com/blog/, handles cover image generation, SEO metadata, FAQ schema, internal linking, sitemap/llms.txt updates, Vercel deployment, and Google indexing.
+**Catálogo de estados cognitivos (TDAH-aware):**
+- `ai-hiperfoco` — flujo profundo. Respuestas ultra-cortas, sin alternativas, sin contexto extra. No interrumpir el flujo.
+- `ai-disperso` — saltando temas, señales de overwhelm. Una cosa a la vez, anclar suavemente, no agregar más info.
+- `ai-procrastinando` — circulando sin arrancar. Acción más pequeña posible, sin teoría, sin opciones.
+- `ai-crash` — post-hiperfoco o agotamiento cognitivo. Mínimo de palabras, cero decisiones, respuesta directa.
+
+**Catálogo de estados emocionales:**
+- `ai-frustración` — ir al punto, sin alternativas, sin contexto extra.
+- `ai-entusiasmo` — expandir, proponer ideas, explorar opciones.
+- `ai-urgencia` — bullets, camino más rápido, sin caveats.
+- `ai-cansancio` — respuestas cortas, estructura clara, una cosa por vez.
+- `ai-confusión` — simplificar, no asumir contexto, preguntar si es necesario.
+- `ai-alivio` — confirmar brevemente, no sobrecargar con lo que sigue.
+
+**Comportamiento:**
+- Inferir silenciosamente y aplicar. El usuario nota el efecto, no el tag.
+- Si el usuario quiere hablar de cómo se siente, lo dice él. Solo entonces acompañar.
+- Una o dos etiquetas por momento relevante, no en cada mensaje.
+
+## Personal Brain
+
+`brain/` is a GTD-ish personal second brain living alongside the plugin wiki.
+
+**Structure:**
+- `brain/inbox/` — capture zone, process in weekly review
+- `brain/goals/` — goals + north star
+- `brain/projects/` — active GTD projects with next actions
+- `brain/areas/` — life areas: health, career, finances, relationships
+- `brain/learning/` — skills, books, concepts in progress
+- `brain/resources/` — reference material
+- `brain/someday/` — parked ideas and projects
+
+**Templates:** `_templates/brain/` — capture, project, goal, area, weekly-review
+
+**Conventions:**
+- All notes use YAML frontmatter: type, status, area, created, updated, tags
+- Wikilinks use `[[note-name]]` format
+- `brain/inbox/` is the only unsorted zone — everything else has a home
+- Weekly review processes inbox and updates projects/_index next actions
+- `brain/hot.md` is the session cache — Claude updates it after significant changes
+- `brain/log.md` is append-only — new entries at the top
+
+**GTD Tagging Rule (IMPORTANTE):**
+Al crear una acción GTD, inferir tags de contexto del título además de los tags base (`gtd`, `action`). Ejemplos:
+- "comprar cortina" → `compras`, `hogar`
+- "ir a la ferretería" → `compras`, `ferretería`
+- "llamar al médico" → `salud`, `llamadas`
+- "revisar código PR" → `trabajo`, `código`
+- "pagar factura" → `finanzas`, `trámites`
+
+Siempre agregar al menos 1 tag de contexto. El objetivo es poder filtrar tareas por categoría desde la app GTD.
+
+**How to use with Claude:**
+- "Capture [idea/task]" → adds to inbox
+- "Add project [name]" → creates from template, links in projects/_index
+- "Weekly review" → runs through the weekly-review template
+- "What are my active projects?" → reads projects/_index
+- "Update [area]" → opens the area note for editing

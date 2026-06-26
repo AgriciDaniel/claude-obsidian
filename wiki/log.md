@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Operation Log"
-updated: 2026-04-08
+updated: 2026-06-24
 tags:
   - meta
   - log
@@ -10,8 +10,41 @@ related:
   - "[[index]]"
   - "[[hot]]"
   - "[[overview]]"
-  - "[[sources/_index]]"
 ---
+
+## [2026-06-25] save | Buenas noches - GTD task completion
+
+- Type: session
+- Location: wiki/gtd/reference/20260625-buenas-noches.md
+- From: sesión corta, usuario se fue a dormir, tarea `ir-a-dormir` marcada done
+
+## [2026-06-25] dev | java-gtd — cierre de sesión, estado actual
+
+- Master limpio, sin ramas colgadas
+- Backend completo: 12 endpoints, 27 tests, CLAUDE.md + TODO.md para onboarding de agentes
+- Frontend (test-node/gtd-frontend) avanzando en otra sesión paralela — repos separados
+- Próxima sesión: arrancar de cero con contexto fresco
+
+## [2026-06-25] dev | java-gtd — hardening arquitectónico + test suite completa
+
+- Rama: `feature/hardening` (PR pendiente)
+- Revisión arquitectónica vía agente Explore: 3 BLOCKER + 5 HIGH + 6 MEDIUM + 5 LOW
+- Fixes implementados: `synchronized` en `mutate()`/`moveBucket()` (race condition), `log.warn` en `logDiscard()` (silent failure), try/catch en fallback parse del clasificador (500 crudo), validación de filename en `resolveFile()` (path traversal), `YAMLException` capturada en `MarkdownSerializer`, `GlobalExceptionHandler` centralizado
+- Tests: 27 tests nuevos — `BucketControllerTest` (14 endpoints), `ChatControllerTest` (6 casos), `UndoControllerTest` (3 casos), `VaultServiceTest` +2 (path traversal y filename inválido)
+- Fix de infraestructura: `pom.xml` con Surefire `argLine` para compatibilidad Java 26 + Byte Buddy experimental
+- Ramas mergeadas sesión anterior: `feature/item-endpoints` (GET single, HTTP move, stats, history), `docs/update-readme` (endpoints actualizados + ejemplo fallback:true)
+
+## [2026-06-24] save | java-gtd sesión desarrollo — multi-task + unified-references
+
+- Type: reference (session)
+- Location: wiki/references/java-gtd-sesion-desarrollo-2026-06-24.md
+- From: sesión completa de desarrollo java-gtd: reference unification, multi-task /api/chat, git workflow, session counter
+
+## [2026-06-24] save | Proyecto Spring AI — GTD API
+
+- Type: reference
+- Location: wiki/gtd/reference/spring-ai-proyecto-gtd.md
+- From: sesión de implementación de API REST Java/Spring AI para GTD con switching entre Anthropic, Gemini y Groq
 
 # Operation Log
 
@@ -24,6 +57,13 @@ Entry format: `## [YYYY-MM-DD] operation | Title`
 Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
+
+## [2026-06-24] release | v1.10.0 — GTD mode + wiki-triage skill
+- Source: `docs/gtd-mode-plan.md` (user-authored implementation plan)
+- Scope: 5th methodology mode (GTD/David Allen) + `wiki-triage` skill implementing the capture → actionable → 2-min / delegate / today / backlog decision tree
+- Files changed (10): `scripts/wiki-mode.py`, `tests/test_wiki_mode.py`, `bin/setup-mode.sh`, `skills/wiki-mode/templates/gtd/{action,waiting,someday,reference}-template.md` (4 new), `skills/wiki-triage/SKILL.md` (new), `skills/wiki-ingest/SKILL.md`, `skills/save/SKILL.md`, `skills/autoresearch/SKILL.md`, `docs/methodology-modes-guide.md`, `skills/wiki-mode/SKILL.md`, `wiki/references/methodology-modes.md`, `CLAUDE.md`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `CHANGELOG.md`
+- Key insight: GTD integrates cleanly as a 5th mode — the existing router architecture needed only `--bucket` + `--due` flags and a new branch. All 9 inline GTD routing assertions green.
+- Version: 1.9.2 → 1.10.0 (local; not yet pushed/tagged)
 
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets

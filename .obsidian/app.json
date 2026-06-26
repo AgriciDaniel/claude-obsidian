@@ -9,5 +9,6 @@
     "CLAUDE.md",
     "WIKI.md",
     "Welcome.md"
-  ]
+  ],
+  "spellcheck": true
 }

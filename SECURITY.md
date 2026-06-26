@@ -6,7 +6,7 @@ If you find a security issue in claude-obsidian, please report it privately rath
 
 **Preferred:** GitHub's private reporting at the repository's [Security Advisories](../../security/advisories/new) page.
 
-**Alternative:** Email **agricidaniel@gmail.com** with subject line `claude-obsidian security`.
+**Alternative:** Email **agricidaniel@gmail.com** or **mileimaximiliano@gmail.com** with subject line `claude-obsidian security`.
 
 Please include:
 - A short description of the issue

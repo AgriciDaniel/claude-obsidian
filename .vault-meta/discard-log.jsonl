@@ -1,0 +1,2 @@
+{"ts":"2026-06-24T23:38:10.314894400Z","message":"hola","ops":[{"op":"create","bucket":"discard","title":"Hola","body":"","due":null,"delegado_a":null,"tags":[]}]}
+{"ts":"2026-06-25T07:33:33.075967800Z","message":"asd","ops":[{"op":"create","bucket":"discard","title":"asd","body":"","due":null,"delegado_a":null,"tags":[]}]}
