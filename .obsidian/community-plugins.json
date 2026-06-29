@@ -2,5 +2,8 @@
   "obsidian-excalidraw-plugin",
   "obsidian-banners",
   "calendar",
-  "thino"
+  "thino",
+  "calendar-beta",
+  "obsidian-memos",
+  "obsidian-local-rest-api"
 ]

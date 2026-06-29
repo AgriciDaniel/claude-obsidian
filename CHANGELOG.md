@@ -2,6 +2,17 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+SEC/EDGAR knowledge build + a reusable primary-source fetch capability + the product-thesis memory the research serves.
+
+### Added
+
+- **`scripts/sec-fetch.sh`** — fetches sec.gov / data.sec.gov with a compliant `User-Agent` (SEC fair-access policy) and follows redirects. Resolves the `WebFetch` HTTP 403 against SEC primary sources (root cause: missing User-Agent, not a hard block). Contact email via `SEC_CONTACT_EMAIL` env var (not hardcoded); sec.gov-only URL guard; `--text` HTML-to-text mode.
+- **General Operating Principles** in `CLAUDE.md` (diagnose-before-detour, a blocked primary source is a bug, disclose fallbacks, capture the fix, escalate) — generalized from the sec.gov incident; also mirrored to global memory.
+- **Product Context + `docs/product-thesis.md`** (living thesis: counsel-ready/drift-monitored layer for securities offerings; control model + five gap axes + three-layer drift engine with verified eCFR/Federal-Register endpoints) plus a Self-Refinement Protocol and a standing directive so future sessions refine the thesis proactively.
+- **SEC/EDGAR research vault** — ~87 cited, lint-clean wiki pages across 10 autoresearch passes (laws → EDGAR → filings → exemptions → disclosure rulebooks → enforcement → proxy → takeovers → data access), hung off the synthesis `wiki/questions/Research - SEC regulations and EDGAR.md`.
+
 ## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
 
 Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.

@@ -150,6 +150,11 @@ if command -v pgrep >/dev/null 2>&1; then
   if pgrep -if 'obsidian' >/dev/null 2>&1; then
     OBSIDIAN_RUNNING=true
   fi
+elif command -v tasklist >/dev/null 2>&1; then
+  # Windows fallback: pgrep is unavailable; tasklist is always present
+  if tasklist 2>/dev/null | grep -qi 'obsidian'; then
+    OBSIDIAN_RUNNING=true
+  fi
 fi
 
 # ── 3. Compute preferred + fallback chain ────────────────────────────────────

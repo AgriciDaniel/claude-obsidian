@@ -186,16 +186,16 @@ python3 -c "from PIL import Image; img=Image.open('path.png'); print(img.width, 
 identify -format '%w %h' path.png
 ```
 
-| Aspect ratio | Condition | Canvas width | Canvas height |
-|-------------|-----------|-------------|--------------|
-| 16:9 (wide) | ratio 1.6–2.0 | 420 | 236 |
-| 2:1 (ultra wide) | ratio > 2.0 | 440 | 220 |
-| 4:3 | ratio 1.2–1.6 | 380 | 285 |
-| 1:1 (square) | ratio 0.9–1.1 | 280 | 280 |
-| 3:4 | ratio 0.6–0.9 | 240 | 320 |
-| 9:16 (portrait) | ratio < 0.6 | 200 | 356 |
-| PDF | any | 400 | 520 |
-| Unknown | fallback | 320 | 240 |
+| Aspect ratio     | Condition     | Canvas width | Canvas height |
+| ---------------- | ------------- | ------------ | ------------- |
+| 16:9 (wide)      | ratio 1.6–2.0 | 420          | 236           |
+| 2:1 (ultra wide) | ratio > 2.0   | 440          | 220           |
+| 4:3              | ratio 1.2–1.6 | 380          | 285           |
+| 1:1 (square)     | ratio 0.9–1.1 | 280          | 280           |
+| 3:4              | ratio 0.6–0.9 | 240          | 320           |
+| 9:16 (portrait)  | ratio < 0.6   | 200          | 356           |
+| PDF              | any           | 400          | 520           |
+| Unknown          | fallback      | 320          | 240           |
 
 ---
 

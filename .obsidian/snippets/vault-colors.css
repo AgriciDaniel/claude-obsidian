@@ -6,9 +6,14 @@
 :root {
   --cb-blue:   #4fc1ff;   /* concepts, domains — knowledge nodes */
   --cb-green:  #6a9955;   /* sources, questions — content nodes  */
-  --cb-purple: #c586c0;   /* entities — people & orgs            */
+  --cb-purple: #c586c0;   /* entities, people — people & orgs    */
   --cb-meta:   #569cd6;   /* wiki meta: index, hot, log          */
   --cb-dim:    #606060;   /* templates, raw — de-emphasized       */
+  /* Mode D — Second Brain */
+  --cb-gold:   #dca54c;   /* goals — ambition, future            */
+  --cb-teal:   #4ec9b0;   /* learning — growth                   */
+  --cb-amber:  #f4a261;   /* areas — life domains                */
+  --cb-sky:    #9cdcfe;   /* resources — reference               */
 }
 
 /* ── Wiki meta (light blue) ── */
@@ -26,6 +31,13 @@
 
 /* ── People & orgs — purple ── */
 .nav-folder-title[data-path^="wiki/entities"]    { color: var(--cb-purple); }
+.nav-folder-title[data-path^="wiki/people"]      { color: var(--cb-purple); }
+
+/* ── Second Brain (Mode D) ── */
+.nav-folder-title[data-path^="wiki/goals"]       { color: var(--cb-gold); }
+.nav-folder-title[data-path^="wiki/learning"]    { color: var(--cb-teal); }
+.nav-folder-title[data-path^="wiki/areas"]       { color: var(--cb-amber); }
+.nav-folder-title[data-path^="wiki/resources"]   { color: var(--cb-sky); }
 
 /* ── De-emphasized ── */
 .nav-folder-title[data-path=".raw"]              { color: var(--cb-dim); opacity: 0.55; }

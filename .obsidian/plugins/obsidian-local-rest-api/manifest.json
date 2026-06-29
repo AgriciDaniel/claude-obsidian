@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-local-rest-api",
+	"name": "Local REST API with MCP",
+	"version": "4.1.2",
+	"minAppVersion": "1.4.0",
+	"description": "A secure REST API and Model Context Protocol (MCP) server for your vault.",
+	"author": "Adam Coddington",
+	"authorUrl": "https://adamcoddington.net/",
+	"isDesktopOnly": true
+}

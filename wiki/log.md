@@ -23,6 +23,82 @@ Entry format: `## [YYYY-MM-DD] operation | Title`
 
 Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 10: takeovers / Williams Act + lint)
+- Rounds: 1 (2 search angles + SEC primary fetch via scripts/sec-fetch.sh)
+- Sources found: 3 (SEC.gov tender-offer CDI fetched DIRECTLY + verified, Ropes & Gray, US Law Explained)
+- Pages created: [[Williams Act]], [[Tender Offer]] + 3 source pages (5 total)
+- Lint: full-vault (163 pages); 0 dead links / 0 orphans across 39 loop pages
+- Tooling: improved scripts/sec-fetch.sh to follow redirects (-L) after diagnosing sec.gov 301s (principle: fix access, don't work around it)
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 10 section)
+- Key finding: Williams Act (1968) = takeover rules via Sections 13(d)/14(d)/14(e). Tender offers run on Schedule TO (SC TO-T/TO-I/TO-C) with a 14D-9 board response in 10 business days; 20-business-day minimum period, all-holders + best-price rules, withdrawal rights; Rule 13e-4 (issuer self-tender) and 13e-3 (going private). Notable: April 16 2026 SEC exemptive order halves the minimum period to 10 business days for negotiated all-cash equity offers.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 9: proxy solicitation)
+- Rounds: 1 (2 search angles + 2 SEC primary fetches via scripts/sec-fetch.sh)
+- Sources found: 4 (2 SEC.gov fetched DIRECTLY + verified, Cornell LII, Debevoise)
+- Pages created: [[Proxy Statement]], [[Universal Proxy]], [[Rule 14a-8 Shareholder Proposals]] + 4 source pages (7 total)
+- Method note: FIRST pass to apply the new operating principle - pulled SEC primary sources directly with the compliant-User-Agent wrapper instead of relying on search excerpts. Captured exact rule cites (14a-19(e), 67% solicitation threshold, 60/50/25-day deadlines, release 34-93596) verbatim.
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 9 section)
+- Key finding: Proxy statements (DEF 14A / Schedule 14A) are governed by Section 14(a); "solicitation" is defined broadly. Say-on-pay is an advisory Dodd-Frank vote. Universal proxy (Rule 14a-19, effective 2022) forces one card listing all sides' nominees in contests, lowering the bar for activists. Rule 14a-8 is the separate shareholder-proposal path.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 8: practical EDGAR data access)
+- Rounds: 1 (3 search angles)
+- Sources found: 3 (all SEC.gov: Accessing EDGAR Data, Financial Statement Data Sets, New Rate Control Limits)
+- Pages created: [[EDGAR Data Access]], [[EDGAR Bulk Data]] + 3 source pages (5 total); also resolved the rate-limit gap in [[EDGAR APIs]]
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 8 section; planned backlog complete)
+- Key finding: CIK = permanent 10-digit filer ID; accession number = submitterCIK-YY-sequential. Fair access = 10 req/s per IP + required User-Agent header; violations return HTTP 403 + ~10-min block (this is exactly why sec.gov 403'd this vault's WebFetches). Bulk analysis via Financial Statement Data Sets (SUB/NUM/TAG/PRE, since Apr 2009, monthly from Apr 2023), full-index, and DERA Data Library.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 7: structure & enforcement + lint)
+- Rounds: 1 (3 search angles)
+- Sources found: 3 (SEC.gov org chart, Winston & Strawn, Wikipedia)
+- Pages created: [[SEC Divisions and Structure]], [[SEC Enforcement Process]], [[SEC Whistleblower Program]] + 3 source pages (6 total)
+- Lint: full-vault (146 pages); 0 dead links / 0 orphans across 32 loop pages
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 7 section added)
+- Key finding: SEC = 5 divisions (Corp Fin, Enforcement, Trading & Markets, IM, DERA). Enforcement runs investigation -> Wells notice -> submission -> charge (administrative proceeding or federal court) or close; most settle. Dodd-Frank whistleblower program pays 10-30% of sanctions over $1M from the Investor Protection Fund with anti-retaliation protection.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 6: disclosure rulebooks S-K / S-X)
+- Rounds: 1 (3 search angles)
+- Sources found: 3 (Cornell LII x2, CFO Bridge)
+- Pages created: [[Regulation S-K]], [[Regulation S-X]], [[Integrated Disclosure System]] + 3 source pages (6 total)
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 6 section added)
+- Key finding: The 1982 integrated disclosure system splits content into two rulebooks: Reg S-K (narrative - business, risk factors, MD&A Item 303, exec comp) and Reg S-X (financial-statement form/content, 17 CFR Part 210, auditor independence, Rule 3-05 acquired-business financials, Rule 1-02(w) significance tests). The same S-K + S-X items populate both registration statements and periodic reports.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 5: private-offering exemptions)
+- Rounds: 1 (4 search angles, detailed SEC/law excerpts)
+- Sources found: 5 (4 SEC.gov, Carta)
+- Pages created: [[Exempt Offerings]], [[Regulation D]], [[Regulation A]], [[Accredited Investor]], [[Rule 144]] + 5 source pages (11 total)
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 5 section added)
+- Key finding: Reg D Rule 506 is the dominant private exemption (506(b) no-solicitation/35 non-accredited vs 506(c) accredited-only-with-verification, both Form D). Reg A is a public mini-IPO ($20M Tier 1 / $75M Tier 2, Form 1-A). Accredited status = $200k income or $1M net worth, plus Series 7/65/82 since 2020. Rule 144 governs resale (6mo/1yr holding; affiliate volume caps).
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 4: recent rulemaking + lint)
+- Rounds: 1 (4 search angles, detailed law-firm/SEC excerpts; no extra fetch needed)
+- Sources found: 5 (2 SEC.gov, DLA Piper, Orrick, Davis Polk)
+- Pages created: [[SEC Cybersecurity Disclosure Rules]], [[SEC Climate Disclosure Rule]], [[T+1 Settlement Cycle]], [[Recent SEC Rulemaking and Litigation 2023-2026]] + 5 source pages (9 total)
+- Lint: full-vault wiki-lint run; 0 orphans among loop pages, fixed 3 self-introduced dead links (table-escaped pipes), pre-existing dead links flagged for human review in [[Lint Report 2026-06-29]]
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 4 section added)
+- Key finding: 2023-26 SEC rules split by type. Operational rules stuck (T+1 settlement May 2024; cyber 8-K Item 1.05). Disclosure-expansion rules failed: the buyback rule was vacated by the Fifth Circuit (Dec 2023) and the climate rule was stayed then proposed for rescission (2026).
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 3: XBRL & structured data)
+- Rounds: 2 (4 search angles + 2 depth fetches)
+- Sources found: 5 (2 SEC.gov, Covington, Cooley, IRIS Carbon)
+- Pages created: [[XBRL]], [[Financial Data Transparency Act]], [[Financial Accounting Standards Board]] + 5 source pages (8 total)
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 3 section added)
+- Key finding: SEC has required XBRL since 2009 and inline XBRL since 2018 (phased 2019-2021); financial data is tagged against FASB's ~17k-tag US GAAP taxonomy and powers the EDGAR APIs. The 2022 FDTA extends machine-readable standards across nine federal regulators with a common LEI; final joint rule in 2026.
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 2: Reg CF funding portals)
+- Rounds: 2 (4 search angles + 2 depth fetches)
+- Sources found: 7 (3 SEC.gov, 1 FINRA, 3 secondary/market)
+- Pages created: [[Regulation Crowdfunding]], [[Funding Portal]], [[Form C]], [[Financial Industry Regulatory Authority]], [[Wefunder]], [[StartEngine]], [[Republic (crowdfunding)]] + 7 source pages (14 total)
+- Synthesis: [[Research - SEC regulations and EDGAR]] (Pass 2 section added)
+- Key finding: Reg CF (Title III JOBS Act) allows $5M/yr public raises only through a FINRA-member funding portal or broker-dealer; portals register via Form Funding Portal on EDGAR and cannot advise, solicit, or hold funds. 83 portals registered end-2024; Wefunder leads (~33% of 2025 dollars).
+
+## [2026-06-29] autoresearch | SEC regulations and EDGAR (pass 1)
+- Rounds: 2 (broad sweep + targeted gap fetches)
+- Sources found: 9 (4 SEC/investor.gov primary, 2 Wikipedia, 3 secondary/vendor)
+- Pages created: [[U.S. Securities and Exchange Commission]], [[EDGAR]], [[EDGAR Next]], [[SEC Filing Types]], [[EDGAR APIs]], [[Federal Securities Laws]] + 9 source pages + synthesis
+- Synthesis: [[Research - SEC regulations and EDGAR]]
+- Key finding: US securities regulation is a mandatory-disclosure regime (1933 Act = offerings, 1934 Act = ongoing reporting); EDGAR is the filing pipe, now mid-modernization via EDGAR Next (Login.gov + MFA, compliance required Sept 15 2025).
+- Note: running on a 2-hour loop; subsequent passes fill Open Questions (XBRL/FDTA, recent rulemaking, Reg S-K/S-X, exemptions, API rate limits).
+
 ---
 
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
@@ -216,3 +292,35 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 - Plugin: claude-obsidian v1.1.0
 - Structure: seed files + first ingest complete
 - Skills: wiki, wiki-ingest, wiki-query, wiki-lint, save, autoresearch
+
+## [2026-06-05] ingest | Dive into Claude Code — README (arXiv 2604.14228)
+- Source: `.raw/architechtai/doc_README.md`
+- Summary: [[Dive-into-Claude-Code-README]]
+- Pages created: [[Dive-into-Claude-Code-README]], [[VILA-Lab]], [[Dive into Claude Code]], [[Agent Harness Engineering]], [[queryLoop Architecture]], [[5-Layer Compaction]], [[Deny-First Permission Model]]
+- Pages updated: [[Andrej Karpathy]], [[entities/_index]], [[sources/_index]], [[concepts/_index]], [[index]], [[hot]]
+- Key insight: 98.4% of Claude Code is deterministic infrastructure; the harness (hooks, compaction, permissions) is the differentiator, not the model loop.
+
+
+## [2026-06-05] ingest | Dive into Claude Code — Architecture (arXiv 2604.14228)
+- Source: `.raw/architechtai/doc_architecture.md`
+- Summary: [[Dive-into-Claude-Code-Architecture]]
+- Pages created: [[Dive-into-Claude-Code-Architecture]], [[Claude Code Extensibility]], [[Subagent Delegation Architecture]], [[CLAUDE.md Hierarchy]]
+- Pages updated: [[queryLoop Architecture]], [[5-Layer Compaction]], [[Deny-First Permission Model]], [[concepts/_index]], [[index]], [[hot]]
+- Key insight: CLAUDE.md is user context (probabilistic), not system prompt (deterministic) — permission rules are the enforcement layer, not text instructions.
+
+
+## [2026-06-05] ingest | Dive into Claude Code — Build Your Own Agent (arXiv 2604.14228)
+- Source: `.raw/architechtai/doc_build-your-own-agent.md`
+- Summary: [[Dive-into-Claude-Code-Build-Agent]]
+- Pages created: [[Dive-into-Claude-Code-Build-Agent]], [[Agent Design Space Decisions]]
+- Pages updated: [[Agent Harness Engineering]], [[Dive into Claude Code]], [[concepts/_index]], [[index]], [[hot]]
+- Key insight: Top 3 frontier models are within 1% on SWE-bench — the harness is now the differentiator, not the model. Three meta-pattern commitments: graduated layering, append-only auditability, model-in-harness.
+
+
+## [2026-06-05] ingest | Dive into Claude Code — Related Resources (arXiv 2604.14228)
+- Source: `.raw/architechtai/doc_related-resources.md`
+- Summary: [[Dive-into-Claude-Code-Related-Resources]]
+- Pages created: [[Dive-into-Claude-Code-Related-Resources]], [[Claude Code Ecosystem Reference]]
+- Pages updated: [[Agent Harness Engineering]], [[Dive into Claude Code]], [[index]], [[hot]]
+- Key insight: claw-code hit 179K stars in 9 days (fastest to 100K in GitHub history) — the community appetite for harness-level understanding is real. "The moat is the harness, not the model" independently confirmed by post-leak analysts.
+

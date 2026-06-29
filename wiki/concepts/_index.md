@@ -40,4 +40,17 @@ All concept pages — ideas, patterns, and frameworks extracted from sources.
 
 ---
 
+## Agent Architecture
+
+- [[Agent Harness Engineering]] — 98.4% infrastructure / 1.6% AI; the harness (not the model loop) is the differentiator (developing)
+- [[queryLoop Architecture]] — Claude Code's single AsyncGenerator while-loop; 9-step turn pipeline; 5 stop conditions (developing)
+- [[5-Layer Compaction]] — graduated context degradation: Budget Reduction → Snip → Microcompact → Context Collapse → Auto-Compact; feature-gated stages (developing)
+- [[Deny-First Permission Model]] — 7 permission modes, 7 safety layers, 4-stage authorization pipeline, never restore on resume (developing)
+- [[Claude Code Extensibility]] — 4 mechanisms (hooks/skills/plugins/MCP) × 3 injection points (assemble/model/execute); graduated context cost (developing)
+- [[Subagent Delegation Architecture]] — SkillTool vs AgentTool; 3 isolation modes; sidechain transcripts; flock() coordination (developing)
+- [[CLAUDE.md Hierarchy]] — 4 levels; user context (probabilistic) not system prompt (deterministic); 9 ordered context sources (developing)
+- [[Agent Design Space Decisions]] — 6 decisions with alternatives and trade-offs (LangGraph/Devin/SWE-Agent/Aider vs Claude Code); 3 meta-pattern commitments (developing)
+
+---
+
 ## Add new concepts here as they are extracted from sources.

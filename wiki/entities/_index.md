@@ -30,13 +30,13 @@ All entity pages — people, organizations, products, and tools.
 
 ## Organizations
 
-<!-- Add organization pages here -->
+- [[VILA-Lab]] — research group behind "Dive into Claude Code" (arXiv 2604.14228)
 
 ---
 
 ## Products & Tools
 
-<!-- Add tool and product pages here -->
+- [[Dive into Claude Code]] — arXiv 2604.14228; source-level analysis of Claude Code v2.1.88; codifies [[Agent Harness Engineering]] as a discipline
 
 ---
 

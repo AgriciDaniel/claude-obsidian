@@ -44,4 +44,5 @@ His framing: "The wiki is a persistent, compounding artifact. The cross-referenc
 
 - [[LLM Wiki Pattern]] — his core contribution to knowledge management
 - [[Compounding Knowledge]] — the central insight he articulated
-- claude-obsidian plugin — this repo is a production implementation of his pattern
+- [karpathy/autoresearch](https://github.com/karpathy/autoresearch) — autonomous AI-agent loop running nanochat training research on a single GPU (Mar 2026); cited in [[Dive into Claude Code]] community resources
+- claude-obsidian plugin — this repo is a production implementation of his LLM Wiki pattern

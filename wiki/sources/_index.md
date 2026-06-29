@@ -35,7 +35,7 @@ All source pages — summaries of ingested documents, transcripts, articles, and
 
 ## Papers
 
-<!-- Add paper source pages here -->
+- [[Dive-into-Claude-Code-README]] — 2026-06-05 | VILA-Lab arXiv 2604.14228 | architecture overview, design-space scan, community resources
 
 ---
 

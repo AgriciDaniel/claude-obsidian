@@ -2,8 +2,96 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    ".raw/architechtai/doc_README.md": {
+      "hash": "a334d3418f9e32943919bdfff8f44612",
+      "ingested_at": "2026-06-05",
+      "pages_created": [
+        "wiki/sources/Dive-into-Claude-Code-README.md",
+        "wiki/entities/VILA-Lab.md",
+        "wiki/entities/Dive into Claude Code.md",
+        "wiki/concepts/Agent Harness Engineering.md",
+        "wiki/concepts/queryLoop Architecture.md",
+        "wiki/concepts/5-Layer Compaction.md",
+        "wiki/concepts/Deny-First Permission Model.md"
+      ],
+      "pages_updated": [
+        "wiki/entities/Andrej Karpathy.md",
+        "wiki/entities/_index.md",
+        "wiki/sources/_index.md",
+        "wiki/concepts/_index.md",
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    },
+    ".raw/architechtai/doc_architecture.md": {
+      "hash": "a1d5840e6ebcc4fd0867a1f69a2d2e89",
+      "ingested_at": "2026-06-05",
+      "pages_created": [
+        "wiki/sources/Dive-into-Claude-Code-Architecture.md",
+        "wiki/concepts/Claude Code Extensibility.md",
+        "wiki/concepts/Subagent Delegation Architecture.md",
+        "wiki/concepts/CLAUDE.md Hierarchy.md"
+      ],
+      "pages_updated": [
+        "wiki/concepts/queryLoop Architecture.md",
+        "wiki/concepts/5-Layer Compaction.md",
+        "wiki/concepts/Deny-First Permission Model.md",
+        "wiki/concepts/_index.md",
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    },
+    ".raw/architechtai/doc_build-your-own-agent.md": {
+      "hash": "d9d71585910f35a1a23f8ca7ecbfc1cf",
+      "ingested_at": "2026-06-05",
+      "pages_created": [
+        "wiki/sources/Dive-into-Claude-Code-Build-Agent.md",
+        "wiki/concepts/Agent Design Space Decisions.md"
+      ],
+      "pages_updated": [
+        "wiki/concepts/Agent Harness Engineering.md",
+        "wiki/entities/Dive into Claude Code.md",
+        "wiki/concepts/_index.md",
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    },
+    ".raw/architechtai/doc_related-resources.md": {
+      "hash": "692761eb3ff4f53744e53e64294e613f",
+      "ingested_at": "2026-06-05",
+      "pages_created": [
+        "wiki/sources/Dive-into-Claude-Code-Related-Resources.md",
+        "wiki/references/Claude Code Ecosystem Reference.md"
+      ],
+      "pages_updated": [
+        "wiki/concepts/Agent Harness Engineering.md",
+        "wiki/entities/Dive into Claude Code.md",
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    }
+  },
   "address_map": {
-    "wiki/concepts/DragonScale Memory.md": "c-000001"
+    "wiki/concepts/DragonScale Memory.md": "c-000001",
+    "wiki/sources/Dive-into-Claude-Code-README.md": "c-000003",
+    "wiki/entities/VILA-Lab.md": "c-000004",
+    "wiki/entities/Dive into Claude Code.md": "c-000005",
+    "wiki/concepts/Agent Harness Engineering.md": "c-000006",
+    "wiki/concepts/queryLoop Architecture.md": "c-000007",
+    "wiki/concepts/5-Layer Compaction.md": "c-000008",
+    "wiki/concepts/Deny-First Permission Model.md": "c-000009",
+    "wiki/sources/Dive-into-Claude-Code-Architecture.md": "c-000010",
+    "wiki/concepts/Claude Code Extensibility.md": "c-000011",
+    "wiki/concepts/Subagent Delegation Architecture.md": "c-000012",
+    "wiki/concepts/CLAUDE.md Hierarchy.md": "c-000013",
+    "wiki/sources/Dive-into-Claude-Code-Build-Agent.md": "c-000014",
+    "wiki/concepts/Agent Design Space Decisions.md": "c-000015",
+    "wiki/sources/Dive-into-Claude-Code-Related-Resources.md": "c-000016",
+    "wiki/references/Claude Code Ecosystem Reference.md": "c-000017"
   }
 }

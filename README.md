@@ -172,25 +172,25 @@ Then scaffold the full wiki structure.
 
 ## Commands
 
-| You say | Claude does |
-|---------|------------|
-| `/wiki` | Setup check, scaffold, or continue where you left off |
-| `ingest [file]` | Read source, create 8-15 wiki pages, update index and log |
-| `ingest all of these` | Batch process multiple sources, then cross-reference |
-| `what do you know about X?` | Read index, drill into relevant pages, synthesize answer |
-| `/save` | File the current conversation as a wiki note |
-| `/save [name]` | Save with a specific title (skips the naming question) |
-| `/autoresearch [topic]` | Run the autonomous research loop: search, fetch, synthesize, file |
-| `/canvas` | Open or create the visual canvas, list zones and nodes |
-| `/canvas add image [path]` | Add an image (URL or local path) to the canvas with auto-layout |
-| `/canvas add text [content]` | Add a markdown text card to the canvas |
-| `/canvas add pdf [path]` | Add a PDF document as a rendered preview node |
-| `/canvas add note [page]` | Pin a wiki page as a linked card on the canvas |
-| `/canvas zone [name]` | Add a new labeled zone to organize visual content |
-| `/canvas from banana` | Capture recently generated images onto the canvas |
-| `/think [problem]` | Apply the 10-principle thinking loop to a non-trivial problem |
-| `lint the wiki` | Health check: orphans, dead links, gaps, suggestions |
-| `update hot cache` | Refresh hot.md with latest context summary |
+| You say                      | Claude does                                                       |
+| ---------------------------- | ----------------------------------------------------------------- |
+| `/wiki`                      | Setup check, scaffold, or continue where you left off             |
+| `ingest [file]`              | Read source, create 8-15 wiki pages, update index and log         |
+| `ingest all of these`        | Batch process multiple sources, then cross-reference              |
+| `what do you know about X?`  | Read index, drill into relevant pages, synthesize answer          |
+| `/save`                      | File the current conversation as a wiki note                      |
+| `/save [name]`               | Save with a specific title (skips the naming question)            |
+| `/autoresearch [topic]`      | Run the autonomous research loop: search, fetch, synthesize, file |
+| `/canvas`                    | Open or create the visual canvas, list zones and nodes            |
+| `/canvas add image [path]`   | Add an image (URL or local path) to the canvas with auto-layout   |
+| `/canvas add text [content]` | Add a markdown text card to the canvas                            |
+| `/canvas add pdf [path]`     | Add a PDF document as a rendered preview node                     |
+| `/canvas add note [page]`    | Pin a wiki page as a linked card on the canvas                    |
+| `/canvas zone [name]`        | Add a new labeled zone to organize visual content                 |
+| `/canvas from banana`        | Capture recently generated images onto the canvas                 |
+| `/think [problem]`           | Apply the 10-principle thinking loop to a non-trivial problem     |
+| `lint the wiki`              | Health check: orphans, dead links, gaps, suggestions              |
+| `update hot cache`           | Refresh hot.md with latest context summary                        |
 
 > ✨ **Want more?** [claude-canvas](https://github.com/AgriciDaniel/claude-canvas) adds 12 templates, 6 layout algorithms, AI image generation, presentations, and full canvas orchestration. Install both, they complement each other.
 
