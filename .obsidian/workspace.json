@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "84b4000c150a4e36",
+        "id": "91e9638aec82fae9",
         "type": "tabs",
         "children": [
           {
-            "id": "8a7d5fc9df481afe",
+            "id": "fcebea1ff64ec21c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
+                "file": "Projects/Projects/JobFilter/JobFilter/Prompts 1/⚡ FAST BUILD AGENT (FINAL — SELF-LEARNING + SAFE).md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "13 Split Batches Codex vs Claude"
+              "title": "⚡ FAST BUILD AGENT (FINAL — SELF-LEARNING + SAFE)"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "linkedin",
+                "query": "build pro",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,8 +74,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -196,44 +195,44 @@
       "grimoire:Open Grimoire": false
     }
   },
-  "active": "8a7d5fc9df481afe",
+  "active": "ef8cfa7c6d5fb07a",
   "lastOpenFiles": [
+    "04-SESSIONS/2026-06-29-mazos-obsidian-memory-session.md",
+    "06-SYSTEM/OBSIDIAN_IMMERSION_PLAN.md",
+    "_Hermes/01_CONTEXT_PACKS/MazOS_CONTEXT_PACK.md",
+    "_Hermes/01_CONTEXT_PACKS/JobFilter_CONTEXT_PACK.md",
+    "_attachments/youtube/how-it-works-B.png.md",
+    "06-SYSTEM/HERMES_RULES.md",
+    "06-SYSTEM",
+    "05-HERMES-OUTPUTS",
+    "04-SESSIONS",
+    "03-MEMORY/USER_PROFILE.md",
+    "03-MEMORY/PROMPT_LIBRARY.md",
+    "03-MEMORY/PROJECT_INDEX.md",
+    "03-MEMORY/DECISIONS.md",
+    "03-MEMORY/CURRENT_TASKS.md",
+    "03-MEMORY",
+    "02-PROJECTS/Recall/CURRENT.md",
+    "02-PROJECTS/MazOS/CURRENT.md",
+    "02-PROJECTS/JobFilter/CURRENT.md",
+    "02-PROJECTS/Hermes/CURRENT.md",
+    "02-PROJECTS/Recall",
+    "02-PROJECTS/MazOS",
+    "02-PROJECTS/JobFilter",
+    "02-PROJECTS/Hermes",
+    "02-PROJECTS",
+    "01-DAILY",
+    "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
     "Archive/Legacy JobFilter Vault/JobFilter/System/Competitor Deep Dive - 2026-05-19.md",
     "wiki/sessions/2026-06-21-supabase-mcp-codex.md",
     "wiki/sessions/2026-06-21-jobfilter-codex.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/Product_Context.txt",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/JOBFILTER_LAUNCH_CHECKLIST.txt",
     "Local Knowledge/state/sessions/2026-06-21T18-58-37-895Z-query-what-is-the-current-jobfilter-launch-reality-especially-trust-security-privacy-e.md",
     "Local Knowledge/wiki/outputs/what-is-the-current-jobfilter-launch-reality-especially-trust-security-privacy-e.md",
     "wiki/outputs/2026-06-21-recall-pre-mortem.md",
-    "wiki/outputs",
-    "Local Knowledge/state/retrieval/fts-000.sqlite-shm",
-    "Local Knowledge/state/retrieval/fts-000.sqlite-wal",
     "wiki/sessions/2026-06-21-recall-codex.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/Footer.tsx",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/layout.tsx",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/TopNav.tsx",
     "wiki/sessions/2026-06-20-recall-codex.md",
     "Local Knowledge/state/sessions/2026-06-20T13-38-03-938Z-query-jobfilter.md",
     "Local Knowledge/wiki/outputs/jobfilter.md",
-    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Product Map.md",
-    "Local Knowledge/wiki/projects/JobFilter/LinkedIn_30_Day_Strategy.md",
-    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/Product/Letterhead Pack.md",
-    "Projects/JobFilter/System/JobFilter_Research/SAMPLE_LEAD_CARD_SYSTEM.md",
-    "Local Knowledge/wiki/projects/JobFilter/index.md",
-    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_HANDOFF_2026-05-11.txt",
-    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_HANDOFF_2026-05-11-evening.txt",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/TODO.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/README.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/PROJECT_STATUS.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/DESIGN.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/COMPETITOR_STRATEGY_PLAYBOOK.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/CLAUDE.md",
-    "Local Knowledge/wiki/projects/JobFilter/project-docs/AGENTS.md",
-    "Local Knowledge/wiki/projects/JobFilter/logs/SESSION_2026-05-03.md",
-    "Local Knowledge/wiki/projects/JobFilter/notes/next-codex-task.md",
-    "Local Knowledge/wiki/projects/JobFilter/notes/api-deep-test-results.md",
-    "Local Knowledge/wiki/projects/JobFilter/notes/analysis-2026-04-25.md",
     "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/JobFilter Control Map.canvas",
     "Local Knowledge/wiki/projects/JobFilter/vault/Airdrop Bot/Airdrop Bot Flow.canvas",
     "Untitled.canvas"
