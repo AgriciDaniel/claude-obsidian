@@ -63,3 +63,34 @@ status: completed
 ## Next steps
 - Consider documenting submodule update procedure for future refreshes.
 - Consider adding a small validator script for external-source registry consistency.
+
+## Addendum: project status lookup
+
+## What I did
+- Added MAZos read-only project status lookup for questions like "what's the latest work done on JobFilter in the last 24h?"
+- Resolver checks `03-MEMORY/PROJECT_INDEX.md`, `02-PROJECTS/<project>/CURRENT.md`, git commits from the last 24h, `git status --short`, and loop state files where present.
+- Added dashboard panel with one project input, one `LATEST 24H` button, and a concise output summary.
+- Scoped Tailwind v4 source detection to `src/app` and `src/components` so external markdown tables do not generate invalid CSS in dev mode.
+- Opened MAZos PR #3: `https://github.com/manazoid4/mazos-ui/pull/3`.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\projectStatus.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\api\mazos\project-status\route.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\page.tsx`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\globals.css`
+
+## Decisions made
+- Keep status lookup read-only; it does not mutate vault scan files or repo state.
+- Leave unrelated dirty MAZos files unstaged: `.gitmodules`, `external/agent-sources/penpot`, `research/mazos/latest-vault-scan.md`, `data/`, `tsconfig.tsbuildinfo`.
+- Preserve the Ralph conflict as evidence in status output instead of resolving it silently.
+
+## Verification
+- `npm run lint` passed.
+- `npm run build` passed. Remaining warning: Next workspace-root inference and Turbopack dynamic filesystem tracing for the read-only status helper.
+- `GET /api/mazos/project-status?project=MAZos` returned commits, dirty files, CURRENT entries, Ralph conflict, blocker, next action, and evidence paths.
+- `GET /api/mazos/project-status?project=JobFilter` returned repo/vault summary and evidence paths.
+- `GET /` returned HTTP 200 from the running local MAZos dev server on port 3046.
+
+## Next steps
+- Merge PR #3 if the status lookup output looks useful.
+- Clean or finish the unrelated platform-source dirty files separately before more MAZos source work.
