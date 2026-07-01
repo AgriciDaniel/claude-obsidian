@@ -154,3 +154,50 @@ status: completed
 ## Next steps
 - Paste the implementation prompt from `MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt` into Hermes/Codex when ready.
 - If the sheet looks right, commit it on an `agents/` branch and open/update a PR.
+
+## Addendum: resumed after other agent command-centre work
+
+## What I did
+- Pulled the vault before starting.
+- Inspected MAZos branch `agents/mazos-command-centre-next`.
+- Found two other-agent commits already pushed to origin:
+  - `87ab1d7 feat: MAZos command centre next stage`
+  - `e0f1c6c feat: loop engineering deck, tabbed cockpit, palette + 4 new panels`
+- Confirmed no GitHub PR currently exists for `agents/mazos-command-centre-next`.
+- Reviewed commit scope: context pack, decisions API, loop engine/API, shiplog API, stale radar, tool router, safety levels, command-centre ranking, page/UI expansion, and spec docs.
+- Ran verification and found `npm run lint` failing on ES5 iterator usage in the new code.
+- Fixed the lint issue in:
+  - `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\decisions.ts`
+  - `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\shipLog.ts`
+- Committed the local fix as `ff0fe8a fix: satisfy mazos lint on es5 target`.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\decisions.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\shipLog.ts`
+- `C:\Users\manaz\claude-obsidian\wiki\sessions\2026-07-01-mazos-codex.md`
+
+## Decisions made
+- Left unrelated/background MAZos dirty files untouched: `.gitmodules`, `research/mazos/latest-vault-scan.md`, `MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt`, `data/`, `external/agent-sources/penpot/`, `tsconfig.tsbuildinfo`.
+- Did not push the MAZos fix yet because the latest explicit workflow around this work said not to push unless Maz asks.
+- Treated `/api/mazos/context-pack` returning `400` without a project query as expected validation, because `/api/mazos/context-pack?project=MAZos` works.
+
+## Verification
+- Initial `npm run lint` failed with:
+  - `src/lib/mazos/decisions.ts(44,14)` MapIterator requires downlevel iteration or ES2015 target.
+  - `src/lib/mazos/shipLog.ts(42,20)` MapIterator requires downlevel iteration or ES2015 target.
+  - `src/lib/mazos/shipLog.ts(61,24)` implicit `any`.
+- After fix, `npm run lint` passed.
+- `npm run build` passed. Remaining warning: existing Next workspace-root inference from multiple lockfiles.
+- `GET http://localhost:3046/` returned HTTP 200.
+- API checks:
+  - `/api/mazos/loops` returned 200.
+  - `/api/mazos/shiplog` returned 200.
+  - `/api/mazos/tool-router?q=browser%20automation` returned 200.
+  - `/api/mazos/decisions` returned 200.
+  - `/api/mazos/context-pack?project=MAZos` returned a 28-line context pack and wrote `data/mazos/context-packs/mazos-2026-07-01.md`.
+  - `/api/mazos/project-status` worked for MAZos, JobFilter, Recall, and missing-project case.
+
+## Next steps
+- Push `ff0fe8a` to `origin/agents/mazos-command-centre-next` if Maz wants the lint fix on GitHub.
+- Open a PR for `agents/mazos-command-centre-next`.
+- Review the new UI manually in the browser and decide whether to commit the prompt sheet and generated context pack or leave them local-only.
