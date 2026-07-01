@@ -201,3 +201,48 @@ status: completed
 - Push `ff0fe8a` to `origin/agents/mazos-command-centre-next` if Maz wants the lint fix on GitHub.
 - Open a PR for `agents/mazos-command-centre-next`.
 - Review the new UI manually in the browser and decide whether to commit the prompt sheet and generated context pack or leave them local-only.
+
+## Addendum: command-centre work block closed
+
+## What I did
+- Treated the latest instruction as permission to finish the MAZos work block end-to-end.
+- Committed the next-stage prompt sheet and Penpot external-source gitlink in MAZos:
+  - `b2dacaa docs: add mazos next stage prompt sheet`
+- Pushed `agents/mazos-command-centre-next` to GitHub, including:
+  - `87ab1d7 feat: MAZos command centre next stage`
+  - `e0f1c6c feat: loop engineering deck, tabbed cockpit, palette + 4 new panels`
+  - `ff0fe8a fix: satisfy mazos lint on es5 target`
+  - `b2dacaa docs: add mazos next stage prompt sheet`
+- Opened MAZos PR #5:
+  - `https://github.com/manazoid4/mazos-ui/pull/5`
+- Confirmed PR #5 is open and GitHub reports it as mergeable.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\.gitmodules`
+- `C:\Users\manaz\Projects\mazos-ui\MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt`
+- `C:\Users\manaz\Projects\mazos-ui\external\agent-sources\penpot`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\decisions.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\shipLog.ts`
+- `C:\Users\manaz\claude-obsidian\wiki\sessions\2026-07-01-mazos-codex.md`
+
+## Decisions made
+- Included Penpot as a proper parent-repo gitlink/submodule pointer, not as vendored source.
+- Kept runtime/generated local files out of PR #5: `data/`, `research/mazos/latest-vault-scan.md`, `tsconfig.tsbuildinfo`.
+- Did not reset the Penpot submodule checkout even though it is locally dirty, because that would be destructive inside the submodule. The parent repo records the intended gitlink commit.
+- Left unrelated untracked vault file `04-SESSIONS/2026-07-01-mazos-command-centre-next.md` untouched.
+
+## Verification
+- `npm run lint` passed.
+- `npm run build` passed. Remaining warning: existing Next workspace-root inference from multiple lockfiles.
+- `GET http://localhost:3046/` returned 200.
+- Local API checks passed for:
+  - `/api/mazos/loops`
+  - `/api/mazos/shiplog`
+  - `/api/mazos/tool-router?q=browser%20automation`
+  - `/api/mazos/decisions`
+  - `/api/mazos/context-pack?project=MAZos`
+  - `/api/mazos/project-status` for MAZos, JobFilter, Recall, and missing project.
+
+## Next steps
+- Review PR #5 in browser and merge when ready.
+- If a fully clean local MAZos worktree is required, explicitly approve cleaning/resetting the dirty Penpot submodule checkout and decide whether to delete or keep generated `data/` files.
