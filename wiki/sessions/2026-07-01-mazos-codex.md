@@ -94,3 +94,38 @@ status: completed
 ## Next steps
 - Merge PR #3 if the status lookup output looks useful.
 - Clean or finish the unrelated platform-source dirty files separately before more MAZos source work.
+
+## Addendum: daily cockpit sharpening
+
+## What I did
+- Added a `What Now` daily cockpit panel above the main dashboard so MAZos surfaces the current priority, warning, next action, last-24h commit count, dirty repo count, and dirty-file split immediately.
+- Grouped project dirty files into app work, generated/runtime noise, submodule/source leftovers, docs, and unknown.
+- Surfaced Ralph loop conflicts as warnings and promoted them into the next best action when `.ralph/STATE.md` and `.ralph/prd.json` disagree.
+- Added `Daily Triage L1` as a report-only prompt action with explicit no-edit/no-push/no-deploy/no-credential limits.
+- Clarified action button modes so MAZos distinguishes manual prompts, repo reads, command runs, and vault scan writes.
+- Pushed MAZos PR #3 update at `42c47f9`: `https://github.com/manazoid4/mazos-ui/pull/3`.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\src\app\page.tsx`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\commandRegistry.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\projectStatus.ts`
+
+## Decisions made
+- Keep the status and cockpit layer read-only; it reports state and gives prompts rather than mutating repos.
+- Leave unrelated dirty MAZos files unstaged: `.gitmodules`, `external/agent-sources/penpot`, `research/mazos/latest-vault-scan.md`, `data/`, `tsconfig.tsbuildinfo`.
+- Do not hide generated or external-source leftovers; classify them so Hermes/Codex can decide what to finish or clean next.
+
+## Verification
+- `npm run lint` passed.
+- `npm run build` passed. Remaining warning: Next workspace-root inference from multiple lockfiles.
+- `GET /api/mazos/project-status?project=MAZos` returned the Ralph conflict warning, source/submodule warning, and correct dirty groups.
+- `GET /api/mazos/project-status?project=JobFilter` returned a clean repo/vault status.
+- `GET /api/mazos/project-status?project=Recall` returned a repo/vault status with one recent commit.
+- `GET /api/mazos/project-status?project=doesnotexist` returned a clear missing-project warning.
+- `GET /` returned HTTP 200 from the running MAZos dev server on port 3046.
+- Browser visual automation was not completed because the local Playwright Chromium binary is missing.
+
+## Next steps
+- Refresh `http://localhost:3046/` and review the `What Now` panel.
+- Resolve the MAZos Ralph state conflict before trusting loop progress.
+- Clean or finish the unrelated platform-source dirty files in a separate task.
