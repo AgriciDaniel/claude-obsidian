@@ -129,3 +129,28 @@ status: completed
 - Refresh `http://localhost:3046/` and review the `What Now` panel.
 - Resolve the MAZos Ralph state conflict before trusting loop progress.
 - Clean or finish the unrelated platform-source dirty files in a separate task.
+
+## Addendum: next stage prompt sheet
+
+## What I did
+- Read the attached Hermes MAZos usefulness brief.
+- Reviewed current MAZos context, external-source registry, control panel config, and lightweight README snippets from the installed GitHub source folders.
+- Created `C:\Users\manaz\Projects\mazos-ui\MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt`.
+- Included a concise implementation prompt for Hermes/Codex covering Hermes Context Pack, Light Hermes Prompt, real Next Best Move, button audit, intake queue, focus evidence, repo command centre, Ship Board, safety levels, and performance.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt`
+- `C:\Users\manaz\claude-obsidian\wiki\sessions\2026-07-01-mazos-codex.md`
+
+## Decisions made
+- Kept this as a prompt-sheet artifact only, not an app implementation.
+- Did not push MAZos because the attached brief explicitly says not to push unless Maz asks.
+- Left unrelated/background MAZos changes untouched.
+
+## Verification
+- Confirmed the prompt sheet exists and is readable.
+- Confirmed the prompt sheet includes MAZos repo reference, PR #3 reference, installed GitHub source references, safety rules, validation commands, and final response format.
+
+## Next steps
+- Paste the implementation prompt from `MAZOS_NEXT_STAGE_BUILD_PROMPT_SHEET.txt` into Hermes/Codex when ready.
+- If the sheet looks right, commit it on an `agents/` branch and open/update a PR.
