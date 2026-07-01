@@ -22,6 +22,8 @@ status: completed
 - Audited Hermes external agent source integration across MAZos, Hermes local files, local external clones, and the Obsidian memory note.
 - Validated JSON/YAML syntax and checked submodule gitlinks against local clone remotes/revisions.
 - Tightened routing prompt wording so private scraping, auth bypass, and unbounded loops are refused rather than merely confirmation-gated.
+- Added `enescingoz/awesome-n8n-templates` after follow-up request, pinned at `2d78bc6`, and routed it as the n8n/no-code workflow template source.
+- Kept the MAZos n8n submodule sparse because the full repo contains Windows long-path template filenames; the full clone is available under `C:\Users\manaz\.hermes\external-sources\awesome-n8n-templates`.
 
 ## Files changed
 - `C:\Users\manaz\Projects\mazos-ui\config\buttons.json`
@@ -48,12 +50,13 @@ status: completed
 - Treat the MAZos submodule approach as coherent because `.gitmodules`, gitlinks, and local Hermes clone commits/remotes line up.
 - Keep `alirezarezvani/claude` documented as inaccessible and route to `alirezarezvani/claude-skills` plus the installed `CLAUDE.md`.
 - Keep external repos out of MAZos TypeScript/build scope because they are reference repos, not app source.
+- Use the full local Hermes clone for n8n template files and use the MAZos sparse submodule as a pinned repository pointer.
 - Do not touch unrelated dirty files such as `data/` or `research/mazos/latest-vault-scan.md`.
 
 ## Verification
 - JSON parse passed for MAZos config and Hermes buttons.
 - YAML parse passed for MAZos and Hermes control panels.
-- `git submodule status` resolved all six pointers.
+- `git submodule status` resolved all seven pointers.
 - `npm run lint` passed.
 - `npm run build` passed with existing workspace-root/CSS warnings only.
 

@@ -29,6 +29,9 @@ Hermes registry:
 - Claude Skills `CLAUDE.md`: copied to `C:\Users\manaz\.hermes\external-sources\CLAUDE.alirezarezvani-claude-skills.md`.
 - Maxun: browser automation and web extraction architecture.
 - Loop Engineering: recurring agent loops, PR/CI loops, cost checks, stop conditions, loop audits.
+- Awesome n8n Templates: n8n workflow templates, webhook/integration automation examples, no-code automation patterns, and workflow blueprint inspiration.
+
+Note: the MAZos `awesome-n8n-templates` submodule is sparse because the full repo contains Windows long-path template filenames. Hermes should use the full local clone at `C:\Users\manaz\.hermes\external-sources\awesome-n8n-templates`.
 
 ## Unresolved
 
@@ -44,7 +47,10 @@ When using these sources, Hermes should not load all repos by default. It should
 - Claude Skills for agent workflow design.
 - Maxun for browser automation architecture.
 - Loop Engineering for recurring automations and multi-step loops.
+- Awesome n8n Templates for n8n workflows, webhook/integration automations, no-code automations, and reusable workflow blueprints.
 
 Agent Reach and Maxun must not be used to bypass authentication, scrape private content, or violate platform terms.
 
 Every recurring loop must have a goal, stop condition, budget, run log, and human gate.
+
+n8n templates must be adapted manually with credential review and must not be blindly activated after import.
