@@ -6,4 +6,5 @@
 - Finish/verify MazOS RALPH backlog: UI, action API, Recall ingest, build/runtime smoke, commit/push/log.
 - Configure Hermes to rely on targeted Obsidian reads/searches, not chat-memory hallucination.
 - Review `oh-my-hermes` ideas selectively; do not install blindly.
+- Use Hermes external agent sources selectively: Headroom for compression, Agent Reach for web reach, NVIDIA Skills for GPU/NVIDIA work, Claude Skills for workflow patterns, Maxun for browser automation architecture, Loop Engineering for recurring loops. Read local docs before acting.
 - Email digest delivery still needs Resend visibility from Hermes runtime before claiming sent.
