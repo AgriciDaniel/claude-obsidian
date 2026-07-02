@@ -24,6 +24,18 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 - 各レベルは約2週間。**卒業条件を満たしてから次へ進む**(飛ばさない)
 - 毎週金曜に振り返り(このページ下部の振り返りログに追記)
 - 新しい機能は必ず**実際の業務タスクで試す**(素振りだけで終わらせない)
+- Claude Code本体だけでなく、**スキル・プラグイン・MCP・外部リソース**を各レベルで1つずつ取り込む(巻末の[リソース集](#リソース集外部サイトスキルプラグイン)参照)
+
+**用語の整理**(混同しやすいので最初に):
+
+| 仕組み | 何ができるか | 置き場所 |
+|--------|-------------|----------|
+| **スラッシュコマンド** | 定型プロンプトを `/名前` で呼ぶ | `.claude/commands/*.md` |
+| **スキル** | 手順書+スクリプト+参照資料のセット。Claudeが必要時に自動で読む | `~/.claude/skills/` または `.claude/skills/` |
+| **プラグイン** | コマンド・スキル・エージェント・フック・MCPをまとめて配布する箱 | `/plugin` でマーケットプレイスから導入 |
+| **MCPサーバー** | 外部サービス(Gmail、Notion等)への接続口 | `claude mcp add` で登録 |
+
+このVault自体が「claude-obsidianプラグイン」(スキル+コマンド+フックの詰め合わせ)なので、手元に完成品の見本が常にある。
 
 ---
 
@@ -58,6 +70,11 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 2. 次のingest作業をプランモードで開始し、計画を確認してから実行させる
 3. 1つの会話で2つ以上の話題を扱ったら、意識的に `/clear` してから次に進む
 
+### スキル・プラグイン・外部サイト
+- 公式ドキュメントの「よくあるワークフロー」「メモリ管理」を通読: https://code.claude.com/docs
+- Anthropic公式のベストプラクティス記事(実務利用の考え方の土台): https://www.anthropic.com/engineering/claude-code-best-practices
+- Anthropic Academy の無料コース「Claude Code in Action」で基礎を体系的に: https://www.anthropic.com/learn
+
 ### 卒業条件
 - CLAUDE.mdを3回以上更新した
 - 「やり直し」の回数が体感で減った
@@ -81,6 +98,11 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 1. テンダーヒルズ3スキルを実際の業務データで1回ずつ使い、改善点をメモする
 2. 自分の定型業務を1つ選んで自作コマンドにする(例: `/議事録 [メモ]` → 施設の会議メモを決まった書式に整形、`/週報` → log.mdから今週分を要約)
 3. このWikiの `/wiki-ingest` の出力で気に入らない点があれば、スキル側を直す
+
+### スキル・プラグイン・外部サイト
+- **Anthropic公式スキル集**(docx / xlsx / pptx / pdf 操作スキルなど。介護業務のExcel・書類仕事に直結): https://github.com/anthropics/skills — Excel帳票を扱うなら `xlsx` スキルをまず入れる
+- スキルの仕様と作り方は公式ドキュメントの「Agent Skills」ページを参照
+- 手本として、このVaultの `skills/wiki-ingest/SKILL.md` と自分で入れたテンダーヒルズスキルを読み比べる
 
 ### 卒業条件
 - 自作コマンド/スキルを2つ以上作り、実務で使った
@@ -106,6 +128,12 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 2. 「来週の予定を確認して、空いている面談枠を3つ提案して」を試す
 3. ドライブ上の書類(入所関係書類など)を読ませて、Wikiにingestする流れを1回通す
 
+### スキル・プラグイン・外部サイト
+- **MCP公式サイト**(プロトコルの全体像を30分だけ): https://modelcontextprotocol.io
+- **公式リファレンスサーバー集**(何が接続できるかのカタログとして眺める): https://github.com/modelcontextprotocol/servers
+- Obsidian MCPのセットアップ手順はVault内にあり: `skills/wiki/references/mcp-setup.md`
+- Gmail / Googleカレンダー / Google Drive / Notion はClaude公式のコネクタから接続できる(claude.ai の設定 → コネクタ、またはClaude Codeの `/mcp`)
+
 ### 卒業条件
 - MCP経由の作業を週3回以上、自然に使うようになった
 - 「Claudeに聞く」だけで済んだ調べ物が1つ以上あった(自分でメール・カレンダーを開かずに)
@@ -129,6 +157,11 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 1. `claude -p` で「wiki/log.md の直近1週間を3行に要約」を実行してみる
 2. 隔週で `/wiki-lint` を自動実行するスクリプトを書く(hot.mdの「lint残課題」を潰す運用に)
 3. 業務で「毎週やる確認作業」を1つ選び、ヘッドレス実行のスクリプトにする
+
+### スキル・プラグイン・外部サイト
+- 公式ドキュメントの「Hooks」「Headless mode (`claude -p`)」ページが一次情報
+- 見本はこのVaultの `hooks/` フォルダ(auto-commitフックの実物)
+- 通知系の小物は自作より既存プラグインを先に探す(下記リソース集のマーケットプレイス参照)
 
 ### 卒業条件
 - 定期実行されるタスクが1つ以上動いている
@@ -154,6 +187,11 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 2. カスタムエージェントを1つ定義して使う
 3. 「Claude Codeに向くタスク / Codexに向くタスク / 人がやるべきタスク」の振り分け表をWikiに書く
 
+### スキル・プラグイン・外部サイト
+- 公式ドキュメントの「Subagents」ページ(`.claude/agents/` の書式)
+- **Codex Plugin for Claude Code**(調査済みのやつを実戦投入する): `/plugin marketplace add openai/codex-plugin-cc` → `/codex:review` などが使える
+- コミュニティのエージェント定義例を漁るなら awesome-claude-code(下記リソース集)
+
 ### 卒業条件
 - 並列で2つ以上のタスクを走らせた経験が3回以上
 - 振り分け表がWikiにある
@@ -178,9 +216,58 @@ Navigation: [[learning/_index]] | [[index]] | [[hot]]
 2. 自作物をプラグインとして整理する
 3. 次の12週間の「Level 7以降」を自分で設計する(候補: Agent SDK、チームでの共有、音声入力連携)
 
+### スキル・プラグイン・外部サイト
+- 公式ドキュメントの「Plugins」「Plugin marketplaces」ページ(自作物の配布形式)
+- 見本はこのVaultの `.claude-plugin/` フォルダ(claude-obsidianプラグイン自体のマニフェスト)
+- 自作プラグインをGitHubに置けば `/plugin marketplace add 自分のユーザー名/リポジトリ名` で他マシンにも入る
+
 ### 卒業条件
 - Level 0との比較レポートがWikiにある
 - 「次に伸ばすこと」を自分の言葉で書けた
+
+---
+
+## リソース集(外部サイト・スキル・プラグイン)
+
+### 公式ドキュメント・学習サイト
+
+| サイト | 用途 |
+|--------|------|
+| https://code.claude.com/docs | Claude Code公式ドキュメント。機能で迷ったらまずここ |
+| https://www.anthropic.com/engineering/claude-code-best-practices | 公式ベストプラクティス記事 |
+| https://www.anthropic.com/learn | Anthropic Academy(無料コース) |
+| https://docs.claude.com | Claude API / プラットフォーム全般のドキュメント |
+| https://modelcontextprotocol.io | MCPプロトコル公式 |
+
+### スキル
+
+| リソース | 用途 |
+|----------|------|
+| https://github.com/anthropics/skills | Anthropic公式スキル集。**xlsx / docx / pptx / pdf** スキルは事務仕事に直結 |
+| `~/.claude/skills/`(手元) | テンダーヒルズ特養スキル3種 — 改造の練習台 |
+| このVaultの `skills/` | wiki-ingest / wiki-query など8スキルの実装例 |
+
+### プラグイン・マーケットプレイス
+
+| リソース | 用途 |
+|----------|------|
+| `/plugin` コマンド | マーケットプレイスの追加・プラグインの導入・管理はすべてここから |
+| https://github.com/anthropics/claude-code | Claude Code本体リポジトリ。公式プラグイン・変更履歴・Issue |
+| https://github.com/openai/codex-plugin-cc | Codexワーカー連携の公式プラグイン(調査済み → [[Codex Plugin for Claude Code]]) |
+| https://github.com/hesreallyhim/awesome-claude-code | コミュニティ製のコマンド・フック・プラグインのキュレーション集 |
+
+### MCPサーバー
+
+| リソース | 用途 |
+|----------|------|
+| https://github.com/modelcontextprotocol/servers | 公式リファレンスサーバー集(カタログとして) |
+| Claude公式コネクタ(Gmail / Googleカレンダー / Drive / Notion) | claude.ai 設定 → コネクタ、または `/mcp` から |
+| `skills/wiki/references/mcp-setup.md`(手元) | Obsidian Vault直結MCPの手順 |
+
+### 使い方のルール
+- **一次情報は公式ドキュメント**。コミュニティ製(awesome系、個人ブログ)は鮮度と正確性を疑ってから使う
+- 外部のスキル・プラグイン・MCPは**中身(SKILL.md、スクリプト、要求する権限)を読んでから**入れる。業務データ(利用者情報)に触れるものは特に慎重に
+- 入れたものは必ずWikiにingestして記録する(テンダーヒルズスキルやCodexプラグインで既にやっている運用の継続)
 
 ---
 
