@@ -132,3 +132,9 @@ _attachments/
 # v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
 .vault-meta/mode.json
 .vault-meta/mode.*.tmp
+# Privacy perimeter config (user's sensitive-band globs and PII regex
+# vocabulary are themselves sensitive; `git add -f` to share with a team)
+.vault-meta/perimeter-paths.txt
+.vault-meta/perimeter-patterns.txt
+.vault-meta/perimeter-whitelist.txt
+.vault-meta/perimeter-airgap

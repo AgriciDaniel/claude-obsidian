@@ -2,8 +2,9 @@
 # Test runner entry points for DragonScale and vault tooling.
 
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
-        test-lock test-concurrent test-mode test-contextual setup-dragonscale \
-        setup-retrieve setup-mode clean-test-state help
+        test-lock test-concurrent test-mode test-contextual test-graph-lint \
+        test-perimeter setup-dragonscale \
+        setup-retrieve setup-mode setup-perimeter clean-test-state help
 
 help:
 	@echo "claude-obsidian developer targets:"
@@ -17,12 +18,15 @@ help:
 	@echo "  make test-concurrent  multi-writer correctness gate (shell, hermetic)"
 	@echo "  make test-mode        scripts/wiki-mode.py tests (python, hermetic)"
 	@echo "  make test-contextual  scripts/contextual-prefix.py cache-floor tests (python, hermetic)"
+	@echo "  make test-graph-lint  scripts/graph-lint.py tests (python, hermetic)"
+	@echo "  make test-perimeter   bin/setup-perimeter.sh tests (shell, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
 	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
+	@echo "  make setup-perimeter  Run bin/setup-perimeter.sh to install the privacy perimeter (opt-in)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual test-graph-lint test-perimeter
 	@echo ""
 	@echo "All tests passed."
 
@@ -62,6 +66,14 @@ test-contextual:
 	@echo "=== test_contextual_prefix.py ==="
 	@python3 tests/test_contextual_prefix.py
 
+test-graph-lint:
+	@echo "=== test_graph_lint.py ==="
+	@python3 tests/test_graph_lint.py
+
+test-perimeter:
+	@echo "=== test_setup_perimeter.sh ==="
+	@bash tests/test_setup_perimeter.sh
+
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh
 
@@ -70,6 +82,9 @@ setup-retrieve:
 
 setup-mode:
 	@bash bin/setup-mode.sh
+
+setup-perimeter:
+	@bash bin/setup-perimeter.sh
 
 clean-test-state:
 	@rm -f .vault-meta/.address.lock .vault-meta/.tiling.lock .vault-meta/.bm25.lock \
