@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Learning Index"
-updated: 2026-05-08
+updated: 2026-07-02
 tags: [learning, index]
 ---
 
@@ -11,7 +11,7 @@ tags: [learning, index]
 
 ## In Progress
 
-<!-- 現在学習中 -->
+- [[claude-code-level-up-roadmap|Claude Code レベルアップ・ロードマップ]] — 12週間の段階的習得計画(2026-07-02開始)
 
 ## Completed
 
@@ -19,4 +19,4 @@ tags: [learning, index]
 
 ## Pages
 
-<!-- 個別学習ページへのリンク -->
+- [[claude-code-level-up-roadmap]]
