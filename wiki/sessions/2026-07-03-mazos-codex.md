@@ -58,3 +58,38 @@ status: completed
   - `npm run bridge`
 - Consider adding a Windows startup shortcut or scheduled task for the bridge if this becomes daily workflow.
 - Consider adding token auth to the bridge if it ever listens beyond `127.0.0.1`.
+
+## Addendum: automatic local stack startup
+
+## What I did
+- Added `C:\Users\manaz\Projects\mazos-ui\scripts\start-mazos-local-stack.ps1`.
+- Registered Windows Scheduled Task `MAZos Local Stack`.
+- Configured it to run at user logon.
+- The launcher starts:
+  - MAZos local app on `3046` with `npm run dev -- -p 3046`
+  - MAZos local bridge on `3047` with `npm run bridge`
+- The launcher checks ports first and does not start duplicate processes if the app or bridge is already listening.
+- Updated `README.md` with the scheduled task name and behavior.
+- Opened and merged PR #8:
+  - `https://github.com/manazoid4/mazos-ui/pull/8`
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\README.md`
+- `C:\Users\manaz\Projects\mazos-ui\scripts\start-mazos-local-stack.ps1`
+- `C:\Users\manaz\claude-obsidian\wiki\sessions\2026-07-03-mazos-codex.md`
+
+## Verification
+- Ran the launcher manually. It detected existing listeners and skipped duplicates.
+- Ran the scheduled task manually with `Start-ScheduledTask`.
+- Scheduled task last result: `0`.
+- Ports verified listening:
+  - `3046`
+  - `3047`
+- `npm run lint` passed.
+- `npm run build` passed.
+- PR #8 merged into main as:
+  - `ff58eb0 chore: auto-start MAZos local stack`
+
+## Next steps
+- After next Windows login, MAZos local app and bridge should start automatically.
+- If it ever fails, check logs under `C:\Users\manaz\Projects\mazos-ui\data\mazos\logs`.
