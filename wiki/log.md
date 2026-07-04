@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Operation Log"
-updated: 2026-05-28
+updated: 2026-07-04
 tags:
   - meta
   - log
@@ -24,6 +24,16 @@ Entry format: `## [YYYY-MM-DD] operation | Title`
 Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
+
+## [2026-07-04] save | Obsidian plugin enablement + MCPVault transport setup
+- Type: vault housekeeping (plugins, git commit, MCP configuration)
+- Trigger: follow-up to the 2026-05-28 catch-up entry below, which flagged 3 uncommitted items for user follow-up. User confirmed: "proceed to work on it all."
+- Plugins enabled: `.obsidian/community-plugins.json` updated to add `dataview`, `obsidian-git`, `templater-obsidian` to the enabled list (main.js/manifest.json/styles.css for all three were already present in `.obsidian/plugins/` from a prior session but not yet in the enabled-plugins array). Templater pre-configured via new `.obsidian/plugins/templater-obsidian/data.json` (gitignored, host-local, same pattern as calendar/thino): `templates_folder` set to `_templates` per `skills/wiki/references/plugins.md` step 2. Obsidian Git left at plugin defaults — auto-backup interval (15 min per the plugins.md recommendation) needs to be set manually in Obsidian Settings since it isn't exposed via a simple config key.
+- Committed: `4f18efd` "chore(obsidian): enable Dataview, Obsidian Git, Templater; catch up wiki hot cache to v1.9.2" — bundles the plugin enablement with the `.obsidian/graph.json` / `workspace.json` drift (routine UI state, not sensitive) and the 2026-05-28 `wiki/hot.md` + `wiki/log.md` catch-up. Local-only, NOT pushed.
+- MCP configured: `obsidian-cli` binary absent despite Obsidian 1.12.7 (`skills/wiki/references/mcp-setup.md` Option D unavailable). Used **Option B, MCPVault** instead of Option A (mcp-obsidian, needs Local REST API plugin + TLS bypass) since it needs no Obsidian-side plugin and no cert workaround. Ran `claude mcp add-json obsidian-vault '{"type":"stdio","command":"npx","args":["-y","@bitbonsai/mcpvault@latest","/Users/yalema/Desktop/Yale AI Agent/yale-obsidian-brain"]}' --scope user`. First `claude mcp list` check showed "Failed to connect" (cold npx download); retried and it connected. Verified live via `mcp__obsidian-vault__get_vault_stats`: 138 notes, 59 folders, correctly identifies `wiki/log.md` and `wiki/hot.md` as most recently modified.
+- Locations (modified): `.vault-meta/transport.json` (gitignored, host-local) — `preferred` changed `filesystem` to `mcpvault`, `manual_override: true` (since `scripts/detect-transport.sh` does not auto-detect MCP servers by design), `available.mcpvault.present: true` with server details.
+- Left as-is: `.claude/` directory (settings.local.json + 4 command shortcuts) remains untracked — this is local Claude Code session config, not part of the public `claude-obsidian` plugin repo surface, so it was deliberately excluded from the commit.
+- Next recommended: user decides whether to push `4f18efd` to remote, and whether to set Obsidian Git's auto-backup interval in Settings.
 
 ## [2026-05-28] save | hot.md/log.md catch-up to v1.9.2 (wiki was 10 days behind git history)
 - Type: hot cache + log maintenance (self-referential — vault tracks its own plugin's dev history)
