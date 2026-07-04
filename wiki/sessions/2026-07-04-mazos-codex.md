@@ -57,3 +57,30 @@ status: completed
   - `C:\Users\manaz\Projects\mazos-ui\research\mazos\latest-vault-scan.md`
   - `C:\Users\manaz\Projects\mazos-ui\data\`
   - `C:\Users\manaz\Projects\mazos-ui\tsconfig.tsbuildinfo`
+
+## OpenWiki Install and Agent Access
+
+Completed on 2026-07-04:
+
+- Installed `kdsz001/OpenWiki` v0.3.17 on Windows.
+- Verified the Windows installer SHA-256 against the GitHub release digest:
+  `4c0fef09009f2a59c1a29270bd69864fa98fef469b528f7005af53aea944d22d`.
+- App path: `C:\Users\manaz\AppData\Local\OpenWiki\OpenWiki.exe`.
+- Database path: `C:\Users\manaz\AppData\Roaming\com.openwiki.app\openwiki.db`.
+- Source clone: `C:\Users\manaz\Projects\openwiki`.
+- Hermes clone: `C:\Users\manaz\.hermes\external-sources\openwiki`.
+- MAZos docs PR merged: `https://github.com/manazoid4/mazos-ui/pull/10`.
+- Merge commit: `5da40a0b23518e47afffc394c2dc2c798558b3f3`.
+- Added Windows scheduled task: `OpenWiki Local Knowledge App`.
+- Configured MCP server name `openwiki` in:
+  - `C:\Users\manaz\AppData\Roaming\Claude\claude_desktop_config.json`
+  - `C:\Users\manaz\.openclaw\openclaw.json`
+  - `C:\Users\manaz\.codex\config.toml`
+- Seeded OpenWiki with three wiki pages:
+  - `OpenWiki Local Install and Agent Access`
+  - `MAZos Agent Access and Market-Breaker Roadmap`
+  - `OpenWiki GitHub Capability Summary`
+
+Manual next step:
+
+- Open OpenWiki and configure Settings -> AI with the preferred provider if in-app wiki compilation, reports, or Q&A should use Claude/OpenAI/Gemini/Ollama/LM Studio.
