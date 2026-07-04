@@ -88,3 +88,26 @@ Completed on 2026-07-04:
 Manual next step:
 
 - Open OpenWiki and configure Settings -> AI with the preferred provider if in-app wiki compilation, reports, or Q&A should use Claude/OpenAI/Gemini/Ollama/LM Studio.
+
+## Agent Task Gate and Mission Planner
+
+Completed on 2026-07-04:
+
+- Added MAZos Agent Task Gate at `/sessions`.
+- Added `GET /api/mazos/task-gate`.
+- Added `POST /api/mazos/task-gate`.
+- Added `POST /api/mazos/mission-plan`.
+- Added scoring from 0 to 100 with risk levels `safe`, `caution`, and `danger`.
+- Added prompt repair, default forbidden actions, Research First toggle, Make Smaller 3-session split, validation command suggestions, and saved mission plans.
+- Added docs in `README.md`.
+- Added report `MAZOS_TASK_GATE_REPORT.md`.
+- Merged MAZos PR #14: `https://github.com/manazoid4/mazos-ui/pull/14`.
+- Merge commit: `aca06d02f082048c76c7b0e84ac7c066687c3b72`.
+
+Validation:
+
+- `npm run lint` passed.
+- `npm run build` passed.
+- `GET http://127.0.0.1:3046/sessions` returned 200.
+- `POST http://127.0.0.1:3046/api/mazos/task-gate` returned a scored gate result.
+- `POST http://127.0.0.1:3046/api/mazos/mission-plan` generated a saved markdown mission plan.
