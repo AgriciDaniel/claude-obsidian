@@ -72,6 +72,8 @@ Completed on 2026-07-04:
 - MAZos docs PR merged: `https://github.com/manazoid4/mazos-ui/pull/10`.
 - Merge commit: `5da40a0b23518e47afffc394c2dc2c798558b3f3`.
 - Added Windows scheduled task: `OpenWiki Local Knowledge App`.
+- Scheduled-task starter script: `C:\Users\manaz\.hermes\openwiki\start-openwiki.ps1`.
+- Verified the scheduled task returns result `0` when OpenWiki is already running.
 - Configured MCP server name `openwiki` in:
   - `C:\Users\manaz\AppData\Roaming\Claude\claude_desktop_config.json`
   - `C:\Users\manaz\.openclaw\openclaw.json`
@@ -80,6 +82,8 @@ Completed on 2026-07-04:
   - `OpenWiki Local Install and Agent Access`
   - `MAZos Agent Access and Market-Breaker Roadmap`
   - `OpenWiki GitHub Capability Summary`
+- Follow-up docs PR merged: `https://github.com/manazoid4/mazos-ui/pull/12`.
+- Follow-up merge commit: `d5240e0fd178ea8696c84b9d662f5b7cce142d1d`.
 
 Manual next step:
 
