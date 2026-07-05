@@ -77,4 +77,5 @@ status: completed
 - Follow-up merge commit: `778b82e0edd059ff35516295dc127f92a71ad064`
 - Validation: `npm run lint` passed, `npm run build` passed, local `GET http://127.0.0.1:3046/api/mazos/feed` passed, hosted `GET https://mazos-command-centre.vercel.app/api/mazos/feed` passed.
 - Production deployment for PR #17: `dpl_obMah8Nezzf6WgyDrGwfLMV7uoB7`, Ready and aliased to `https://mazos-command-centre.vercel.app`.
+- Final report deployment for PR #18: `dpl_2DYo3f3MY46zGYpfd2DEmCTJhCCP`, Ready and aliased to `https://mazos-command-centre.vercel.app`.
 
