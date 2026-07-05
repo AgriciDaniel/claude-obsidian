@@ -79,3 +79,17 @@ status: completed
 - Production deployment for PR #17: `dpl_obMah8Nezzf6WgyDrGwfLMV7uoB7`, Ready and aliased to `https://mazos-command-centre.vercel.app`.
 - Final report deployment for PR #18: `dpl_2DYo3f3MY46zGYpfd2DEmCTJhCCP`, Ready and aliased to `https://mazos-command-centre.vercel.app`.
 
+## Addendum — GitHub Inspiration Research Lane 1
+- Researched GitHub inspiration for local-first AI dashboards, agent cockpits, LLM observability feeds, homelab dashboards, and personal knowledge OS patterns relevant to MAZos.
+- Prioritized patterns that fit MAZos current direction: deterministic feed, local/private state, hosted-to-local bridge, agent task gate, OpenWiki/Obsidian evidence, and prompt-first safety.
+- Strongest external patterns found:
+  - TMA1-style agent-readable observability context.
+  - AgentLens-style append-only flight recorder/audit trail.
+  - OpenClaw Command Center-style unified state endpoint with SSE and read-only default.
+  - Mission Control/LiteLLM-style runtime registry and task/agent control plane.
+  - PersonalOS/Life-OS-style plain-text local operating memory.
+- Recommended MAZos build ideas:
+  - AI Feed as flight recorder plus action inbox.
+  - Cockpit unified state endpoint with live local bridge updates.
+  - Agent preflight/diff view across Obsidian, OpenWiki, GitHub, runs, decisions, and ship log before task launch.
+
