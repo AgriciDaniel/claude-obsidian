@@ -93,3 +93,17 @@ status: completed
   - Cockpit unified state endpoint with live local bridge updates.
   - Agent preflight/diff view across Obsidian, OpenWiki, GitHub, runs, decisions, and ship log before task launch.
 
+## Addendum — Reddit/Community Inspiration Research Lane 2
+- Researched Reddit/community patterns from r/LocalLLaMA, r/selfhosted, r/homelab, r/ObsidianMD, and r/ArtificialInteligence around personal AI dashboards, local AI workflows, home dashboards, personal operating systems, and AI knowledge hubs.
+- Key demand patterns: private/local data, a single cockpit for disconnected tools, Obsidian/Markdown as durable memory, dashboard views with actionable status, workflow automation through n8n/Home Assistant-style orchestration, and human approval before agent actions.
+- Key pain points: tool sprawl, fragile RAG/chat-over-docs, weak mobile UX, local model hardware limits, lack of provenance, dashboards becoming decorative, and agents needing too much trust.
+- Strongest MAZos takeaways:
+  - Build an evidence-first personal command center, not a generic chatbot.
+  - Treat Obsidian/OpenWiki as maintained memory, with raw inputs compiled into linked pages.
+  - Add workflow and agent observability before adding more autonomous execution.
+  - Keep local-first/private defaults and explicit approval gates.
+- Recommended build ideas:
+  - Daily MAZos Brief that reads notes, runs, decisions, stale items, calendar-like priorities, and OpenWiki state.
+  - Personal Data Control Room with modular cards for projects, home/lab services, knowledge gaps, workflows, and agent runs.
+  - Agent Approval Queue with proposed actions, evidence, risk labels, and one-click copy/run prompts.
+
