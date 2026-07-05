@@ -53,3 +53,14 @@ status: completed
 - Seed OpenWiki with project-specific pages for MAZos, Recall, JobFilter, OpenFlowKit, and Hermes.
 - Add OpenWiki-to-Obsidian export/handoff flow while preserving prompt-first safety.
 - Add agent memory diff across OpenWiki, Obsidian, GitHub, and MAZos session state before launching tasks.
+
+## Addendum — AI Feed Spec
+- Read the attached `MazOS AI Feed — Research-Further Prompt`.
+- Completed the requested build-ready spec at `specs/mazos-ai-feed.md`.
+- The spec recommends a deterministic v1 `FEED` tab plus `GET /api/mazos/feed`, aggregating Shipping Spine, decisions, runs, ship log, stale radar, intake queue, and OpenWiki status.
+- The spec rejects LLM calls, external RSS/web crawling, Supabase/KV, cron, and autonomous execution for v1.
+- Added ranking rules, item schema, API contract, storage/ingestion/placement options, safety notes, done criteria, and a concise next-agent build prompt.
+- PR #16 merged: `https://github.com/manazoid4/mazos-ui/pull/16`
+- Merge commit: `746c355c2f1f8b9d2ac21d3426a5e8ba0b69b0e3`
+- Validation: `npm run lint` passed locally.
+- Vercel preview passed. Production deployment `dpl_AcibPDkMNvmdLQKefAjsq8Fzn3xJ` was still building when this addendum was written.
