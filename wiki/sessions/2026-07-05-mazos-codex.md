@@ -63,4 +63,5 @@ status: completed
 - PR #16 merged: `https://github.com/manazoid4/mazos-ui/pull/16`
 - Merge commit: `746c355c2f1f8b9d2ac21d3426a5e8ba0b69b0e3`
 - Validation: `npm run lint` passed locally.
-- Vercel preview passed. Production deployment `dpl_AcibPDkMNvmdLQKefAjsq8Fzn3xJ` was still building when this addendum was written.
+- Vercel preview passed. Production deployment `dpl_AcibPDkMNvmdLQKefAjsq8Fzn3xJ` reached Ready and is aliased to `https://mazos-command-centre.vercel.app`.
+
