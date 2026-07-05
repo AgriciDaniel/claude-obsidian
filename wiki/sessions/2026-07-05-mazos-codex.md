@@ -65,3 +65,16 @@ status: completed
 - Validation: `npm run lint` passed locally.
 - Vercel preview passed. Production deployment `dpl_AcibPDkMNvmdLQKefAjsq8Fzn3xJ` reached Ready and is aliased to `https://mazos-command-centre.vercel.app`.
 
+## Addendum — AI Feed Implementation
+- Implemented the deterministic MAZos AI Feed v1 from `specs/mazos-ai-feed.md`.
+- Added `GET /api/mazos/feed`.
+- Added `src/lib/mazos/feed.ts` to aggregate Shipping Spine, Decision Inbox, run history, Stale Work Radar, Ship Log, intake queue, and OpenWiki status.
+- Added the cockpit `FEED` tab with verdict, attention/product/type filters, evidence modal, copyable prompts, score, source, and safety badges.
+- Updated `README.md` and `MAZOS_AI_FEED_REPORT.md`.
+- PR #17 merged: `https://github.com/manazoid4/mazos-ui/pull/17`
+- Merge commit: `e2880cd9bdeed6d35440046ea5b70baae6c64a0d`
+- Follow-up report PR #18 merged: `https://github.com/manazoid4/mazos-ui/pull/18`
+- Follow-up merge commit: `778b82e0edd059ff35516295dc127f92a71ad064`
+- Validation: `npm run lint` passed, `npm run build` passed, local `GET http://127.0.0.1:3046/api/mazos/feed` passed, hosted `GET https://mazos-command-centre.vercel.app/api/mazos/feed` passed.
+- Production deployment for PR #17: `dpl_obMah8Nezzf6WgyDrGwfLMV7uoB7`, Ready and aliased to `https://mazos-command-centre.vercel.app`.
+
