@@ -107,3 +107,13 @@ status: completed
   - Personal Data Control Room with modular cards for projects, home/lab services, knowledge gaps, workflows, and agent runs.
   - Agent Approval Queue with proposed actions, evidence, risk labels, and one-click copy/run prompts.
 
+## Addendum — Product/Design Research Lane 3
+- Researched product/design patterns for activity feeds and agent dashboards across Linear Inbox, GitHub Notifications, Slack Activity, Devin, OpenHands, Cursor, Codex, Langfuse, Helicone, and LangSmith.
+- Key reusable UI patterns: unified triage inbox, saved/custom filtered views, dense and detailed modes, keyboard-first list navigation, drill-down side panel, append-only session timeline, environment/tool tabs, and metrics cards above trace/feed tables.
+- Key ranking/read-state patterns: separate unread/read from done/cleared, allow save/snooze/remind-later, group by repo/project/source, prioritize mentions/assigned/review-needed/errors/stale blockers, and keep cleared/completed history searchable.
+- Key evidence/handoff patterns: every feed item should link to source artifacts, command output, diff/PR, trace/session IDs, plan/checklist, and next action; agent work should be inspectable before takeover or merge.
+- Strongest MAZos build ideas:
+  - Feed Inbox Zero: grouped AI Feed with `needs-decision`, `blocked`, `stale`, and `ready-to-ship` lanes plus save/snooze/done state.
+  - Agent Flight Recorder: session detail surface combining plan, step log, commands, file changes, evidence links, cost/latency/quality tags, and handoff prompt.
+  - Morning Command Brief: top-level ranked digest that collapses project status, agent runs, OpenWiki/Obsidian gaps, PRs, and next safest action into one review loop.
+
