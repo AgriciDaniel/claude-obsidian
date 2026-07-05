@@ -1,33 +1,41 @@
 ---
 title: JobFilter — Project Index
-project: jobfilter
-type: index
-created: 2026-06-15
-updated: 2026-06-15
-tags: [jobfilter, index]
+created: 2026-07-05
+updated: 2026-07-05
+type: entity
+tags: [project, saas, trades, leads, birmingham]
 ---
 
 # JobFilter
 
-UK construction lead intelligence platform. Scores, filters, and routes construction leads by quality.
+> High-quality job leads for UK tradesmen. Filter real work from noise.
 
-## Project Metadata
+**GitHub:** https://github.com/manazoid4/JobFilterV1  
+**Local:** `C:\Users\manaz\Desktop\JobFilter`  
+**Stack:** React 19 + Vite 6 + Express + Firebase + Stripe + Tailwind v4  
+**Status:** Pre-launch / active development (#1 priority)  
+**Live URL:** TBD (hosted on Firebase Hosting)
 
-- GitHub: https://github.com/manazoid4/JobFilterV1
-- Local PC location: `C:\Users\manaz\Desktop\jobfilter\jobfilterv1`
-- Live URL: https://jobfilter.uk
-- Stack: Next.js 15, Supabase, Stripe, Tailwind, Vercel
+---
 
-## Key Notes
+## What it does
 
-- [[STICKY-TODO]] — founder setup actions
-- [[BuildScout Competitive Analysis]]
-- [[2026-06-02-2146-deep-research-prompts]]
-- [[BidStats and UK public procurement APIs for JobFilter]]
-- [[2026-06-18-claude-launch-readiness-loop]] — full autonomous launch-readiness build prompt
+- Tradesman signs up → sets their trade + postcode
+- App scans public procurement sources (FTS, Contracts Finder, Sell2Wales, PCS) + internal leads
+- Leads are scored 0–100 with reason codes
+- Free tier: 3 leads; paid: unlimited with priority
+- WhatsApp intake state machine collects homeowner job requests
+- Stripe handles subscriptions + priority pass one-off payments
+- Email alerts via Resend on new lead matches
 
-## Project Rules
+## Notes index
 
-- Lead scoring: GOLD >=80, SILVER >=50, BRONZE 30-49, BIN <30
-- Design system: Brutalist-Yellow, white/black/yellow palette, `border-2`, hard shadows
-- AI usage: Claude API via Next.js
+| Note | Description |
+|---|---|
+| [[wiki/projects/jobfilter/ARCHITECTURE]] | Modules, data flow, server routes |
+| [[wiki/projects/jobfilter/DATA-MODEL]] | Firestore collections, lead schema |
+| [[wiki/projects/jobfilter/API]] | API routes, webhook endpoints |
+| [[wiki/projects/jobfilter/SETUP]] | Local dev setup |
+| [[wiki/projects/jobfilter/DEPLOYMENT]] | Firebase hosting, CI/CD |
+| [[wiki/projects/jobfilter/DECISIONS]] | Key technical tradeoffs |
+| [[wiki/projects/jobfilter/TODO]] | Pending tasks and blockers |
