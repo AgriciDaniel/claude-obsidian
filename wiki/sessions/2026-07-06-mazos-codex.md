@@ -10,6 +10,8 @@ status: completed
 - Created isolated worktree branch `agents/next-stage-loop`.
 - Added the next missing operating layer: server-side Morning Brief, Source Receipts / Context Map, and Agent Runtime Registry / Safety Console.
 - Opened PR #23: https://github.com/manazoid4/mazos-ui/pull/23
+- Continued loop iteration 2 after PR #23 merged: connected Context Map Source Receipts into Task Gate mission plans.
+- Opened PR #24: https://github.com/manazoid4/mazos-ui/pull/24
 
 ## Files changed
 - `src/lib/mazos/morningBrief.ts`
@@ -22,12 +24,15 @@ status: completed
 - `src/app/globals.css`
 - `README.md`
 - `MAZOS_NEXT_STAGE_LOOP_REPORT.md`
+- `src/lib/mazos/missionPlanner.ts`
+- `src/app/sessions/page.tsx`
 
 ## Decisions made
 - Did not rebuild features Claude already shipped in PR #22.
 - Kept all new surfaces prompt/context/safety only: no shell launch, no LLM calls, no autonomous agent starts.
 - Put server Morning Brief and Context Map in `NOW`; put Runtime Safety Console in `SYSTEM`.
 - Kept Context Map receipts sensitive-aware so Windows-local vault/repo paths are clearly treated as local/private evidence.
+- Mission plans should now carry receipt-backed context into Hermes prompts instead of relying on vague task text alone.
 
 ## Validation
 - `npm run lint`: passed.
@@ -36,9 +41,12 @@ status: completed
 - `GET http://127.0.0.1:3052/api/mazos/context-map?project=MAZos`: 200.
 - `GET http://127.0.0.1:3052/api/mazos/agent-runtimes?task=improve%20mazos%20context`: 200.
 - `GET http://127.0.0.1:3052/`: 200.
+- Iteration 2: `npm run lint`: passed.
+- Iteration 2: `npm run build`: passed.
+- Iteration 2: `POST http://127.0.0.1:3053/api/mazos/mission-plan`: 200, returned 10 source receipts, and the Hermes prompt included `SOURCE RECEIPTS`.
 
 ## Next steps
-- Wait for PR #23 CI/Vercel/automerge.
-- Connect Context Map receipts directly into Task Gate mission plans.
+- Wait for PR #24 CI/automerge.
+- Vercel production deploy for PR #23 was still building after local/GitHub success; recheck hosted alias later.
 - Add a dedicated `/context` page with saved project views and missing-knowledge cleanup.
 - Link Flight Recorder sessions to runtime recommendations and context receipts.
