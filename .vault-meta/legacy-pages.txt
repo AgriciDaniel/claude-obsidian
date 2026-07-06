@@ -1,9 +1,0 @@
-# DragonScale legacy-pages manifest
-# rollout: 2026-04-23
-#
-# List, one path per line, any pages whose frontmatter `created:` date is
-# post-rollout but which should still be treated as legacy (i.e. not required
-# to have an address). Also lines beginning with "# rollout:" set the
-# per-vault rollout baseline used by wiki-lint for severity classification.
-# Example:
-# wiki/sources/old-page-with-wrong-metadata.md
