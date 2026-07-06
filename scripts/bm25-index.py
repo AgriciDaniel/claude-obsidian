@@ -71,7 +71,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 META_DIR = VAULT_ROOT / ".vault-meta"
 CHUNKS_DIR = META_DIR / "chunks"
 BM25_DIR = META_DIR / "bm25"

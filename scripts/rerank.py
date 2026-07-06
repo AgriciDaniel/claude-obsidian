@@ -81,7 +81,7 @@ else:
     def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
     def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 META_DIR = VAULT_ROOT / ".vault-meta"
 EMBED_CACHE_PATH = META_DIR / "embed-cache.json"
 CACHE_LOCK = META_DIR / ".embed-cache.lock"

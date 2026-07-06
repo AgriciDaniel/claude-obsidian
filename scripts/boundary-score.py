@@ -44,9 +44,10 @@ import math
 import re
 import sys
 from datetime import date, datetime, timezone
+import os
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 WIKI_DIR = VAULT_ROOT / "wiki"
 
 EXCLUDE_TYPES = {"meta", "fold"}

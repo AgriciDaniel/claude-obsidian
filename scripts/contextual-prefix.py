@@ -75,7 +75,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 WIKI_DIR = VAULT_ROOT / "wiki"
 META_DIR = VAULT_ROOT / ".vault-meta"
 CHUNKS_DIR = META_DIR / "chunks"
@@ -428,7 +428,7 @@ def process_page(page_path, force_synthetic=False, rebuild=False, peek=False,
 def collect_pages(target):
     if target == "--all" or target is None:
         return sorted(p for p in WIKI_DIR.rglob("*.md")
-                      if not any(part.startswith(".") for part in p.parts))
+                      if not any(part.startswith(".") for part in p.relative_to(WIKI_DIR).parts))
     p = Path(target)
     if not p.is_absolute():
         p = VAULT_ROOT / p
