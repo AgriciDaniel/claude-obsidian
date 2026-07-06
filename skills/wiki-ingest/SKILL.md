@@ -11,9 +11,21 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ---
 
+## Scripts Location
+
+All `scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>` or `./scripts/<name>`.
+
+---
+
 ## Transport (v1.7+)
 
-Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
+Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash $SCRIPTS/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
 
 - **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md` (or `append`, `property:set`); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note` and friends; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
@@ -25,17 +37,17 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Mode awareness (v1.8+)
 
-Before creating any new wiki page, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
+Before creating any new wiki page, consult the vault's methodology mode via `uv run $SCRIPTS/wiki-mode.py route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
 
 ```bash
-SRC_PATH=$(python3 scripts/wiki-mode.py route source "Karpathy 2025 LLM Wiki essay")
+SRC_PATH=$(uv run $SCRIPTS/wiki-mode.py route source "Karpathy 2025 LLM Wiki essay")
 # generic:      wiki/sources/Karpathy-2025-LLM-Wiki-essay.md
 # lyt:          wiki/notes/Karpathy-2025-LLM-Wiki-essay.md  (also update relevant MOC)
 # para:         wiki/resources/incoming/Karpathy-2025-LLM-Wiki-essay.md
 # zettelkasten: wiki/20260517123456-Karpathy-2025-LLM-Wiki-essay.md
 
-ENT_PATH=$(python3 scripts/wiki-mode.py route entity "Andrej Karpathy")
-CON_PATH=$(python3 scripts/wiki-mode.py route concept "Compounding Vault Pattern")
+ENT_PATH=$(uv run $SCRIPTS/wiki-mode.py route entity "Andrej Karpathy")
+CON_PATH=$(uv run $SCRIPTS/wiki-mode.py route concept "Compounding Vault Pattern")
 ```
 
 If `.vault-meta/mode.json` is absent, the router returns mode=generic paths (identical to v1.7 behavior). No special-casing needed in this skill.
@@ -51,29 +63,29 @@ Mode-specific follow-up:
 
 ```bash
 # Acquire — blocks (returns 75 EX_TEMPFAIL) if another writer holds the lock
-if bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md; then
+if bash $SCRIPTS/wiki-lock.sh acquire wiki/concepts/Foo.md; then
   # ... do the write via the §Transport-selected method ...
-  bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+  bash $SCRIPTS/wiki-lock.sh release wiki/concepts/Foo.md
 else
   # rc=75: another writer is in flight. Retry once after 2s; if still held,
   # log to wiki/log.md and skip this page rather than overwrite.
   sleep 2
-  bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md && {
+  bash $SCRIPTS/wiki-lock.sh acquire wiki/concepts/Foo.md && {
     # write …
-    bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+    bash $SCRIPTS/wiki-lock.sh release wiki/concepts/Foo.md
   } || echo "skipped wiki/concepts/Foo.md (locked); logged to wiki/log.md"
 fi
 ```
 
 Properties:
 - **Per-file granularity.** Locks key on `sha1(<vault-relative-path>)`; concurrent writes to DIFFERENT pages run in parallel.
-- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `scripts/wiki-lock.sh` header for the full semantics.
+- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `$SCRIPTS/wiki-lock.sh` header for the full semantics.
 - **Cross-process release.** Release is `rm -f` (no PID match required). Skill authors are trusted to release locks they acquire; cross-skill release is allowed by design (a janitor running `wiki-lock clear-stale --max-age 0` is the canonical recovery path).
 - **The PostToolUse hook now defers `git add` if any locks are currently held**, so the auto-commit doesn't fire mid-ingest and produce torn commits. See `hooks/hooks.json`.
 
 `wiki-lock` is unconditional in v1.7+ — there is no feature gate, no fallback. Skills that don't acquire locks are racing against any other writer. The script is in core, not opt-in.
 
-Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `scripts/allocate-address.sh`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `agents/wiki-ingest.md`.
+Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `$SCRIPTS/allocate-address.sh`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `agents/wiki-ingest.md`.
 
 ---
 
@@ -252,12 +264,13 @@ Do not silently overwrite old claims. Flag and let the user decide.
 
 ## Address Assignment (DragonScale Mechanism 2 MVP)
 
-**Opt-in feature**. DragonScale address assignment runs only if `scripts/allocate-address.sh` is present AND `.vault-meta/` exists. Otherwise, skip this entire section and proceed with ingest normally.
+**Opt-in feature**. DragonScale address assignment runs only if `allocate-address.sh` is present (vault-local `scripts/` or `$CLAUDE_OBSIDIAN_REPO/scripts`) AND `.vault-meta/` exists. Otherwise, skip this entire section and proceed with ingest normally.
 
 **Feature detection (run at start of every ingest)**:
 
 ```bash
-if [ -x ./scripts/allocate-address.sh ] && [ -d ./.vault-meta ]; then
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:-}/scripts"
+if [ -x "$SCRIPTS/allocate-address.sh" ] && [ -d ./.vault-meta ]; then
   DRAGONSCALE_ADDRESSES=1
 else
   DRAGONSCALE_ADDRESSES=0
@@ -280,12 +293,12 @@ Format: `c-<6-digit-counter>`. The `c-` prefix stands for "creation-order counte
 
 Rollout baseline: **2026-04-23** (Phase 2 ship date). Pages with `created:` >= this date are post-rollout and MUST have an address (unless excluded below). Pages with `created:` earlier are legacy-exempt until a deliberate backfill pass assigns `l-NNNNNN` addresses.
 
-### Required tool: `scripts/allocate-address.sh`
+### Required tool: `$SCRIPTS/allocate-address.sh`
 
 Address allocation is delegated to an atomic Bash helper. The helper uses `flock` on `.vault-meta/.address.lock` to prevent read-use-increment races and recovers the counter by scanning existing frontmatter if the counter file is missing.
 
 ```bash
-ADDR=$(./scripts/allocate-address.sh)
+ADDR=$($SCRIPTS/allocate-address.sh)
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
@@ -293,13 +306,13 @@ ADDR=$(./scripts/allocate-address.sh)
 
 ### Helper modes
 
-- `./scripts/allocate-address.sh` — atomically reserves and returns the next address.
-- `./scripts/allocate-address.sh --peek` — prints the next value without reserving (safe, read-only).
-- `./scripts/allocate-address.sh --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
+- `$SCRIPTS/allocate-address.sh` — atomically reserves and returns the next address.
+- `$SCRIPTS/allocate-address.sh --peek` — prints the next value without reserving (safe, read-only).
+- `$SCRIPTS/allocate-address.sh --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
 
 ### Assignment procedure (per new page)
 
-1. Before writing a new non-meta page, call `./scripts/allocate-address.sh` and capture the output.
+1. Before writing a new non-meta page, call `$SCRIPTS/allocate-address.sh` and capture the output.
 2. Include `address: c-XXXXXX` in the page's frontmatter.
 3. Record the path-to-address mapping in `.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
 

@@ -18,9 +18,21 @@ The wiki compounds. Save often.
 
 ---
 
+## Scripts Location
+
+`scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>`.
+
+---
+
 ## Transport (v1.7+)
 
-The session-note write itself follows the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
+The session-note write itself follows the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash $SCRIPTS/detect-transport.sh`):
 
 - **cli** — `obsidian-cli write "$VAULT" "$NOTE" < session.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
@@ -32,7 +44,7 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Mode awareness (v1.8+)
 
-Before creating the session note, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route session "<topic-summary>"`. The router returns the vault-relative path:
+Before creating the session note, consult the vault's methodology mode via `uv run $SCRIPTS/wiki-mode.py route session "<topic-summary>"`. The router returns the vault-relative path:
 
 - **generic**: `wiki/sessions/<date>-<topic>.md` (v1.7 default)
 - **LYT**: `wiki/notes/<date>-<topic>.md` + update the relevant session/journal MOC
@@ -47,11 +59,11 @@ Session-note writes MUST be preceded by `wiki-lock acquire`:
 
 ```bash
 NOTE_PATH="wiki/questions/<slug>.md"   # or wiki/concepts/, wiki/meta/, etc.
-bash scripts/wiki-lock.sh acquire "$NOTE_PATH" || {
+bash "$SCRIPTS/wiki-lock.sh" acquire "$NOTE_PATH" || {
   echo "skipped: $NOTE_PATH currently locked by another writer"; exit 0
 }
 # … write the note via §Transport-selected method …
-bash scripts/wiki-lock.sh release "$NOTE_PATH"
+bash "$SCRIPTS/wiki-lock.sh" release "$NOTE_PATH"
 ```
 
 For multi-file saves (e.g., session note + index update + log append), acquire each lock in sorted-path order to avoid deadlocks. Index/log/hot updates lock just like content pages.
@@ -84,7 +96,7 @@ If the user specifies a type, use that. If not, pick the best fit based on the c
 2. **Project CLAUDE.md or global `~/.claude/CLAUDE.md` `/save` rule.** If either declares a personal-vault destination (e.g., `~/Documents/Obsidian Vault/`), that is the destination ROOT. The Note Type table below describes paths relative to whichever root is active. Append the new note to `<root>/log/ingest-log.md` at the top, in the format that file already uses.
 3. **Default.** The project's own `wiki/` folder.
 
-The mode router (`python3 scripts/wiki-mode.py route session "<topic>"`) applies when filing into the project's own `wiki/`. When filing into a personal-vault root, use the canonical folders documented in that vault's CLAUDE.md (commonly `sessions/`, `concepts/`, `sources/`) — the mode router is NOT consulted for personal-vault writes by default. Filename sanitization (slug + safe_name) still applies regardless of root: strip path separators, NUL bytes, control chars, leading dots/hyphens.
+The mode router (`uv run $SCRIPTS/wiki-mode.py route session "<topic>"`) applies when filing into the project's own `wiki/`. When filing into a personal-vault root, use the canonical folders documented in that vault's CLAUDE.md (commonly `sessions/`, `concepts/`, `sources/`) — the mode router is NOT consulted for personal-vault writes by default. Filename sanitization (slug + safe_name) still applies regardless of root: strip path separators, NUL bytes, control chars, leading dots/hyphens.
 
 **Then continue the workflow:**
 

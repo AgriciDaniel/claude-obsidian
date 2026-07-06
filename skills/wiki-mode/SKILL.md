@@ -68,7 +68,7 @@ Interactive prompt: pick one of the 4 modes. Writes `.vault-meta/mode.json`. Opt
 To check the current mode programmatically:
 
 ```bash
-cat .vault-meta/mode.json | python3 -c 'import json,sys; print(json.load(sys.stdin)["mode"])'
+cat .vault-meta/mode.json | uv run python -c 'import json,sys; print(json.load(sys.stdin)["mode"])'
 ```
 
 To switch modes later: re-run `setup-mode.sh`. Existing files are NOT auto-migrated; the new mode only affects newly-filed pages from that point. Migration is a manual operation (see [migration section](#migration-between-modes) below).
@@ -171,7 +171,7 @@ This skill is universally available in v1.8+. No `bin/setup-*.sh` required for t
 ```bash
 # Detection idiom for consumers:
 if [ -f .vault-meta/mode.json ]; then
-  MODE=$(python3 -c 'import json; print(json.load(open(".vault-meta/mode.json"))["mode"])')
+  MODE=$(uv run python -c 'import json; print(json.load(open(".vault-meta/mode.json"))["mode"])')
 else
   MODE="generic"
 fi

@@ -78,7 +78,7 @@ If it does not exist, create it:
 Create `_attachments/images/canvas/` if it doesn't exist.
 
 **Detect aspect ratio:**
-Use `python3 -c "from PIL import Image; img=Image.open('[path]'); print(img.width, img.height)"` or `identify -format '%w %h' [path]`.
+Use `uv run python -c "from PIL import Image; img=Image.open('[path]'); print(img.width, img.height)"` or `identify -format '%w %h' [path]`.
 See `references/canvas-spec.md` for the full aspect ratio → canvas size table (7 ratios including 4:3, 3:4, ultra-wide). Do not use an inline table here. The spec is the single source of truth for sizing.
 
 **Position using auto-layout** (see Auto-Positioning section below).
@@ -180,7 +180,7 @@ wiki/canvases/design-ideas.canvas. 42 nodes (30 images, 4 text, 8 groups)
 1. Check `wiki/canvases/.recent-images.txt` first (session log of newly written images).
 2. If not found or empty: use `find` with correct precedence (parentheses required. Without them `-newer` only binds to the last `-name` clause):
    ```bash
-   python3 -c "import time,os; open('/tmp/ten-min-ago','w').close(); os.utime('/tmp/ten-min-ago',(time.time()-600,time.time()-600))"
+   uv run python -c "import time,os; open('/tmp/ten-min-ago','w').close(); os.utime('/tmp/ten-min-ago',(time.time()-600,time.time()-600))"
    find _attachments/images -newer /tmp/ten-min-ago \( -name "*.png" -o -name "*.jpg" \)
    ```
    Note: `/banana` is an optional external skill not shipped in this plugin. If the user has it installed, the `.recent-images.txt` log will be populated. If not, the `find` command above is the fallback.

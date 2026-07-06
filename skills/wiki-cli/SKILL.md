@@ -27,12 +27,24 @@ CLI loses to MCP on exactly one axis: it only works on machines where Obsidian i
 
 ---
 
+## Scripts Location
+
+`scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>`.
+
+---
+
 ## Detection
 
 At session start (or vault setup), run:
 
 ```bash
-bash scripts/detect-transport.sh
+bash $SCRIPTS/detect-transport.sh
 ```
 
 This writes `.vault-meta/transport.json` with the schema:
@@ -54,7 +66,7 @@ This writes `.vault-meta/transport.json` with the schema:
 
 Refresh detection with `--force` after installing/removing the Obsidian CLI:
 ```bash
-bash scripts/detect-transport.sh --force
+bash $SCRIPTS/detect-transport.sh --force
 ```
 
 ---

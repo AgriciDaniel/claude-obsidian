@@ -12,16 +12,28 @@ The v1.6 query path was `Read(hot.md) → Read(index.md) → Read(3-5 pages) →
 
 ---
 
+## Scripts Location
+
+`scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>`.
+
+---
+
 ## Data privacy (v1.7.1+)
 
 Tier 1 (Anthropic API) and tier 2 (claude CLI subprocess) of the contextual-prefix generator send **wiki page bodies off-machine**. As of v1.7.1, both tiers are GATED behind explicit user consent at two layers:
 
-- `scripts/contextual-prefix.py --allow-egress` (default off). Without the flag, `pick_prefix_tier()` returns `"synthetic"` regardless of `ANTHROPIC_API_KEY` or `claude` binary presence.
+- `uv run $SCRIPTS/contextual-prefix.py --allow-egress` (default off). Without the flag, `pick_prefix_tier()` returns `"synthetic"` regardless of `ANTHROPIC_API_KEY` or `claude` binary presence.
 - `bin/setup-retrieve.sh` prompts before any non-synthetic Stage 1 run; default is abort.
 
 To run fully on-machine (tier 3 synthetic prefix + local ollama rerank), use `bash bin/setup-retrieve.sh --no-llm`. This is also the effective behavior if you decline the consent prompt or omit `--allow-egress`.
 
-The guard mirrors `scripts/tiling-check.py:351` `--allow-remote-ollama`. v1.6 vaults that never provisioned this skill see zero behavior change.
+The guard mirrors `$SCRIPTS/tiling-check.py:351` `--allow-remote-ollama`. v1.6 vaults that never provisioned this skill see zero behavior change.
 
 ---
 
@@ -33,7 +45,7 @@ INGEST (one-time, then incremental):
   wiki/<page>.md
        │
        ▼
-  scripts/contextual-prefix.py
+  $SCRIPTS/contextual-prefix.py
        │   ├─ chunk on paragraph boundaries (~500 token target, 200 char overlap)
        │   ├─ generate 1-2 sentence prefix per chunk
        │   │     tier 1: ANTHROPIC_API_KEY → Anthropic API (Haiku, prompt-cached
@@ -43,7 +55,7 @@ INGEST (one-time, then incremental):
        │   └─ write .vault-meta/chunks/<address>/chunk-NNN.json
        │
        ▼
-  scripts/bm25-index.py build
+  $SCRIPTS/bm25-index.py build
        └─ inverted index over chunks' contextualized_text → .vault-meta/bm25/index.json
 
 QUERY:
@@ -51,7 +63,7 @@ QUERY:
   query string
        │
        ▼
-  scripts/retrieve.py "<query>" --top 5
+  $SCRIPTS/retrieve.py "<query>" --top 5
        ├─ bm25-index.py query "<query>" --top 20    (sparse candidate set)
        ├─ rerank.py "<query>" --candidates -        (dense rerank via ollama cosine)
        │     cosine(query_embedding, chunk_embedding)
@@ -69,7 +81,8 @@ QUERY:
 Other skills must detect this skill before using it. The canonical detection:
 
 ```bash
-[ -x scripts/retrieve.py ] && [ -d .vault-meta/chunks ] && \
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:-}/scripts"
+[ -x "$SCRIPTS/retrieve.py" ] && [ -d .vault-meta/chunks ] && \
   [ -f .vault-meta/bm25/index.json ] && \
   echo "wiki-retrieve installed" || echo "fallback: legacy hot→index→drill"
 ```
@@ -121,31 +134,31 @@ These are the commands wiki-query and autoresearch will execute when wiki-retrie
 
 ### Standard retrieve
 ```bash
-python3 scripts/retrieve.py "your question here" --top 5
+uv run $SCRIPTS/retrieve.py "your question here" --top 5
 ```
 Output: JSON with `candidates` array. Each candidate has `absolute_path` to the source page; caller reads that page (using the v1.7 transport selector) and synthesizes.
 
 ### BM25-only (skip rerank)
 ```bash
-python3 scripts/retrieve.py "query" --top 5 --no-rerank
+uv run $SCRIPTS/retrieve.py "query" --top 5 --no-rerank
 ```
 Faster (no ollama call); lower quality.
 
 ### Explain mode (debugging)
 ```bash
-python3 scripts/retrieve.py "query" --top 5 --explain
+uv run $SCRIPTS/retrieve.py "query" --top 5 --explain
 ```
 Adds an `explain` block with per-stage diagnostics (BM25 candidate count, dedupe size, etc.).
 
 ### Direct BM25 inspection
 ```bash
-python3 scripts/bm25-index.py query "query" --top 10
-python3 scripts/bm25-index.py stats
+uv run $SCRIPTS/bm25-index.py query "query" --top 10
+uv run $SCRIPTS/bm25-index.py stats
 ```
 
 ### Rerank strategy probe
 ```bash
-python3 scripts/rerank.py "query" --peek
+uv run $SCRIPTS/rerank.py "query" --peek
 ```
 Reports which strategy will run (cosine via ollama / no-op).
 
@@ -156,7 +169,7 @@ Reports which strategy will run (cosine via ollama / no-op).
 After this skill is installed, `skills/wiki-query/SKILL.md` standard and deep modes will:
 
 1. Read `wiki/hot.md` (always — quick context).
-2. Call `python3 scripts/retrieve.py "<query>" --top 5`.
+2. Call `uv run $SCRIPTS/retrieve.py "<query>" --top 5`.
 3. Read the candidate pages from the result's `absolute_path` field (using the v1.7 transport selector — `obsidian-cli read` or `Read` tool).
 4. Synthesize with chunk-level citation.
 
@@ -171,8 +184,8 @@ If `retrieve.py` exits 10 (feature not provisioned), `wiki-query` falls back to 
 The index is NOT auto-refreshed when wiki pages change. Re-run after substantive ingest sessions:
 
 ```bash
-python3 scripts/contextual-prefix.py --all      # incremental: only re-processes changed pages
-python3 scripts/bm25-index.py build             # always full rebuild (cheap; pure Python)
+uv run $SCRIPTS/contextual-prefix.py --all      # incremental: only re-processes changed pages
+uv run $SCRIPTS/bm25-index.py build             # always full rebuild (cheap; pure Python)
 ```
 
 A future v1.7.x patch will add an opt-in PostToolUse hook that triggers contextual-prefix + BM25 rebuild after every N writes. For v1.7.0, refresh is manual.

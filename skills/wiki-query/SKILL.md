@@ -10,9 +10,21 @@ The wiki has already done the synthesis work. Read strategically, answer precise
 
 ---
 
+## Scripts Location
+
+`scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>`.
+
+---
+
 ## Transport (v1.7+)
 
-Reads should prefer the same transport the rest of the plugin uses. Consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`) and use the `preferred` entry:
+Reads should prefer the same transport the rest of the plugin uses. Consult `.vault-meta/transport.json` (auto-created by `bash $SCRIPTS/detect-transport.sh`) and use the `preferred` entry:
 
 - **cli** — `obsidian-cli read "$VAULT" "$NOTE"` and `obsidian-cli search "$VAULT" "<query>"` (Obsidian-native ranking); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__read_note`, `search_notes`; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
@@ -24,10 +36,10 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Retrieval (v1.7+)
 
-If `wiki-retrieve` is feature-detected — `[ -x scripts/retrieve.py ] && [ -d .vault-meta/chunks ] && [ -f .vault-meta/bm25/index.json ]` — Standard and Deep modes consult it BEFORE the legacy hot→index→drill chain:
+If `wiki-retrieve` is feature-detected — `[ -x "$SCRIPTS/retrieve.py" ] && [ -d .vault-meta/chunks ] && [ -f .vault-meta/bm25/index.json ]` — Standard and Deep modes consult it BEFORE the legacy hot→index→drill chain:
 
 ```bash
-python3 scripts/retrieve.py "<the user's question verbatim>" --top 5
+uv run $SCRIPTS/retrieve.py "<the user's question verbatim>" --top 5
 ```
 
 Output is JSON with a `candidates` array. Each candidate has `absolute_path` to the source page, a `snippet`, and `bm25_score` + `rerank_score`. Read the cited pages (using the transport selector from §Transport above) and synthesize with chunk-level citation.
