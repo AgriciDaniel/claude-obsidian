@@ -50,3 +50,31 @@ status: completed
 - Vercel production deploy for PR #23 was still building after local/GitHub success; recheck hosted alias later.
 - Add a dedicated `/context` page with saved project views and missing-knowledge cleanup.
 - Link Flight Recorder sessions to runtime recommendations and context receipts.
+
+---
+
+## Loop Factory Product Line Research
+
+## What I did
+- Confirmed MAZos local readiness fix from PR #28 and explained how `/api/mazos/system` reads local system info.
+- Researched current loop-engineering practice using latest GitHub metadata, primary docs, and current public loop-engineering writing.
+- Checked live GitHub repo signals for `n8n`, `opencode`, `OpenHands`, `AutoGen`, `CrewAI`, `LangGraph`, `OpenAI Agents SDK`, `Mastra`, `loop-engineering`, and `ospec`.
+- Added a MAZos product-line research brief and opened PR #29: https://github.com/manazoid4/mazos-ui/pull/29
+
+## Files changed
+- `research/mazos/LOOP_FACTORY_PRODUCT_LINE_RESEARCH_2026-07-06.md`
+
+## Decisions made
+- Treat Loop Factory as the first product in a broader loop product line, not a one-off prompt generator.
+- Default MAZos loops to report-only/read-only unless the user explicitly graduates them to assisted writes or PR-only operation.
+- Make latest GitHub metadata, source freshness, evidence receipts, safety levels, and verifier roles core loop fields.
+- Prioritize the next MAZos PRs around Loop Doctor, Loop Pattern Library, Loop Receipts, Product Loop Packs, and Loop Simulator.
+
+## Validation
+- `npm run build`: passed in `C:\Users\manaz\Projects\mazos-ui`.
+- Build still shows pre-existing non-fatal Next/Turbopack warnings around workspace root inference and dynamic `openWiki.ts` tracing.
+
+## Next steps
+- Merge PR #29 after review.
+- Implement Loop Doctor first so MAZos can grade useless vs useful loops before adding more automation.
+- Add curated Product Loop Packs for Competitor Intelligence, GitHub Pulse, and Useless Feature Reaper.
