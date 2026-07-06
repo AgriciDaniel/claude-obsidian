@@ -76,13 +76,22 @@ cat > "$OBSIDIAN/appearance.json" << 'EOF'
 EOF
 
 # ── 5. Download Excalidraw main.js (8MB, not in git) ─────────────────────────
+# Pinned to a specific release tag (not "latest") so the fetched code can't
+# silently change between runs. Verify the printed sha256 yourself against
+# https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/tag/2.16.2
+# before trusting it in a vault that opens untrusted notes.
+EXCALIDRAW_VERSION="2.16.2"
 EXCALIDRAW="$OBSIDIAN/plugins/obsidian-excalidraw-plugin"
 if [ -f "$EXCALIDRAW/manifest.json" ] && [ ! -f "$EXCALIDRAW/main.js" ]; then
-  echo "Downloading Excalidraw main.js (~8MB)..."
+  echo "Downloading Excalidraw main.js ${EXCALIDRAW_VERSION} (~8MB)..."
   curl -sS -L \
-    "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/latest/download/main.js" \
+    "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/download/${EXCALIDRAW_VERSION}/main.js" \
     -o "$EXCALIDRAW/main.js"
   echo "✓ Excalidraw main.js downloaded"
+  if command -v sha256sum >/dev/null 2>&1; then
+    echo "  sha256: $(sha256sum "$EXCALIDRAW/main.js" | cut -d' ' -f1)"
+    echo "  (not independently verified — upstream does not publish a checksum; compare against a second machine/mirror if this matters to you)"
+  fi
 elif [ -f "$EXCALIDRAW/main.js" ]; then
   echo "✓ Excalidraw main.js already present"
 fi
