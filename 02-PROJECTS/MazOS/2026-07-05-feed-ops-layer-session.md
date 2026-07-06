@@ -38,3 +38,7 @@
 4. **Prompt-only "summarize this feed"** — copyable LLM prompt before any automatic calls.
 5. **External AI feed v2** — GitHub/Reddit curated builder feed; Gemini research prompt already written ([[2026-07-05-ai-feed-research-prompt]]), report pending. Feed tab + intake queue are its landing zone.
 6. **Hygiene from audit**: delete ~10 stale merged branches; disk on local machine at 17 GB free — worth clearing before big builds.
+
+## Addendum 2026-07-06 — CI + auto-merge pipeline (PR #20)
+
+Added JobFilter's deploy pipeline to mazos-ui: `.github/workflows/ci.yml` (npm ci + tsc + next build on Node 22, PR + main push) and `auto-merge.yml` (waits for CI `check`, then squash-merges via `gh pr merge --auto`). Vercel git integration then deploys main. Pipeline validated on its own PR — #20 auto-merged itself after CI passed (`6d9c401`), production 200. Future agent PRs now ship hands-free when green.
