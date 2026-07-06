@@ -219,3 +219,41 @@ status: completed
 ## Next steps
 - Wait for PR #34 checks/automerge.
 - Continue competitor emulation with a GitHub Pulse snapshot API and competitor feature matrix.
+
+---
+
+## Research Roadmap And Competitor Radar
+
+## What I did
+- Spawned a specialized research strategist subagent, Lovelace, to define four big research prompts and a next-step roadmap.
+- Added those four prompts to the MAZos Research Console:
+  - Execution Observability
+  - Durable Human-Gated Loop Runtime
+  - Agent Workbench / Mission Control UX
+  - Competitor Pattern Library + Loop Marketplace
+- Implemented the subagent's top recommendation: Competitor Radar / Feature Matrix.
+- Added live GitHub-backed competitor snapshots for n8n, Dify, Activepieces, LangGraph, OpenHands, opencode, Codex, and OSpec.
+- Opened PR #35: https://github.com/manazoid4/mazos-ui/pull/35
+
+## Files changed
+- `src/lib/mazos/competitorRadar.ts`
+- `src/app/api/mazos/competitor-radar/route.ts`
+- `src/lib/mazos/research.ts`
+- `src/app/research/page.tsx`
+- `src/app/globals.css`
+
+## Decisions made
+- Research prompts should be first-class app data, not only chat output.
+- Competitor emulation should be copy/adapt/ignore guidance backed by latest GitHub metadata and official docs links.
+- Next implementation focus after this PR should be a Run Inspector that upgrades Loop Receipts from JSON logs into a usable timeline.
+
+## Validation
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- `GET /api/mazos/competitor-radar`: returned 8 snapshots with live GitHub stars/pushed metadata.
+- `GET /api/mazos/research`: returned 4 research prompts and 4 roadmap steps.
+- `GET /research`: rendered Competitor Radar and Four Big Research Prompts.
+
+## Next steps
+- Wait for PR #35 checks/automerge.
+- Build Run Inspector next: step timeline, evidence diffs, input/output summaries, retry/failure state, and next-run suggestions.
