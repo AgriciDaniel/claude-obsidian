@@ -78,3 +78,37 @@ status: completed
 - Merge PR #29 after review.
 - Implement Loop Doctor first so MAZos can grade useless vs useful loops before adding more automation.
 - Add curated Product Loop Packs for Competitor Intelligence, GitHub Pulse, and Useless Feature Reaper.
+
+---
+
+## Multiple Deep Research Tracks
+
+## What I did
+- Ran multiple MAZos research tracks after the Loop Factory product-line brief.
+- Confirmed the Gemini-backed `deep-research` skill could not run because `GEMINI_API_KEY` is not configured, then completed the work manually with live web/GitHub research.
+- Checked latest GitHub metadata for workflow automation, agent runtime, loop-engineering, and coding-agent repos.
+- Audited MAZos current surfaces against usefulness criteria: clear next action, source freshness, evidence receipts, human gates, product value, and loop fit.
+- Opened PR #30: https://github.com/manazoid4/mazos-ui/pull/30
+
+## Files changed
+- `research/mazos/MULTI_DEEP_RESEARCH_INDEX_2026-07-06.md`
+- `research/mazos/DEEP_RESEARCH_WORKFLOW_AUTOMATION_2026-07-06.md`
+- `research/mazos/DEEP_RESEARCH_AGENT_RUNTIME_LOOP_ENGINEERING_2026-07-06.md`
+- `research/mazos/DEEP_RESEARCH_CODING_AGENT_PRODUCTS_2026-07-06.md`
+- `research/mazos/DEEP_RESEARCH_MAZOS_USEFULNESS_AUDIT_2026-07-06.md`
+
+## Decisions made
+- MAZos should not become a generic workflow canvas, generic coding IDE, or hidden autonomous deployer.
+- The strongest wedge is a local-first cockpit that turns project state, competitor research, GitHub activity, vault memory, and agent work into safe receipt-backed loops.
+- Keep and strengthen Loop Factory, Feed/Loop Inbox, Flight Recorder, Context Map, Shipping Spine, Task Gate, and Morning Brief.
+- Demote or merge Action Matrix, raw Ship Log, standalone Tool Router, and broad dashboard surfaces unless they feed loop receipts.
+- Build Loop Doctor next before adding more automation.
+
+## Validation
+- `npm run build`: passed in `C:\Users\manaz\Projects\mazos-ui`.
+- Build still shows pre-existing non-fatal Next/Turbopack warnings around workspace root inference and dynamic `openWiki.ts` tracing.
+
+## Next steps
+- Wait for PR #30 checks/automerge.
+- Implement `loopPatterns.ts` and Loop Doctor as the next code PR.
+- Use the new research reports as the source of truth for Product Loop Packs and Loop Receipts.
