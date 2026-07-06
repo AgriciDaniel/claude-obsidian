@@ -112,3 +112,41 @@ status: completed
 - Wait for PR #30 checks/automerge.
 - Implement `loopPatterns.ts` and Loop Doctor as the next code PR.
 - Use the new research reports as the source of truth for Product Loop Packs and Loop Receipts.
+
+---
+
+## Research Console And Loop Doctor
+
+## What I did
+- Continued after the multi-track research pass and turned the reports into a usable MAZos surface.
+- Added `/research`, a sleek local-first Research Console that reads saved markdown reports, extracts sources, next actions, usefulness tags, and a copy-ready automation prompt.
+- Added `/api/mazos/research` so future agents/scripts can consume research reports instead of scraping chat history.
+- Opened and merged PR #31: https://github.com/manazoid4/mazos-ui/pull/31
+- Continued into the next research-backed feature: Loop Doctor.
+- Added deterministic loop usefulness audits across built-in, custom, and drafted loops.
+- Opened PR #32: https://github.com/manazoid4/mazos-ui/pull/32
+
+## Files changed
+- `src/lib/mazos/research.ts`
+- `src/app/api/mazos/research/route.ts`
+- `src/app/research/page.tsx`
+- `src/lib/mazos/loopFactory.ts`
+- `src/app/api/mazos/loops/route.ts`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+
+## Decisions made
+- Research is now a product surface and API, not just saved docs.
+- Loop Doctor scores loops on trigger clarity, source policy, latest GitHub/source freshness, evidence, verifier, safety, stop conditions, and product impact.
+- WORK tab should show a compact keep/revise/merge/remove audit before adding more loops.
+- Screenshot automation was attempted but blocked by missing/incomplete local Playwright packages; kept build, API, and HTML checks as verification.
+
+## Validation
+- Research Console PR #31: `npm run lint`, `npm run build`, `/research` 200, `/api/mazos/research` returned 6 reports, 24 sources, and 10 queued next actions.
+- Loop Doctor PR #32: `npm run lint`, `npm run build`, `/api/mazos/loops` returned 6 audited loops; first loop scored `83 keep`.
+- Builds still show pre-existing non-fatal Next/Turbopack warnings around workspace root inference and dynamic `openWiki.ts` tracing.
+
+## Next steps
+- Wait for PR #32 checks/automerge.
+- After Loop Doctor lands, build typed Product Loop Packs: Competitor Intelligence, GitHub Pulse, and Useless Feature Reaper.
+- Add Loop Receipts so Research Console and Loop Doctor can attach evidence to every recommendation.
