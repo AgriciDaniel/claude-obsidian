@@ -150,3 +150,36 @@ status: completed
 - Wait for PR #32 checks/automerge.
 - After Loop Doctor lands, build typed Product Loop Packs: Competitor Intelligence, GitHub Pulse, and Useless Feature Reaper.
 - Add Loop Receipts so Research Console and Loop Doctor can attach evidence to every recommendation.
+
+---
+
+## Product Loop Packs
+
+## What I did
+- Continued after Loop Doctor and added first-class Product Loop Packs to Loop Factory.
+- Added GitHub Pulse, Useless Feature Reaper, Revenue Radar, and Founder Inbox patterns.
+- Kept existing Competitor Intelligence as the research-intelligence pack.
+- Added auto-classification terms so goals route into the right loop pack.
+- Opened PR #33: https://github.com/manazoid4/mazos-ui/pull/33
+
+## Files changed
+- `src/lib/mazos/loopFactory.ts`
+- `src/app/page.tsx`
+
+## Decisions made
+- Product Loop Packs should be typed Loop Factory patterns, not one-off UI cards.
+- Every pack must include source policy, safety ceiling, evidence requirements, stop conditions, and human gates.
+- New packs default to L1 report-only because receipts and simulator are not yet fully built.
+
+## Validation
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- Local loop-factory API drafted all four new packs successfully:
+  - `github-pulse`: `89 keep`, `100 ready`
+  - `useless-feature-reaper`: `100 keep`, `100 ready`
+  - `revenue-radar`: `100 keep`, `100 ready`
+  - `founder-inbox`: `89 keep`, `100 ready`
+
+## Next steps
+- Wait for PR #33 checks/automerge.
+- Build Loop Receipts next so Research Console, Loop Doctor, and Product Loop Packs can preserve evidence across runs.
