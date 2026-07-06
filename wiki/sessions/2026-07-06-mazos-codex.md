@@ -183,3 +183,39 @@ status: completed
 ## Next steps
 - Wait for PR #33 checks/automerge.
 - Build Loop Receipts next so Research Console, Loop Doctor, and Product Loop Packs can preserve evidence across runs.
+
+---
+
+## Competitor Emulation: Loop Receipts
+
+## What I did
+- Treated competitor "copy" as product-pattern emulation, not code copying.
+- Refreshed latest GitHub metadata for n8n, Dify, Activepieces, LangGraph, AutoGen, CrewAI, OpenHands, opencode, Codex, Cline, Continue, Aider, loop-engineering, and OSpec.
+- Implemented Loop Receipts as the shared MAZos equivalent of execution history, workflow artifacts, durable state, and agent traces.
+- Opened PR #34: https://github.com/manazoid4/mazos-ui/pull/34
+
+## Files changed
+- `src/lib/mazos/loopReceipts.ts`
+- `src/app/api/mazos/loop-receipts/route.ts`
+- `src/app/api/mazos/loops/route.ts`
+- `src/lib/mazos/flightRecorder.ts`
+- `src/lib/mazos/paths.ts`
+- `src/app/page.tsx`
+
+## Decisions made
+- Emulate n8n/GitHub Actions execution history through append-only loop receipts.
+- Emulate LangGraph/Temporal durable state by making every loop event replayable.
+- Emulate OpenAI Agents tracing/OpenHands/opencode by preserving actions, evidence, risk flags, and next-run suggestions.
+- Keep receipts local-first and report-only; no new autonomous execution.
+
+## Validation
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- `POST /api/mazos/loops` start event created a `started` receipt for `daily_triage_l1`.
+- `GET /api/mazos/loop-receipts?loopId=daily_triage_l1` returned the receipt.
+- `GET /api/mazos/loops` included receipt summaries.
+- Verification created local runtime files under `data/mazos`; these stayed untracked.
+
+## Next steps
+- Wait for PR #34 checks/automerge.
+- Continue competitor emulation with a GitHub Pulse snapshot API and competitor feature matrix.
