@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Operation Log"
-updated: 2026-04-08
+updated: 2026-07-04
 tags:
   - meta
   - log
@@ -24,6 +24,24 @@ Entry format: `## [YYYY-MM-DD] operation | Title`
 Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
+
+## [2026-07-04] save | Obsidian plugin enablement + MCPVault transport setup
+- Type: vault housekeeping (plugins, git commit, MCP configuration)
+- Trigger: follow-up to the 2026-05-28 catch-up entry below, which flagged 3 uncommitted items for user follow-up. User confirmed: "proceed to work on it all."
+- Plugins enabled: `.obsidian/community-plugins.json` updated to add `dataview`, `obsidian-git`, `templater-obsidian` to the enabled list (main.js/manifest.json/styles.css for all three were already present in `.obsidian/plugins/` from a prior session but not yet in the enabled-plugins array). Templater pre-configured via new `.obsidian/plugins/templater-obsidian/data.json` (gitignored, host-local, same pattern as calendar/thino): `templates_folder` set to `_templates` per `skills/wiki/references/plugins.md` step 2. Obsidian Git left at plugin defaults — auto-backup interval (15 min per the plugins.md recommendation) needs to be set manually in Obsidian Settings since it isn't exposed via a simple config key.
+- Committed: `4f18efd` "chore(obsidian): enable Dataview, Obsidian Git, Templater; catch up wiki hot cache to v1.9.2" — bundles the plugin enablement with the `.obsidian/graph.json` / `workspace.json` drift (routine UI state, not sensitive) and the 2026-05-28 `wiki/hot.md` + `wiki/log.md` catch-up. Local-only, NOT pushed.
+- MCP configured: `obsidian-cli` binary absent despite Obsidian 1.12.7 (`skills/wiki/references/mcp-setup.md` Option D unavailable). Used **Option B, MCPVault** instead of Option A (mcp-obsidian, needs Local REST API plugin + TLS bypass) since it needs no Obsidian-side plugin and no cert workaround. Ran `claude mcp add-json obsidian-vault '{"type":"stdio","command":"npx","args":["-y","@bitbonsai/mcpvault@latest","/Users/yalema/Desktop/Yale AI Agent/yale-obsidian-brain"]}' --scope user`. First `claude mcp list` check showed "Failed to connect" (cold npx download); retried and it connected. Verified live via `mcp__obsidian-vault__get_vault_stats`: 138 notes, 59 folders, correctly identifies `wiki/log.md` and `wiki/hot.md` as most recently modified.
+- Locations (modified): `.vault-meta/transport.json` (gitignored, host-local) — `preferred` changed `filesystem` to `mcpvault`, `manual_override: true` (since `scripts/detect-transport.sh` does not auto-detect MCP servers by design), `available.mcpvault.present: true` with server details.
+- Left as-is: `.claude/` directory (settings.local.json + 4 command shortcuts) remains untracked — this is local Claude Code session config, not part of the public `claude-obsidian` plugin repo surface, so it was deliberately excluded from the commit.
+- Next recommended: user decides whether to push `4f18efd` to remote, and whether to set Obsidian Git's auto-backup interval in Settings.
+
+## [2026-05-28] save | hot.md/log.md catch-up to v1.9.2 (wiki was 10 days behind git history)
+- Type: hot cache + log maintenance (self-referential — vault tracks its own plugin's dev history)
+- Trigger: `/wiki` setup-check run found `wiki/hot.md` and `wiki/log.md` last updated 2026-05-18 (v1.9.1 patch entries) while `git log` on `main` showed work had actually progressed through `cb93ff6` (2026-05-28, v1.9.2 public release + social preview asset). Gap: 3 unrecorded commits.
+- Commits reconciled: `73616fa` (2026-05-27, feat v1.9.2 — prompt-cache hardening on `contextual-prefix.py`: `cache_control_for()` only attaches above the Haiku 4.5 floor `HAIKU_CACHE_MIN_CHARS=16384`; per-call cache telemetry logs token counts only, never page content; path-handling fixes — missing page exits 3, out-of-vault path exits 2 with message instead of raw traceback; `make test` 9 suites green), `00213b7` (2026-05-28, release — promotes v1.9.2 to public canonical, flips README/docs default install to AgriciDaniel/claude-obsidian, repositions AI Marketing Hub Pro as early-access, corrects install slug to `claude-obsidian@agricidaniel-claude-obsidian`, adds SSS+ compliance files CITATION.cff/PRIVACY.md/CODEOWNERS/FUNDING.yml, SEO/GEO pass on README with 4 GEO Q&As; gates: secret scan clean over 55-commit history, 9/9 tests, plugin validate clean, verifier SHIP), `cb93ff6` (2026-05-28, chore — adds `assets/social-preview.png`, 1280x640 GitHub social card).
+- Locations (modified): `wiki/hot.md` (new dated entry prepended to Last Updated section; Plugin State block corrected — version 1.7.1 to 1.9.2, skill count 13 to 15 adding `wiki-mode` and `think`, test suite count 7 to 9 adding `test_mode.py` and `test_contextual.py`; `updated` frontmatter bumped to 2026-05-28), `wiki/log.md` (this entry)
+- Also observed but NOT yet actioned this session: working tree has uncommitted changes unrelated to wiki content — 3 new Obsidian community plugin folders installed (`dataview`, `obsidian-git`, `templater-obsidian`) not yet added to `.obsidian/community-plugins.json` enabled list; `.obsidian/graph.json` and `workspace.json` modified; new `.claude/` directory (commands + local settings) untracked. User was asked how to proceed (catch up wiki vs. handle new plugins vs. set up Obsidian MCP) but did not respond within the session window; this catch-up was applied as the lowest-risk default. Plugin/config items deferred to user follow-up.
+- Next recommended: user confirms whether to (a) enable the 3 new plugins in `community-plugins.json`, (b) commit the `.obsidian/` config changes, (c) set up a dedicated Obsidian MCP server (none currently configured — `claude mcp list` shows filesystem MCP only for local file access).
 
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets

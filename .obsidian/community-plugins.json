@@ -2,5 +2,8 @@
   "obsidian-excalidraw-plugin",
   "obsidian-banners",
   "calendar",
-  "thino"
+  "thino",
+  "dataview",
+  "obsidian-git",
+  "templater-obsidian"
 ]

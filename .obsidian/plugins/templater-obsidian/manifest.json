@@ -1,0 +1,17 @@
+{
+    "id": "templater-obsidian",
+    "name": "Templater",
+    "version": "2.20.6",
+    "description": "Advanced templating and automation using handlebars-like syntax.",
+    "minAppVersion": "1.12.2",
+    "author": "SilentVoid",
+    "authorUrl": "https://github.com/SilentVoid13",
+    "fundingUrl": {
+        "GitHub Sponser (Zachatoo, maintainer)": "https://github.com/sponsors/Zachatoo",
+        "Ko-fi (Zachatoo, maintainer)": "https://ko-fi.com/zachatoo",
+        "GitHub Sponser (SilentVoid13, creator)": "https://github.com/sponsors/SilentVoid13",
+        "Paypal (SilentVoid13, creator)": "https://www.paypal.com/donate?hosted_button_id=U2SRGAFYXT32Q"
+    },
+    "helpUrl": "https://silentvoid13.github.io/Templater/",
+    "isDesktopOnly": false
+}
