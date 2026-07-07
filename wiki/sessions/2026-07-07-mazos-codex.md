@@ -6,6 +6,7 @@ status: completed
 ---
 ## What I did
 - Implemented PR #37, "feat: add remote MAZos data layer", and merged it into `main`.
+- Added and merged PR #38, "docs: add declutter one verdict spec", preserving the minimalist audit as an implementation spec.
 - Added a remote-safe MAZos snapshot endpoint for Codex Mobile / hosted usage.
 - Added token-gated snapshot publishing plus a remote intent queue so mobile can request work without directly executing local system actions.
 - Added recursive redaction for local paths, env files, bearer tokens, API-key shaped secrets, and private spiritual terms.
@@ -29,6 +30,7 @@ status: completed
 - `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\remoteSanitize.ts`
 - `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\remoteSnapshot.ts`
 - `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\remoteStore.ts`
+- `C:\Users\manaz\Projects\mazos-ui\specs\declutter-one-verdict.md`
 
 ## Decisions made
 - Mobile/hosted MAZos gets a sanitized read model, not raw localhost access.
@@ -45,6 +47,7 @@ status: completed
 - `npm run remote:publish` stored a local snapshot.
 - `POST http://127.0.0.1:3046/api/mazos/remote/intents` redacted a test Windows path and fake API key.
 - GitHub Actions checks for PR #37 passed. Vercel status context remained pending after merge.
+- GitHub Actions checks for PR #38 passed. Vercel status context remained pending after merge.
 
 ## Next steps
 - Configure hosted secrets: `MAZOS_REMOTE_SYNC_TOKEN`, `MAZOS_REMOTE_READ_TOKEN`, and a persistent store if hosted snapshots should survive serverless restarts.
