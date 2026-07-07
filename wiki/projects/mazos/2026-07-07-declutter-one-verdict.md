@@ -22,9 +22,9 @@ Ruthless declutter after PRs #31–36 (Research Console, Loop Doctor, Product Lo
 
 `/` NOW tab — Shipping Spine only. It carries verdict, why, owner, safety, needs-you list, avoid-today, handoff prompt, brief copy, publishable update.
 
-## Best next build (queued, not built)
+## Best next build — SHIPPED same session
 
-Nothing new until PR #40 lands. After that: competitor-radar-driven loop packs are the strongest candidate — radar already has 8 live snapshots (n8n, Dify, Activepieces, LangGraph, OpenHands, opencode…), each with a `suggestedLoopPack`.
+PR #40 merged (auto-merge on green checks), then radar→loop shipped as [PR #42](https://github.com/manazoid4/mazos-ui/pull/42) (also merged): every Competitor Radar snapshot and Mass Competitor card (61 buttons, incl. #39's mass catalog) now has `→ Loop Factory`, landing in the cockpit WORK tab with a prefilled pattern-picked draft via `mazos-loopfactory-draft` localStorage handoff. One manual check outstanding: click a button once in the browser to see the form fill.
 
 ## Session hazards worth remembering
 
