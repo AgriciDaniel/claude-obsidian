@@ -144,3 +144,44 @@ status: completed
 - Add a Clutter Reaper pass over AI Source Inbox, Skill Factory, and Loop Store records.
 - Add "source to competitor decision" wiring so copied/adapted/ignored competitor findings become reusable records.
 - Add remote-safe AI Inbox summary to the Codex Mobile snapshot.
+
+---
+date: 2026-07-07
+project: mazos
+agent: codex
+status: completed
+---
+## What I did
+- Implemented and merged PR #44, "feat: add clutter reaper loop".
+- Added a local-first Clutter Reaper service that reads existing MAZos inbox, skill, pack, loop, panel, and report state.
+- Added cleanup recommendations with target, action, severity, reason, product impact, and safe-to-apply flags.
+- Added `GET /api/mazos/clutter-reaper` and guarded `POST /api/mazos/clutter-reaper` apply behavior.
+- Wired a compact `Reaper` tab into the existing AI Intelligence Engine in INTAKE instead of adding another dashboard.
+- Restarted localhost `3046` from the merged main branch so the browser can see current changes.
+- Reviewed YouMind as inspiration for a source-to-output workflow, while keeping MAZos focused on founder/operator cleanup and reusable product assets.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\clutterReaper.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\api\mazos\clutter-reaper\route.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\page.tsx`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\globals.css`
+
+## Decisions made
+- The Reaper is advisory-first: only source, skill, and pack status changes can be applied automatically when marked safe.
+- Panel and loop cleanup stays review-only because those require product/UI judgment.
+- The product kernel stays: capture messy AI sources once, score usefulness and trust, convert strong inputs into skills/loops/packs, produce receipts, archive or merge the rest.
+- YouMind inspiration should inform frictionless capture and source-grounded output, not push MAZos into a broad content studio.
+
+## Verification
+- `npm run lint` passed after clearing stale `.next` generated types.
+- `npm run build` passed with the existing Turbopack/OpenWiki NFT trace warning.
+- `GET http://127.0.0.1:3046/` returned 200 in the restarted dev server log.
+- `GET http://127.0.0.1:3046/api/mazos/clutter-reaper` returned score 79 and 3 cleanup recommendations.
+- `POST http://127.0.0.1:3046/api/mazos/clutter-reaper` with advisory id `panel:system-action-matrix:merge` correctly returned "not safe to auto-apply".
+- GitHub Actions `check` and `auto_merge` passed for PR #44; PR merged into `main`.
+
+## Next steps
+- Collapse or demote `SYSTEM Action Matrix` behind a command palette/details drawer.
+- Merge legacy `Source Intake` into AI Intelligence Engine advanced mode so INTAKE has one obvious capture path.
+- Add Reaper recommendations to Morning Brief and remote/mobile snapshot.
+- Continue loop productization with Run Inspector, Loop Inbox, and Cadence Controller.
