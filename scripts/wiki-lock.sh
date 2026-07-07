@@ -149,13 +149,40 @@ is_alive() {
 
 # Atomic meta-lock wrapper. Funcs that mutate LOCK_DIR call under this lock so
 # acquire/release/clear-stale don't race against each other.
+#
+# Portability note (vault-local patch): flock(1) is absent on Windows Git Bash
+# (msys2 ships no util-linux flock). When flock is unavailable we fall back to
+# an atomic mkdir spinlock — mkdir is atomic on every POSIX/NTFS filesystem, so
+# it serializes meta-lock holders exactly like flock -x, just with a poll loop.
+# 5s timeout mirrors `flock -w 5`; a lock dir older than 5s is treated as stale
+# (crashed holder) and reaped. When flock IS present (Linux/macOS) the original
+# path runs unchanged.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
-    "$@"
-  ) 9>"$META_LOCK"
+  if command -v flock >/dev/null 2>&1; then
+    # Use flock under bash's redirect; meta lock is short-lived per command.
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # flock-less fallback: atomic mkdir spinlock (Windows Git Bash).
+    local mdir="${META_LOCK}.d" waited=0
+    until mkdir "$mdir" 2>/dev/null; do
+      # Reap a stale holder (dir mtime older than 5s ⇒ crashed mid-operation).
+      if [ -d "$mdir" ] && [ -z "$(find "$mdir" -maxdepth 0 -newermt '-5 seconds' 2>/dev/null)" ]; then
+        rm -rf "$mdir" 2>/dev/null || true
+        continue
+      fi
+      sleep 0.1
+      waited=$((waited + 1))
+      [ "$waited" -ge 50 ] && die "could not acquire meta-lock within 5s" 1
+    done
+    local rc=0
+    "$@" || rc=$?
+    rmdir "$mdir" 2>/dev/null || rm -rf "$mdir" 2>/dev/null || true
+    return "$rc"
+  fi
 }
 
 read_lockfile() {

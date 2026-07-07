@@ -46,7 +46,6 @@ Exit codes:
 """
 
 import argparse
-import fcntl
 import json
 import math
 import os
@@ -55,6 +54,13 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+
+try:
+    import fcntl  # POSIX only
+    _HAVE_FCNTL = True
+except ImportError:  # Windows (Git Bash Python) ships no fcntl module
+    fcntl = None
+    _HAVE_FCNTL = False
 
 VAULT_ROOT = Path(__file__).resolve().parent.parent
 META_DIR = VAULT_ROOT / ".vault-meta"
@@ -98,21 +104,47 @@ def tokenize(text):
 
 def acquire_lock():
     META_DIR.mkdir(parents=True, exist_ok=True)
-    fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_WRONLY, 0o644)
+    if _HAVE_FCNTL:
+        fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_WRONLY, 0o644)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            os.close(fd)
+            log("ERR: could not acquire bm25 lock")
+            sys.exit(EXIT_LOCK)
+        return fd
+    # Windows fallback (no fcntl): atomic O_EXCL lockfile == non-blocking exclusive.
+    # A lockfile older than 60s is treated as stale (crashed holder) and reaped,
+    # mirroring the age-based staleness used by wiki-lock.sh.
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except OSError:
-        os.close(fd)
+        return os.open(str(LOCK_PATH), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError:
+        try:
+            age = datetime.now(timezone.utc).timestamp() - os.path.getmtime(LOCK_PATH)
+            if age > 60:
+                os.unlink(LOCK_PATH)
+                return os.open(str(LOCK_PATH), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except OSError:
+            pass
         log("ERR: could not acquire bm25 lock")
         sys.exit(EXIT_LOCK)
-    return fd
 
 
 def release_lock(fd):
+    if _HAVE_FCNTL:
+        try:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+        finally:
+            os.close(fd)
+        return
+    # Windows fallback: close and remove the lockfile so the next writer can take it.
     try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
-    finally:
         os.close(fd)
+    finally:
+        try:
+            os.unlink(LOCK_PATH)
+        except OSError:
+            pass
 
 
 def discover_chunks():

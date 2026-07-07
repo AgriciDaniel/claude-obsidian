@@ -42,7 +42,12 @@ Exit codes:
 """
 
 import argparse
-import fcntl
+try:
+    import fcntl  # POSIX only
+    _HAVE_FCNTL = True
+except ImportError:  # Windows (Git Bash Python) ships no fcntl module
+    fcntl = None
+    _HAVE_FCNTL = False
 import json
 import math
 import os
@@ -150,14 +155,17 @@ def save_cache(cache):
     fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_WRONLY, 0o644)
     locked = False
     try:
-        for attempt in range(3):
-            try:
-                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                locked = True
-                break
-            except BlockingIOError:
-                time.sleep(0.1)
-        if not locked:
+        if _HAVE_FCNTL:
+            for attempt in range(3):
+                try:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    locked = True
+                    break
+                except BlockingIOError:
+                    time.sleep(0.1)
+        # On Windows (no fcntl) locked stays False and we fall through to the
+        # atomic temp+rename write below — expected, so suppress the WARN there.
+        if not locked and _HAVE_FCNTL:
             msg = ("WARN: rerank embed-cache lock unavailable after 3 tries; "
                    "writing unlocked (atomic via temp+rename). Concurrent writers "
                    "may overwrite each other's last update.")
