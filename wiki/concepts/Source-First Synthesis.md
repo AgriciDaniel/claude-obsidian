@@ -1,6 +1,7 @@
 ---
 type: concept
 title: "Source-First Synthesis"
+address: c-000004
 created: 2026-04-24
 updated: 2026-04-24
 tags:
@@ -9,7 +10,7 @@ tags:
   - provenance
 status: developing
 related:
-  - "[[How does the LLM Wiki pattern work?]]"
+  - "[[How does the LLM Wiki pattern work]]"
   - "[[LLM Wiki Pattern]]"
   - "[[Compounding Knowledge]]"
   - "[[Persistent Wiki Artifact]]"

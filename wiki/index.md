@@ -81,10 +81,19 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Decisions
 
+- [[2026-04-10-backlink-empire-session]] - Backlink empire: 2 blog posts, Karpathy gist comment, 26 GitHub repos updated with homepage URLs/topics/Author sections, 5 rankenstein.pro backlinks (status: complete)
 - [[2026-04-14-community-cta-rollout]] - Skool community CTA footer added to 6 skill repos with per-tool frequency rules (status: active)
 - [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
 - [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)
 - [[2026-04-14-claude-seo-v190-session]] - Claude SEO v1.9.0 Pro Hub Challenge integration: 5 submissions, 4 new skills, 4 review rounds, cybersecurity audit (status: complete)
+
+---
+
+## References
+
+- [[transport-fallback]] - v1.7 decision tree for selecting the vault mutation transport (Obsidian CLI → mcp-obsidian → mcpvault → filesystem)
+- [[methodology-modes]] - v1.8 quick decision tree for picking a vault organizational style (LYT / PARA / Zettelkasten / Generic)
+- [[retrieval-benchmark-v1.7]] - 50-query benchmark corpus used to score the v1.7 hybrid retrieval pipeline against the simulated v1.6 baseline
 
 ---
 

@@ -6,9 +6,11 @@ tags:
   - methodology
   - wiki-mode
 status: evergreen
+created: 2026-05-17
+updated: 2026-05-17
 related:
   - "[[methodology-modes-guide]]"
-  - "[[wiki-mode]]"
+  - "[[skills/wiki-mode/SKILL|wiki-mode]]"
 ---
 
 # Methodology Modes — Quick Decision Tree
@@ -66,6 +68,6 @@ After setting mode:
 ## Cross-reference
 
 Full guide: [[methodology-modes-guide]]
-Skill: [[wiki-mode]] (`skills/wiki-mode/SKILL.md`)
+Skill: [[skills/wiki-mode/SKILL|wiki-mode]]
 Router: `scripts/wiki-mode.py`
 Setup: `bash bin/setup-mode.sh`
