@@ -92,3 +92,55 @@ status: completed
 - Convert the top catalog moves into Loop Factory presets: Run Inspector, Operator Inbox, Cadence Controller, Agent Workbench, and Loop Evals.
 - Add per-competitor "send to loop" actions after the declutter pass so the page does not become another noisy dashboard.
 - Optionally add live GitHub metadata to the mass list for open-source competitors, using the existing Competitor Radar fetch pattern.
+
+---
+date: 2026-07-07
+project: mazos
+agent: codex
+status: completed
+---
+## What I did
+- Resumed the interrupted AI Intelligence Engine work from the `.claude/worktrees/declutter` handoff.
+- Implemented and merged PR #43, "feat: add ai intelligence engine".
+- Added a local-first AI Source Inbox for messy AI links, notes, GitHub repos, MCPs, prompts, workflow ideas, AI Feed captions, and docs.
+- Added deterministic source classification, dedupe, usefulness scoring, trust scoring, and forced actions.
+- Added Skill Factory drafts with copyable skill specs, eval checklists, risk levels, and approval floor.
+- Added Loop Store starter packs and copyable pack README generation.
+- Added a compact `AI Intelligence Engine` section to the existing INTAKE tab instead of creating another page.
+- Added Morning Brief AI Inbox and trust/cleanup summaries.
+
+## Files changed
+- `C:\Users\manaz\Projects\mazos-ui\specs\ai-intelligence-engine.md`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\trust.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\aiSourceInbox.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\skillFactory.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\loopStore.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\api\mazos\ai-source-inbox\route.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\api\mazos\skill-factory\route.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\api\mazos\loop-store\route.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\lib\mazos\morningBrief.ts`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\page.tsx`
+- `C:\Users\manaz\Projects\mazos-ui\src\app\globals.css`
+
+## Decisions made
+- No scraping, no Instagram login, no external API calls, no auto-installing unknown code.
+- Storage stays local JSON under `data/mazos/`.
+- The intelligence engine lives in INTAKE as one compact section to avoid more dashboard clutter.
+- Source-to-loop only prefills Loop Factory and switches to WORK; it never auto-saves a loop.
+- Starter packs are seeded idempotently by `GET /api/mazos/loop-store`.
+
+## Verification
+- `npm run lint` passed.
+- `npm run build` passed with the existing Turbopack/OpenWiki NFT trace warning.
+- Worktree smoke on port 3051: source inbox POST added 3 items and skipped 0 duplicates.
+- Worktree smoke: Skill Factory drafted a `context_management` skill with markdown.
+- Worktree smoke: Loop Store returned 4 starter packs and a README with safety limits.
+- Worktree smoke: Morning Brief included AI Source Inbox and trust sections.
+- Main localhost 3046 after merge: AI Source Inbox returned 0 items, Loop Store returned 4 starter packs, Morning Brief included AI Inbox fields.
+- GitHub Actions checks for PR #43 passed. Vercel status context remained pending after merge.
+
+## Next steps
+- Add formal `node:test` or repo-native tests once the project has a test runner decision.
+- Add a Clutter Reaper pass over AI Source Inbox, Skill Factory, and Loop Store records.
+- Add "source to competitor decision" wiring so copied/adapted/ignored competitor findings become reusable records.
+- Add remote-safe AI Inbox summary to the Codex Mobile snapshot.
