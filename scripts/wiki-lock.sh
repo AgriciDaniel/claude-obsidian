@@ -127,6 +127,10 @@ validate_path() {
   # GNU coreutils + macOS BSD where realpath flag semantics differ).
   if command -v python3 >/dev/null 2>&1; then
     local resolved root
+    # `|| resolved=""` keeps set -e from aborting when python3 exists on PATH
+    # but cannot run — e.g. the Windows Store alias stub, which passes
+    # `command -v` yet exits 49 ("Python was not found"). Fail-open matches
+    # the existing 2>/dev/null intent: no python3 => skip symlink check.
     resolved=$(VAULT_ROOT_BASH="$VAULT_ROOT" P_BASH="$p" python3 -c '
 import os, sys
 root = os.path.realpath(os.environ["VAULT_ROOT_BASH"])
@@ -134,7 +138,7 @@ candidate = os.environ["P_BASH"]
 target = os.path.realpath(os.path.join(root, candidate))
 common = os.path.commonpath([root, target]) if target else ""
 sys.stdout.write("INSIDE" if common == root else "OUTSIDE")
-' 2>/dev/null)
+' 2>/dev/null) || resolved=""
     [ "$resolved" = "OUTSIDE" ] && die "path resolves outside vault via symlink: $p" 4
   fi
   return 0
@@ -152,10 +156,19 @@ is_alive() {
 with_meta_lock() {
   ensure_dirs
   # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+  if command -v flock >/dev/null 2>&1; then
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # Git Bash on Windows ships no flock(1). Fall back to running without
+    # the meta-lock: _cmd_acquire's noclobber create is itself atomic, so
+    # the remaining race window only affects concurrent list/clear-stale.
+    # Without this fallback every wiki-lock invocation fails (rc=1), which
+    # silently disables the auto-commit PostToolUse hook on Windows.
     "$@"
-  ) 9>"$META_LOCK"
+  fi
 }
 
 read_lockfile() {
