@@ -28,9 +28,12 @@ assert_eq() {
 TMP=$(mktemp -d -t ds-test-XXXXXX)
 trap 'rm -rf "$TMP"' EXIT
 
-mkdir -p "$TMP/scripts" "$TMP/wiki"
+mkdir -p "$TMP/scripts/lib" "$TMP/wiki"
 cp "$ALLOC" "$TMP/scripts/allocate-address.sh"
 chmod +x "$TMP/scripts/allocate-address.sh"
+# allocate-address.sh sources scripts/lib/portable-lock.sh; the throwaway vault has
+# to mirror the real layout or the script dies on a missing source.
+cp "$VAULT_ROOT/scripts/lib/portable-lock.sh" "$TMP/scripts/lib/portable-lock.sh"
 cd "$TMP"
 
 # --- Test 1: rebuild on empty vault = 1 ---
@@ -60,8 +63,10 @@ for i in $(seq 1 10); do
   (./scripts/allocate-address.sh >> concurrent.txt) &
 done
 wait
-UNIQ=$(sort -u concurrent.txt | wc -l)
-TOTAL=$(wc -l < concurrent.txt)
+# BSD `wc -l` pads its count with leading spaces ("      10") where GNU `wc -l`
+# does not, so the bare string compare below fails on macOS. Strip the padding.
+UNIQ=$(sort -u concurrent.txt | wc -l | tr -d '[:space:]')
+TOTAL=$(wc -l < concurrent.txt | tr -d '[:space:]')
 assert_eq "10 concurrent allocs: unique count" "10" "$UNIQ"
 assert_eq "10 concurrent allocs: total count"  "10" "$TOTAL"
 

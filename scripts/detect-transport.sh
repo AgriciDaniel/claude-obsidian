@@ -114,35 +114,94 @@ if [ "$MODE" = "write" ] && [ -f "$OUTPUT_FILE" ]; then
   fi
 fi
 
+# probe_with_timeout SECS CMD [ARGS...] — run CMD, killing it after SECS.
+# Returns CMD's exit status, or 1 if it had to be killed. macOS ships no
+# timeout(1) (it is GNU coreutils), so this is hand-rolled to stay portable.
+probe_with_timeout() {
+  local secs="$1"; shift
+  "$@" >/dev/null 2>&1 &
+  local probe_pid=$!
+
+  local waited=0
+  local limit=$(( secs * 10 ))
+  while kill -0 "$probe_pid" 2>/dev/null; do
+    if [ "$waited" -ge "$limit" ]; then
+      kill -9 "$probe_pid" 2>/dev/null
+      wait "$probe_pid" 2>/dev/null || true
+      return 1
+    fi
+    sleep 0.1
+    waited=$(( waited + 1 ))
+  done
+
+  wait "$probe_pid"
+}
+
 # ── 1. CLI detection ─────────────────────────────────────────────────────────
+# Probe order: PATH first (respects a user's own symlink or wrapper), then the
+# known app-bundle locations. Obsidian 1.12 ships the CLI *inside* the bundle and
+# does NOT symlink it onto PATH, so a PATH-only probe misses it on every stock
+# macOS install and silently downgrades the vault to the filesystem floor.
+#
+# CLI_BINARY is whatever string a consumer must exec — a bare name when it is on
+# PATH, an absolute path when it is only in the bundle. Consumers invoke it
+# verbatim; they must not assume it is PATH-resolvable.
 CLI_PRESENT=false
 CLI_BINARY=""
 CLI_VERSION=""
 CLI_VERSION_RAW=""
-if command -v obsidian-cli >/dev/null 2>&1; then
+
+# Order matters. `obsidian-cli` is an unambiguous CLI name, so it wins. The bundle
+# paths come next: they are stable, whereas a PATH symlink can point into a
+# Gatekeeper-translocated bundle whose path is randomized per launch. Bare
+# `obsidian` is LAST because on some installs it is the Electron GUI launcher, and
+# probing a GUI launcher risks popping a window during an unattended detection run.
+CLI_CANDIDATES=(
+  "obsidian-cli"
+  "/Applications/Obsidian.app/Contents/MacOS/obsidian-cli"
+  "${HOME}/Applications/Obsidian.app/Contents/MacOS/obsidian-cli"
+  "obsidian"
+)
+
+for candidate in "${CLI_CANDIDATES[@]}"; do
+  # Bare names must resolve on PATH; absolute paths must be executable files.
+  case "$candidate" in
+    /*) [ -x "$candidate" ] || continue ;;
+    *)  command -v "$candidate" >/dev/null 2>&1 || continue ;;
+  esac
+
+  # Confirm it is really the CLI and not a GUI launcher. The Obsidian CLI takes a
+  # `version` subcommand (it rejects `--version`), so a clean exit is the probe.
+  #
+  # Bounded, because we cannot be sure how a non-CLI binary reacts: an Electron
+  # launcher special-cases `--version` but may treat a bare `version` as a file to
+  # open, and would then sit there with a window up. detect-transport.sh runs from
+  # several skills, so a hang here would wedge them. A timeout degrades that to a
+  # failed probe and we simply move to the next candidate.
+  if ! probe_with_timeout 3 "$candidate" version; then
+    continue
+  fi
+
   CLI_PRESENT=true
-  CLI_BINARY="obsidian-cli"
+  CLI_BINARY="$candidate"
   # Keep two views of the version: RAW for the human log line, JSON-escaped
   # for the transport.json heredoc. CLI_VERSION below is pre-quoted (includes
   # the surrounding double quotes), so the heredoc emits ${CLI_VERSION}
   # without wrapping quotes.
-  CLI_VERSION_RAW="$(obsidian-cli --version 2>/dev/null | head -1 || echo unknown)"
+  CLI_VERSION_RAW="$("$candidate" version 2>/dev/null | head -1 || echo unknown)"
   CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
-elif command -v obsidian >/dev/null 2>&1; then
-  # Obsidian 1.12+ ships `obsidian` as the CLI binary on some platforms.
-  # We treat it as cli-capable if it accepts a --cli or --version flag without launching the GUI.
-  if obsidian --version >/dev/null 2>&1; then
-    CLI_PRESENT=true
-    CLI_BINARY="obsidian"
-    CLI_VERSION_RAW="$(obsidian --version 2>/dev/null | head -1 || echo unknown)"
-    CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
-  fi
-fi
+  break
+done
 # Fallback default when neither binary was found: must still be a valid JSON literal.
 if [ -z "$CLI_VERSION" ]; then
   CLI_VERSION='""'
   CLI_VERSION_RAW=""
 fi
+
+# The binary is now sometimes an absolute path, not a bare name. Escape it the same
+# way as the version string rather than trusting it to be JSON-safe by construction —
+# the candidate list is hardcoded today, but a user-configurable path would not be.
+CLI_BINARY_JSON="$(printf '%s' "$CLI_BINARY" | json_escape || echo '""')"
 
 # ── 2. Obsidian app running? (informational only; CLI works either way) ──────
 OBSIDIAN_RUNNING=false
@@ -186,7 +245,7 @@ snapshot() {
   "available": {
     "cli": {
       "present": ${CLI_PRESENT},
-      "binary": "${CLI_BINARY}",
+      "binary": ${CLI_BINARY_JSON},
       "version_string": ${CLI_VERSION},
       "obsidian_app_running": ${OBSIDIAN_RUNNING}
     },

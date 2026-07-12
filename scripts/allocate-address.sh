@@ -32,8 +32,10 @@ mkdir -p "$(dirname "$COUNTER_FILE")" || {
 }
 
 # Acquire exclusive lock with 5-second timeout. Release automatically on scope exit.
-exec 9>"$LOCK_FILE"
-if ! flock -x -w 5 9; then
+# flock(1) is util-linux and absent on macOS, so go through the portable helper.
+# shellcheck source=lib/portable-lock.sh
+. "${VAULT_ROOT}/scripts/lib/portable-lock.sh"
+if ! portable_lock_acquire "$LOCK_FILE" 5; then
   echo "ERR: could not acquire address allocator lock within 5s" >&2
   exit 1
 fi

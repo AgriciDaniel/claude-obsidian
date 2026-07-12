@@ -59,85 +59,158 @@ bash scripts/detect-transport.sh --force
 
 ---
 
+## Invocation contract
+
+The CLI takes a subcommand followed by `key=value` options. It does **not** take positional
+arguments, and it does **not** read content from stdin.
+
+```
+obsidian-cli <command> [vault=<name>] [key=value ...]
+```
+
+Three things to get right before writing any recipe:
+
+- **`vault=` takes the vault NAME, not a path.** `vault=claude-obsidian`, never
+  `vault=/Users/you/claude-obsidian`. Omit it entirely to target the active vault.
+- **`file=` resolves by name (like a wikilink); `path=` is exact** (`wiki/concepts/Foo.md`).
+  Prefer `path=` in scripts — `file=` is ambiguous when two notes share a basename.
+- **The CLI drives the running Obsidian app.** It is not a standalone vault parser. If
+  Obsidian is not running, expect failure — check `available.cli.obsidian_app_running` in
+  the detection snapshot.
+
+Resolve the binary from the detection snapshot rather than assuming it is on `PATH` —
+on a stock macOS install it is only inside the app bundle:
+
+```bash
+CLI="$(python3 -c 'import json;print(json.load(open(".vault-meta/transport.json"))["available"]["cli"]["binary"])')"
+VAULT=claude-obsidian
+```
+
 ## Recipes (CLI-first; fallback noted inline)
 
-Each recipe shows the CLI form first. If the CLI is unavailable per the detection snapshot, fall through to the noted fallback. Variable substitution: `$VAULT` is the absolute vault root; `$NOTE` is a vault-relative path like `wiki/concepts/Foo.md`.
+Each recipe shows the CLI form first. If the CLI is unavailable per the detection snapshot,
+fall through to the noted fallback. `$NOTE` is a vault-relative path like `wiki/concepts/Foo.md`;
+`$VAULT_ROOT` is the absolute vault root (used only by the filesystem fallbacks).
 
 ### Read a note
 ```bash
 # CLI
-obsidian-cli read "$VAULT" "$NOTE"
+"$CLI" read vault="$VAULT" path="$NOTE"
 
 # Fallback: Claude's Read tool with absolute path
-# Read $VAULT/$NOTE
+# Read $VAULT_ROOT/$NOTE
 ```
 
 ### Create or overwrite a note
 ```bash
-# CLI
-obsidian-cli write "$VAULT" "$NOTE" < /path/to/content.md
+# CLI — there is no `write` command; `create` + `overwrite` is the upsert.
+"$CLI" create vault="$VAULT" path="$NOTE" content="# Title\n\nBody text." overwrite
 
 # Fallback: Claude's Write tool with absolute path
-# Write $VAULT/$NOTE with the desired content string
+# Write $VAULT_ROOT/$NOTE with the desired content string
 ```
+
+> [!warning] `content=` is a shell argument, not stdin.
+> Newlines must be escaped as `\n` (and tabs as `\t`). There is no `< file.md` redirect form.
+> For anything longer than a few lines — i.e. most real wiki pages — **prefer the filesystem
+> Write tool**: it avoids a fragile escaping round-trip through the shell. Reserve `create`
+> for short notes and for the case where you want Obsidian's own template/link handling.
 
 ### Append to a note
 ```bash
 # CLI
-echo "additional content" | obsidian-cli append "$VAULT" "$NOTE"
+"$CLI" append vault="$VAULT" path="$NOTE" content="additional content"
 
-# Fallback: Read $VAULT/$NOTE, append manually, Write back
+# Fallback: Read $VAULT_ROOT/$NOTE, append manually, Write back
 ```
+
+`prepend` takes the same options. Both add a leading/trailing newline unless you pass `inline`.
 
 ### Search note content (CLI uses Obsidian's own search ranking)
 ```bash
-# CLI
-obsidian-cli search "$VAULT" "<query>"
+# CLI — returns ranked file paths
+"$CLI" search vault="$VAULT" query="<query>"
+
+# Narrow, cap, or get structured output:
+"$CLI" search vault="$VAULT" query="<query>" path=wiki/ limit=10 format=json
+
+# With matching lines for context (closer to a grep hit list):
+"$CLI" search:context vault="$VAULT" query="<query>" path=wiki/
 
 # Fallback: ripgrep
-rg --type=md "<query>" "$VAULT/wiki/"
+rg --type=md "<query>" "$VAULT_ROOT/wiki/"
 ```
 
-### Today's daily note (if Daily Notes plugin is enabled)
+### Daily note (if Daily Notes plugin is enabled)
 ```bash
-# CLI
-obsidian-cli daily:today "$VAULT"
-obsidian-cli daily:append "$VAULT" "captured at $(date)"
+# CLI — there is no `daily:today`.
+"$CLI" daily:path vault="$VAULT"      # resolve today's path
+"$CLI" daily:read vault="$VAULT"      # read today's contents
+"$CLI" daily:append vault="$VAULT" content="captured at $(date)"
 
 # Fallback: compute path manually
-NOTE="$VAULT/wiki/daily/$(date +%Y-%m-%d).md"
+NOTE="$VAULT_ROOT/wiki/daily/$(date +%Y-%m-%d).md"
 ```
 
 ### Patch a frontmatter property
 ```bash
-# CLI
-obsidian-cli property:set "$VAULT" "$NOTE" status "evergreen"
+# CLI — name= and value= are both required, and are named options, not positionals.
+"$CLI" property:set vault="$VAULT" path="$NOTE" name=status value=evergreen
 
-# Fallback: read frontmatter, parse, mutate, rewrite (use mcp__obsidian-vault__update_frontmatter if MCP is configured)
+# Typed properties (text|list|number|checkbox|date|datetime):
+"$CLI" property:set vault="$VAULT" path="$NOTE" name=updated value=2026-07-12 type=date
+
+# Read one back, or remove it:
+"$CLI" property:read vault="$VAULT" path="$NOTE" name=status
+"$CLI" property:remove vault="$VAULT" path="$NOTE" name=status
+
+# Fallback: read frontmatter, parse, mutate, rewrite
 ```
 
 ### List backlinks for a page
 ```bash
 # CLI
-obsidian-cli backlinks "$VAULT" "$NOTE"
+"$CLI" backlinks vault="$VAULT" path="$NOTE"
+"$CLI" backlinks vault="$VAULT" path="$NOTE" format=json counts
+
+# Outgoing links are the mirror command:
+"$CLI" links vault="$VAULT" path="$NOTE"
 
 # Fallback: ripgrep for wikilink references
-rg --type=md "\[\[$(basename "$NOTE" .md)" "$VAULT/wiki/"
+rg --type=md "\[\[$(basename "$NOTE" .md)" "$VAULT_ROOT/wiki/"
 ```
 
-### Open a Bases (.base) file's resolved view
+### Query a Bases (.base) file's resolved view
 ```bash
-# CLI
-obsidian-cli bases "$VAULT" "$NOTE"
-# (returns the resolved row list; supplements obsidian-bases skill which handles the .base file's YAML)
+# CLI — `bases` LISTS base files; `base:query` resolves one to rows.
+"$CLI" bases vault="$VAULT"
+"$CLI" base:query vault="$VAULT" path="$NOTE" view="<view-name>" format=json
+
+# Omitting `view=` does NOT return all views — it silently resolves the FIRST view
+# defined in the file. Always pass `view=` explicitly in scripts.
+
+# `base:views` takes NO file/path option — it reads whatever file is ACTIVE in the GUI and
+# errors otherwise ("Active file is not a base file"). It is not scriptable. To enumerate
+# view names without depending on GUI state, parse the .base YAML directly — note `name:`
+# is nested under each `views:` list item, not on the `- ` line:
+grep -E '^[[:space:]]+name:' "$VAULT_ROOT/$NOTE" | sed 's/^ *name: *//'
 
 # Fallback: read the .base file directly; no resolved-view available without Obsidian itself
 ```
 
+### Vault health primitives (native — prefer these over reimplementing in wiki-lint)
+```bash
+"$CLI" orphans vault="$VAULT"           # files with no incoming links
+"$CLI" unresolved vault="$VAULT"        # dead wikilinks (add verbose for source files)
+"$CLI" deadends vault="$VAULT"          # files with no outgoing links
+# Append `total` to any of them for a bare count.
+```
+
 ### Tags + bookmarks
 ```bash
-obsidian-cli tags "$VAULT"
-obsidian-cli bookmarks "$VAULT"
+"$CLI" tags vault="$VAULT"
+"$CLI" tags vault="$VAULT" counts sort=count format=json
+"$CLI" bookmarks vault="$VAULT"
 ```
 
 ---

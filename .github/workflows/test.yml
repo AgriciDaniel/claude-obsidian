@@ -34,12 +34,54 @@ jobs:
       - name: Run hermetic test suite
         run: make test
 
+      # ubuntu-latest ships util-linux, so `make test` above always takes the
+      # flock(1) backend. Without this step the python3 fcntl.flock path — the
+      # whole reason scripts/lib/portable-lock.sh exists, and the one that took
+      # three attempts to get right — would have zero automated coverage, and a
+      # future edit to the heredoc could break every Mac while CI stayed green.
+      - name: Run lock suite against the python3 backend (macOS path)
+        run: PORTABLE_LOCK_FORCE_BACKEND=python3 make test-portable-lock
+
       - name: Verify wiki-mode CLI surfaces
         run: |
           python3 scripts/wiki-mode.py get
           python3 scripts/wiki-mode.py config | python3 -m json.tool > /dev/null
           python3 scripts/wiki-mode.py id
           python3 scripts/wiki-mode.py templates
+
+      - name: Verify transport detection
+        run: bash scripts/detect-transport.sh --peek | python3 -m json.tool > /dev/null
+
+  # Every bug in v1.9.3 was a macOS portability bug that shipped because CI only
+  # ever ran on Linux: flock(1) missing, BSD `wc -l` padding its output, no
+  # timeout(1), and bash 3.2 (no BASHPID). A Linux-only matrix cannot see any of
+  # those. This job is the regression guard for the entire class.
+  test-macos:
+    name: Hermetic test suite (macOS)
+    runs-on: macos-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Show the platform we are actually testing
+        run: |
+          sw_vers || true
+          bash --version | head -1
+          echo "flock(1):   $(command -v flock || echo 'absent (expected on macOS)')"
+          echo "timeout(1): $(command -v timeout || echo 'absent (expected on macOS)')"
+
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh scripts/*.py bin/*.sh tests/*.sh 2>/dev/null || true
+
+      - name: Run hermetic test suite
+        run: make test
 
       - name: Verify transport detection
         run: bash scripts/detect-transport.sh --peek | python3 -m json.tool > /dev/null
