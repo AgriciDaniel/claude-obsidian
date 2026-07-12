@@ -138,3 +138,6 @@ Personal/
 Local Knowledge/
 Projects/
 Archive/
+
+# Local desktop imports can contain secrets, backup codes, and private loose files.
+99_Inbox/Desktop_Roots/
