@@ -125,6 +125,45 @@ python3 -c "import json;json.load(open('$SNAP'))" 2>/dev/null \
   && pass "snapshot is valid JSON" \
   || fail "snapshot is not valid JSON"
 
+# ── 4b. NAME COLLISION: two vaults share a name → must NOT prefer cli ────────
+# Matching by path is only half the job: we then hand consumers a NAME, and the CLI
+# resolves `vault=<name>` through the registry. If two vaults share that name, the
+# name is ambiguous and can resolve to the other one — reinstating the silent
+# wrong-target bug inside the fix for it. Obsidian names vaults by folder basename,
+# so two checkouts of the same repo collide by default. This is not exotic; it is
+# exactly what caused the original incident.
+cat > "$MOCKBIN/obsidian-cli" <<MOCK
+#!/usr/bin/env bash
+case "\${1:-}" in
+  version) echo "1.12.7"; exit 0 ;;
+  vaults)
+    # Our vault, AND a decoy elsewhere sharing the same name.
+    printf '%s\t%s\n' "claude-obsidian" "$VAULT_REAL"
+    printf '%s\t%s\n' "claude-obsidian" "$TMP/some-other-copy"
+    exit 0 ;;
+  *) exit 1 ;;
+esac
+MOCK
+chmod +x "$MOCKBIN/obsidian-cli"
+mkdir -p "$TMP/some-other-copy"
+SNAP="$(run_detect)"
+
+got_pref="$(read_json "$SNAP" "['preferred']")"
+got_addr="$(read_json "$SNAP" "['available']['cli']['vault_addressable']")"
+got_name="$(read_json "$SNAP" "['available']['cli']['vault_name']")"
+
+[ "$got_pref" = "filesystem" ] \
+  && pass "duplicate vault NAME -> falls back to filesystem (ambiguous vault= is refused)" \
+  || fail "duplicate vault name -> expected filesystem, got '$got_pref' (vault= COULD HIT THE WRONG VAULT)"
+
+[ "$got_addr" = "False" ] \
+  && pass "vault_addressable=false on a name collision" \
+  || fail "vault_addressable expected false on name collision, got '$got_addr'"
+
+[ -z "$got_name" ] \
+  && pass "no ambiguous vault_name is published" \
+  || fail "published an ambiguous vault_name '$got_name' that consumers would trust"
+
 # ── 5. A HANGING CLI must not wedge detection, and must not leak orphans ─────
 # The scenario this guards: an Electron launcher that treats a bare `version` (or
 # `vaults`) as a file to open, sits there with a window up, and never exits.

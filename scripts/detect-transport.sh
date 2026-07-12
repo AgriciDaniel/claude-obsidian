@@ -295,6 +295,8 @@ if $CLI_PRESENT; then
   # Resolve symlinks on both sides so /tmp vs /private/tmp (and friends) match.
   VAULT_ROOT_REAL="$(cd "$VAULT_ROOT" 2>/dev/null && pwd -P || echo "$VAULT_ROOT")"
 
+  VAULT_REGISTRY="$(capture_with_timeout 5 "$CLI_BINARY" vaults verbose 2>/dev/null || true)"
+
   # `vaults verbose` emits: <name>\t<path>
   while IFS="$(printf '\t')" read -r v_name v_path; do
     [ -n "${v_path:-}" ] || continue
@@ -305,8 +307,33 @@ if $CLI_PRESENT; then
       break
     fi
   done <<EOF
-$(capture_with_timeout 5 "$CLI_BINARY" vaults verbose 2>/dev/null || true)
+$VAULT_REGISTRY
 EOF
+
+  # Matching by PATH is only half the job. We then hand consumers a NAME, and the
+  # CLI resolves `vault=<name>` through the registry — so if two registered vaults
+  # share a name, the name we publish is ambiguous and can resolve to the other one.
+  # That would reinstate the exact silent-wrong-target bug this block exists to stop,
+  # inside the fix for it. Obsidian derives the vault name from the folder basename,
+  # so two checkouts of the same repo in different directories collide by default,
+  # which is precisely the situation that caused the original incident.
+  #
+  # The CLI offers no way to target a vault by path, so a collision is unfixable here:
+  # refuse `cli` rather than guess.
+  if $CLI_VAULT_ADDRESSABLE; then
+    NAME_COUNT="$(printf '%s\n' "$VAULT_REGISTRY" \
+      | awk -F'\t' -v n="$CLI_VAULT_NAME" 'NF && $1 == n { c++ } END { print c+0 }')"
+
+    if [ "${NAME_COUNT:-0}" -gt 1 ]; then
+      CLI_VAULT_ADDRESSABLE=false
+      CLI_VAULT_NAME=""
+      log "WARN: Obsidian has ${NAME_COUNT} vaults registered under the name"
+      log "      '$(printf '%s' "$VAULT_REGISTRY" | awk -F'\t' 'NF{print $1}' | sort | uniq -d | head -1)'."
+      log "      \`vault=<name>\` cannot distinguish them, so a CLI call could hit the"
+      log "      wrong one. Rename or remove the duplicate vault in Obsidian."
+      log "      Falling back to: filesystem."
+    fi
+  fi
 
   if ! $CLI_VAULT_ADDRESSABLE; then
     # Two very different causes, two very different fixes. Do not tell someone to
