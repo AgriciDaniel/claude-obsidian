@@ -82,6 +82,9 @@ LOCK_DIR="${META_DIR}/locks"
 META_LOCK="${META_DIR}/.wiki-lock.meta"
 STALE_AFTER_SEC=60
 
+# shellcheck source=lib/portable-lock.sh
+. "${VAULT_ROOT}/scripts/lib/portable-lock.sh"
+
 # ── helpers ──────────────────────────────────────────────────────────────────
 die() { echo "ERR: $*" >&2; exit "${2:-2}"; }
 log() { echo "$*" >&2; }
@@ -151,11 +154,13 @@ is_alive() {
 # acquire/release/clear-stale don't race against each other.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
+  # Meta lock is short-lived per command. The subshell IS the release: the helper
+  # traps EXIT, so the lock drops when the subshell ends, matching the previous
+  # flock-on-fd-9 behavior. flock(1) is absent on macOS, hence the helper.
   (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+    portable_lock_acquire "$META_LOCK" 5 || die "could not acquire meta-lock within 5s" 1
     "$@"
-  ) 9>"$META_LOCK"
+  )
 }
 
 read_lockfile() {

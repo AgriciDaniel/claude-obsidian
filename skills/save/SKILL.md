@@ -22,7 +22,7 @@ The wiki compounds. Save often.
 
 The session-note write itself follows the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
 
-- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < session.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **cli** — `"$CLI" create vault="$VAULT" path="$NOTE" content="..." overwrite`. There is no `write` command and there is no stdin redirect; a session note is long, so prefer the filesystem Write tool. `$VAULT` is the vault NAME from `available.cli.vault_name`. See [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
 - **filesystem** — Claude's `Write` tool with absolute path
 

@@ -92,13 +92,13 @@ flatpak run md.obsidian.Obsidian --cli --version
 obsidian-cli list /path/to/vault wiki/
 
 # Read a note
-obsidian-cli read /path/to/vault wiki/index.md
+obsidian-cli read vault=<vault-name> path=wiki/index.md
 
 # Create or update a note
-obsidian-cli write /path/to/vault wiki/new-note.md < content.md
+obsidian-cli create vault=<vault-name> path=wiki/new-note.md content="..." overwrite
 
 # Search notes by content
-obsidian-cli search /path/to/vault "query term"
+obsidian-cli search vault=<vault-name> query="query term"
 ```
 
 **Why prefer this**:
