@@ -151,11 +151,25 @@ is_alive() {
 # acquire/release/clear-stale don't race against each other.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
-    "$@"
-  ) 9>"$META_LOCK"
+  if command -v flock >/dev/null 2>&1; then
+    # Use flock under bash's redirect; meta lock is short-lived per command.
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # Portable fallback (no flock on Windows Git Bash): atomic mkdir lock.
+    local mdir="${META_LOCK}.d" acquired=0 rc=0 _i
+    for _i in $(seq 1 50); do
+      if mkdir "$mdir" 2>/dev/null; then acquired=1; break; fi
+      sleep 0.1
+    done
+    [ "$acquired" -eq 1 ] || die "could not acquire meta-lock within 5s" 1
+    # Subshell so an inner die()/exit can't skip the rmdir cleanup below.
+    set +e; ( "$@" ); rc=$?; set -e
+    rmdir "$mdir" 2>/dev/null || true
+    return "$rc"
+  fi
 }
 
 read_lockfile() {

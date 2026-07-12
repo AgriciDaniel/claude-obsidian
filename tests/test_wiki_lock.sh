@@ -143,7 +143,11 @@ RC_NL=$( (wl acquire $'wiki/concepts/Foo\nbar.md' >/dev/null 2>&1); echo $? )
 assert_eq "acquire newline path rejected" "4" "$RC_NL"
 
 # ── path validation: carriage return rejected (v1.7.2; closes audit M4) ──────
-RC_CR=$( (wl acquire $'wiki/concepts/Foo\rbar.md' >/dev/null 2>&1); echo $? )
+# Pass the CR via a variable: on Windows Git Bash (msys), a $'\r' literal used
+# directly as an argument inside command substitution is stripped before it
+# reaches the child process, so the rejection could never be exercised.
+CR_PATH="wiki/concepts/Foo"$'\r'"bar.md"
+RC_CR=$( (wl acquire "$CR_PATH" >/dev/null 2>&1); echo $? )
 assert_eq "acquire carriage-return path rejected" "4" "$RC_CR"
 
 # ── stress: 10 unique paths all acquire cleanly ──────────────────────────────
