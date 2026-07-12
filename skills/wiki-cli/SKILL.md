@@ -70,20 +70,41 @@ obsidian-cli <command> [vault=<name>] [key=value ...]
 
 Three things to get right before writing any recipe:
 
-- **`vault=` takes the vault NAME, not a path.** `vault=claude-obsidian`, never
-  `vault=/Users/you/claude-obsidian`. Omit it entirely to target the active vault.
+- **`vault=` takes the vault NAME, not a path** — and the name is resolved against
+  Obsidian's own registry, never against your working directory. This is a footgun:
+  see the warning below. Omit it entirely to target the active vault.
 - **`file=` resolves by name (like a wikilink); `path=` is exact** (`wiki/concepts/Foo.md`).
   Prefer `path=` in scripts — `file=` is ambiguous when two notes share a basename.
 - **The CLI drives the running Obsidian app.** It is not a standalone vault parser. If
   Obsidian is not running, expect failure — check `available.cli.obsidian_app_running` in
   the detection snapshot.
 
-Resolve the binary from the detection snapshot rather than assuming it is on `PATH` —
-on a stock macOS install it is only inside the app bundle:
+> [!danger] `vault=<name>` can silently target a DIFFERENT directory.
+> Because the name is resolved through Obsidian's registry, `vault=claude-obsidian` does
+> **not** mean "the vault I am standing in." If Obsidian has some other folder registered
+> under that name — a stray copy in `~/Downloads`, say — every read and write goes there
+> instead, and the CLI reports success either way. This is not hypothetical: it swallowed
+> an entire session's writes while the real working tree sat untouched.
+>
+> Never hardcode the vault name and never derive it from the directory basename.
+
+`scripts/detect-transport.sh` closes this. It asks the CLI which vaults it can reach,
+matches one against the vault root, and **refuses to prefer `cli` at all** unless a vault
+is genuinely addressable (`preferred` falls back to `filesystem`). It publishes the
+verified name for you to use. So take both the binary and the vault name from the snapshot:
 
 ```bash
-CLI="$(python3 -c 'import json;print(json.load(open(".vault-meta/transport.json"))["available"]["cli"]["binary"])')"
-VAULT=claude-obsidian
+SNAP=.vault-meta/transport.json
+CLI="$(python3 -c "import json;print(json.load(open('$SNAP'))['available']['cli']['binary'])")"
+VAULT="$(python3 -c "import json;print(json.load(open('$SNAP'))['available']['cli']['vault_name'])")"
+```
+
+And honor `preferred` before you use them. If it is not `cli`, use the filesystem
+fallbacks below — the CLI either is not installed or cannot reach this vault:
+
+```bash
+PREFERRED="$(python3 -c "import json;print(json.load(open('$SNAP'))['preferred'])")"
+[ "$PREFERRED" = cli ] || echo "CLI not usable here; use the filesystem fallback."
 ```
 
 ## Recipes (CLI-first; fallback noted inline)

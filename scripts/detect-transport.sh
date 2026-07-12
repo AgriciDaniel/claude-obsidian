@@ -114,27 +114,49 @@ if [ "$MODE" = "write" ] && [ -f "$OUTPUT_FILE" ]; then
   fi
 fi
 
-# probe_with_timeout SECS CMD [ARGS...] — run CMD, killing it after SECS.
-# Returns CMD's exit status, or 1 if it had to be killed. macOS ships no
-# timeout(1) (it is GNU coreutils), so this is hand-rolled to stay portable.
-probe_with_timeout() {
-  local secs="$1"; shift
-  "$@" >/dev/null 2>&1 &
-  local probe_pid=$!
-
+# _wait_or_kill PID SECS — poll PID, SIGKILL it past SECS. Returns its status, or
+# 1 if it had to be killed. macOS ships no timeout(1) (it is GNU coreutils), so
+# the bound is hand-rolled to stay portable.
+_wait_or_kill() {
+  local pid="$1" secs="$2"
   local waited=0
   local limit=$(( secs * 10 ))
-  while kill -0 "$probe_pid" 2>/dev/null; do
+  while kill -0 "$pid" 2>/dev/null; do
     if [ "$waited" -ge "$limit" ]; then
-      kill -9 "$probe_pid" 2>/dev/null
-      wait "$probe_pid" 2>/dev/null || true
+      kill -9 "$pid" 2>/dev/null
+      wait "$pid" 2>/dev/null || true
       return 1
     fi
     sleep 0.1
     waited=$(( waited + 1 ))
   done
+  wait "$pid"
+}
 
-  wait "$probe_pid"
+# probe_with_timeout SECS CMD [ARGS...] — run CMD for its EXIT STATUS only.
+# Output is discarded. Use for capability probes, never to read a command's result.
+probe_with_timeout() {
+  local secs="$1"; shift
+  "$@" >/dev/null 2>&1 &
+  _wait_or_kill $! "$secs"
+}
+
+# capture_with_timeout SECS CMD [ARGS...] — run CMD and echo its STDOUT, bounded.
+# Separate from probe_with_timeout because that one sends stdout to /dev/null, so
+# capturing through it silently yields nothing (which is exactly the bug this
+# comment exists to stop someone re-introducing).
+capture_with_timeout() {
+  local secs="$1"; shift
+  local out
+  out="$(mktemp)" || return 1
+
+  "$@" >"$out" 2>/dev/null &
+  local rc=0
+  _wait_or_kill $! "$secs" || rc=$?
+
+  cat "$out"
+  rm -f "$out"
+  return $rc
 }
 
 # ── 1. CLI detection ─────────────────────────────────────────────────────────
@@ -211,8 +233,60 @@ if command -v pgrep >/dev/null 2>&1; then
   fi
 fi
 
-# ── 3. Compute preferred + fallback chain ────────────────────────────────────
+# ── 2b. Can the CLI actually ADDRESS this vault? ─────────────────────────────
+# The CLI targets a vault by NAME (`vault=<name>`), resolved against Obsidian's
+# own registry — never by path. So "the binary exists" does NOT imply "the binary
+# can reach the vault we are standing in":
+#
+#   - Obsidian may not have this directory open as a vault at all.
+#   - Another directory may be registered under the same name, in which case every
+#     CLI call silently reads and writes THAT directory while reporting success.
+#
+# The second case is not hypothetical; it is how this check came to exist. A stray
+# copy of the repo registered under the same name absorbed an entire session's CLI
+# writes while the real working tree sat untouched. That is the same silent
+# wrong-target failure this script was already fixed once to prevent.
+#
+# So: ask the CLI which vaults it knows, and find the one whose PATH is this vault
+# root. If none is, the CLI cannot be trusted here and we fall back to filesystem.
+# The resolved name is published so consumers pass a verified `vault=` rather than
+# guessing from the directory basename.
+CLI_VAULT_NAME=""
+CLI_VAULT_ADDRESSABLE=false
+
 if $CLI_PRESENT; then
+  # Resolve symlinks on both sides so /tmp vs /private/tmp (and friends) match.
+  VAULT_ROOT_REAL="$(cd "$VAULT_ROOT" 2>/dev/null && pwd -P || echo "$VAULT_ROOT")"
+
+  # `vaults verbose` emits: <name>\t<path>
+  while IFS="$(printf '\t')" read -r v_name v_path; do
+    [ -n "${v_path:-}" ] || continue
+    v_path_real="$(cd "$v_path" 2>/dev/null && pwd -P || echo "$v_path")"
+    if [ "$v_path_real" = "$VAULT_ROOT_REAL" ]; then
+      CLI_VAULT_NAME="$v_name"
+      CLI_VAULT_ADDRESSABLE=true
+      break
+    fi
+  done <<EOF
+$(capture_with_timeout 5 "$CLI_BINARY" vaults verbose 2>/dev/null || true)
+EOF
+
+  if ! $CLI_VAULT_ADDRESSABLE; then
+    log "WARN: the Obsidian CLI is installed, but Obsidian has no vault registered at"
+    log "      ${VAULT_ROOT_REAL}"
+    log "      A CLI call would target a DIFFERENT directory (or fail), so the cli"
+    log "      transport is being skipped. Open this folder as a vault in Obsidian to"
+    log "      enable it. Falling back to: filesystem."
+  fi
+fi
+
+CLI_VAULT_NAME_JSON="$(printf '%s' "$CLI_VAULT_NAME" | json_escape || echo '""')"
+
+# ── 3. Compute preferred + fallback chain ────────────────────────────────────
+# `cli` requires BOTH a working binary and a vault the binary can actually address.
+# A present-but-unaddressable CLI is worse than no CLI: it succeeds against the
+# wrong directory.
+if $CLI_PRESENT && $CLI_VAULT_ADDRESSABLE; then
   PREFERRED="cli"
   CHAIN='"cli", "filesystem"'
 else
@@ -247,6 +321,8 @@ snapshot() {
       "present": ${CLI_PRESENT},
       "binary": ${CLI_BINARY_JSON},
       "version_string": ${CLI_VERSION},
+      "vault_addressable": ${CLI_VAULT_ADDRESSABLE},
+      "vault_name": ${CLI_VAULT_NAME_JSON},
       "obsidian_app_running": ${OBSIDIAN_RUNNING}
     },
     "filesystem": {
