@@ -27,7 +27,12 @@ Usage:
 """
 
 import argparse
-import fcntl
+
+try:
+    import fcntl  # POSIX advisory locks
+except ImportError:  # Windows: no fcntl; use msvcrt byte-range locking
+    fcntl = None
+    import msvcrt
 import hashlib
 import json
 import math
@@ -164,7 +169,13 @@ def _lock_cache():
     META_DIR.mkdir(exist_ok=True)
     fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
+        if fcntl is not None:
+            fcntl.flock(fd, fcntl.LOCK_EX)
+        else:
+            # msvcrt locks a byte range; locking byte 0 (even past EOF) gives
+            # the same mutual exclusion as flock LOCK_EX for this cache file.
+            os.lseek(fd, 0, os.SEEK_SET)
+            msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
     except OSError:
         os.close(fd)
         raise
@@ -173,7 +184,11 @@ def _lock_cache():
 
 def _unlock_cache(fd: int) -> None:
     try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
+        if fcntl is not None:
+            fcntl.flock(fd, fcntl.LOCK_UN)
+        else:
+            os.lseek(fd, 0, os.SEEK_SET)
+            msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
     finally:
         os.close(fd)
 

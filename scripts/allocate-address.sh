@@ -32,10 +32,26 @@ mkdir -p "$(dirname "$COUNTER_FILE")" || {
 }
 
 # Acquire exclusive lock with 5-second timeout. Release automatically on scope exit.
-exec 9>"$LOCK_FILE"
-if ! flock -x -w 5 9; then
-  echo "ERR: could not acquire address allocator lock within 5s" >&2
-  exit 1
+# flock(1) is unavailable on Windows Git Bash / native msys; fall back to an
+# atomic mkdir lock (mkdir is atomic on every platform bash runs on).
+if command -v flock >/dev/null 2>&1; then
+  exec 9>"$LOCK_FILE"
+  if ! flock -x -w 5 9; then
+    echo "ERR: could not acquire address allocator lock within 5s" >&2
+    exit 1
+  fi
+else
+  LOCK_DIR_FALLBACK="${LOCK_FILE}.d"
+  acquired=0
+  for _ in $(seq 1 50); do
+    if mkdir "$LOCK_DIR_FALLBACK" 2>/dev/null; then acquired=1; break; fi
+    sleep 0.1
+  done
+  if [ "$acquired" -ne 1 ]; then
+    echo "ERR: could not acquire address allocator lock within 5s" >&2
+    exit 1
+  fi
+  trap 'rmdir "$LOCK_DIR_FALLBACK" 2>/dev/null || true' EXIT
 fi
 
 scan_max_c_address() {
