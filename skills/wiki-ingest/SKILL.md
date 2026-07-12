@@ -15,7 +15,7 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
 
-- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md` (or `append`, `property:set`); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **cli** — `"$CLI" create vault="$VAULT" path="$NOTE" content="..." overwrite` (or `append`, `property:set`). There is no `write` command, args are `key=value`, and `$VAULT` is the vault NAME — take it from `available.cli.vault_name` in the snapshot, never from the directory basename. For page-sized content prefer the filesystem Write tool: `content=` is a shell argument with `\n` escapes, not stdin. See [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note` and friends; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
 - **filesystem** — Claude's `Write`/`Edit` tools with absolute vault-rooted paths (final floor; always works)
 

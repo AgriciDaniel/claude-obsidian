@@ -125,6 +125,60 @@ python3 -c "import json;json.load(open('$SNAP'))" 2>/dev/null \
   && pass "snapshot is valid JSON" \
   || fail "snapshot is not valid JSON"
 
+# ── 5. A HANGING CLI must not wedge detection, and must not leak orphans ─────
+# The scenario this guards: an Electron launcher that treats a bare `version` (or
+# `vaults`) as a file to open, sits there with a window up, and never exits.
+#
+# Killing only the leader is not enough. A GUI app spawns helpers, and those get
+# reparented to PID 1 and keep running. detect-transport.sh is invoked from several
+# skills, so a leaky timeout accumulates orphans across a session. The mock below
+# spawns a long-lived CHILD precisely to catch that.
+CANARY="$TMP/canary-child.pid"
+cat > "$MOCKBIN/obsidian-cli" <<MOCK
+#!/usr/bin/env bash
+case "\${1:-}" in
+  version) echo "1.12.7"; exit 0 ;;
+  vaults)
+    # A child that outlives its parent unless the whole process GROUP is killed.
+    sleep 120 &
+    echo \$! > "$CANARY"
+    sleep 120          # the hang itself
+    ;;
+  *) exit 1 ;;
+esac
+MOCK
+chmod +x "$MOCKBIN/obsidian-cli"
+
+START=$(date +%s)
+SNAP="$(run_detect)"
+ELAPSED=$(( $(date +%s) - START ))
+
+# The vaults probe is bounded at 5s. Allow headroom for the version probe + writes.
+if [ "$ELAPSED" -le 15 ]; then
+  pass "hanging CLI does not wedge detection (returned in ${ELAPSED}s, not never)"
+else
+  fail "hanging CLI wedged detection for ${ELAPSED}s"
+fi
+
+got_pref="$(read_json "$SNAP" "['preferred']")"
+[ "$got_pref" = "filesystem" ] \
+  && pass "hanging CLI -> falls back to filesystem" \
+  || fail "hanging CLI -> expected filesystem, got '$got_pref'"
+
+# The orphan check. Give the reaper a moment, then look for the child.
+sleep 1
+if [ -f "$CANARY" ]; then
+  CHILD_PID="$(cat "$CANARY")"
+  if kill -0 "$CHILD_PID" 2>/dev/null; then
+    fail "ORPHAN LEAK: the hung CLI's child (pid $CHILD_PID) survived the timeout"
+    kill -9 "$CHILD_PID" 2>/dev/null   # do not leave it running after the test
+  else
+    pass "hung CLI's child was reaped too (process group killed, no orphan)"
+  fi
+else
+  fail "test setup: mock never recorded its child pid"
+fi
+
 echo
 echo "passed: $PASS  failed: $FAIL"
 [ "$FAIL" -eq 0 ] || exit 1

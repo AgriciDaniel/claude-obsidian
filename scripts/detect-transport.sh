@@ -114,22 +114,59 @@ if [ "$MODE" = "write" ] && [ -f "$OUTPUT_FILE" ]; then
   fi
 fi
 
-# _wait_or_kill PID SECS — poll PID, SIGKILL it past SECS. Returns its status, or
-# 1 if it had to be killed. macOS ships no timeout(1) (it is GNU coreutils), so
-# the bound is hand-rolled to stay portable.
-_wait_or_kill() {
+# _spawn_bounded OUTFILE CMD [ARGS...] — start CMD in its OWN PROCESS GROUP,
+# redirecting stdout to OUTFILE (use /dev/null to discard). Sets _BOUNDED_PID.
+#
+# The pid comes back in a GLOBAL, not on stdout, and that is deliberate. Calling
+# this as `pid="$(_spawn_bounded ...)"` would run it in a command-substitution
+# subshell, making the background job a child of THAT subshell rather than of the
+# caller. `wait` in the caller then fails, the probe looks like it errored, and the
+# CLI gets reported as absent. A plain function call does not fork, so the job stays
+# a direct child and `wait` works.
+#
+# The process group is the point. Killing just the leader leaves anything it
+# spawned running, reparented to PID 1. The hang we are guarding against is an
+# Electron launcher, which spawns helpers freely, so a bare `kill -9 $pid` would
+# leak orphans on every timed-out probe — and detect-transport.sh runs from
+# several skills, so they would accumulate across a session.
+#
+# `set -m` (job control) makes bash put each background job in its own process
+# group whose PGID equals its PID, which is what lets _reap_group signal the whole
+# tree. macOS ships no setsid(1), so this is the portable route. The group is
+# fixed at fork time, so restoring the old -m state immediately after is safe.
+_BOUNDED_PID=""
+_spawn_bounded() {
+  local outfile="$1"; shift
+
+  local had_m=0
+  case "$-" in *m*) had_m=1 ;; esac
+
+  set -m
+  "$@" >"$outfile" 2>/dev/null &
+  _BOUNDED_PID=$!
+  [ "$had_m" -eq 1 ] || set +m
+}
+
+# _reap_group PID SECS — poll PID, then SIGKILL its whole process group past SECS.
+# Returns the command's status, or 1 if it had to be killed. macOS ships no
+# timeout(1) (it is GNU coreutils), so the bound is hand-rolled to stay portable.
+_reap_group() {
   local pid="$1" secs="$2"
   local waited=0
   local limit=$(( secs * 10 ))
+
   while kill -0 "$pid" 2>/dev/null; do
     if [ "$waited" -ge "$limit" ]; then
-      kill -9 "$pid" 2>/dev/null
+      # Negative pid == the process group. Fall back to the bare pid if the group
+      # is already gone, so we never leave the leader alive.
+      kill -9 -"$pid" 2>/dev/null || kill -9 "$pid" 2>/dev/null
       wait "$pid" 2>/dev/null || true
       return 1
     fi
     sleep 0.1
     waited=$(( waited + 1 ))
   done
+
   wait "$pid"
 }
 
@@ -137,8 +174,8 @@ _wait_or_kill() {
 # Output is discarded. Use for capability probes, never to read a command's result.
 probe_with_timeout() {
   local secs="$1"; shift
-  "$@" >/dev/null 2>&1 &
-  _wait_or_kill $! "$secs"
+  _spawn_bounded /dev/null "$@"
+  _reap_group "$_BOUNDED_PID" "$secs"
 }
 
 # capture_with_timeout SECS CMD [ARGS...] — run CMD and echo its STDOUT, bounded.
@@ -150,9 +187,9 @@ capture_with_timeout() {
   local out
   out="$(mktemp)" || return 1
 
-  "$@" >"$out" 2>/dev/null &
   local rc=0
-  _wait_or_kill $! "$secs" || rc=$?
+  _spawn_bounded "$out" "$@"
+  _reap_group "$_BOUNDED_PID" "$secs" || rc=$?
 
   cat "$out"
   rm -f "$out"
@@ -272,11 +309,19 @@ $(capture_with_timeout 5 "$CLI_BINARY" vaults verbose 2>/dev/null || true)
 EOF
 
   if ! $CLI_VAULT_ADDRESSABLE; then
-    log "WARN: the Obsidian CLI is installed, but Obsidian has no vault registered at"
-    log "      ${VAULT_ROOT_REAL}"
-    log "      A CLI call would target a DIFFERENT directory (or fail), so the cli"
-    log "      transport is being skipped. Open this folder as a vault in Obsidian to"
-    log "      enable it. Falling back to: filesystem."
+    # Two very different causes, two very different fixes. Do not tell someone to
+    # register a vault they already registered; the app just is not running.
+    if ! $OBSIDIAN_RUNNING; then
+      log "WARN: the Obsidian CLI is installed, but Obsidian is not running, so it"
+      log "      cannot report which vaults exist. The vault may well be registered."
+      log "      Start Obsidian and re-run with --force. Falling back to: filesystem."
+    else
+      log "WARN: the Obsidian CLI is installed and Obsidian is running, but no vault"
+      log "      is registered at ${VAULT_ROOT_REAL}"
+      log "      A CLI call would target a DIFFERENT directory (or fail), so the cli"
+      log "      transport is being skipped. Open this folder as a vault in Obsidian"
+      log "      to enable it. Falling back to: filesystem."
+    fi
   fi
 fi
 
