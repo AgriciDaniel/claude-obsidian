@@ -9,9 +9,19 @@ on:
 
 jobs:
   test:
-    name: Hermetic test suite
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    name: Hermetic test suite (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # macOS is a first-class target, so it is in CI. A Linux-only matrix cannot
+        # see the bug class that detect-browser.sh exists to avoid: browsers live in
+        # .app bundles on macOS and never land on PATH, so a PATH-only probe reports
+        # "no browser" on a Mac that has Chrome installed. Ubuntu would pass that
+        # bug straight through. It also runs bash 3.2, which catches GNU-isms.
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout
@@ -25,8 +35,8 @@ jobs:
       - name: Verify Python version
         run: python3 --version
 
-      - name: Verify Bash + GNU coreutils
-        run: bash --version && date --version | head -1
+      - name: Verify Bash
+        run: bash --version
 
       - name: Make scripts executable
         run: chmod +x scripts/*.sh scripts/*.py bin/*.sh tests/*.sh 2>/dev/null || true
@@ -43,6 +53,99 @@ jobs:
 
       - name: Verify transport detection
         run: bash scripts/detect-transport.sh --peek | python3 -m json.tool > /dev/null
+
+      - name: Verify browser detection
+        run: bash scripts/detect-browser.sh --peek | python3 -m json.tool > /dev/null
+
+      - name: Verify the SSRF guard actually denies (fail closed, not open)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # These MUST be denied. If an always-on fetcher will hit the cloud
+          # metadata endpoint, it will hand over credentials on request. This
+          # step asserts the deny, rather than trusting that the code reads right.
+          # Includes encoded spellings of blocked addresses: 2130706433 is
+          # 127.0.0.1 in decimal, 2852039166 is the cloud-metadata endpoint in
+          # decimal. A guard that only knows dotted-quad is bypassed by these.
+          for url in \
+            "http://169.254.169.254/latest/meta-data/" \
+            "http://127.0.0.1:8080/admin" \
+            "https://10.0.0.5/internal" \
+            "http://2130706433/" \
+            "http://2852039166/latest/meta-data/" \
+            "http://0x7f.0.0.1/" \
+            "file:///etc/passwd" ; do
+            if python3 scripts/net-policy.py check-fetch "$url" >/dev/null 2>&1; then
+              echo "SECURITY REGRESSION: net-policy ALLOWED $url"
+              exit 1
+            fi
+            echo "denied (correct): $url"
+          done
+          # And a public URL must still be allowed, or we have merely broken the network.
+          python3 scripts/net-policy.py check-fetch "https://example.com" >/dev/null
+          echo "allowed (correct): https://example.com"
+
+      - name: Verify secrets can never egress, even to an allowlisted host
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/net-policy.py grant api.example.com >/dev/null
+          if python3 scripts/net-policy.py check-egress https://api.example.com \
+               --payload /home/user/.env >/dev/null 2>&1; then
+            echo "SECURITY REGRESSION: a .env payload egressed to an allowlisted host"
+            exit 1
+          fi
+          echo "denied (correct): .env payload to an allowlisted host"
+
+  rules-drift:
+    name: Rule packs are current
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # rules/ is the single source of truth; the six rendered agent dialects are
+      # build artifacts. Without this gate, "one source of truth" silently decays
+      # back into six copies that disagree, which is the thing it was built to stop.
+      - name: Rendered rule files match rules/
+        run: python3 scripts/render-rules.py check
+
+  core-surface:
+    name: Every endpoint the plugin claims is reachable
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh scripts/*.py bin/*.sh tests/*.sh 2>/dev/null || true
+
+      # capabilities.json is derived from source. If someone adds a skill and does not
+      # rescan, the plugin's self-description silently drifts from what it actually is,
+      # and a confidently-wrong self-description is worse than none at all.
+      - name: capabilities.json matches the source tree
+        run: python3 scripts/core-introspect.py check
+
+      # The check above only proves the JSON agrees with the source. This one EXECUTES
+      # every endpoint. It is the difference between a surface that is declared and a
+      # surface that is real, and it is the only step that can catch a skill with broken
+      # frontmatter or a script whose --help crashes.
+      - name: Execute every endpoint
+        run: python3 scripts/core-introspect.py verify
 
   lint-skills:
     name: Skill frontmatter validation

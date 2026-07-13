@@ -39,6 +39,7 @@ Open-source Obsidian AI plugin for AI note-taking, personal knowledge management
   - [`/canvas`: visual layer](#canvas-visual-layer)
   - [`/think`: 10-principle thinking loop](#think-10-principle-thinking-loop)
 - [Methodology Modes (v1.8+)](#methodology-modes-v18)
+- [Live Core (v2.0)](#live-core-v20)
 - [Vault Use Cases (v1.0+)](#vault-use-cases-v10)
 - [Cross-Project Knowledge Base](#cross-project-knowledge-base)
 - [What Gets Created](#what-gets-created)
@@ -264,6 +265,41 @@ Four organizational philosophies, opt-in via `bash bin/setup-mode.sh`. The `wiki
 | **Zettelkasten** (Luhmann slip-box) | Atomic notes, unique IDs, dense bidirectional linking, no folders. | `wiki/<YYYYMMDDHHMMSSffffff>-<slug>.md` (flat, timestamped) |
 
 Switching modes does NOT auto-migrate existing files. Full guide: [`docs/methodology-modes-guide.md`](docs/methodology-modes-guide.md).
+
+---
+
+## Live Core (v2.0)
+
+v1.x built a vault that compounds knowledge, but it was **sealed**: it read only what you handed it, and it had no opinion about how the agent using it should behave. v2.0 opens it along five axes.
+
+```bash
+bash bin/setup-live.sh          # interactive
+bash bin/setup-live.sh --check  # status only, changes nothing
+```
+
+| Capability | What it adds | Entry point |
+|---|---|---|
+| **Always-on internet** | The vault reads the web at will. Egress is gated. | `scripts/net-policy.py` |
+| **Browser** | JS-rendered and login-gated pages become ingestible. | `scripts/detect-browser.sh` |
+| **Rule packs** | One rule, authored once, compiled to six coding agents. | `scripts/render-rules.py` |
+| **Workflows** | Fable-driven multi-agent fan-out over the vault. | `workflows/*.js` |
+| **Self-knowledge** | The plugin knows its own surface, and proves it by running it. | `scripts/core-introspect.py` |
+
+**Internet access is two capabilities, not one.** Reading the public web (*inbound*) is on by default and asks nobody. Sending vault content to a third party (*egress*) asks for consent, every time. Collapsing those into a single "network: on" flag is precisely how a private note ends up in a vendor's logs. An SSRF guard denies loopback, private, and cloud-metadata addresses (`169.254.169.254` hands out cloud credentials to anyone who asks it nicely), and secrets (`.env`, `*.pem`, `.ssh/`, `.aws/`) can **never** egress, even to a host you explicitly allowlisted. Consent to send the vault is not consent to send an SSH key. A corrupt policy file fails closed. CI asserts the deny rather than trusting that the code reads correctly.
+
+**The browser exists because `WebFetch` fails silently.** Against a JS-rendered or login-gated page it returns the page shell and **reports success**, and you get a wiki note confidently synthesized from a nav bar. Chain: `playwright` (full interaction) → `cdp` (render, screenshot, dump DOM) → `fetch` (plain HTTP, always available).
+
+**Rules are authored once and compiled to six dialects** — Claude, Cursor, Windsurf, Copilot, Codex, Gemini — from `rules/<domain>/<slug>.md`. Ships 20 rules (10 coding, 10 finance, 6 blockers). Maintaining six copies by hand guarantees drift: someone fixes a rule in `CLAUDE.md`, forgets Cursor, and now two agents in the same repo disagree about what "done" means. `render-rules.py check` runs in CI and goes red on drift, which is the only reason "single source of truth" stays true.
+
+**The plugin's feature list is never written by hand.** A hand-written one is believed forever and starts rotting immediately. `core-introspect.py` *discovers* every endpoint by walking the source and *verifies* it by **executing** each one:
+
+```bash
+python3 scripts/core-introspect.py list           # the whole surface
+python3 scripts/core-introspect.py show script/net-policy.py
+python3 scripts/core-introspect.py verify         # EXECUTE every endpoint; red if any is broken
+```
+
+Full guide: [`docs/live-core-guide.md`](docs/live-core-guide.md), including the threat model and what it explicitly does **not** defend against.
 
 ---
 

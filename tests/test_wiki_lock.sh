@@ -156,7 +156,8 @@ for i in $(seq 1 10); do
     break
   fi
 done
-LIST_COUNT=$(wl list | wc -l)
+# BSD wc pads with leading spaces, GNU wc does not; assert_eq is a string compare.
+LIST_COUNT=$(wl list | wc -l | tr -d '[:space:]')
 assert_eq "10 unique paths all acquired" "10" "$LIST_COUNT"
 wl clear-stale --max-age 0 >/dev/null
 

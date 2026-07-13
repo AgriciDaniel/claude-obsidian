@@ -60,8 +60,10 @@ for i in $(seq 1 10); do
   (./scripts/allocate-address.sh >> concurrent.txt) &
 done
 wait
-UNIQ=$(sort -u concurrent.txt | wc -l)
-TOTAL=$(wc -l < concurrent.txt)
+# BSD wc pads its count with leading spaces; GNU wc does not. Strip whitespace
+# or this compares "10" against "      10" and fails on macOS only.
+UNIQ=$(sort -u concurrent.txt | wc -l | tr -d '[:space:]')
+TOTAL=$(wc -l < concurrent.txt | tr -d '[:space:]')
 assert_eq "10 concurrent allocs: unique count" "10" "$UNIQ"
 assert_eq "10 concurrent allocs: total count"  "10" "$TOTAL"
 
