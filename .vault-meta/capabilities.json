@@ -1,0 +1,1253 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/core-introspect.py scan",
+  "warning": "GENERATED FROM SOURCE. Do not hand-edit. Run 'core-introspect.py scan' to refresh.",
+  "counts": {
+    "skill": 19,
+    "script": 16,
+    "workflow": 3,
+    "rule": 20,
+    "command": 4,
+    "agent": 3,
+    "hook": 4,
+    "make": 25,
+    "config": 5
+  },
+  "total": 99,
+  "capabilities": [
+    {
+      "id": "skill/autoresearch",
+      "kind": "skill",
+      "name": "autoresearch",
+      "summary": ">",
+      "triggers": [],
+      "tools": "Read Write Edit Glob Grep WebFetch WebSearch",
+      "path": "skills/autoresearch/SKILL.md",
+      "invoke": "/autoresearch"
+    },
+    {
+      "id": "skill/browser",
+      "kind": "skill",
+      "name": "browser",
+      "summary": "Browser automation for the Compound Vault (v2.0 'Live Core'). WebFetch is blind to JS-rendered, login-gated and cookie-walled pages, and it fails SILENTLY by returning the page shell and reporting suc",
+      "triggers": [
+        "browser",
+        "headless",
+        "playwright",
+        "chrome",
+        "chromium",
+        "CDP",
+        "devtools",
+        "screenshot this page",
+        "render this page",
+        "this page needs JS",
+        "the fetch came back empty",
+        "page is behind a login",
+        "cookie wall",
+        "dump the DOM",
+        "click",
+        "wait for selector",
+        "detect browser",
+        "which browser"
+      ],
+      "tools": "Read, Write, Bash, WebFetch",
+      "path": "skills/browser/SKILL.md",
+      "invoke": "/browser"
+    },
+    {
+      "id": "skill/canvas",
+      "kind": "skill",
+      "name": "canvas",
+      "summary": "Visual layer of the wiki. Add images, text cards, PDFs, and wiki pages to Obsidian canvas files with auto-positioning inside zones. Integrates with /banana for image capture.",
+      "triggers": [
+        "/canvas",
+        "canvas new",
+        "canvas add image",
+        "canvas add text",
+        "canvas add pdf",
+        "canvas add note",
+        "canvas zone",
+        "canvas list",
+        "canvas from banana",
+        "add to canvas",
+        "put this on the canvas",
+        "open canvas",
+        "create canvas"
+      ],
+      "tools": "Read Write Edit Glob Grep",
+      "path": "skills/canvas/SKILL.md",
+      "invoke": "/canvas"
+    },
+    {
+      "id": "skill/core",
+      "kind": "skill",
+      "name": "core",
+      "summary": "The plugin's knowledge of itself (v2.0 'Live Core'). Answers what claude-obsidian can do, what every skill/script/workflow/rule/hook/make-target is, what flags and subcommands and exit codes each expo",
+      "triggers": [
+        "core",
+        "what can you do",
+        "what are your capabilities",
+        "what skills do you have",
+        "what does this plugin do",
+        "list the scripts",
+        "what commands exist",
+        "what flags does X take",
+        "how do I invoke X",
+        "is X broken",
+        "does X still work",
+        "what endpoints are there",
+        "self-introspection",
+        "capabilities",
+        "capability manifest",
+        "show me the surface",
+        "what workflows exist",
+        "what rules are loaded"
+      ],
+      "tools": "Read, Bash, Grep, Glob",
+      "path": "skills/core/SKILL.md",
+      "invoke": "/core"
+    },
+    {
+      "id": "skill/defuddle",
+      "kind": "skill",
+      "name": "defuddle",
+      "summary": "Strip clutter from web pages before ingesting into the wiki. Removes ads, navigation, headers, footers, and boilerplate: leaving clean readable markdown that saves 40-60% tokens.",
+      "triggers": [
+        "defuddle",
+        "clean this page",
+        "strip this url",
+        "fetch and clean",
+        "clean web content before ingesting",
+        "strip ads",
+        "remove clutter",
+        "clean URL content",
+        "readable markdown from URL"
+      ],
+      "tools": "Read Bash",
+      "path": "skills/defuddle/SKILL.md",
+      "invoke": "/defuddle"
+    },
+    {
+      "id": "skill/obsidian-bases",
+      "kind": "skill",
+      "name": "obsidian-bases",
+      "summary": "Create and edit Obsidian Bases (.base files): Obsidian's native database layer for dynamic tables, card views, list views, filters, formulas, and summaries over vault notes.",
+      "triggers": [
+        "create a base",
+        "add a base file",
+        "obsidian bases",
+        "base view",
+        "filter notes",
+        "formula",
+        "database view",
+        "dynamic table",
+        "task tracker base",
+        "reading list base"
+      ],
+      "tools": "Read Write",
+      "path": "skills/obsidian-bases/SKILL.md",
+      "invoke": "/obsidian-bases"
+    },
+    {
+      "id": "skill/obsidian-markdown",
+      "kind": "skill",
+      "name": "obsidian-markdown",
+      "summary": "Write correct Obsidian Flavored Markdown: wikilinks, embeds, callouts, properties, tags, highlights, math, and canvas syntax. Reference this when creating or editing any wiki page.",
+      "triggers": [
+        "write obsidian note",
+        "obsidian syntax",
+        "wikilink",
+        "callout",
+        "embed",
+        "obsidian markdown",
+        "wikilink format",
+        "callout syntax",
+        "embed syntax",
+        "obsidian formatting",
+        "how to write obsidian markdown"
+      ],
+      "tools": "Read Write Edit",
+      "path": "skills/obsidian-markdown/SKILL.md",
+      "invoke": "/obsidian-markdown"
+    },
+    {
+      "id": "skill/save",
+      "kind": "skill",
+      "name": "save",
+      "summary": ">",
+      "triggers": [],
+      "tools": "Read Write Edit Glob Grep",
+      "path": "skills/save/SKILL.md",
+      "invoke": "/save"
+    },
+    {
+      "id": "skill/think",
+      "kind": "skill",
+      "name": "think",
+      "summary": "Apply the 10-principle thinking loop (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) to any non-trivial problem. Walks Claude through external observation, metacognition, active",
+      "triggers": [
+        "think this through",
+        "10-principle review",
+        "/think",
+        "OBSERVE LISTEN THINK",
+        "deep think",
+        "systematic thinking",
+        "structured reasoning",
+        "walk this through",
+        "audit my thinking",
+        "am I thinking about this right"
+      ],
+      "tools": "Read, Grep, Glob, Bash",
+      "path": "skills/think/SKILL.md",
+      "invoke": "/think"
+    },
+    {
+      "id": "skill/web-live",
+      "kind": "skill",
+      "name": "web-live",
+      "summary": "Always-on internet for the Compound Vault (v2.0 'Live Core'). The vault may READ the public web at any time without asking; SENDING vault content to a third party is gated by explicit consent, always.",
+      "triggers": [
+        "web-live",
+        "go online",
+        "fetch this url",
+        "read the web",
+        "search the web",
+        "is the vault online",
+        "network policy",
+        "net policy",
+        "net mode",
+        "offline mode",
+        "live mode",
+        "allow this host",
+        "grant egress",
+        "revoke egress",
+        "can you access the internet",
+        "SSRF",
+        "why was that url blocked",
+        "network denied"
+      ],
+      "tools": "Read, Bash, WebFetch, WebSearch",
+      "path": "skills/web-live/SKILL.md",
+      "invoke": "/web-live"
+    },
+    {
+      "id": "skill/wiki",
+      "kind": "skill",
+      "name": "wiki",
+      "summary": ">",
+      "triggers": [],
+      "tools": "Read Write Edit Glob Grep Bash",
+      "path": "skills/wiki/SKILL.md",
+      "invoke": "/wiki"
+    },
+    {
+      "id": "skill/wiki-cli",
+      "kind": "skill",
+      "name": "wiki-cli",
+      "summary": "Default vault-mutation transport for claude-obsidian v1.7+. Wraps the Obsidian CLI (Obsidian 1.12+) as the preferred way to read, write, search, and modify vault notes from Claude \u2014 no MCP server, no ",
+      "triggers": [
+        "wiki-cli",
+        "obsidian cli",
+        "obsidian read",
+        "obsidian write",
+        "obsidian search",
+        "daily note",
+        "obsidian create",
+        "obsidian append",
+        "vault transport",
+        "which transport",
+        "transport detection",
+        "obsidian command line"
+      ],
+      "tools": "Read Bash",
+      "path": "skills/wiki-cli/SKILL.md",
+      "invoke": "/wiki-cli"
+    },
+    {
+      "id": "skill/wiki-fold",
+      "kind": "skill",
+      "name": "wiki-fold",
+      "summary": "Rollup of wiki log entries into meta-pages. Reads the last 2^k entries from wiki/log.md, writes a structurally-idempotent fold page to wiki/folds/ that links back to children. Extractive summarization",
+      "triggers": [
+        "fold the log",
+        "run a fold",
+        "run wiki-fold",
+        "log rollup",
+        "roll up log entries"
+      ],
+      "tools": "",
+      "path": "skills/wiki-fold/SKILL.md",
+      "invoke": "/wiki-fold"
+    },
+    {
+      "id": "skill/wiki-ingest",
+      "kind": "skill",
+      "name": "wiki-ingest",
+      "summary": "Ingest sources into the Obsidian wiki vault. Reads a source, extracts entities and concepts, creates or updates wiki pages, cross-references, and logs the operation. Supports files, URLs, and batch mo",
+      "triggers": [
+        "ingest",
+        "process this source",
+        "add this to the wiki",
+        "read and file this",
+        "batch ingest",
+        "ingest all of these",
+        "ingest this url"
+      ],
+      "tools": "",
+      "path": "skills/wiki-ingest/SKILL.md",
+      "invoke": "/wiki-ingest"
+    },
+    {
+      "id": "skill/wiki-lint",
+      "kind": "skill",
+      "name": "wiki-lint",
+      "summary": ">",
+      "triggers": [],
+      "tools": "",
+      "path": "skills/wiki-lint/SKILL.md",
+      "invoke": "/wiki-lint"
+    },
+    {
+      "id": "skill/wiki-mode",
+      "kind": "skill",
+      "name": "wiki-mode",
+      "summary": "Methodology modes for the Compound Vault. Lets the vault declare an organizational style (LYT / PARA / Zettelkasten / Generic) that wiki-ingest, save, and autoresearch consult before filing new pages.",
+      "triggers": [
+        "set vault mode",
+        "switch to PARA",
+        "use LYT",
+        "what's my vault mode",
+        "zettelkasten setup",
+        "wiki mode",
+        "methodology mode",
+        "change mode",
+        "configure mode"
+      ],
+      "tools": "Read, Write, Bash",
+      "path": "skills/wiki-mode/SKILL.md",
+      "invoke": "/wiki-mode"
+    },
+    {
+      "id": "skill/wiki-query",
+      "kind": "skill",
+      "name": "wiki-query",
+      "summary": "Answer questions using the Obsidian wiki vault. Reads hot cache first, then index, then relevant pages. Synthesizes answers with citations. Files good answers back as wiki pages. Supports quick, stand",
+      "triggers": [
+        "what do you know about",
+        "query:",
+        "what is",
+        "explain",
+        "summarize",
+        "find in wiki",
+        "search the wiki",
+        "based on the wiki",
+        "wiki query quick",
+        "wiki query deep"
+      ],
+      "tools": "Read Glob Grep",
+      "path": "skills/wiki-query/SKILL.md",
+      "invoke": "/wiki-query"
+    },
+    {
+      "id": "skill/wiki-retrieve",
+      "kind": "skill",
+      "name": "wiki-retrieve",
+      "summary": "Hybrid retrieval primitive for the Compound Vault. Replaces the v1.6 static hot\u2192index\u2192drill read order with contextual-prefix + BM25 + cosine-rerank, modeled on Anthropic's Sept 2024 Contextual Retrie",
+      "triggers": [
+        "retrieve",
+        "hybrid retrieval",
+        "BM25",
+        "rerank",
+        "contextual retrieval",
+        "search the chunks",
+        "chunk search",
+        "vault search",
+        "semantic search",
+        "what chunks match",
+        "find relevant passages"
+      ],
+      "tools": "Read Bash",
+      "path": "skills/wiki-retrieve/SKILL.md",
+      "invoke": "/wiki-retrieve"
+    },
+    {
+      "id": "skill/wiki-workflow",
+      "kind": "skill",
+      "name": "wiki-workflow",
+      "summary": "Fable-driven multi-agent workflow layer for the Compound Vault (v2.0 'Live Core'). Ships deterministic orchestration scripts under `workflows/`, run with Claude Code's Workflow tool, that fan out over",
+      "triggers": [
+        "wiki-workflow",
+        "run a workflow",
+        "deep ingest",
+        "deep-ingest",
+        "research sweep",
+        "research-sweep",
+        "rules audit",
+        "rules-audit",
+        "fan out",
+        "fan-out",
+        "multi-agent",
+        "orchestrate agents",
+        "parallel ingest",
+        "adversarial verify",
+        "audit this diff against the rules",
+        "sweep the web on"
+      ],
+      "tools": "Read, Write, Bash",
+      "path": "skills/wiki-workflow/SKILL.md",
+      "invoke": "/wiki-workflow"
+    },
+    {
+      "id": "script/allocate-address.sh",
+      "kind": "script",
+      "name": "allocate-address.sh",
+      "summary": "allocate-address.sh \u2014 atomic creation-order address allocation for the vault.",
+      "subcommands": [
+        "peek",
+        "rebuild"
+      ],
+      "exit_codes": {
+        "0": "success",
+        "1": "lock acquisition failed (another writer is holding the lock)",
+        "2": "vault-meta directory missing and cannot be created",
+        "3": "counter value corrupt or non-numeric"
+      },
+      "path": "scripts/allocate-address.sh",
+      "invoke": "bash scripts/allocate-address.sh <peek|rebuild>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/baseline-v16.py",
+      "kind": "script",
+      "name": "baseline-v16.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "3": "wiki directory missing"
+      },
+      "path": "scripts/baseline-v16.py",
+      "invoke": "python3 scripts/baseline-v16.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/benchmark-runner.py",
+      "kind": "script",
+      "name": "benchmark-runner.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {},
+      "path": "scripts/benchmark-runner.py",
+      "invoke": "python3 scripts/benchmark-runner.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/bm25-index.py",
+      "kind": "script",
+      "name": "bm25-index.py",
+      "summary": "",
+      "subcommands": [
+        "build",
+        "query",
+        "stats"
+      ],
+      "exit_codes": {
+        "0": "success",
+        "1": "lock acquisition failed",
+        "2": "usage error",
+        "3": "index file missing or corrupt (query mode)",
+        "4": "chunks directory missing"
+      },
+      "path": "scripts/bm25-index.py",
+      "invoke": "python3 scripts/bm25-index.py <build|query|stats>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/boundary-score.py",
+      "kind": "script",
+      "name": "boundary-score.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {},
+      "path": "scripts/boundary-score.py",
+      "invoke": "python3 scripts/boundary-score.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/contextual-prefix.py",
+      "kind": "script",
+      "name": "contextual-prefix.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "3": "page file missing or unreadable",
+        "4": "chunk dir creation failed"
+      },
+      "path": "scripts/contextual-prefix.py",
+      "invoke": "python3 scripts/contextual-prefix.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/core-introspect.py",
+      "kind": "script",
+      "name": "core-introspect.py",
+      "summary": "",
+      "subcommands": [
+        "check",
+        "list",
+        "scan",
+        "show",
+        "verify",
+        "x"
+      ],
+      "exit_codes": {
+        "0": "success (or: verify passed, everything reachable)",
+        "1": "verify found a broken endpoint, or check found the manifest stale",
+        "2": "usage error"
+      },
+      "path": "scripts/core-introspect.py",
+      "invoke": "python3 scripts/core-introspect.py <check|list|scan|show|verify|x>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/detect-browser.sh",
+      "kind": "script",
+      "name": "detect-browser.sh",
+      "summary": "detect-browser.sh \u2014 discover which browser-automation transports are available",
+      "subcommands": [
+        "force",
+        "peek",
+        "quiet"
+      ],
+      "exit_codes": {
+        "0": "success (browser.json written or peeked)",
+        "2": "vault-meta/ missing and cannot be created",
+        "3": "unrecognized flag"
+      },
+      "path": "scripts/detect-browser.sh",
+      "invoke": "bash scripts/detect-browser.sh <force|peek|quiet>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/detect-transport.sh",
+      "kind": "script",
+      "name": "detect-transport.sh",
+      "summary": "detect-transport.sh \u2014 discover which vault-mutation transports are available",
+      "subcommands": [
+        "force",
+        "peek",
+        "quiet"
+      ],
+      "exit_codes": {
+        "0": "success (transport.json written or peeked)",
+        "2": "vault-meta/ missing and cannot be created",
+        "3": "unrecognized flag"
+      },
+      "path": "scripts/detect-transport.sh",
+      "invoke": "bash scripts/detect-transport.sh <force|peek|quiet>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/net-policy.py",
+      "kind": "script",
+      "name": "net-policy.py",
+      "summary": "",
+      "subcommands": [
+        "check-egress",
+        "check-fetch",
+        "config",
+        "get",
+        "grant",
+        "revoke",
+        "set-mode"
+      ],
+      "exit_codes": {
+        "0": "allow",
+        "1": "deny",
+        "2": "usage error",
+        "3": "ask (consent required; caller must prompt the human)",
+        "4": "invalid mode"
+      },
+      "path": "scripts/net-policy.py",
+      "invoke": "python3 scripts/net-policy.py <check-egress|check-fetch|config|get|grant|revoke|set-mode>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/render-rules.py",
+      "kind": "script",
+      "name": "render-rules.py",
+      "summary": "",
+      "subcommands": [
+        "check",
+        "list",
+        "render"
+      ],
+      "exit_codes": {
+        "0": "success (or: check passed, everything current)",
+        "1": "check failed: at least one rendered file is stale or missing",
+        "2": "usage error",
+        "3": "a rule file is malformed"
+      },
+      "path": "scripts/render-rules.py",
+      "invoke": "python3 scripts/render-rules.py <check|list|render>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/rerank.py",
+      "kind": "script",
+      "name": "rerank.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "3": "candidate input malformed",
+        "10": "ollama unreachable (no-op rerank performed, exit 0 with note)",
+        "11": "model not pulled (no-op rerank performed, exit 0 with note)"
+      },
+      "path": "scripts/rerank.py",
+      "invoke": "python3 scripts/rerank.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/retrieve.py",
+      "kind": "script",
+      "name": "retrieve.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "10": "feature not provisioned (no chunks or no BM25 index); caller falls back"
+      },
+      "path": "scripts/retrieve.py",
+      "invoke": "python3 scripts/retrieve.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/tiling-check.py",
+      "kind": "script",
+      "name": "tiling-check.py",
+      "summary": "",
+      "subcommands": [],
+      "exit_codes": {},
+      "path": "scripts/tiling-check.py",
+      "invoke": "python3 scripts/tiling-check.py",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "script/wiki-lock.sh",
+      "kind": "script",
+      "name": "wiki-lock.sh",
+      "summary": "wiki-lock.sh \u2014 per-file advisory locking for safe multi-writer vault mutation.",
+      "subcommands": [
+        "max-age",
+        "stale-after-sec"
+      ],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "75": "acquire failed (lock held by alive process)",
+        "3": "vault-meta/locks dir creation failed",
+        "4": "invalid vault-relative path (escape attempt)"
+      },
+      "path": "scripts/wiki-lock.sh",
+      "invoke": "bash scripts/wiki-lock.sh <max-age|stale-after-sec>",
+      "executable": true,
+      "verifiable": false
+    },
+    {
+      "id": "script/wiki-mode.py",
+      "kind": "script",
+      "name": "wiki-mode.py",
+      "summary": "",
+      "subcommands": [
+        "config",
+        "get",
+        "id",
+        "route",
+        "set",
+        "templates"
+      ],
+      "exit_codes": {
+        "0": "success",
+        "2": "usage error",
+        "3": "invalid mode string",
+        "4": "invalid content type"
+      },
+      "path": "scripts/wiki-mode.py",
+      "invoke": "python3 scripts/wiki-mode.py <config|get|id|route|set|templates>",
+      "executable": true,
+      "verifiable": true
+    },
+    {
+      "id": "workflow/deep-ingest",
+      "kind": "workflow",
+      "name": "deep-ingest",
+      "summary": "Fan out over many sources: ingest each in parallel under a lock, verify, then lint once",
+      "phases": [
+        "Ingest",
+        "Verify",
+        "Lint"
+      ],
+      "path": "workflows/deep-ingest.js",
+      "invoke": "Workflow tool, scriptPath: workflows/deep-ingest.js"
+    },
+    {
+      "id": "workflow/research-sweep",
+      "kind": "workflow",
+      "name": "research-sweep",
+      "summary": "Multi-modal web sweep on a topic: search wide, deep-read, adversarially verify, file into the wiki",
+      "phases": [
+        "Sweep",
+        "Read",
+        "Verify",
+        "File"
+      ],
+      "path": "workflows/research-sweep.js",
+      "invoke": "Workflow tool, scriptPath: workflows/research-sweep.js"
+    },
+    {
+      "id": "workflow/rules-audit",
+      "kind": "workflow",
+      "name": "rules-audit",
+      "summary": "Audit a diff or a codebase against the rules/ packs. One auditor per rule, adversarially verified.",
+      "phases": [
+        "Audit",
+        "Verify",
+        "Report"
+      ],
+      "path": "workflows/rules-audit.js",
+      "invoke": "Workflow tool, scriptPath: workflows/rules-audit.js"
+    },
+    {
+      "id": "rule/coding/green-gate-is-not-the-feature",
+      "kind": "rule",
+      "name": "A green gate can be fully satisfied by an invisible feature",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/coding/green-gate-is-not-the-feature.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/match-surrounding-code",
+      "kind": "rule",
+      "name": "You are a guest in this codebase",
+      "summary": "severity: medium",
+      "severity": "medium",
+      "path": "rules/coding/match-surrounding-code.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/no-hand-rolled-locks",
+      "kind": "rule",
+      "name": "Do not hand-roll a mutex",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/coding/no-hand-rolled-locks.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/no-invented-causes",
+      "kind": "rule",
+      "name": "A fallback must never name a cause it did not verify",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/coding/no-invented-causes.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/no-silent-scope-creep",
+      "kind": "rule",
+      "name": "Do the task asked, surface the rest",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/coding/no-silent-scope-creep.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/platforms-must-be-in-ci",
+      "kind": "rule",
+      "name": "A platform you do not test is a platform you do not support",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/coding/platforms-must-be-in-ci.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/read-before-write",
+      "kind": "rule",
+      "name": "Read the file before you write it, and trust code over docs",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/coding/read-before-write.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/reproduce-before-fix",
+      "kind": "rule",
+      "name": "Reproduce before you fix",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/coding/reproduce-before-fix.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/smallest-diff-that-solves-it",
+      "kind": "rule",
+      "name": "Prefer deleting to adding",
+      "summary": "severity: medium",
+      "severity": "medium",
+      "path": "rules/coding/smallest-diff-that-solves-it.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/coding/verify-by-execution",
+      "kind": "rule",
+      "name": "Verify by execution, never by inspection",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/coding/verify-by-execution.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/as-of-and-staleness",
+      "kind": "rule",
+      "name": "Timestamp market data; stale presented as live is a defect",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/as-of-and-staleness.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/guard-against-lookahead-bias",
+      "kind": "rule",
+      "name": "Guard against look-ahead and survivorship bias",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/guard-against-lookahead-bias.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/label-calculation-estimate-opinion",
+      "kind": "rule",
+      "name": "Label whether you are calculating, estimating, or opining",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/label-calculation-estimate-opinion.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/no-personalized-advice",
+      "kind": "rule",
+      "name": "Give analysis, never personalized investment advice",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/finance/no-personalized-advice.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/no-unsourced-figures",
+      "kind": "rule",
+      "name": "Never state a figure you did not retrieve",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/finance/no-unsourced-figures.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/protect-financial-pii",
+      "kind": "rule",
+      "name": "Do not transmit identifiable financial data without explicit consent",
+      "summary": "severity: blocker",
+      "severity": "blocker",
+      "path": "rules/finance/protect-financial-pii.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/reconcile-material-figures",
+      "kind": "rule",
+      "name": "Cross-check every material figure against a second source",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/reconcile-material-figures.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/show-the-work",
+      "kind": "rule",
+      "name": "Show the formula and the inputs, not just the output",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/show-the-work.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/state-assumptions-and-limits",
+      "kind": "rule",
+      "name": "State model assumptions and material limitations up front",
+      "summary": "severity: medium",
+      "severity": "medium",
+      "path": "rules/finance/state-assumptions-and-limits.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "rule/finance/units-currency-scale",
+      "kind": "rule",
+      "name": "Units, currency, and scale are load-bearing",
+      "summary": "severity: high",
+      "severity": "high",
+      "path": "rules/finance/units-currency-scale.md",
+      "invoke": "compiled by scripts/render-rules.py into 6 agent dialects"
+    },
+    {
+      "id": "command/autoresearch",
+      "kind": "command",
+      "name": "/autoresearch",
+      "summary": "Run an autonomous research loop on a topic. Searches the web, synthesizes findings, and files everything into the wiki as structured pages.",
+      "path": "commands/autoresearch.md",
+      "invoke": "/autoresearch"
+    },
+    {
+      "id": "command/canvas",
+      "kind": "command",
+      "name": "/canvas",
+      "summary": "Open, create, or update a visual canvas \u2014 add images, text, PDFs, wiki pages, and banana-generated assets to Obsidian canvas files.",
+      "path": "commands/canvas.md",
+      "invoke": "/canvas"
+    },
+    {
+      "id": "command/save",
+      "kind": "command",
+      "name": "/save",
+      "summary": "Save the current conversation or a specific insight into the wiki vault as a structured note.",
+      "path": "commands/save.md",
+      "invoke": "/save"
+    },
+    {
+      "id": "command/wiki",
+      "kind": "command",
+      "name": "/wiki",
+      "summary": "Bootstrap or check the claude-obsidian wiki vault. Reads the wiki skill and runs setup workflow.",
+      "path": "commands/wiki.md",
+      "invoke": "/wiki"
+    },
+    {
+      "id": "agent/verifier",
+      "kind": "agent",
+      "name": "verifier",
+      "summary": ">",
+      "tools": "Read, Grep, Glob, Bash",
+      "path": "agents/verifier.md",
+      "invoke": "Agent tool, subagent_type: verifier"
+    },
+    {
+      "id": "agent/wiki-ingest",
+      "kind": "agent",
+      "name": "wiki-ingest",
+      "summary": ">",
+      "tools": "Read, Write, Edit, Glob, Grep, Bash",
+      "path": "agents/wiki-ingest.md",
+      "invoke": "Agent tool, subagent_type: wiki-ingest"
+    },
+    {
+      "id": "agent/wiki-lint",
+      "kind": "agent",
+      "name": "wiki-lint",
+      "summary": ">",
+      "tools": "Read, Write, Glob, Grep, Bash",
+      "path": "agents/wiki-lint.md",
+      "invoke": "Agent tool, subagent_type: wiki-lint"
+    },
+    {
+      "id": "hook/SessionStart",
+      "kind": "hook",
+      "name": "SessionStart",
+      "summary": "1 matcher(s) registered",
+      "path": "hooks/hooks.json",
+      "invoke": "fires automatically on SessionStart"
+    },
+    {
+      "id": "hook/PostCompact",
+      "kind": "hook",
+      "name": "PostCompact",
+      "summary": "1 matcher(s) registered",
+      "path": "hooks/hooks.json",
+      "invoke": "fires automatically on PostCompact"
+    },
+    {
+      "id": "hook/PostToolUse",
+      "kind": "hook",
+      "name": "PostToolUse",
+      "summary": "1 matcher(s) registered",
+      "path": "hooks/hooks.json",
+      "invoke": "fires automatically on PostToolUse"
+    },
+    {
+      "id": "hook/Stop",
+      "kind": "hook",
+      "name": "Stop",
+      "summary": "1 matcher(s) registered",
+      "path": "hooks/hooks.json",
+      "invoke": "fires automatically on Stop"
+    },
+    {
+      "id": "make/check-core",
+      "kind": "make",
+      "name": "check-core",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make check-core"
+    },
+    {
+      "id": "make/check-rules",
+      "kind": "make",
+      "name": "check-rules",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make check-rules"
+    },
+    {
+      "id": "make/clean-test-state",
+      "kind": "make",
+      "name": "clean-test-state",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make clean-test-state"
+    },
+    {
+      "id": "make/help",
+      "kind": "make",
+      "name": "help",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make help"
+    },
+    {
+      "id": "make/render-rules",
+      "kind": "make",
+      "name": "render-rules",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make render-rules"
+    },
+    {
+      "id": "make/scan",
+      "kind": "make",
+      "name": "scan",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make scan"
+    },
+    {
+      "id": "make/setup-dragonscale",
+      "kind": "make",
+      "name": "setup-dragonscale",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make setup-dragonscale"
+    },
+    {
+      "id": "make/setup-live",
+      "kind": "make",
+      "name": "setup-live",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make setup-live"
+    },
+    {
+      "id": "make/setup-mode",
+      "kind": "make",
+      "name": "setup-mode",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make setup-mode"
+    },
+    {
+      "id": "make/setup-retrieve",
+      "kind": "make",
+      "name": "setup-retrieve",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make setup-retrieve"
+    },
+    {
+      "id": "make/test",
+      "kind": "make",
+      "name": "test",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test"
+    },
+    {
+      "id": "make/test-address",
+      "kind": "make",
+      "name": "test-address",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-address"
+    },
+    {
+      "id": "make/test-bm25",
+      "kind": "make",
+      "name": "test-bm25",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-bm25"
+    },
+    {
+      "id": "make/test-boundary",
+      "kind": "make",
+      "name": "test-boundary",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-boundary"
+    },
+    {
+      "id": "make/test-browser",
+      "kind": "make",
+      "name": "test-browser",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-browser"
+    },
+    {
+      "id": "make/test-concurrent",
+      "kind": "make",
+      "name": "test-concurrent",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-concurrent"
+    },
+    {
+      "id": "make/test-contextual",
+      "kind": "make",
+      "name": "test-contextual",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-contextual"
+    },
+    {
+      "id": "make/test-introspect",
+      "kind": "make",
+      "name": "test-introspect",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-introspect"
+    },
+    {
+      "id": "make/test-lock",
+      "kind": "make",
+      "name": "test-lock",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-lock"
+    },
+    {
+      "id": "make/test-mode",
+      "kind": "make",
+      "name": "test-mode",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-mode"
+    },
+    {
+      "id": "make/test-net",
+      "kind": "make",
+      "name": "test-net",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-net"
+    },
+    {
+      "id": "make/test-render",
+      "kind": "make",
+      "name": "test-render",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-render"
+    },
+    {
+      "id": "make/test-retrieve",
+      "kind": "make",
+      "name": "test-retrieve",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-retrieve"
+    },
+    {
+      "id": "make/test-tiling",
+      "kind": "make",
+      "name": "test-tiling",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make test-tiling"
+    },
+    {
+      "id": "make/verify-core",
+      "kind": "make",
+      "name": "verify-core",
+      "summary": "",
+      "path": "Makefile",
+      "invoke": "make verify-core"
+    },
+    {
+      "id": "config/transport.json",
+      "kind": "config",
+      "name": "transport.json",
+      "summary": "vault-mutation transport (cli > mcp > filesystem)",
+      "path": ".vault-meta/transport.json",
+      "invoke": "read .vault-meta/transport.json"
+    },
+    {
+      "id": "config/browser.json",
+      "kind": "config",
+      "name": "browser.json",
+      "summary": "browser transport (playwright > cdp > fetch)",
+      "path": ".vault-meta/browser.json",
+      "invoke": "read .vault-meta/browser.json"
+    },
+    {
+      "id": "config/net.json",
+      "kind": "config",
+      "name": "net.json",
+      "summary": "network policy (inbound always-on, egress gated)",
+      "path": ".vault-meta/net.json",
+      "invoke": "read .vault-meta/net.json"
+    },
+    {
+      "id": "config/mode.json",
+      "kind": "config",
+      "name": "mode.json",
+      "summary": "methodology mode (generic | lyt | para | zettelkasten)",
+      "path": ".vault-meta/mode.json",
+      "invoke": "read .vault-meta/mode.json"
+    },
+    {
+      "id": "config/capabilities.json",
+      "kind": "config",
+      "name": "capabilities.json",
+      "summary": "this manifest",
+      "path": ".vault-meta/capabilities.json",
+      "invoke": "read .vault-meta/capabilities.json"
+    }
+  ],
+  "generated_at": "2026-07-13T21:48:53Z"
+}

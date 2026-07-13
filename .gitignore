@@ -132,3 +132,22 @@ _attachments/
 # v1.8 methodology mode (host-specific by default; `git add -f` to commit if desired)
 .vault-meta/mode.json
 .vault-meta/mode.*.tmp
+
+# v2.0 renders the Claude rule dialect into .claude/rules/, which makes .claude/ a
+# committed directory for the first time. Claude Code also puts its worktrees under
+# .claude/worktrees/, so without this line the next `git add .claude/` from the main
+# checkout would commit an entire second copy of the repo into the repo.
+.claude/worktrees/
+.claude/settings.local.json
+
+# v2.0 Live Core. net.json and browser.json describe THIS machine (which browser is
+# installed, which hosts this user granted egress to), so they never get committed.
+# capabilities.json is different in kind: it is derived from the source tree alone and
+# is therefore identical on every machine at a given commit. It IS committed, so the
+# plugin can read its own surface without first running a scan, and so `core-introspect
+# check` has something to gate against.
+.vault-meta/net.json
+.vault-meta/net.*.tmp
+.vault-meta/browser.json
+.vault-meta/browser.*.tmp
+.vault-meta/capabilities.*.tmp
