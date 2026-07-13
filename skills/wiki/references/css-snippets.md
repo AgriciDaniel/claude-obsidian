@@ -20,7 +20,6 @@ Create this file at `.obsidian/snippets/vault-colors.css` inside the vault:
 }
 
 /* Folder colors in file explorer */
-.nav-folder-title[data-path^="wiki/domains"]     { color: var(--wiki-1); }
 .nav-folder-title[data-path^="wiki/entities"]    { color: var(--wiki-2); }
 .nav-folder-title[data-path^="wiki/concepts"]    { color: var(--wiki-3); }
 .nav-folder-title[data-path^="wiki/sources"]     { color: var(--wiki-4); }
@@ -62,7 +61,6 @@ Guide the user to set these in Graph View settings (click the settings icon in t
 
 | Query | Color |
 |-------|-------|
-| `path:wiki/domains` | Blue (`#4fc1ff`) |
 | `path:wiki/entities` | Purple (`#c586c0`) |
 | `path:wiki/concepts` | Yellow (`#dcdcaa`) |
 | `path:wiki/sources` | Orange (`#ce9178`) |

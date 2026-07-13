@@ -44,8 +44,6 @@ wiki/
 │   └── _index.md
 ├── concepts/           # ideas, patterns, frameworks
 │   └── _index.md
-├── domains/            # top-level topic areas
-│   └── _index.md
 ├── comparisons/        # side-by-side analyses
 ├── questions/          # filed answers to user queries
 └── meta/               # dashboards, lint reports, conventions
@@ -120,7 +118,7 @@ Steps:
 1. Determine the wiki mode. Read `references/modes.md` to show the 6 options and pick the best fit.
 2. Ask: "What is this vault for?" (one question, then proceed).
 3. Create full folder structure under `wiki/` based on the mode.
-4. Create domain pages + `_index.md` sub-indexes.
+4. Create type folders' `_index.md` sub-indexes.
 5. Create `wiki/index.md`, `wiki/log.md`, `wiki/hot.md`, `wiki/overview.md`.
 6. Create `_templates/` files for each note type.
 7. Apply visual customization. Read `references/css-snippets.md`. Create `.obsidian/snippets/vault-colors.css`.
@@ -176,7 +174,7 @@ Path: ~/path/to/vault
 When you need context not already in this project:
 1. Read wiki/hot.md first (recent context, ~500 words)
 2. If not enough, read wiki/index.md (full catalog)
-3. If you need domain specifics, read wiki/<domain>/_index.md
+3. If you need type-specific specifics, read wiki/<type>/_index.md
 4. Only then read individual wiki pages
 
 Do NOT read the wiki for:

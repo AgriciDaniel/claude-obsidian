@@ -160,7 +160,7 @@ LIST FROM "wiki/questions" WHERE answer_quality = "draft" SORT created DESC
 
 ## Canvas Map
 
-Create or update `wiki/meta/overview.canvas` for a visual domain map:
+Create or update `wiki/meta/overview.canvas` for a visual knowledge map:
 
 ```json
 {
@@ -178,7 +178,7 @@ Create or update `wiki/meta/overview.canvas` for a visual domain map:
 }
 ```
 
-Add one node per domain page. Connect domains that have significant cross-references. Colors map to the CSS scheme: 1=blue, 2=purple, 3=yellow, 4=orange, 5=green, 6=red.
+Add one node per major concept/entity page. Connect pages that have significant cross-references. Colors map to the CSS scheme: 1=blue, 2=purple, 3=yellow, 4=orange, 5=green, 6=red.
 
 ---
 

@@ -51,7 +51,7 @@ The v1.6 + v1.7 vault structure was opinion-free — `wiki/sources/`, `wiki/enti
 
 ### Generic (default — v1.7 behavior)
 
-**Filing convention:** preserves the v1.6/v1.7 default — `wiki/sources/`, `wiki/entities/`, `wiki/concepts/`, `wiki/<domain>/`. No opinion imposed.
+**Filing convention:** preserves the default — `wiki/sources/`, `wiki/entities/`, `wiki/concepts/`, and other type folders. No domain-based top-level folders; domain is a frontmatter/tag field on notes. No opinion imposed.
 
 **When to use:** when you don't want to commit to a methodology, or you're migrating from v1.7 and want zero behavior change.
 

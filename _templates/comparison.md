@@ -10,6 +10,7 @@ dimensions:
 verdict: "Replace with one-line conclusion."
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
+domain: ""
 tags:
   - comparison
 status: seed

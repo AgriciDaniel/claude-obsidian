@@ -62,7 +62,7 @@ If it does not exist, create it:
 
 1. Slugify the name: lowercase, spaces → hyphens, strip special chars.
 2. Create `wiki/canvases/[slug].canvas` with the starter structure, title updated to `# [Name]`.
-3. Add entry to `wiki/overview.md` under a "## Canvases" subsection (append after the Current State section). Do not modify `wiki/index.md`. It uses a fixed section schema (Domains, Entities, Concepts, Sources, Questions, Comparisons).
+3. Add entry to `wiki/overview.md` under a "## Canvases" subsection (append after the Current State section). Do not modify `wiki/index.md`. It uses a fixed section schema (Entities, Concepts, Sources, Questions, Comparisons).
 4. Report: "Created wiki/canvases/[slug].canvas"
 
 ---

@@ -295,10 +295,10 @@ Path: ~/path/to/vault
 When you need context not already in this project:
 1. Read wiki/hot.md first (recent context cache)
 2. If not enough, read wiki/index.md
-3. If you need domain details, read the relevant domain sub-index
+3. If you need type-specific details, read the relevant type sub-index
 4. Only then drill into specific wiki pages
 
-Do NOT read the wiki for general coding questions or tasks unrelated to [domain].
+Do NOT read the wiki for general coding questions or tasks unrelated to this vault's subject matter.
 ```
 
 Your executive assistant, coding projects, and content workflows all draw from the same knowledge base.

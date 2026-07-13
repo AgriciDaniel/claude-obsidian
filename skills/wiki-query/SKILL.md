@@ -121,9 +121,6 @@ If hot.md has the answer, respond without reading further.
 The master index (`wiki/index.md`) looks like:
 
 ```markdown
-## Domains
-- [[Domain Name]]: description (N sources)
-
 ## Entities
 - [[Entity Name]]: role (first: [[Source]])
 
@@ -141,9 +138,9 @@ Scan the section headers first to determine which sections to read.
 
 ---
 
-## Domain Sub-Index Format
+## Type Sub-Index Format
 
-Each domain folder has a `_index.md` for focused lookups:
+Each type folder has a `_index.md` for focused lookups:
 
 ```markdown
 ---
@@ -163,7 +160,7 @@ updated: YYYY-MM-DD
 - [[Product Name]]: category
 ```
 
-Use sub-indexes when the question is scoped to one domain. Avoid reading the full master index for narrow queries.
+Use sub-indexes when the question is scoped to one type folder. Avoid reading the full master index for narrow queries.
 
 ---
 
