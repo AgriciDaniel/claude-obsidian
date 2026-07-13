@@ -226,7 +226,7 @@ fi
 
 | Script | Status | Role |
 |---|---|---|
-| `allocate-address.sh` | DragonScale Mech 2 | Atomic c-NNNNNN allocator (flock) |
+| `allocate-address.sh` | DragonScale Mech 2 | Atomic c-NNNNNN allocator (Python lock, cross-platform) |
 | `tiling-check.py` | DragonScale Mech 3 | Embedding-based duplicate lint (fcntl) |
 | `boundary-score.py` | DragonScale Mech 4 | Frontier scoring for autoresearch |
 | `detect-transport.sh` | **new in v1.7 (§3.2)** | Transport detection → transport.json |

@@ -1,108 +1,28 @@
 #!/usr/bin/env bash
-# allocate-address.sh — atomic creation-order address allocation for the vault.
+# allocate-address.sh — thin wrapper delegating to allocate-address.py.
 #
-# Reserves the next address of the form c-NNNNNN and increments the counter
-# under an exclusive flock. On missing counter file, recovers by scanning the
-# vault for the highest existing c-NNNNNN in page frontmatter and resuming from
-# max+1. Never silently resets to 1 in a non-empty vault.
+# The original flock-based implementation didn't run under Git Bash/MSYS2 on
+# Windows (no flock binary). Locking logic moved to allocate-address.py,
+# which uses msvcrt.locking on win32 and fcntl.flock elsewhere (same pattern
+# as bm25-index.py). This wrapper is kept — same filename, same exec bit —
+# because skills/docs feature-detect DragonScale via
+# `[ -x ./scripts/allocate-address.sh ]`.
 #
-# Usage:
-#   ./scripts/allocate-address.sh           # prints the reserved address (e.g. c-000042) to stdout
-#   ./scripts/allocate-address.sh --peek    # prints the next value without incrementing
-#   ./scripts/allocate-address.sh --rebuild # recomputes counter from max observed and exits
-#
-# Exit codes:
-#   0 — success
-#   1 — lock acquisition failed (another writer is holding the lock)
-#   2 — vault-meta directory missing and cannot be created
-#   3 — counter value corrupt or non-numeric
+# Usage: see allocate-address.py --help / header docstring.
 
 set -euo pipefail
 
-if [ -n "${CO_VAULT_ROOT:-}" ]; then
-  VAULT_ROOT="$CO_VAULT_ROOT"
-elif [ -d "$PWD/.vault-meta" ] || [ -d "$PWD/wiki" ]; then
-  VAULT_ROOT="$PWD"
-else
-  VAULT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-fi
-COUNTER_FILE="${VAULT_ROOT}/.vault-meta/address-counter.txt"
-LOCK_FILE="${VAULT_ROOT}/.vault-meta/.address.lock"
-WIKI_DIR="${VAULT_ROOT}/wiki"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-MODE="${1:-allocate}"
-
-mkdir -p "$(dirname "$COUNTER_FILE")" || {
-  echo "ERR: cannot create .vault-meta/" >&2
-  exit 2
-}
-
-# Acquire exclusive lock with 5-second timeout. Release automatically on scope exit.
-exec 9>"$LOCK_FILE"
-if ! flock -x -w 5 9; then
-  echo "ERR: could not acquire address allocator lock within 5s" >&2
-  exit 1
-fi
-
-scan_max_c_address() {
-  # Emit the largest NNNNNN from "address: c-NNNNNN" lines that appear inside
-  # the FIRST YAML frontmatter block of each wiki .md file. Code-block examples
-  # and body prose are excluded. Returns 0 if none found.
-  if [ ! -d "$WIKI_DIR" ]; then
-    echo 0
-    return
-  fi
-  find "$WIKI_DIR" -type f -name '*.md' -print0 2>/dev/null \
-    | xargs -0 awk '
-        FNR == 1 { state = "pre"; next_is_fm = ($0 == "---") ? 1 : 0 }
-        FNR == 1 && $0 == "---" { state = "fm"; next }
-        state == "fm" && $0 == "---" { state = "body"; nextfile }
-        state == "fm" && match($0, /^address:[[:space:]]+c-[0-9]{6}[[:space:]]*$/) {
-          if (match($0, /c-[0-9]{6}/)) {
-            print substr($0, RSTART, RLENGTH)
-          }
-        }
-      ' 2>/dev/null \
-    | sed 's/^c-0*//;s/^$/0/' \
-    | sort -n \
-    | tail -1 \
-    | awk 'BEGIN{n=0} {n=$0} END{print (n+0)}'
-}
-
-read_or_recover_counter() {
-  if [ ! -f "$COUNTER_FILE" ]; then
-    local max_c
-    max_c="$(scan_max_c_address)"
-    echo $((max_c + 1)) > "$COUNTER_FILE"
-    echo "INFO: counter file missing; recovered from vault scan, set to $((max_c + 1))" >&2
-  fi
-  local raw
-  raw="$(cat "$COUNTER_FILE")"
-  if ! [[ "$raw" =~ ^[0-9]+$ ]]; then
-    echo "ERR: counter file content is not a positive integer: $raw" >&2
-    exit 3
-  fi
-  echo "$raw"
-}
-
-case "$MODE" in
-  --peek)
-    read_or_recover_counter
-    ;;
-  --rebuild)
-    max_c="$(scan_max_c_address)"
-    echo $((max_c + 1)) > "$COUNTER_FILE"
-    echo "Counter rebuilt: next = $((max_c + 1))"
-    ;;
-  allocate|"")
-    current="$(read_or_recover_counter)"
-    next=$((current + 1))
-    echo "$next" > "$COUNTER_FILE"
-    printf 'c-%06d\n' "$current"
-    ;;
-  *)
-    echo "ERR: unknown mode: $MODE" >&2
-    echo "Usage: $0 [allocate|--peek|--rebuild]" >&2
-    exit 3
-    ;;
-esac
+# Not `exec`: on Windows/MSYS, redirecting a real (non-MSYS) child process's
+# stdout with `>>` from several concurrent bash jobs races at the OS level
+# (each native child gets its own append-mode handle, and Windows does not
+# serialize those writes the way POSIX processes sharing an msys fd do) —
+# so bash captures the child's output itself and re-emits it with a plain
+# builtin `printf`, which uses the same append fd bash always has.
+set +e
+OUT="$(uv run --project "$SCRIPT_DIR/.." python "$SCRIPT_DIR/allocate-address.py" "$@")"
+EC=$?
+set -e
+[ -n "$OUT" ] && printf '%s\n' "$OUT"
+exit "$EC"
