@@ -107,7 +107,7 @@ Do not include the raw transcript unless the user asks for it. Do not pad with f
 
 Every run persists **both** artifacts to the wiki — no exceptions, even on URL-only default run. This skill operates on the vault at the current working directory, same as every other skill in this plugin (`CO_VAULT_ROOT` env var overrides; see `src/claude_obsidian/_vault.py`). Architecture: `.raw/` = immutable source docs, `wiki/` = generated knowledge base.
 
-**Route filing through the `wiki-ingest` skill** — it is purpose-built for ingesting external sources: reads the source, creates/updates wiki pages, extracts entities/concepts, cross-references existing pages, and logs the operation with correct transport (wiki-cli / MCP / filesystem) and methodology-mode paths.
+**Route filing through the `wiki-ingest` skill — this is not optional.** It is purpose-built for ingesting external sources: reads the source, creates/updates entity/concept pages, cross-references existing pages, and updates `wiki/index.md` + `wiki/hot.md` + `wiki/log.md`. Do not silently take the direct-write Fallback path just because it's less work — a video mentioning several products/people/orgs (as most do) needs those entity pages and index/hot updates to actually be discoverable later. Confirm `wiki-ingest` is present (`[ -f skills/wiki-ingest/SKILL.md ]` vault-local or under `$CLAUDE_OBSIDIAN_REPO`) before deciding to fall back; only fall back if it is genuinely missing or errors out, and say so in the final chat message ("wiki-ingest unavailable, filed directly").
 
 Two artifacts per video, **named by content (not title), filed under a domain subfolder**. Use `<filename>` below = the content-derived name from the "Video title + author" rules:
 
@@ -132,9 +132,16 @@ Workflow per run. **Do all file work first — the chat summary is the LAST thin
 5. **Derive `<filename>` from the summary content** (descriptive, unambiguous; see "Video title + author" rules).
 6. Pick domain subfolder (default `Generic/`).
 7. Write raw transcript to `.raw/youtube/<filename>.md`.
-8. Invoke `wiki-ingest` on the raw file with the summary as the synthesized note, target path `wiki/sources/<domain>/<filename>.md`. Let it own transport, frontmatter, cross-refs, index/log/hot.
+8. Invoke `wiki-ingest` on the raw file with the summary as the synthesized note, target path `wiki/sources/<domain>/<filename>.md`. Let it own transport, frontmatter, cross-refs, index/log/hot — this includes creating/updating an entity page for every person/org/product the video names (channel, manufacturers, etc.) and a concept page for any significant idea/framework, per `wiki-ingest`'s own Single Source Ingest steps.
 9. **Only now, once every write above is done**, output one chat message: the full summary (TL;DR + bullets + table + remarks) followed by the landed file paths. This is the single final message for the run — no tool calls after it.
 
-Fallback (if `wiki-ingest` unavailable): write summary to `wiki/sources/<domain>/<filename>.md` and raw to `.raw/youtube/<filename>.md` directly via `Write`, append a line to `wiki/log.md`, cross-link the two with `[[wikilinks]]`. Same rule applies: finish all writes, then output the summary once.
+**Concurrency within one ingest**: entity/concept pages are different files, so they're safe to write in parallel under `wiki-lock.sh`'s per-file advisory locking (v1.7+ core, not opt-in — see `wiki-ingest`'s Concurrency section). But `wiki/index.md`, `wiki/hot.md`, and `wiki/log.md` are single shared files — update each once, sequentially, as the last step; don't try to parallelize writes to the same file, the lock only serializes contention, it doesn't make a shared file safely concurrent. For one video's handful of entities the sequencing overhead of real parallel dispatch (spawning sub-agents) isn't worth it — that machinery already exists for **Batch Ingest** of multiple sources (`agents/wiki-ingest.md`), not for the entity fan-out of a single source.
+
+Fallback (only if `wiki-ingest` is genuinely missing or errors — see above, this is not a default path): reproduce the same coverage directly —
+- write raw to `.raw/youtube/<filename>.md` and summary to `wiki/sources/<domain>/<filename>.md` via `Write`
+- create/update an entity page under `wiki/entities/` for every person/org/product named (channel, manufacturers, etc.), cross-linked with `[[wikilinks]]`
+- update `wiki/index.md` (add the new source + entity entries) and `wiki/hot.md` (recent-context summary)
+- append a line to `wiki/log.md`
+Same rule applies: finish all writes, then output the summary once.
 
 If a save fails, finish whatever writes still succeed, then deliver the summary to chat and report which file(s) failed — still as one final message, not before the save attempt. If the user explicitly says "don't save" / "just tell me", skip wiki save for that run only (summary is then the only step, so ordering is moot).
