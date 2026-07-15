@@ -22,7 +22,7 @@ help:
 	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual test-hooks
 	@echo ""
 	@echo "All tests passed."
 
@@ -57,6 +57,10 @@ test-concurrent:
 test-mode:
 	@echo "=== test_wiki_mode.py ==="
 	@python3 tests/test_wiki_mode.py
+
+test-hooks:
+	@echo "=== test_hooks_json.py ==="
+	@python3 tests/test_hooks_json.py
 
 test-contextual:
 	@echo "=== test_contextual_prefix.py ==="
