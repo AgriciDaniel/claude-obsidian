@@ -2,6 +2,30 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- **SessionStart prompt-type hook error** (`hooks/hooks.json`). Removed the
+  `type: "prompt"` hook from the `SessionStart` block. Claude Code does not
+  support prompt-type hooks at `SessionStart` (no conversation context exists at
+  startup), so it errored on every session start with `prompt-type hooks are not
+  supported for SessionStart events`. Hot-cache restoration at startup is
+  unchanged — the sibling `cat wiki/hot.md` command hook already handles it, and
+  `PostCompact` still restores mid-session. Distinct from the STDOUT-capture issue
+  noted in `hooks/README.md`.
+
+### Added
+
+- `tests/test_hooks_json.py` — hermetic validation that each event's hook types
+  are harness-legal, guarding specifically against reintroducing a prompt hook at
+  `SessionStart`. Wired into `make test` (now 10 suites) + `make test-hooks`.
+
+### Documented
+
+- `hooks/README.md` `SessionStart` row updated to `command` and notes that
+  prompt hooks are unsupported at that event.
+
 ## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
 
 Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.
