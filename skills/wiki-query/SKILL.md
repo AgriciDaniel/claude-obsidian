@@ -95,7 +95,7 @@ Use for synthesis questions, comparisons, or "tell me everything about X."
 1. Read `wiki/hot.md` and `wiki/index.md`.
 2. Identify all relevant sections (concepts, entities, sources, comparisons).
 3. Read every relevant page. No skipping.
-4. If wiki coverage is thin, offer to supplement with web search.
+4. If wiki coverage is thin, ask: "Quick web search to fill the gap (filed into the wiki), or `/autoresearch` to dig deep (also filed)?" Don't pick for the user.
 5. Synthesize a comprehensive answer with full citations.
 6. Always file the result back as a wiki page. Deep answers are too valuable to lose.
 
@@ -195,12 +195,13 @@ After filing, add an entry to `wiki/index.md` under Questions and append to `wik
 
 ## Gap Handling
 
-If the question cannot be answered from the wiki:
+If the question cannot be answered from the wiki, always fall back to web research — but always ask which mode first:
 
 1. Say clearly: "I don't have enough in the wiki to answer this well."
 2. Identify the specific gap: "I have nothing on [subtopic]."
-3. Suggest: "Want to find a source on this? I can help you search or process one."
-4. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
+3. Ask: "Want me to look this up? Quick web search now (I'll file the answer into the wiki as a `question` page), or `/autoresearch` for a deep multi-source dive that gets filed too?"
+4. Both paths file into the wiki — quick search files a single `question` page via the standard Filing Answers Back format; `/autoresearch` files its own structured pages via its own loop. Neither path is "unfiled." Only the depth differs.
+5. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki. Do not silently pick a research mode — wait for the user's choice.
 
 ---
 
