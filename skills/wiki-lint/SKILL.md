@@ -324,7 +324,7 @@ If you place a real concept under `wiki/meta/` it will be excluded by path regar
 - Computes one embedding per included page via the ollama `nomic-embed-text` model by default.
 - Caches embeddings at `.vault-meta/tiling-cache.json`, keyed on `sha256(model + body)` so model drift auto-invalidates. Frontmatter is not part of the hash or the embedding input — pure frontmatter edits (tag changes, status bumps) do not trigger recomputation.
 - Orphans are GC'd: when a cached page path no longer exists on disk, its entry is dropped on save.
-- Concurrent-safe: exclusive flock on `.vault-meta/.tiling.lock` around cache I/O; per-PID temp file for atomic writes.
+- Concurrent-safe: exclusive file lock on `.vault-meta/.tiling.lock` around cache I/O (msvcrt on Windows, fcntl elsewhere); per-PID temp file for atomic writes.
 
 ### Security posture
 

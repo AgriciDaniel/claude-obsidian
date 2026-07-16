@@ -171,6 +171,8 @@ After setup, `wiki-query` standard/deep modes automatically use the new pipeline
 - **Cross-process release allowed**: `release` is `rm -f` (no PID match required). Skill authors are trusted to release locks they acquire. The `wiki-lock clear-stale --max-age 0` command is the canonical recovery path.
 - **PID in the lockfile is informational only** (helpful for `list` and debugging).
 
+**Implementation (v1.9.2+):** the logic lives in `scripts/wiki-lock.py`; `wiki-lock.sh` is a thin wrapper kept for the stable `bash scripts/wiki-lock.sh …` call sites. The internal meta-lock (which serializes acquire/release/clear-stale against each other) uses `msvcrt.locking` on Windows and `fcntl.flock` elsewhere — the `flock` binary is not required, so locking works under Git Bash on Windows where earlier versions silently failed and skills fell back to unguarded writes.
+
 **Skill integration:**
 
 Four skills gained "## Concurrency (v1.7+)" sections with the recipe:

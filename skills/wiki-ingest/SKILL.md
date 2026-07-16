@@ -295,7 +295,7 @@ Rollout baseline: **2026-04-23** (Phase 2 ship date). Pages with `created:` >= t
 
 ### Required tool: `$SCRIPTS/allocate-address.sh`
 
-Address allocation is delegated to an atomic Bash helper. The helper uses `flock` on `.vault-meta/.address.lock` to prevent read-use-increment races and recovers the counter by scanning existing frontmatter if the counter file is missing.
+Address allocation is delegated to an atomic helper (a thin Bash wrapper over `allocate-address.py`). The helper holds an exclusive file lock on `.vault-meta/.address.lock` (msvcrt on Windows, fcntl elsewhere — no `flock` binary needed) to prevent read-use-increment races and recovers the counter by scanning existing frontmatter if the counter file is missing.
 
 ```bash
 ADDR=$($SCRIPTS/allocate-address.sh)
@@ -346,7 +346,7 @@ On a page rename, the skill must update the `address_map` key (old path -> new p
 
 ### Concurrency policy
 
-- **Single-writer only** in Phase 2. Do not run parallel ingests from multiple Claude sessions or sub-agents that assign addresses. The `flock` in the helper prevents counter corruption but does not serialize page writes themselves.
+- **Single-writer only** in Phase 2. Do not run parallel ingests from multiple Claude sessions or sub-agents that assign addresses. The file lock in the helper prevents counter corruption but does not serialize page writes themselves.
 - Sub-agents (codex, general-purpose) that are dispatched for research or review MUST NOT call the allocator. They are read-only in this respect.
 - Multi-writer support is a deferred feature.
 

@@ -481,17 +481,9 @@ When those conditions are not met, the repo falls back to earlier behavior. That
 
 ## Troubleshooting
 
-### Missing flock
+### Locking errors
 
-If `flock` is missing, fix that first. Symptoms can include an unsafe address-allocation path or a tiling cache path that cannot lock correctly.
-
-Check:
-
-```bash
-command -v flock
-```
-
-If it is absent, install the package that provides it for your system, then rerun:
+The `flock` binary is NOT required (since v1.9.2 nothing in the repo shells out to it — the allocator, tiling cache, and wiki-lock all lock via Python: `msvcrt.locking` on Windows, `fcntl.flock` elsewhere). If address allocation or the tiling cache reports lock failures, check that `uv` (or `python3`) is installed and runs from the vault root, then rerun:
 
 ```bash
 bash bin/setup-dragonscale.sh
