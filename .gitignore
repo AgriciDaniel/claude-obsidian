@@ -26,6 +26,11 @@ __pycache__/
 *.pyc
 .venv/
 
+# Serena MCP (project.yml + memories/ are tracked project docs; cache and
+# the local host-override file are machine-specific)
+.serena/cache/
+.serena/project.local.yml
+
 # Node
 node_modules/
 

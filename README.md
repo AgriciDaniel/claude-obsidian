@@ -295,10 +295,10 @@ Path: ~/path/to/vault
 When you need context not already in this project:
 1. Read wiki/hot.md first (recent context cache)
 2. If not enough, read wiki/index.md
-3. If you need domain details, read the relevant domain sub-index
+3. If you need type-specific details, read the relevant type sub-index
 4. Only then drill into specific wiki pages
 
-Do NOT read the wiki for general coding questions or tasks unrelated to [domain].
+Do NOT read the wiki for general coding questions or tasks unrelated to this vault's subject matter.
 ```
 
 Your executive assistant, coding projects, and content workflows all draw from the same knowledge base.
@@ -459,7 +459,7 @@ claude-obsidian/
 ├── .claude-plugin/
 │   ├── plugin.json              # manifest
 │   └── marketplace.json         # distribution
-├── skills/                       # 15 Claude Code skills (v1.9.2)
+├── skills/                       # 16 Claude Code skills (v1.9.2)
 │   ├── wiki/                    # orchestrator + references
 │   ├── wiki-ingest/             # source ingestion
 │   ├── wiki-query/              # answer questions from the vault
@@ -472,6 +472,7 @@ claude-obsidian/
 │   ├── autoresearch/            # autonomous research loop
 │   ├── canvas/                  # visual layer (images, PDFs, notes)
 │   ├── defuddle/                # web extraction wrapper
+│   ├── youtube/                 # YouTube transcript fetch + wiki-ingest filing
 │   ├── obsidian-bases/          # Bases schema reference
 │   ├── obsidian-markdown/       # OFM syntax reference
 │   └── think/                   # 10-principle thinking framework (v1.9+)

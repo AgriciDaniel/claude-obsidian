@@ -50,19 +50,9 @@ bash bin/setup-dragonscale.sh /path/to/vault
 
 If you omit the path, it uses the repo root inferred from `bin/`.
 
-### Universal prerequisite: flock
+### Locking: cross-platform, no flock required
 
-`flock` is the universal prerequisite. Mechanism 2 uses it directly in `scripts/allocate-address.sh` to guard `.vault-meta/.address.lock`. Mechanism 3 uses flock from Python to guard `.vault-meta/.tiling.lock` around cache I/O.
-
-Quick check:
-
-```bash
-command -v flock
-```
-
-If that prints nothing, install `flock` before relying on DragonScale. On Linux it is usually already present. On macOS it commonly comes from `util-linux`.
-
-If `flock` is missing, setup can still create files, but the address allocator and tiling cache path are not reliable. Treat that as a blocker.
+DragonScale locking runs through Python (`fcntl.flock` on Linux/macOS, `msvcrt.locking` on Windows) rather than the `flock` binary. `scripts/allocate-address.sh` is a thin wrapper around `scripts/allocate-address.py` (via `uv run`) that guards `.vault-meta/.address.lock` this way; Mechanism 3 uses the same pattern in `bm25-index.py` for `.vault-meta/.bm25.lock` and in the tiling cache for `.vault-meta/.tiling.lock`. No separate `flock` install is needed on any platform, including Git Bash / MSYS2 on Windows, where the standalone `flock` binary is normally absent.
 
 ### Mechanism 3 extra prerequisites: python3, ollama, nomic-embed-text
 
@@ -491,17 +481,9 @@ When those conditions are not met, the repo falls back to earlier behavior. That
 
 ## Troubleshooting
 
-### Missing flock
+### Locking errors
 
-If `flock` is missing, fix that first. Symptoms can include an unsafe address-allocation path or a tiling cache path that cannot lock correctly.
-
-Check:
-
-```bash
-command -v flock
-```
-
-If it is absent, install the package that provides it for your system, then rerun:
+The `flock` binary is NOT required (since v1.9.2 nothing in the repo shells out to it — the allocator, tiling cache, and wiki-lock all lock via Python: `msvcrt.locking` on Windows, `fcntl.flock` elsewhere). If address allocation or the tiling cache reports lock failures, check that `uv` (or `python3`) is installed and runs from the vault root, then rerun:
 
 ```bash
 bash bin/setup-dragonscale.sh

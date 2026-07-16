@@ -46,17 +46,32 @@ Exit codes:
 """
 
 import argparse
-import fcntl
 import json
 import math
 import os
 import re
 import sys
+
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 META_DIR = VAULT_ROOT / ".vault-meta"
 CHUNKS_DIR = META_DIR / "chunks"
 BM25_DIR = META_DIR / "bm25"
@@ -100,7 +115,7 @@ def acquire_lock():
     META_DIR.mkdir(parents=True, exist_ok=True)
     fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_WRONLY, 0o644)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        _flock_ex(fd)
     except OSError:
         os.close(fd)
         log("ERR: could not acquire bm25 lock")
@@ -110,7 +125,7 @@ def acquire_lock():
 
 def release_lock(fd):
     try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
+        _flock_un(fd)
     finally:
         os.close(fd)
 

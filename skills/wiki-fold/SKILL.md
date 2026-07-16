@@ -40,15 +40,16 @@ When referring to level in frontmatter, use `batch_exponent: k` (not `level: k`)
 
 ## Concurrency (v1.7+)
 
-The fold-page write in commit mode MUST be preceded by `wiki-lock acquire`:
+The fold-page write in commit mode MUST be preceded by `wiki-lock acquire`. Resolve `scripts/` vault-local first, falling back to `$CLAUDE_OBSIDIAN_REPO/scripts` (set once per machine):
 
 ```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
 FOLD_PATH="wiki/folds/${FOLD_ID}.md"
-bash scripts/wiki-lock.sh acquire "$FOLD_PATH" || {
+bash "$SCRIPTS/wiki-lock.sh" acquire "$FOLD_PATH" || {
   echo "FAIL: another writer holds $FOLD_PATH; aborting fold."; exit 75
 }
 # … write the fold via Write/Edit (which fires the PostToolUse hook) …
-bash scripts/wiki-lock.sh release "$FOLD_PATH"
+bash "$SCRIPTS/wiki-lock.sh" release "$FOLD_PATH"
 ```
 
 Fold pages are deterministically named (`fold-k{K}-from-{DATE}-to-{DATE}-n{COUNT}.md`), so two parallel folds with the same parameters target the same path. Without the lock, they could overwrite each other's outputs. The duplicate-detection check inside this skill (already documented below) handles the "fold already exists" case at the SKILL level; the lock handles the in-flight-write race at the OS level.

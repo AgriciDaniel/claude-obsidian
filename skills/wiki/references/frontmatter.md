@@ -10,12 +10,13 @@ Every page, no exceptions:
 
 ```yaml
 ---
-type: <source|entity|concept|domain|comparison|question|overview|meta>
+type: <source|entity|concept|comparison|question|overview|meta>
 title: "Human-Readable Title"
 created: 2026-04-07
 updated: 2026-04-07
+domain: ""
 tags:
-  - <domain-tag>
+  - domain/<domain-value>
   - <type-tag>
 status: <seed|developing|mature|evergreen>
 related:
@@ -30,6 +31,8 @@ sources:
 - `developing`: has real content, not yet complete
 - `mature`: comprehensive, well-linked
 - `evergreen`: unlikely to need updates
+
+**domain field:** flat scalar naming the subject area (`"networking"`, `"soulmask"`, `"ev-cars"`). Not a folder, not its own page type — a plain frontmatter value so both grep (`grep "^domain: networking"`) and Dataview (`WHERE domain = "networking"`) can filter by it directly. Leave `""` if the page doesn't fit one clean domain. Mirror the same value into `tags` as `domain/<value>` so Obsidian's tag pane and graph-view tag filters pick it up too — the field and the tag are two access paths to one fact, not two facts to keep in sync by hand.
 
 ---
 
@@ -62,7 +65,6 @@ first_mentioned: "[[Source Title]]"
 
 ```yaml
 complexity: intermediate  # basic | intermediate | advanced
-domain: ""
 aliases:
   - "alternative name"
   - "abbreviation"
@@ -88,13 +90,6 @@ question: "The original query as asked."
 answer_quality: solid   # draft | solid | definitive
 ```
 
-### domain
-
-```yaml
-subdomain_of: ""        # leave empty for top-level domains
-page_count: 0
-```
-
 ---
 
 ## Rules
@@ -105,3 +100,4 @@ page_count: 0
 4. Wikilinks in YAML fields must be quoted: `"[[Page Name]]"`.
 5. Keep `related` and `sources` as wikilinks, not plain URLs.
 6. Update `updated` every time you edit the page content.
+7. If `domain` is set, add the matching `domain/<value>` tag; if it's empty, don't add a `domain/` tag either.

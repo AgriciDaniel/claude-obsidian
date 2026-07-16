@@ -11,6 +11,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VAULT_ROOT="$(dirname "$SCRIPT_DIR")"
 ALLOC="$VAULT_ROOT/scripts/allocate-address.sh"
+ALLOC_PY="$VAULT_ROOT/scripts/allocate-address.py"
 
 PASS=0
 FAIL=0
@@ -30,7 +31,8 @@ trap 'rm -rf "$TMP"' EXIT
 
 mkdir -p "$TMP/scripts" "$TMP/wiki"
 cp "$ALLOC" "$TMP/scripts/allocate-address.sh"
-chmod +x "$TMP/scripts/allocate-address.sh"
+cp "$ALLOC_PY" "$TMP/scripts/allocate-address.py"
+chmod +x "$TMP/scripts/allocate-address.sh" "$TMP/scripts/allocate-address.py"
 cd "$TMP"
 
 # --- Test 1: rebuild on empty vault = 1 ---

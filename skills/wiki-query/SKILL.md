@@ -10,9 +10,21 @@ The wiki has already done the synthesis work. Read strategically, answer precise
 
 ---
 
+## Scripts Location
+
+`scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>`.
+
+---
+
 ## Transport (v1.7+)
 
-Reads should prefer the same transport the rest of the plugin uses. Consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`) and use the `preferred` entry:
+Reads should prefer the same transport the rest of the plugin uses. Consult `.vault-meta/transport.json` (auto-created by `bash $SCRIPTS/detect-transport.sh`) and use the `preferred` entry:
 
 - **cli** — `obsidian-cli read "$VAULT" "$NOTE"` and `obsidian-cli search "$VAULT" "<query>"` (Obsidian-native ranking); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__read_note`, `search_notes`; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
@@ -24,10 +36,10 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Retrieval (v1.7+)
 
-If `wiki-retrieve` is feature-detected — `[ -x scripts/retrieve.py ] && [ -d .vault-meta/chunks ] && [ -f .vault-meta/bm25/index.json ]` — Standard and Deep modes consult it BEFORE the legacy hot→index→drill chain:
+If `wiki-retrieve` is feature-detected — `[ -x "$SCRIPTS/retrieve.py" ] && [ -d .vault-meta/chunks ] && [ -f .vault-meta/bm25/index.json ]` — Standard and Deep modes consult it BEFORE the legacy hot→index→drill chain:
 
 ```bash
-python3 scripts/retrieve.py "<the user's question verbatim>" --top 5
+uv run $SCRIPTS/retrieve.py "<the user's question verbatim>" --top 5
 ```
 
 Output is JSON with a `candidates` array. Each candidate has `absolute_path` to the source page, a `snippet`, and `bm25_score` + `rerank_score`. Read the cited pages (using the transport selector from §Transport above) and synthesize with chunk-level citation.
@@ -83,7 +95,7 @@ Use for synthesis questions, comparisons, or "tell me everything about X."
 1. Read `wiki/hot.md` and `wiki/index.md`.
 2. Identify all relevant sections (concepts, entities, sources, comparisons).
 3. Read every relevant page. No skipping.
-4. If wiki coverage is thin, offer to supplement with web search.
+4. If wiki coverage is thin, ask: "Quick web search to fill the gap (filed into the wiki), or `/autoresearch` to dig deep (also filed)?" Don't pick for the user.
 5. Synthesize a comprehensive answer with full citations.
 6. Always file the result back as a wiki page. Deep answers are too valuable to lose.
 
@@ -109,9 +121,6 @@ If hot.md has the answer, respond without reading further.
 The master index (`wiki/index.md`) looks like:
 
 ```markdown
-## Domains
-- [[Domain Name]]: description (N sources)
-
 ## Entities
 - [[Entity Name]]: role (first: [[Source]])
 
@@ -129,9 +138,9 @@ Scan the section headers first to determine which sections to read.
 
 ---
 
-## Domain Sub-Index Format
+## Type Sub-Index Format
 
-Each domain folder has a `_index.md` for focused lookups:
+Each type folder has a `_index.md` for focused lookups:
 
 ```markdown
 ---
@@ -151,7 +160,7 @@ updated: YYYY-MM-DD
 - [[Product Name]]: category
 ```
 
-Use sub-indexes when the question is scoped to one domain. Avoid reading the full master index for narrow queries.
+Use sub-indexes when the question is scoped to one type folder. Avoid reading the full master index for narrow queries.
 
 ---
 
@@ -186,12 +195,13 @@ After filing, add an entry to `wiki/index.md` under Questions and append to `wik
 
 ## Gap Handling
 
-If the question cannot be answered from the wiki:
+If the question cannot be answered from the wiki, always fall back to web research — but always ask which mode first:
 
 1. Say clearly: "I don't have enough in the wiki to answer this well."
 2. Identify the specific gap: "I have nothing on [subtopic]."
-3. Suggest: "Want to find a source on this? I can help you search or process one."
-4. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki.
+3. Ask: "Want me to look this up? Quick web search now (I'll file the answer into the wiki as a `question` page), or `/autoresearch` for a deep multi-source dive that gets filed too?"
+4. Both paths file into the wiki — quick search files a single `question` page via the standard Filing Answers Back format; `/autoresearch` files its own structured pages via its own loop. Neither path is "unfiled." Only the depth differs.
+5. Do not fabricate. Do not answer from training data if the question is about the specific domain in this wiki. Do not silently pick a research mode — wait for the user's choice.
 
 ---
 

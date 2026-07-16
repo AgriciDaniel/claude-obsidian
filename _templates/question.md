@@ -5,6 +5,7 @@ question: ""
 answer_quality: draft
 created: <% tp.date.now("YYYY-MM-DD") %>
 updated: <% tp.date.now("YYYY-MM-DD") %>
+domain: ""
 tags:
   - question
 status: developing

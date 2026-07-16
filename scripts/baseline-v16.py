@@ -39,9 +39,10 @@ import json
 import re
 import sys
 from collections import Counter
+import os
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 WIKI_DIR = VAULT_ROOT / "wiki"
 HOT_PATH = WIKI_DIR / "hot.md"
 INDEX_PATH = WIKI_DIR / "index.md"

@@ -42,11 +42,9 @@ Exit codes:
 """
 
 import argparse
-import fcntl
 import json
 import math
 import os
-import shutil
 import sys
 import time
 import urllib.error
@@ -55,7 +53,35 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+WINDOWS_LOCK_CONTENTION_WINERRORS = frozenset({32, 33})
+
+
+def _is_windows_lock_contention(exc):
+    return getattr(exc, "winerror", None) in WINDOWS_LOCK_CONTENTION_WINERRORS
+
+
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        try:
+            msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+        except OSError as e:
+            if _is_windows_lock_contention(e):
+                raise BlockingIOError(e.errno, e.strerror) from e
+            raise
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
+
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 META_DIR = VAULT_ROOT / ".vault-meta"
 EMBED_CACHE_PATH = META_DIR / "embed-cache.json"
 CACHE_LOCK = META_DIR / ".embed-cache.lock"
@@ -152,7 +178,7 @@ def save_cache(cache):
     try:
         for attempt in range(3):
             try:
-                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                _flock_ex(fd)
                 locked = True
                 break
             except BlockingIOError:
@@ -179,7 +205,7 @@ def save_cache(cache):
     finally:
         if locked:
             try:
-                fcntl.flock(fd, fcntl.LOCK_UN)
+                _flock_un(fd)
             except OSError:
                 pass
         os.close(fd)

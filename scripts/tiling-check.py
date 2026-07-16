@@ -27,7 +27,6 @@ Usage:
 """
 
 import argparse
-import fcntl
 import hashlib
 import json
 import math
@@ -40,13 +39,29 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
+if sys.platform == "win32":
+    import msvcrt
+
+    def _flock_ex(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
+
+    def _flock_un(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+else:
+    import fcntl
+
+    def _flock_ex(fd): fcntl.flock(fd, fcntl.LOCK_EX)
+    def _flock_un(fd): fcntl.flock(fd, fcntl.LOCK_UN)
+
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "nomic-embed-text"
 OLLAMA_TIMEOUT_SEC = 3
 EMBED_TIMEOUT_SEC = 30
 MAX_RESPONSE_BYTES = 4 * 1024 * 1024  # 4 MB; embeddings can be ~10 KB each
 
-VAULT_ROOT = Path(__file__).resolve().parent.parent
+VAULT_ROOT = Path(os.environ.get("CO_VAULT_ROOT") or (Path.cwd() if (Path.cwd() / ".vault-meta").is_dir() or (Path.cwd() / "wiki").is_dir() else Path(__file__).resolve().parent.parent)).resolve()
 WIKI_DIR = VAULT_ROOT / "wiki"
 META_DIR = VAULT_ROOT / ".vault-meta"
 CACHE_PATH = META_DIR / "tiling-cache.json"
@@ -164,7 +179,7 @@ def _lock_cache():
     META_DIR.mkdir(exist_ok=True)
     fd = os.open(str(CACHE_LOCK), os.O_CREAT | os.O_RDWR, 0o644)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
+        _flock_ex(fd)
     except OSError:
         os.close(fd)
         raise
@@ -173,7 +188,7 @@ def _lock_cache():
 
 def _unlock_cache(fd: int) -> None:
     try:
-        fcntl.flock(fd, fcntl.LOCK_UN)
+        _flock_un(fd)
     finally:
         os.close(fd)
 

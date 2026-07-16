@@ -19,9 +19,21 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 
 ---
 
+## Scripts Location
+
+All `scripts/*` invocations below resolve vault-local first, falling back to the shared repo checkout via `CLAUDE_OBSIDIAN_REPO` (set once per machine, e.g. `P:\source\llm\projects\claude-obsidian`):
+
+```bash
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:?CLAUDE_OBSIDIAN_REPO not set — point it at your claude-obsidian checkout}/scripts"
+```
+
+Use `$SCRIPTS/<name>` wherever this doc shows `scripts/<name>` or `./scripts/<name>`.
+
+---
+
 ## Transport (v1.7+)
 
-The research loop writes a lot — source pages, concept pages, entity pages, manifest updates. All writes follow the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
+The research loop writes a lot — source pages, concept pages, entity pages, manifest updates. All writes follow the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash $SCRIPTS/detect-transport.sh`):
 
 - **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
@@ -33,7 +45,7 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Mode awareness (v1.8+)
 
-Before filing research output, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route research "<topic>"`. The router returns the vault-relative path:
+Before filing research output, consult the vault's methodology mode via `uv run $SCRIPTS/wiki-mode.py route research "<topic>"`. The router returns the vault-relative path:
 
 - **generic**: `wiki/concepts/<Topic>.md` (v1.7 default)
 - **LYT**: `wiki/notes/<topic>.md` + create or update a topic MOC at `wiki/mocs/<topic>-moc.md`
@@ -65,7 +77,7 @@ The Claude Code `WebFetch` tool has built-in defenses against many of these. App
 
 **4. Failure mode.** If a fetch fails (timeout, 4xx/5xx, content too large, sanitization removed everything), log the URL + reason to `wiki/log.md` and continue the loop. Do NOT abort the whole run. Do NOT silently swallow — every skipped source is a fact the user needs in the synthesis page's "Open Questions" section.
 
-The router (`python3 scripts/wiki-mode.py route`) already sanitizes the topic-derived FILENAME via `safe_name()`. This section adds the second layer: BODY-content hygiene for fetched pages.
+The router (`uv run $SCRIPTS/wiki-mode.py route`) already sanitizes the topic-derived FILENAME via `safe_name()`. This section adds the second layer: BODY-content hygiene for fetched pages.
 
 ---
 
@@ -74,9 +86,9 @@ The router (`python3 scripts/wiki-mode.py route`) already sanitizes the topic-de
 The research loop is a high write-rate skill (often 10-30 page writes per topic). Every wiki page write MUST be preceded by `wiki-lock acquire <path>`:
 
 ```bash
-bash scripts/wiki-lock.sh acquire wiki/sources/<slug>.md || sleep 2 && bash scripts/wiki-lock.sh acquire wiki/sources/<slug>.md
+bash $SCRIPTS/wiki-lock.sh acquire wiki/sources/<slug>.md || sleep 2 && bash $SCRIPTS/wiki-lock.sh acquire wiki/sources/<slug>.md
 # … write via §Transport-selected method …
-bash scripts/wiki-lock.sh release wiki/sources/<slug>.md
+bash $SCRIPTS/wiki-lock.sh release wiki/sources/<slug>.md
 ```
 
 If autoresearch is invoked in parallel (e.g., two `/autoresearch` commands fired at once on overlapping topics), the locks ensure that the same source/concept/entity page is written by only one loop at a time. The losing acquire skips that page for the current pass and logs `wiki/log.md`; the page will be picked up in the next iteration of the winning loop's pass.
@@ -106,7 +118,8 @@ When `/autoresearch` is invoked WITHOUT a topic AND the vault has adopted Dragon
 Feature detection (shell):
 
 ```bash
-if [ -x ./scripts/boundary-score.py ] && [ -d ./.vault-meta ] && command -v python3 >/dev/null 2>&1; then
+SCRIPTS="scripts"; [ -d "$SCRIPTS" ] || SCRIPTS="${CLAUDE_OBSIDIAN_REPO:-}/scripts"
+if [ -x "$SCRIPTS/boundary-score.py" ] && [ -d ./.vault-meta ] && command -v uv >/dev/null 2>&1; then
   BOUNDARY_MODE=1
 else
   BOUNDARY_MODE=0
@@ -115,7 +128,7 @@ fi
 
 When `BOUNDARY_MODE=1`:
 
-1. Run `./scripts/boundary-score.py --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
+1. Run `uv run $SCRIPTS/boundary-score.py --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
 2. **Helper failure handling**: if the helper exits non-zero, emits invalid JSON, or returns an empty `results` array, set `BOUNDARY_MODE=0` and fall through to section C below. Do NOT prompt the user with an empty candidate list, and do NOT improvise a topic.
 3. Present the candidate list to the user: "Your top frontier pages are: [list]. Research which one? (1-5, or type a topic to override, or say 'cancel' to be asked normally.)"
 4. If the user picks 1-5, use the selected page's title as the topic.
