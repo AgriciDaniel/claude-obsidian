@@ -164,27 +164,31 @@ Use cases: whiteboard photos, screenshots, diagrams, infographics, document scan
 
 Trigger: user drops a file into `.raw/` or pastes content.
 
+> For Article Home output (mid-ingest reading entry page), follow [`./article-home.md`](./article-home.md).
+
 Steps:
 
 1. **Read** the source completely. Do not skim.
 2. **Discuss** key takeaways with the user. Ask: "What should I emphasize? How granular?" Skip this if the user says "just ingest it."
-3. **Create** source summary in `wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
-4. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. Assign addresses to new entity pages.
-5. **Create or update** concept pages for significant ideas and frameworks. Assign addresses to new concept pages.
-6. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
-7. **Update** `wiki/overview.md` if the big picture changed.
-8. **Update** `wiki/index.md`. Add entries for all new pages.
-9. **Update** `wiki/hot.md` with this ingest's context.
-10. **Append** to `wiki/log.md` (new entries at the TOP):
+3. **Create** Article Home at `wiki/articles/<slug>-home.md`. Follow the 10 mandatory sections in `CLAUDE.md §Article Home`. Write concept/entity/source wikilinks as planned red links — they will be finalized after those pages are created. See [`./article-home.md`](./article-home.md) for full spec.
+4. **Create** source summary in `wiki/sources/`. MUST include a backlink `[[<slug>-home]]`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
+5. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. MUST include a backlink `[[<slug>-home]]`. Assign addresses to new entity pages.
+6. **Create or update** concept pages for significant ideas and frameworks. MUST include a backlink `[[<slug>-home]]`. Assign addresses to new concept pages.
+7. **Finalize Article Home** — update the "值得沉淀的 wiki 页面" section: replace planned wikilinks with actual page title wikilinks (e.g. `[[Planned Concept]]` → `[[Actual Concept Page]]`), confirm all backlinks from steps 4–6 are correct, and update "红链候选" with any remaining red links that genuinely have no page yet.
+8. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
+9. **Update** `wiki/overview.md` if the big picture changed.
+10. **Update** `wiki/index.md`. Add entries for all new pages including the Article Home.
+11. **Update** `wiki/hot.md` with this ingest's context. **Append** to `wiki/log.md` (new entries at the TOP):
     ```markdown
     ## [YYYY-MM-DD] ingest | Source Title
     - Source: `.raw/articles/filename.md`
+    - Article Home: [[<slug>-home]]
     - Summary: [[Source Title]]
     - Pages created: [[Page 1]], [[Page 2]]
     - Pages updated: [[Page 3]], [[Page 4]]
     - Key insight: One sentence on what is new.
     ```
-11. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
+12. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
 
 ---
 

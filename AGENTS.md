@@ -44,6 +44,9 @@ bash bin/setup-multi-agent.sh
 - **Hot cache**: `wiki/hot.md` (read at session start, updated at session end)
 - **Source documents**: `.raw/` (immutable: agents never modify these)
 - **Generated knowledge**: `wiki/` (agent-owned, links to sources via wikilinks)
+- **Article Home**: `wiki/articles/` (reading entry point per source, see CLAUDE.md §Article Home)
+- **Human judgments**: `wiki/insights/` (read-only for agents — never write to this directory)
+- **Daily notes**: `journals/` (read on request only)
 - **Manifest**: `.raw/.manifest.json` tracks ingested sources (delta tracking)
 
 ## Bootstrap

@@ -15,13 +15,18 @@ This vault demonstrates the LLM Wiki pattern — a persistent, compounding knowl
 ```
 .raw/           source documents — immutable, Claude reads but never modifies
 wiki/           Claude-generated knowledge base
+wiki/articles/  Article Home — reading entry point per source (see §Article Home)
+wiki/insights/  Human-only judgments — LLM reads but never writes (see WIKI.md §Conventions)
 _templates/     Obsidian Templater templates
 _attachments/   images and PDFs referenced by wiki pages
+journals/       Daily notes — input carrier for distillation layer
 ```
 
 ## How to Use
 
 Drop a source file into `.raw/`, then tell Claude: "ingest [filename]".
+
+**After every ingest, read the Article Home first** — it tells you what's in the source, why it matters, and where to go next. See §Article Home below.
 
 Ask any question. Claude reads the index first, then drills into relevant pages.
 
@@ -61,6 +66,41 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `/wiki-retrieve` (v1.7) | Hybrid contextual + BM25 + cosine-rerank retrieval (opt-in via `bash bin/setup-retrieve.sh`) |
 | `/wiki-mode` (v1.8) | Methodology modes (LYT / PARA / Zettelkasten / Generic). Set via `bash bin/setup-mode.sh`; consumed by wiki-ingest / save / autoresearch for routing new pages |
 | `/think` (v1.9) | The 10-principle thinking loop (OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW) as an invocable workflow. Apply to architectural decisions, audits, post-mortems, ambiguous user requests. Every other skill has a "How to think" appendix mapping this framework to its specific work |
+
+## Article Home
+
+Every ingested source produces an **Article Home** — a dedicated reading entry page at `wiki/articles/<slug>-home.md`. It is not a summary; it is a structured guide for a human reader.
+
+### Mandatory sections
+
+Every Article Home MUST include these sections in order:
+
+1. **先说结论** — 这篇文章值不值得读？为什么？
+2. **目录地图** — 按什么顺序读更容易懂
+3. **像人讲一遍** — 不是百科条目，是自然语言叙述
+4. **上游与下游** — 前置知识和延伸方向
+5. **关键概念怎么连起来** — 图谱级别的概念关系
+6. **值得沉淀的 wiki 页面** — 指向本次生成的 concept/entity/source 页面
+7. **待补知识 / 红链候选** — 知识缺口清单
+8. **后续可问的问题** — 从这篇文章延伸出的开放问题
+9. **以后怎么查回来** — 检索线索，当只记得模糊印象时能找到
+10. **人类判断区** — 预留空间，AI 不替代人的价值判断
+
+### Ingestion order
+
+When ingesting a source, the Article Home is created **before** entity/concept pages. This ensures the entry point exists before the long-term pages are split out.
+
+### Relationship to other pages
+
+```
+Article Home ←──→ Source Summary (evidence carrier)
+     ↓                     ↓
+Concept pages  ←──→  Entity pages
+```
+
+Article Home connects to source, concept, and entity pages via wikilinks. Source/concept/entity pages SHOULD backlink to the Article Home so the entry point is discoverable from both directions.
+
+For the ingest implementation, see `skills/wiki-ingest/article-home.md`.
 
 ## Transport (v1.7+)
 
