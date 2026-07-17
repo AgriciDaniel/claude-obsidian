@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Wiki Index"
-updated: 2026-04-07
+updated: 2026-07-17
 tags:
   - meta
   - index
@@ -19,11 +19,12 @@ related:
   - "[[Hot Cache]]"
   - "[[Compounding Knowledge]]"
   - "[[Andrej Karpathy]]"
+  - "[[AI大模型知识点全景图-home]]"
 ---
 
 # Wiki Index
 
-Last updated: 2026-04-15 | Total pages: 34 | Sources ingested: 2
+Last updated: 2026-07-17 | Total pages: 56 | Sources ingested: 3
 
 Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
 
@@ -44,6 +45,18 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 - [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object, distinct from ephemeral chat turns (status: developing)
 - [[Source-First Synthesis]]: provenance discipline; raw sources stay immutable while the wiki layer is synthesized and cited (status: developing)
 - [[Query-Time Retrieval]]: wiki query path synthesizes with citations; complementary to Obsidian's in-vault search (status: developing)
+- [[AI Large Model Architecture]] — Transformer 架构详解与变体（MHA/GQA/MQA、MoE）（status: seed）
+- [[LLM Training Methods]] — 预训练、SFT、RLHF、DPO、GRPO（status: seed）
+- [[Model Alignment and Safety]] — 对齐技术、红队测试、Jailbreak 防御、Constitutional AI（status: seed）
+- [[LLM Reasoning Methods]] — CoT、ToT、ReAct、Reflexion、o1/o3、test-time compute（status: seed）
+- [[Multimodal AI]] — VLM、T2I、T2V、TTS、语音（status: seed）
+- [[Chinese AI Model Ecosystem]] — 国内大模型生态全景（DeepSeek、Qwen、GLM 等）（status: seed）
+- [[AI Agent Systems]] — Agent 框架、Function Calling、MoA、MCP 协议（status: seed）
+- [[LLM Evaluation]] — 评测基准体系（MMLU、GSM8K、HumanEval、C-Eval 等）（status: seed）
+- [[Model Scaling and Emergence]] — Scaling Laws、涌现能力、上下文窗口演进（status: seed）
+- [[RAG and Retrieval]] — RAG 流水线、Embedding、检索策略、Chunking（status: seed）
+- [[Model Optimization]] — 量化、蒸馏、LoRA/QLoRA、KV-cache 优化（status: seed）
+- [[Prompt Engineering]] — 提示词工程方法体系（status: seed）
 
 ---
 
@@ -57,12 +70,21 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 - [[kepano-obsidian-skills]] — official skills from Obsidian creator; defuddle, obsidian-bases (status: current)
 - [[Claudian-YishenTu]] — native Obsidian plugin embedding Claude Code; plan mode, @mention (status: current)
 - [[Claude SEO]] — Tier 4 Claude Code skill for SEO analysis; 23 skills, 17 agents, 30 scripts at v1.9.0 (status: evergreen)
+- [[OpenAI GPT Series]] — OpenAI 模型进化史：GPT-1 → GPT-4o → o1/o3（status: seed）
+- [[Anthropic Claude Series]] — Anthropic 与 Claude 系列：Constitutional AI 安全对齐（status: seed）
+- [[DeepSeek]] — DeepSeek 模型家族：MLA、MoE 架构、GRPO 训练、R1 推理模型（status: seed）
+- [[Meta LLaMA Series]] — Meta LLaMA 开源模型生态（LLaMA 1 → 2 → 3）（status: seed）
+- [[Google Gemini Series]] — Google Gemini 系列：原生多模态、1M 上下文（status: seed）
+- [[Qwen (Alibaba)]] — 阿里通义 Qwen 系列：全面开源、Agent 生态（status: seed）
+- [[GLM (Zhipu AI)]] — 智谱 GLM/ChatGLM 系列：学术渊源深厚（status: seed）
+- [[Moonshot AI (Kimi)]] — 月之暗面 Kimi：超长上下文、k1.5 推理模型（status: seed）
 
 ---
 
 ## Sources
 
 - [[claude-obsidian-ecosystem-research]] — 2026-04-08 | web research across 16+ repos | 8 wiki pages created
+- [[AI大模型知识点全景图]] — 2026-07-17 | 73 页扫描版 AI 大模型知识全景图 | 22 wiki pages created (concepts: 12, entities: 8, source: 1, article home: 1)
 
 ---
 

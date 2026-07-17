@@ -76,7 +76,12 @@
 
 set -euo pipefail
 
-VAULT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Decoupled toolchain support: allow override via env var
+if [ -n "${CLAUDE_OBSIDIAN_VAULT:-}" ]; then
+  VAULT_ROOT="$CLAUDE_OBSIDIAN_VAULT"
+else
+  VAULT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
 META_DIR="${VAULT_ROOT}/.vault-meta"
 LOCK_DIR="${META_DIR}/locks"
 META_LOCK="${META_DIR}/.wiki-lock.meta"

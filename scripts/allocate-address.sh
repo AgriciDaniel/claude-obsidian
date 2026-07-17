@@ -19,7 +19,14 @@
 
 set -euo pipefail
 
-VAULT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Decoupled toolchain support: allow override via env var
+# (When scripts live in ~/.claude/obsidian-toolkit/scripts/, the old
+#  BASH_SOURCE-based resolution finds the toolkit root, not the vault root.)
+if [ -n "${CLAUDE_OBSIDIAN_VAULT:-}" ]; then
+  VAULT_ROOT="$CLAUDE_OBSIDIAN_VAULT"
+else
+  VAULT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
 COUNTER_FILE="${VAULT_ROOT}/.vault-meta/address-counter.txt"
 LOCK_FILE="${VAULT_ROOT}/.vault-meta/.address.lock"
 WIKI_DIR="${VAULT_ROOT}/wiki"
