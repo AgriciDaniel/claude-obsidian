@@ -341,6 +341,9 @@ echo -e "  ${GREEN}Scripts:${NC}       $(find "$TOOLKIT_DIR/scripts" -type f | w
 echo ""
 if [ -n "$VAULT_DIR" ]; then
   echo -e "  ${GREEN}Vault:${NC}         $VAULT_DIR"
+else
+  echo -e "  ${YELLOW}Vault:${NC}         not specified — auto-discovered from .claude-obsidian-root"
+  echo -e "  ${YELLOW}       ${NC}         or current working directory (see README)"
 fi
 echo ""
 echo "  Next steps:"
