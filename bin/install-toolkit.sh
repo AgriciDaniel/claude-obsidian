@@ -126,6 +126,24 @@ if [ -d "$TOOLKIT_DIR" ]; then
   fi
 fi
 
+# Prompt for vault directory if not specified via --vault
+if [ -z "$VAULT_DIR" ]; then
+  echo ""
+  info "No vault directory specified (--vault)"
+  echo -n "  Enter vault path (or press Enter to skip and use auto-discovery): "
+  read -r VAULT_DIR_ANSWER
+  if [ -n "$VAULT_DIR_ANSWER" ]; then
+    VAULT_DIR="$VAULT_DIR_ANSWER"
+    info "Vault set to: $VAULT_DIR"
+  else
+    warn "No vault specified — vault will be auto-discovered at runtime"
+    echo "  Skills find the vault via:"
+    echo "    1. CLAUDE_OBSIDIAN_VAULT env var"
+    echo "    2. .claude-obsidian-root marker file"
+    echo "    3. Current working directory (fallback)"
+  fi
+fi
+
 header "Installing claude-obsidian toolchain"
 
 # Create toolkit directory
