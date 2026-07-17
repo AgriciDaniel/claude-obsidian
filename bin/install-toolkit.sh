@@ -128,20 +128,16 @@ fi
 
 # Prompt for vault directory if not specified via --vault
 if [ -z "$VAULT_DIR" ]; then
+  # Suggest project root or current directory as default
+  DEFAULT_VAULT="$PROJECT_ROOT"
   echo ""
-  info "No vault directory specified (--vault)"
-  echo -n "  Enter vault path (or press Enter to skip and use auto-discovery): "
+  info "Vault directory not specified. Detected default: ${DEFAULT_VAULT}"
+  echo "  Skills need a vault to store wiki content. This is the directory"
+  echo "  that contains (or will contain) wiki/, .raw/, and .claude-obsidian-root."
+  echo -n "  Vault path [${DEFAULT_VAULT}]: "
   read -r VAULT_DIR_ANSWER
-  if [ -n "$VAULT_DIR_ANSWER" ]; then
-    VAULT_DIR="$VAULT_DIR_ANSWER"
-    info "Vault set to: $VAULT_DIR"
-  else
-    warn "No vault specified — vault will be auto-discovered at runtime"
-    echo "  Skills find the vault via:"
-    echo "    1. CLAUDE_OBSIDIAN_VAULT env var"
-    echo "    2. .claude-obsidian-root marker file"
-    echo "    3. Current working directory (fallback)"
-  fi
+  VAULT_DIR="${VAULT_DIR_ANSWER:-$DEFAULT_VAULT}"
+  info "Vault set to: $VAULT_DIR"
 fi
 
 header "Installing claude-obsidian toolchain"
