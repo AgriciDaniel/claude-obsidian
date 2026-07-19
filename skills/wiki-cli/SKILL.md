@@ -61,12 +61,16 @@ bash scripts/detect-transport.sh --force
 
 ## Recipes (CLI-first; fallback noted inline)
 
-Each recipe shows the CLI form first. If the CLI is unavailable per the detection snapshot, fall through to the noted fallback. Variable substitution: `$VAULT` is the absolute vault root; `$NOTE` is a vault-relative path like `wiki/concepts/Foo.md`.
+Each recipe shows the CLI form first. If the CLI is unavailable per the detection snapshot, fall through to the noted fallback.
+
+The CLI takes **`key=value` parameters**, not positional arguments. `$VAULT_NAME` is the vault's name as shown by `obsidian-cli vaults` (not a filesystem path); `$NOTE` is a vault-relative path like `wiki/concepts/Foo.md`. `path=` is exact; `file=` resolves by name like a wikilink. Boolean flags take no value. Full list: `obsidian-cli help`.
+
+Note: the CLI drives a **running Obsidian instance**. Obsidian must be open with the target vault loaded.
 
 ### Read a note
 ```bash
 # CLI
-obsidian-cli read "$VAULT" "$NOTE"
+obsidian-cli read vault="$VAULT_NAME" path="$NOTE"
 
 # Fallback: Claude's Read tool with absolute path
 # Read $VAULT/$NOTE
@@ -74,8 +78,8 @@ obsidian-cli read "$VAULT" "$NOTE"
 
 ### Create or overwrite a note
 ```bash
-# CLI
-obsidian-cli write "$VAULT" "$NOTE" < /path/to/content.md
+# CLI (there is no `write` command; `create` with the `overwrite` flag)
+obsidian-cli create vault="$VAULT_NAME" path="$NOTE" content="..." overwrite
 
 # Fallback: Claude's Write tool with absolute path
 # Write $VAULT/$NOTE with the desired content string
@@ -83,8 +87,8 @@ obsidian-cli write "$VAULT" "$NOTE" < /path/to/content.md
 
 ### Append to a note
 ```bash
-# CLI
-echo "additional content" | obsidian-cli append "$VAULT" "$NOTE"
+# CLI (use \n for newlines inside content=)
+obsidian-cli append vault="$VAULT_NAME" path="$NOTE" content="additional content"
 
 # Fallback: Read $VAULT/$NOTE, append manually, Write back
 ```
@@ -92,7 +96,8 @@ echo "additional content" | obsidian-cli append "$VAULT" "$NOTE"
 ### Search note content (CLI uses Obsidian's own search ranking)
 ```bash
 # CLI
-obsidian-cli search "$VAULT" "<query>"
+obsidian-cli search vault="$VAULT_NAME" query="<query>" limit=10
+obsidian-cli search:context vault="$VAULT_NAME" query="<query>"   # with matching lines
 
 # Fallback: ripgrep
 rg --type=md "<query>" "$VAULT/wiki/"
@@ -101,8 +106,8 @@ rg --type=md "<query>" "$VAULT/wiki/"
 ### Today's daily note (if Daily Notes plugin is enabled)
 ```bash
 # CLI
-obsidian-cli daily:today "$VAULT"
-obsidian-cli daily:append "$VAULT" "captured at $(date)"
+obsidian-cli daily:path vault="$VAULT_NAME"
+obsidian-cli daily:append vault="$VAULT_NAME" content="captured at $(date)"
 
 # Fallback: compute path manually
 NOTE="$VAULT/wiki/daily/$(date +%Y-%m-%d).md"
@@ -111,7 +116,7 @@ NOTE="$VAULT/wiki/daily/$(date +%Y-%m-%d).md"
 ### Patch a frontmatter property
 ```bash
 # CLI
-obsidian-cli property:set "$VAULT" "$NOTE" status "evergreen"
+obsidian-cli property:set vault="$VAULT_NAME" path="$NOTE" name=status value=evergreen
 
 # Fallback: read frontmatter, parse, mutate, rewrite (use mcp__obsidian-vault__update_frontmatter if MCP is configured)
 ```
@@ -119,16 +124,16 @@ obsidian-cli property:set "$VAULT" "$NOTE" status "evergreen"
 ### List backlinks for a page
 ```bash
 # CLI
-obsidian-cli backlinks "$VAULT" "$NOTE"
+obsidian-cli backlinks vault="$VAULT_NAME" path="$NOTE"
 
 # Fallback: ripgrep for wikilink references
 rg --type=md "\[\[$(basename "$NOTE" .md)" "$VAULT/wiki/"
 ```
 
-### Open a Bases (.base) file's resolved view
+### Query a Bases (.base) file's resolved view
 ```bash
 # CLI
-obsidian-cli bases "$VAULT" "$NOTE"
+obsidian-cli base:query vault="$VAULT_NAME" path="$NOTE" format=json
 # (returns the resolved row list; supplements obsidian-bases skill which handles the .base file's YAML)
 
 # Fallback: read the .base file directly; no resolved-view available without Obsidian itself
@@ -136,8 +141,8 @@ obsidian-cli bases "$VAULT" "$NOTE"
 
 ### Tags + bookmarks
 ```bash
-obsidian-cli tags "$VAULT"
-obsidian-cli bookmarks "$VAULT"
+obsidian-cli tags vault="$VAULT_NAME"
+obsidian-cli bookmarks vault="$VAULT_NAME"
 ```
 
 ---
