@@ -10,7 +10,7 @@ Defuddle extracts the meaningful content from a web page and drops everything el
 
 Use this before any URL ingestion. It is optional but strongly recommended. It cuts token usage by 40-60% on typical web articles and produces cleaner wiki pages.
 
-**Substrate note (v1.7+)**: Unlike `obsidian-markdown` / `obsidian-bases` / `json-canvas` (where we defer to kepano/obsidian-skills as upstream), the `defuddle` skill is original to claude-obsidian — kepano's marketplace does not ship a defuddle skill. This is the canonical version. The underlying `defuddle-cli` is independent of either marketplace and lives at [github.com/kepano/defuddle](https://github.com/kepano/defuddle).
+**Substrate note (v1.7+)**: As with `obsidian-markdown` / `obsidian-bases` / `json-canvas`, kepano/obsidian-skills also ships a `defuddle` skill. Theirs is a short CLI reference; this one adds the vault-side workflow (`.raw/` capture, provenance header, ingest hand-off), so the two can coexist — prefer this one when the goal is filing content into the vault. The underlying `defuddle-cli` is independent of either marketplace and lives at [github.com/kepano/defuddle](https://github.com/kepano/defuddle).
 
 ---
 
