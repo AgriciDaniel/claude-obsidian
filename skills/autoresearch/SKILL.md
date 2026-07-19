@@ -23,7 +23,7 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 
 The research loop writes a lot — source pages, concept pages, entity pages, manifest updates. All writes follow the standard transport policy. Read `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`):
 
-- **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
+- **cli** — `obsidian-cli create vault="$VAULT_NAME" path="$NOTE" content="..." overwrite`; see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note`
 - **filesystem** — Claude's `Write` tool with absolute path
 
