@@ -58,7 +58,28 @@ log() { $QUIET || echo "$@" >&2; }
 # json_escape: read stdin and emit a JSON-encoded string (including the
 # surrounding double quotes). Used for any untrusted value that lands in the
 # transport.json heredoc — newlines, backslashes, control chars in upstream
-# binaries (obsidian-cli --version) would otherwise break the JSON.
+# binaries (obsidian-cli version) would otherwise break the JSON.
+# cli_version: the Obsidian CLI exposes `version` as a subcommand, not a
+# `--version` flag. Two things make error detection awkward, so we validate the
+# output shape instead of trusting the exit code or blacklisting messages:
+#   - an unknown command prints `Error: Command "--version" not found` to
+#     STDOUT and still exits 0, so `2>/dev/null` and `||` both miss it;
+#   - when no Obsidian instance is reachable (headless, CI, app closed) the
+#     binary prints `unable to find Obsidian` and exits 1.
+# Accept only output that starts with a digit, which is what this CLI emits
+# ("1.12.7 (installer 1.12.7)"); anything else becomes "unknown". Erring toward
+# "unknown" is deliberate — never store an error message as a version.
+cli_version() {
+  # `|| true` matters: under `set -euo pipefail` a non-zero exit from the probe
+  # would otherwise abort the whole script.
+  local _v
+  _v="$("$1" version 2>/dev/null | head -1 || true)"
+  case "$_v" in
+    [0-9]*) echo "$_v" ;;
+    *)      echo unknown ;;
+  esac
+}
+
 json_escape() {
   python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()), end="")'
 }
@@ -126,15 +147,21 @@ if command -v obsidian-cli >/dev/null 2>&1; then
   # for the transport.json heredoc. CLI_VERSION below is pre-quoted (includes
   # the surrounding double quotes), so the heredoc emits ${CLI_VERSION}
   # without wrapping quotes.
-  CLI_VERSION_RAW="$(obsidian-cli --version 2>/dev/null | head -1 || echo unknown)"
+  CLI_VERSION_RAW="$(cli_version obsidian-cli)"
   CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
 elif command -v obsidian >/dev/null 2>&1; then
   # Obsidian 1.12+ ships `obsidian` as the CLI binary on some platforms.
-  # We treat it as cli-capable if it accepts a --cli or --version flag without launching the GUI.
-  if obsidian --version >/dev/null 2>&1; then
+  # The old gate here was `obsidian --version >/dev/null 2>&1`. That flag is
+  # invalid, so what it actually tested was reachability: the binary exits 0
+  # for an unknown command when Obsidian is running, and 1 when it is not.
+  # Probing `version` preserves that behavior without relying on the accident.
+  # Probe once: two calls could straddle a change in reachability and leave
+  # CLI_PRESENT=true next to version_string="unknown".
+  _obsidian_version="$(cli_version obsidian)"
+  if [ "$_obsidian_version" != unknown ]; then
     CLI_PRESENT=true
     CLI_BINARY="obsidian"
-    CLI_VERSION_RAW="$(obsidian --version 2>/dev/null | head -1 || echo unknown)"
+    CLI_VERSION_RAW="$_obsidian_version"
     CLI_VERSION="$(printf '%s' "$CLI_VERSION_RAW" | json_escape || echo '"unknown"')"
   fi
 fi
