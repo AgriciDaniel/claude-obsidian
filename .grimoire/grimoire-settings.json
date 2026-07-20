@@ -59,7 +59,7 @@
       "customModels": "",
       "lastModel": "opus",
       "environmentVariables": "",
-      "environmentHash": "project=model=sonnet",
+      "environmentHash": "project=model=claude-fable-5[1m]",
       "respectProjectSettings": true
     },
     "codex": {
