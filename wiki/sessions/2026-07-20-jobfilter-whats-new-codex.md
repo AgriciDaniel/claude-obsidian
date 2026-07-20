@@ -18,7 +18,7 @@ related:
 
 ## What I did
 
-- Shipped JobFilter's first customer-facing `/whats-new` system on GitHub PR #370.
+- Shipped JobFilter's first customer-facing `/whats-new` system through GitHub PR #370 and verified it in production.
 - Added a single release-data source, build-blocking data validation, permanent anchors, metadata, JSON-LD, sitemap freshness, public/member/mobile navigation, and footer discovery.
 - Seeded five customer-notable updates from commits already merged into the JobFilter production history. Internal commit and PR evidence stays server-only and is not rendered.
 - Ran independent route, copy-evidence, accessibility, and QA reviews. Corrected overclaims, current-page semantics, reduced-motion behavior, sticky anchor offsets, and status contrast.
@@ -42,14 +42,14 @@ related:
 
 ## Next steps
 
-1. Merge JobFilter PR #370 after CI and Vercel preview are green, then verify `https://jobfilter.uk/whats-new` in production.
-2. Make JobFilter's next customer release the actual public shipment of What's New; do not list it before deployment.
-3. Agent Nudge next: automate crash/stale-lock recovery and tighten the daemon into the single SQLite writer before adding cloud sync.
-4. Portfolio rollout order: Agent Nudge changelog/release feed, OpenFlowKit releases, InkWeave generation-quality updates. Reuse the schema and validation pattern, but adapt copy and visual language per audience.
+1. Make JobFilter's next customer release the actual public shipment of What's New, now that it is deployed.
+2. Agent Nudge next: automate crash/stale-lock recovery and tighten the daemon into the single SQLite writer before adding cloud sync.
+3. Portfolio rollout order: Agent Nudge changelog/release feed, OpenFlowKit releases, InkWeave generation-quality updates. Reuse the schema and validation pattern, but adapt copy and visual language per audience.
 
 ## Verification
 
 - JobFilter: `npm run releases:check`, `npm run lint`, `npm run build`, static HTTP checks, sitemap checks, desktop/mobile browser smoke.
+- JobFilter production: main CI and Vercel passed; `https://jobfilter.uk/whats-new` returned HTTP 200 with final copy, latest release, hidden evidence, and sitemap entry.
 - Agent Nudge: v0.4 portable EXE health smoke passed on loopback; local SHA-256 hashes matched the build receipt.
 
 ## Links

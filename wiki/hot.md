@@ -17,7 +17,7 @@ related:
 
 ## Last Updated
 
-2026-07-20. Agent Nudge v0.4 Live Connect is merged, deployed, and released for Windows. JobFilter's verified customer-facing What's New system is in PR #370. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
+2026-07-20. Agent Nudge v0.4 Live Connect is merged, deployed, and released for Windows. JobFilter's verified customer-facing What's New system is merged and live. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
 
 ## Key Recent Facts
 
@@ -49,4 +49,4 @@ related:
 - Email digest delivery still needs one-time recipient and SMTP credential configuration from the Local Knowledge Agent menu.
 - Historical orphan pages and metadata gaps are recorded in the lint report for gradual review.
 - Agent Nudge's next reliability gap is crash/stale-lock recovery and a single-writer daemon boundary before cloud sync.
-- JobFilter PR #370 needs production verification after Vercel and merge gates complete.
+- JobFilter `/whats-new` is live with five evidence-backed customer updates; the next entry should record this release now that it has shipped.
