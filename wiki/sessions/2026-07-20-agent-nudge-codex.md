@@ -143,3 +143,28 @@ status: completed
 
 - Implement an immutable connection plan, provider-specific structural renderers, canonical-root/path guards, per-target locking plus hash compare-and-swap, backup/operation manifests, atomic replacement, reverse rollback, and explicit recovery status.
 - Add the security and fault-injection matrix before enabling `--apply`: traversal/symlink/junction cases, concurrent edits, crash points, ownership drift, no-op idempotency, privacy canaries, outbox replay/quarantine/quotas, and packaged Windows connect/disconnect smoke tests.
+
+## v0.4 connector manager implementation
+
+### What I did
+
+- Implemented and tested the transactional project connector manager for Claude Code, Codex, and OpenCode.
+- Added canonical Git-root resolution, project containment, junction/symlink refusal, dry-run plans, manifests, state-directory backups, atomic writes, rollback fault injection, idempotent reconnect, structural disconnect, drift refusal, and outbox-depth inspection.
+- Passed 8 focused connector tests and strict TypeScript checking.
+
+### Files changed
+
+- `src/connectors/index.ts`
+- `src/connectors/manager.ts`
+- `src/connectors/types.ts`
+- `tests/unit/connectors.test.ts`
+- `tests/integration/connectors.test.ts`
+
+### Decisions made
+
+- All three providers use the exact `ENFORCED` capability label with explicit covered-action and enabled/trusted-hook caveats.
+- Provider JSON is merged using a manifest-recorded owned hook value; OpenCode plugins and optional bridges are hash-owned files.
+
+### Next steps
+
+- Wire the exported manager API into the v0.4 CLI and supply provider hook commands/OpenCode plugin content as connector artifacts.
