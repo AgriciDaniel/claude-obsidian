@@ -32,7 +32,23 @@ status: completed
 - Set initial pricing hypotheses at free local, £19 Pro, £299 Team, £999 Business, and £30k–£150k+ Enterprise, with paid pilots and annual-first packaging; all require validation before launch.
 
 ## Next steps
-- Paste the complete prompt into a fresh coding-agent session from `C:\Users\manaz\Projects`.
-- Build locally at `C:\Users\manaz\Projects\agent-nudge` on `agents/agent-nudge-mvp`.
+- Open the portable build at `C:\Users\manaz\Projects\agent-nudge\release\Agent-Nudge-Portable-0.1.0-x64.exe` or install the setup build beside it.
 - Dogfood the verified MVP with Claude Code and Codex on one real repository for seven days.
 - Validate that Agent Nudge prevents measurable rework with fewer than 10–15% ignored nudges before expanding into team or enterprise infrastructure.
+
+## Build execution
+
+- Built the production scaffold at `C:\Users\manaz\Projects\agent-nudge` on `agents/agent-nudge-mvp`.
+- Implemented the deterministic routing engine, redaction, SQLite ledger, loopback Fastify API, CLI, MCP server, Claude/Codex fixture adapters, Electron app, and public fixture demo.
+- Produced and smoke-tested both the Windows installer and portable EXE; the packaged daemon reported healthy on `127.0.0.1:47831` only.
+- Passed lint, formatting, strict TypeScript, 11 unit tests, 8 integration tests, 2 end-to-end tests, a clean `npm ci` build, and a zero-vulnerability production dependency audit.
+- Published the public repository at https://github.com/manazoid4/agent-nudge with verified source commit `48278ea` and release receipt commit `1d37956`.
+- Deployed and interactively verified the public demo at https://agent-nudge-manazir-s-projects1.vercel.app/#demo.
+- Closed GitHub issue #1 with acceptance evidence. Because the repository was initially empty, GitHub made the first `agents/` branch the default; no direct push to `main` was performed.
+
+## Build limitations
+
+- The binaries are not backed by a paid publisher certificate and may trigger Windows SmartScreen.
+- Agent configuration installation remains preview-only in v0.1.0.
+- Node's built-in SQLite API emits an experimental warning.
+- Release executables are retained locally and excluded from Git; hashes are recorded in the project `BUILD_RECEIPT.md`.
