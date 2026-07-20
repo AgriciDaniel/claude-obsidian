@@ -92,3 +92,28 @@ status: completed
 - Ship reversible `connect`/`disconnect` for Claude Code, Codex, and OpenCode with dry-run previews, owned markers, backups, capability labels, and a disk-backed outbox.
 - Dogfood v0.3 for seven days across Agent Nudge and one active revenue project; keep the wedge only if it records verified avoided work while wrong/ignored nudges stay below 15%.
 - Add branch, worktree, base-commit, and semantic-contract awareness before treating claims as hard cross-worktree conflicts.
+
+## v0.4 Live Connect code audit
+
+### What I did
+
+- Performed a read-only audit of the merged v0.3 adapter, install-preview, CLI, Electron, packaging, daemon, MCP, and relevant tests.
+- Traced the existing provider-event path and the separate Live Sync path end to end, with exact source-line evidence.
+- Identified the minimum modules and test seams needed for real, reversible Claude Code, Codex, and OpenCode connection.
+- Re-ran strict TypeScript checking and the full integration suite; both passed, with 11 integration tests passing.
+
+### Files changed
+
+- `wiki/sessions/2026-07-20-agent-nudge-codex.md` only; the Agent Nudge repository was not modified.
+
+### Decisions made
+
+- Treat current hook normalization as an observed-event primitive, not a live connector: it only stores generic events and does not check in, sync, claim, publish, acknowledge, or translate HOLD into provider behavior.
+- Build v0.4 around provider-owned parse/merge/remove logic plus a shared transaction layer with byte-preserving backups, atomic writes, drift detection, and a durable install manifest.
+- Unify the Electron, daemon, CLI, and MCP data-directory contract before claiming one connected local ledger.
+- Keep all filesystem mutation in the Node/Electron main process; expose plan/apply/disconnect/status to the renderer through narrow IPC only.
+
+### Next steps
+
+- Implement provider-specific connection plans and a production hook runner, then add temp-project round-trip tests for connect, idempotent reconnect, drift refusal, and exact disconnect restoration.
+- Extend Windows packaging smoke coverage to prove the shipped executable can connect and disconnect a disposable project without touching real user configuration.
