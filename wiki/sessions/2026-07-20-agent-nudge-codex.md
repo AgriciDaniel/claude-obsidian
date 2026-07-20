@@ -168,3 +168,33 @@ status: completed
 ### Next steps
 
 - Wire the exported manager API into the v0.4 CLI and supply provider hook commands/OpenCode plugin content as connector artifacts.
+
+## v0.4 Live Connect shipment
+
+### What I did
+
+- Shipped real, reversible, dry-run-first project connectors for Claude Code, Codex, and OpenCode.
+- Added production preflight/post-action hooks, exact-path HOLD behavior, claim release receipts, a strict allowlisted event envelope, and a disk-backed offline outbox.
+- Unified the daemon, MCP, Electron, and hooks on `%USERPROFILE%\.agent-nudge` and made Electron verify an existing loopback service before reusing the port.
+- Added connector manifests and external backups, canonical Git-root/path containment, symlink/junction refusal, atomic writes, filesystem locking, compare-and-swap checks, idempotent reconnect, structural disconnect, drift refusal, and rollback that preserves racing external edits.
+- Updated the landing page and desktop settings with honest connector labels, capability caveats, v0.4 language, and a working copy-command action.
+- Passed lint, formatting, strict TypeScript, 22 unit tests, 18 integration tests, 2 end-to-end tests, a clean `npm ci` build, zero-vulnerability audit, CLI connect/disconnect smoke, desktop/mobile browser QA, Windows packaging, and portable EXE smoke.
+- Deployed production to [agent-nudge-bay.vercel.app](https://agent-nudge-bay.vercel.app), merged [PR #5](https://github.com/manazoid4/agent-nudge/pull/5), and closed [issue #4](https://github.com/manazoid4/agent-nudge/issues/4).
+
+### Files changed
+
+- Agent Nudge repository: connectors, hook runner, outbox, daemon preflight/receipt APIs, canonical paths, CLI, Electron, UI, documentation, tests, versioning, and v0.4 build receipts.
+- Local Windows artifacts: `release/Agent-Nudge-Setup-0.4.0-x64.exe` and `release/Agent-Nudge-Portable-0.4.0-x64.exe`.
+- `wiki/sessions/2026-07-20-agent-nudge-codex.md`.
+
+### Decisions made
+
+- Current Codex project hooks in `.codex/hooks.json` support covered pre-action enforcement after project/hook trust; the older project-level `notify` limitation is not the v0.4 integration path.
+- All three providers use `ENFORCED` only with explicit covered-action, enabled/trusted-hook, and bypass caveats; hooks are guardrails, not a complete security boundary.
+- Disconnect removes exact owned fragments and never restores an old whole config over later user edits.
+- Hooks fail open offline and queue only allowlisted metadata; raw prompts, responses, commands, file contents, environment values, and provider payloads remain excluded.
+
+### Next steps
+
+- Dogfood Live Connect on Agent Nudge plus one revenue project for seven days and measure avoided conflicts, ignored/wrong nudges, latency, and drift incidents.
+- Add hard-crash operation journaling, stale-lock recovery, bounded outbox quarantine/quotas, branch/worktree/base-commit awareness, and a packaged connector runner before calling v1 production-hardened.
