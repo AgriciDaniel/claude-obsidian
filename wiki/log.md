@@ -25,6 +25,13 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-07-20] maintenance | hot.md drift fix + plugin marketplace install
+- Type: hot-cache refresh, no wiki content ingested
+- Locations (modified): `wiki/hot.md` (frontmatter `updated` bumped; new dated entry summarizing v1.7.2 → v1.9.2 from CHANGELOG.md; `Plugin State`, `Active Threads`, `Repo Locations` sections rewritten to match current reality)
+- Scope: `wiki/hot.md` had drifted 6 releases behind `git log` (last real update described the local-only `v1.7.0-compound-vault` branch pre-push; repo has since shipped v1.7.2, v1.8.0, v1.8.2, v1.9.0, v1.9.1, v1.9.2 and been promoted to public canonical at `github.com/AgriciDaniel/claude-obsidian`, `00213b7`)
+- Also this session: root-caused why `commands/wiki.md` wasn't runnable (plugin was cloned as a vault via `bin/setup-vault.sh` but never registered with Claude Code's skill/command system). Fixed via `claude plugin marketplace add AgriciDaniel/claude-obsidian` + `claude plugin install claude-obsidian@agricidaniel-claude-obsidian` (user scope). Confirmed via `claude plugin list` and, after restart, the `Skill` tool resolving `claude-obsidian:wiki` and all 15 skills.
+- Next recommended: none blocking. Deferred items (Data M2 embed-cache GC, W1 wiki/meta relocation, Security S1 Excalidraw checksum pin) remain open, carried forward from v1.9.1's CHANGELOG.
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)

@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-17T04:30:00
+updated: 2026-07-20T00:00:00
 tags:
   - meta
   - hot-cache
@@ -19,6 +19,8 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-07-20: **Hot cache refreshed after 6 releases of drift (v1.7.1 → v1.9.2) + plugin marketplace install**. This cache had gone stale: it still described the local-only `v1.7.0-compound-vault` branch pre-push, but `git log` showed 5 more releases had shipped and pushed since. Catching up from CHANGELOG.md: **v1.7.2** (Unicode-aware BM25 tokenizer, defensive-input fixes, dead-code prune per kernel). **v1.8.0** (methodology modes — LYT/PARA/Zettelkasten/Generic via `scripts/wiki-mode.py`, closes compass priority gap 5; `.vault-meta/mode.json`, currently absent here so this vault runs generic/v1.7 default). **v1.8.2** (pre-push audit closure: `manual_override` in `detect-transport.sh` actually honored, `wiki-ingest` agent got `Bash` tool + mode awareness, `autoresearch` got web-egress hygiene (URL validation, content sanitization, cost/failure-mode docs), `save` got explicit destination-root routing). **v1.9.0** (10-principle thinking framework shipped as skill #15 `/think`, every other SKILL.md got a "How to think" appendix; first-public-release repo hygiene: CONTRIBUTING/CODE_OF_CONDUCT/SECURITY/CI workflow/issue templates). **v1.9.1** (6 HIGH/MEDIUM hardening: SessionStart now runs `wiki-lock.sh clear-stale` on every session start, PostToolUse auto-commit gets a `.vault-meta/auto-commit.disabled` opt-out, `wiki-lock.sh` canonicalizes symlinks before path-validation to close an escape vector, `setup-retrieve.sh` refuses non-localhost `OLLAMA_URL` without `--allow-remote-ollama`, new `SECURITY.md` single-tenant threat model). **v1.9.2** (prompt-cache hardening in `scripts/contextual-prefix.py`: `cache_control` only attached above the ~16KB Haiku-4.5 cacheable floor via new `cache_control_for()`, cache hit/write telemetry logged, explicit missing/out-of-vault page paths now fail with clean exit codes instead of silent-0 or raw traceback; new `test_contextual_prefix.py`, `make test` now **9** hermetic suites / ~1240 assertions). Repo was then promoted to **public canonical** at `github.com/AgriciDaniel/claude-obsidian` (`00213b7`) plus a social-preview-card commit (`cb93ff6`, `2026-05-28`) — no commits since. **This session**: user asked why `commands/wiki.md` wasn't runnable; root cause was the plugin never being registered (no `.claude/commands/`, no `commands` key in the manifest, and the plugin itself wasn't installed — only cloned as a vault via `bin/setup-vault.sh`, which is vault-config only and doesn't touch Claude Code's skill/command registry). Fixed by running `claude plugin marketplace add AgriciDaniel/claude-obsidian` then `claude plugin install claude-obsidian@agricidaniel-claude-obsidian` (user scope). User restarted Claude Code; `claude-obsidian:wiki` and all 15 skills now resolve via the `Skill` tool. **Deferred items still open** (none of v1.9.2's changes touched these; carried forward from the v1.9.1 CHANGELOG "Deferred to v1.9.2" list since nothing since has closed them): Data M2 (embed-cache + chunk-orphan GC subcommand for `bm25-index.py`/`contextual-prefix.py`), W1 (12 files' worth of `wiki/meta/` release-session notes need relocation + wikilink graph update, bundle with References M1+M2's 17 dead wikilink targets), Security S1 (pin Excalidraw release-asset checksum in `setup-vault.sh`'s `curl` download).
 
 2026-05-17 (very late, post-polish): **v1.7.1 patch + polish slice shipped locally** (branch `v1.7.0-compound-vault`, still NOT pushed). All 1 BLOCKER + 6 HIGH findings closed; then verifier agent re-pass surfaced 2 MEDIUM + 3 LOW polish items, all closed in `c2d7575`. Final verifier verdict: 0/0/0/0 SHIP. Score: 100/100 on the v1.7.1 patch dimensions (plan fidelity, behavioral correctness, test health, internal consistency, constraint honor, defect introduction, kernel application). 8 commits landed in this resumption session: `ca68bb6` (Fix 1+6 BLOCKER B1 + H6 — contextual-prefix `--allow-egress` flag default-off + `bin/setup-retrieve.sh` consent prompt + `skills/wiki-retrieve/SKILL.md` Data Privacy callout, mirror of `tiling-check.py:351` `--allow-remote-ollama` precedent), `4837d4f` (Fix 2 H1 — setup-retrieve exit 5 + 3-option recovery hint on Stage 1 failure), `7e1f187` (Fix 3 H2 — `make clean-test-state` extended to v1.7 artifacts), `7120970` (Fix 4 H3 — PostToolUse hook captures LOCK_RC directly, not via pipeline; defers commit on script error OR locks held), `722ac97` (Fix 5 H5 — `detect-transport.sh` `json_escape()` helper via `python3 json.dumps`), `3ea443f` (Fix 7 H4 — new `agents/verifier.md` read-only pre-commit specialist + CLAUDE.md reference), and the cross-cutting closeout `822c80a` (version bump 1.7.0 → 1.7.1, CHANGELOG entry, audit doc updated with §10.2 SHAs + v1.7.1 closeout block, audit benchmark scripts promoted to tracked files). `make test` ran 7/7 green after every fix. End-to-end verifications: `python3 scripts/contextual-prefix.py --peek` returns `tier=synthetic` even with `ANTHROPIC_API_KEY` set (default-deny works); `--allow-egress` correctly flips it; `echo "" | bash bin/setup-retrieve.sh` aborts at the consent prompt; `bash scripts/wiki-lock.sh acquire ...` then hook trigger correctly defers auto-commit. **Next step**: ask user whether to push + tag `v1.7.1`. Do NOT push without explicit go.
 
@@ -50,14 +52,15 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Plugin State
 
-- **Version**: 1.7.1 (audit-driven patch on top of Compound Vault; plugin.json + marketplace.json synced; local-only branch `v1.7.0-compound-vault`, no push, no tag)
-- **Install ID**: `claude-obsidian@ai-marketing-hub-claude-obsidian`
-- **Skills**: 13 (wiki, wiki-ingest, wiki-query, wiki-lint, wiki-fold, save, autoresearch, canvas, defuddle, obsidian-bases, obsidian-markdown, **wiki-cli (v1.7)**, **wiki-retrieve (v1.7, opt-in)**)
-- **Scripts (v1.6)**: `scripts/allocate-address.sh`, `scripts/tiling-check.py`, `scripts/boundary-score.py` (DragonScale; opt-in; feature-detected by skills)
-- **Scripts (v1.7 — new)**: `scripts/detect-transport.sh`, `scripts/contextual-prefix.py`, `scripts/bm25-index.py`, `scripts/rerank.py`, `scripts/retrieve.py`, `scripts/wiki-lock.sh`
-- **Setup**: `bin/setup-vault.sh` (base vault), `bin/setup-dragonscale.sh` (opt-in DragonScale), `bin/setup-multi-agent.sh` (multi-agent bootstrap), `bin/setup-retrieve.sh` (opt-in v1.7 hybrid retrieval)
-- **Tests**: `make test` runs 7 suites — `test_allocate_address.sh`, `test_tiling_check.py`, `test_boundary_score.py`, **`test_bm25_index.py`**, **`test_retrieve.py`**, **`test_wiki_lock.sh`**, **`test_concurrent_write.sh`**. Zero ollama and zero network dependency for all core tests.
-- **Hooks**: 4 (SessionStart, PostCompact, PostToolUse [stages wiki/, .raw/, .vault-meta/; **v1.7: defers `git add` if wiki-lock locks held**], Stop)
+- **Version**: 1.9.2, public canonical release (`plugin.json` + `marketplace.json` synced; pushed and promoted, `github.com/AgriciDaniel/claude-obsidian`)
+- **Install ID (this machine)**: `claude-obsidian@agricidaniel-claude-obsidian`, user scope, added 2026-07-20 via `claude plugin marketplace add` + `claude plugin install`. Earlier hot-cache entries below reference `claude-obsidian@ai-marketing-hub-claude-obsidian` from a different operator/machine/context — do not assume they're the same registry entry.
+- **Skills**: 15 — `wiki`, `wiki-ingest`, `wiki-query`, `wiki-lint`, `wiki-fold`, `wiki-mode` (v1.8), `wiki-cli` (v1.7), `wiki-retrieve` (v1.7, opt-in), `save`, `autoresearch`, `canvas`, `defuddle`, `obsidian-bases`, `obsidian-markdown`, `think` (v1.9, skill #15). Every skill now carries a "How to think" 10-principle appendix.
+- **Scripts (v1.6, DragonScale, opt-in)**: `scripts/allocate-address.sh`, `scripts/tiling-check.py`, `scripts/boundary-score.py`
+- **Scripts (v1.7+)**: `scripts/detect-transport.sh` (v1.8.2: honors `manual_override`), `scripts/contextual-prefix.py` (v1.9.1: egress consent gate; v1.9.2: `cache_control_for()` Haiku-floor caching + telemetry + clean exit codes), `scripts/bm25-index.py` (v1.7.2: Unicode-aware tokenizer), `scripts/rerank.py` (v1.9.1: lock-contention warnings route to `hook.log`), `scripts/retrieve.py`, `scripts/wiki-lock.sh` (v1.9.1: symlink canonicalization before path-validation), `scripts/wiki-mode.py` (v1.8, methodology routing)
+- **Setup**: `bin/setup-vault.sh`, `bin/setup-dragonscale.sh` (opt-in), `bin/setup-multi-agent.sh`, `bin/setup-retrieve.sh` (opt-in; v1.9.1: refuses non-localhost `OLLAMA_URL` without `--allow-remote-ollama`), `bin/setup-mode.sh` (v1.8, methodology mode)
+- **Tests**: `make test` runs **9** hermetic suites (~1240 assertions): `test_allocate_address.sh`, `test_tiling_check.py`, `test_boundary_score.py`, `test_bm25_index.py`, `test_retrieve.py`, `test_wiki_lock.sh`, `test_concurrent_write.sh`, `test_wiki_mode.py` (v1.8), `test_contextual_prefix.py` (v1.9.2). Zero ollama and zero network dependency for all core tests; CI (`.github/workflows/test.yml`, v1.9.0) runs the same suite plus SKILL.md/agent-manifest/plugin-manifest validation.
+- **Hooks**: SessionStart (v1.9.1: also runs `wiki-lock.sh clear-stale --max-age 3600`), PostCompact, PostToolUse (stages `wiki/ .raw/ .vault-meta/`; defers `git add` while wiki-lock locks are held; v1.9.1: exits early if `.vault-meta/auto-commit.disabled` exists), Stop
+- **Methodology mode**: no `.vault-meta/mode.json` present in this vault → defaults to `generic` (v1.7 behavior, no organizational opinion imposed)
 
 ## DragonScale Mechanisms
 
@@ -83,10 +86,14 @@ Navigation: [[index]] | [[log]] | [[overview]]
 ## Active Threads
 
 - DragonScale Mechanism 4 shipped in Phase 4 as an opt-in Topic Selection mode in `skills/autoresearch/`. All four DragonScale mechanisms are now shipped and feature-gated.
-- v1.6.0 not yet pushed to GitHub (local commits only, no git tag created). User controls push and tag timing.
-- CLAUDE.md has one pre-existing uncommitted change ("Release Blog Post" section) that predates this session.
+- v1.9.2 is pushed and public-canonical; nothing local-only or unpushed as of this refresh.
+- Deferred, still open: Data M2 (embed-cache/chunk-orphan GC for `bm25-index.py`/`contextual-prefix.py`), W1 (12-file `wiki/meta/` release-note relocation + wikilink graph fix, bundle with References M1+M2's 17 dead wikilink targets), Security S1 (pin Excalidraw release checksum in `setup-vault.sh`).
+- Only 1 source in `.raw/` (`claude-obsidian-ecosystem-research.md`) — most of this vault's content was filed directly as dev/release documentation rather than via `/wiki-ingest`, which is expected for a vault that dogfoods its own plugin.
+- No Obsidian MCP server configured (`claude mcp list` shows only Google Drive/Gmail/Calendar connectors); filesystem transport works fine, MCP is optional.
+- `git status` shows several uncommitted `.obsidian/*` files (app.json, appearance.json, graph.json, community-plugins.json, core-plugins.json, workspace.json, a few plugin data/manifest files) plus untracked `.obsidian/plugins/{dataview,obsidian-git,obsidian-memos,templater-obsidian}/` and modified `CLAUDE.md`/`CODE_OF_CONDUCT.md` — routine local Obsidian usage state, not flagged as a problem, just noted so a future session doesn't mistake it for in-progress work to finish.
 
 ## Repo Locations
 
-- Working: `~/Desktop/claude-obsidian/`
-- Public: https://github.com/AI-Marketing-Hub/claude-obsidian
+- Working: this vault's actual path is user-specific (OneDrive-synced); don't assume `~/Desktop/claude-obsidian/` from older entries above — check `git rev-parse --show-toplevel` if it matters.
+- Public canonical: https://github.com/AgriciDaniel/claude-obsidian (flipped from mirror to canonical at v1.9.2's `00213b7`)
+- Pro early-access mirror: https://github.com/AI-Marketing-Hub/claude-obsidian (same MIT core, earlier access to in-development features)
