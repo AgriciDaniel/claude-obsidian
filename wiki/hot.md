@@ -17,7 +17,7 @@ related:
 
 ## Last Updated
 
-2026-07-20. Agent Nudge is moving from a context-dashboard proof to a production-path live coordination loop. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
+2026-07-20. Agent Nudge v0.4 Live Connect is merged, deployed, and released for Windows. JobFilter's verified customer-facing What's New system is in PR #370. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
 
 ## Key Recent Facts
 
@@ -33,6 +33,8 @@ related:
 - [[Full-Walkthrough-Workflow-for-AI-Coding]] was ingested with its original English automatic-caption transcript and source hash.
 - [[AI Engineering Delivery Loop]] captures the reusable workflow: align first, slice vertically, implement with fast feedback, review from fresh context, and keep humans at the quality boundary.
 - [[2026-07-20-live-agent-bridge]] defines Agent Nudge v0.3 around check-in, task intent, expiring claims, deterministic fact fan-out, sync cursors, acknowledgement, and HOLD-to-CLEAR proof.
+- Agent Nudge v0.4 adds reversible project connectors, pre-action enforcement where providers support it, local backups/rollback, and an allowlisted offline outbox.
+- [[2026-07-20-jobfilter-whats-new-codex]] records JobFilter's single-source product release page and the public Agent Nudge v0.4.0 Windows release.
 
 ## Recent Changes
 
@@ -46,4 +48,5 @@ related:
 
 - Email digest delivery still needs one-time recipient and SMTP credential configuration from the Local Knowledge Agent menu.
 - Historical orphan pages and metadata gaps are recorded in the lint report for gradual review.
-- Agent Nudge's next activation gap after the live loop is reversible project-scoped connection for Claude, Codex, and OpenCode.
+- Agent Nudge's next reliability gap is crash/stale-lock recovery and a single-writer daemon boundary before cloud sync.
+- JobFilter PR #370 needs production verification after Vercel and merge gates complete.

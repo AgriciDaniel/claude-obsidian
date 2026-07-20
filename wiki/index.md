@@ -4,6 +4,7 @@
 
 ## Projects
 
+- [[2026-07-20-jobfilter-whats-new-codex]] — verified JobFilter product updates system and Agent Nudge v0.4 Windows release.
 - [[wiki/projects/INDEX]] — table of active repos, paths, stack, status.
 - [[wiki/projects/jobfilter/INDEX]] — trades lead filtering SaaS.
 - [[wiki/projects/inkweave/INDEX]] — AI book generation product.
