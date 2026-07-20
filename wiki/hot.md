@@ -17,7 +17,7 @@ related:
 
 ## Last Updated
 
-2026-07-20. Agent Nudge v0.4 Live Connect is merged, deployed, and released for Windows. JobFilter's verified customer-facing What's New system is merged and live. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
+2026-07-20. JobFilter is hardened, publicly cleaned, and presented as the portfolio flagship. Agent Nudge v0.4 Live Connect and JobFilter's customer-facing What's New system remain merged and live. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
 
 ## Key Recent Facts
 
@@ -35,6 +35,7 @@ related:
 - [[2026-07-20-live-agent-bridge]] defines Agent Nudge v0.3 around check-in, task intent, expiring claims, deterministic fact fan-out, sync cursors, acknowledgement, and HOLD-to-CLEAR proof.
 - Agent Nudge v0.4 adds reversible project connectors, pre-action enforcement where providers support it, local backups/rollback, and an allowlisted offline outbox.
 - [[2026-07-20-jobfilter-whats-new-codex]] records JobFilter's single-source product release page and the public Agent Nudge v0.4.0 Windows release.
+- [[2026-07-20-jobfilter-codex]] records JobFilter's production hardening, 1,226-to-360-file public cleanup, GitHub metadata/PR/branch hygiene, and the JobFilter-first portfolio redesign.
 
 ## Recent Changes
 
@@ -50,3 +51,4 @@ related:
 - Historical orphan pages and metadata gaps are recorded in the lint report for gradual review.
 - Agent Nudge's next reliability gap is crash/stale-lock recovery and a single-writer daemon boundary before cloud sync.
 - JobFilter `/whats-new` is live with five evidence-backed customer updates; the next entry should record this release now that it has shipped.
+- JobFilter's next commercial proof is source coverage: configure the remaining providers and turn the structurally valid 42-scan audit from 0 sellable results into evidence-backed opportunities.

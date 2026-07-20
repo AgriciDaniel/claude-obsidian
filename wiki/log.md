@@ -1,5 +1,11 @@
 # Wiki Log
 
+## [2026-07-20] save | JobFilter flagship and portfolio cleanup
+
+- Type: session
+- Location: `wiki/sessions/2026-07-20-jobfilter-codex.md`
+- From: verified JobFilter hardening, public GitHub cleanup, production deployment, and JobFilter-first digital portfolio delivery.
+
 ## [2026-07-20] save | JobFilter What's New and Agent Nudge v0.4 Release
 
 - Type: session
