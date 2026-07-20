@@ -2,8 +2,31 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    "https://www.youtube.com/watch?v=-QFHIoCo-Ko": {
+      "title": "Full Walkthrough: Workflow for AI Coding",
+      "source_type": "video",
+      "published_at": "2026-04-24",
+      "ingested_at": "2026-07-20",
+      "raw_path": ".raw/articles/full-walkthrough-workflow-for-ai-coding-matt-pocock-2026-04-24.en-orig.vtt",
+      "content_hash": "sha256:a464b86a1d5ece7e07553497bc1fff0ed0b6c463e4fe3d3cbe013e58a5bedace",
+      "created_pages": [
+        "wiki/sources/Full-Walkthrough-Workflow-for-AI-Coding.md",
+        "wiki/entities/Matt Pocock.md",
+        "wiki/concepts/AI Engineering Delivery Loop.md",
+        "02-PROJECTS/Agent Nudge/2026-07-20-live-agent-bridge.md"
+      ],
+      "updated_pages": [
+        "wiki/index.md",
+        "wiki/hot.md",
+        "wiki/log.md"
+      ]
+    }
+  },
   "address_map": {
-    "wiki/concepts/DragonScale Memory.md": "c-000001"
+    "wiki/concepts/DragonScale Memory.md": "c-000001",
+    "wiki/sources/Full-Walkthrough-Workflow-for-AI-Coding.md": "c-000003",
+    "wiki/entities/Matt Pocock.md": "c-000004",
+    "wiki/concepts/AI Engineering Delivery Loop.md": "c-000005"
   }
 }
