@@ -117,3 +117,29 @@ status: completed
 
 - Implement provider-specific connection plans and a production hook runner, then add temp-project round-trip tests for connect, idempotent reconnect, drift refusal, and exact disconnect restoration.
 - Extend Windows packaging smoke coverage to prove the shipped executable can connect and disconnect a disposable project without touching real user configuration.
+
+## v0.4 Live Connect security and acceptance audit
+
+### What I did
+
+- Audited the proposed dry-run/apply/disconnect boundary against the current CLI, hook normalization, SQLite storage, daemon, MCP process, Electron data path, and test suite without modifying the Agent Nudge repository.
+- Verified current Claude Code hook and Codex configuration behavior against vendor documentation.
+- Defined release-blocking invariants for path containment, symlink/junction defense, owned fragments, backup integrity, compare-and-swap writes, operation rollback/recovery, concurrent writers, and a bounded disk outbox.
+- Re-ran the unit and integration suites: 17 unit and 11 integration tests passed. One initial unsupported Vitest flag invocation failed before the correct commands were run.
+
+### Files changed
+
+- `wiki/sessions/2026-07-20-agent-nudge-codex.md` only; the Agent Nudge repository remained clean.
+
+### Decisions made
+
+- Project-scoped Codex `notify` cannot be the v0.4 mechanism because Codex ignores `notify` in `.codex/config.toml`; default project connection should use MCP and remain `ADVISORY`, while any user-level notification connector must require separate explicit consent and be labelled `OBSERVED`.
+- Claude connection should default to `.claude/settings.local.json`, use exec-form `command` plus `args`, and label only a validated synchronous `PreToolUse` decision path as `ENFORCED`.
+- Normal disconnect must structurally remove only the exact owned fragment; whole-file backups are disaster recovery evidence and must never overwrite later user edits.
+- The outbox must persist only an allowlisted, already-redacted event envelope in one atomic file per event; arbitrary provider payloads, commands, prompts, transcripts, file content, and secret-bearing config are forbidden.
+- The daemon should be the sole SQLite ledger writer. MCP, CLI, Electron, and hooks should share one canonical data directory and communicate through the daemon or the file outbox.
+
+### Next steps
+
+- Implement an immutable connection plan, provider-specific structural renderers, canonical-root/path guards, per-target locking plus hash compare-and-swap, backup/operation manifests, atomic replacement, reverse rollback, and explicit recovery status.
+- Add the security and fault-injection matrix before enabling `--apply`: traversal/symlink/junction cases, concurrent edits, crash points, ownership drift, no-op idempotency, privacy canaries, outbox replay/quarantine/quotas, and packaged Windows connect/disconnect smoke tests.
