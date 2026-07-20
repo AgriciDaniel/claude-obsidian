@@ -2,7 +2,7 @@
 type: meta
 title: "Hot Cache"
 created: 2026-04-23
-updated: 2026-07-20
+updated: 2026-07-21
 tags:
   - meta
   - hot-cache
@@ -17,7 +17,7 @@ related:
 
 ## Last Updated
 
-2026-07-20. JobFilter is hardened, publicly cleaned, and presented as the portfolio flagship. Agent Nudge v0.4 Live Connect and JobFilter's customer-facing What's New system remain merged and live. The shared Claude/Codex/OpenCode vault remains the durable knowledge layer.
+2026-07-21. Portfolio GitHub history is cleaned without rewriting published commits. Agent Nudge now uses protected `main`; merged branch clutter is pruned; unique vault backlog is labelled for review. JobFilter remains the portfolio flagship.
 
 ## Key Recent Facts
 
@@ -36,6 +36,7 @@ related:
 - Agent Nudge v0.4 adds reversible project connectors, pre-action enforcement where providers support it, local backups/rollback, and an allowlisted offline outbox.
 - [[2026-07-20-jobfilter-whats-new-codex]] records JobFilter's single-source product release page and the public Agent Nudge v0.4.0 Windows release.
 - [[2026-07-20-jobfilter-codex]] records JobFilter's production hardening, 1,226-to-360-file public cleanup, GitHub metadata/PR/branch hygiene, and the JobFilter-first portfolio redesign.
+- [[2026-07-21-github-hygiene-codex]] records the account-wide history audit, Agent Nudge main migration, merged-ref pruning, vault PR deduplication, and preserved exceptions.
 
 ## Recent Changes
 
@@ -52,3 +53,4 @@ related:
 - Agent Nudge's next reliability gap is crash/stale-lock recovery and a single-writer daemon boundary before cloud sync.
 - JobFilter `/whats-new` is live with five evidence-backed customer updates; the next entry should record this release now that it has shipped.
 - JobFilter's next commercial proof is source coverage: configure the remaining providers and turn the structurally valid 42-scan audit from 0 sellable results into evidence-backed opportunities.
+- Four unique vault PRs remain labelled for human review; JobFilter PR #376 and FlipSignal PR #5 remain active code reviews.

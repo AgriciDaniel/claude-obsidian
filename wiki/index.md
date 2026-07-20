@@ -1,6 +1,6 @@
 # Wiki Index
 
-> Project and engineering knowledge index. Last updated: 2026-07-20.
+> Project and engineering knowledge index. Last updated: 2026-07-21.
 
 ## Projects
 
@@ -15,6 +15,7 @@
 
 ## Engineering
 
+- [[2026-07-21-github-hygiene-codex]] — history-first repository cleanup, branch policy, and preserved backlog decisions.
 - [[wiki/engineering/REPO-MAP]] — cross-repo stack/auth/payments/AI/deploy map.
 - [[wiki/engineering/AGENT-HANDOFF]] — repo warnings and future-agent rules.
 

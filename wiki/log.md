@@ -1,5 +1,11 @@
 # Wiki Log
 
+## [2026-07-21] save | GitHub History Hygiene Cleanup
+
+- Type: session
+- Location: `wiki/sessions/2026-07-21-github-hygiene-codex.md`
+- From: full portfolio branch, PR, release, default-branch, and merge-policy audit with safe cleanup.
+
 ## [2026-07-20] save | JobFilter flagship and portfolio cleanup
 
 - Type: session
