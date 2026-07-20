@@ -1385,6 +1385,105 @@ Do not end with vague suggestions. Do not call the MVP complete if the demo path
 
 ---
 
+## FUTURE PLATFORM DESIGN CONTRACT — ARCHITECT NOW, DO NOT BUILD IN THE MVP
+
+The MVP is the local proof of a larger category:
+
+> **Agent Nudge is the pre-action context assurance layer for heterogeneous AI agents. It ensures the right agent receives the smallest verified context delta at the last responsible moment.**
+
+The durable company is not a generic memory store, agent chat app, orchestration framework, or proprietary message bus. Protocols will commoditize how agents communicate, and model vendors will bundle basic memory. The long-term product must own:
+
+- what new fact is consequential;
+- which agent, role, task, artifact, or human is affected;
+- when delivery helps instead of interrupts;
+- whether the sender and evidence are trustworthy;
+- whether disclosure is authorized across project, tenant, provider, device, geography, or company boundaries;
+- whether the context is current, expired, superseded, contradicted, or revoked;
+- whether the recipient acknowledged and used it;
+- whether delivery prevented rework, delay, leakage, or an unsafe action.
+
+### Standards and interoperability strategy
+
+Do not invent a closed transport protocol. Keep the canonical domain model transport-neutral so the product can use:
+
+- **MCP** for local agent/tool integration;
+- **A2A** for remote agent discovery, tasks, messages, and artifacts;
+- **CloudEvents-compatible envelopes** for portable internal event facts;
+- **OpenTelemetry** trace and GenAI semantic conventions for observability export;
+- **OAuth/OIDC initially and workload identity such as SPIFFE later** for enterprise agent identity;
+- **an external policy engine such as OPA later**, behind an internal policy-decision interface;
+- **AGNTCY-compatible discovery or secure transport later** if adoption and customer demand justify it.
+
+### Future-proof seams required in the MVP
+
+Implement only lightweight interfaces and fields now—no cloud services or enterprise machinery:
+
+1. Version every persisted and transmitted schema.
+2. Use immutable globally unique IDs and idempotency keys.
+3. Preserve source URI, source hash, observed time, effective time, and emitter identity on every fact.
+4. Support `supersedes`, `contradicts`, `dependsOn`, and `invalidates` relations without building a graph database.
+5. Separate agent identity, provider identity, project membership, role, session, and device in types.
+6. Keep event ingestion, relevance, policy decisions, transport, and delivery behind narrow interfaces.
+7. Provide a durable inbox/outbox, delivery cursor, retry state, and deterministic replay.
+8. Carry correlation ID, causation ID, and trace ID through the pipeline.
+9. Include an extension metadata map so future protocol fields do not require destructive migrations.
+10. Model acknowledgement and consumption separately; delivery alone is not success.
+11. Make expiry, supersession, revocation readiness, and source revalidation first-class.
+12. Ensure a future policy layer can return `allow`, `deny`, `redact`, `summarize`, `requireApproval`, or `localOnly`.
+
+### Long-range architecture
+
+```text
+Hooks / Git / CI / MCP / A2A / workplace connectors
+                         |
+                         v
+              Canonical fact/event ledger
+                         |
+                         v
+      Identity + policy + redaction + provenance
+                         |
+                         v
+       Context delta + relevance + timing engine
+                         |
+                         v
+          Durable delivery + acknowledgement
+                         |
+                         v
+             Outcome and feedback learning
+```
+
+### Roadmap horizons
+
+- **H0 — 0–6 months:** local Windows proof for Claude Code, Codex, and compatible agents; deterministic triggers; evidence-first nudges; privacy by default; measure prevented conflicts and resume time.
+- **H1 — 6–18 months:** encrypted team relay, shared projects, hosted or self-hosted sync, SSO, policy basics, A2A interoperability, OpenTelemetry export, connector SDK.
+- **H2 — 18–36 months:** enterprise context control plane with ABAC, KMS, DLP, SCIM, SIEM, retention, legal hold, agent identity, simulation/replay, and private deployment.
+- **H3 — 3–5 years:** federated context exchange between organizations with selective disclosure, signed provenance, delegation chains, revocation, and contractual trust boundaries.
+- **H4 — 5–10 years:** agent attention infrastructure that predicts coordination failures, allocates interruption budgets, and records why an organization’s agents acted on a particular version of a fact.
+
+### Business model and moat
+
+- Keep the local core and adapter protocol open source for trust and distribution.
+- Treat the following as pricing hypotheses for later validation, not MVP checkout scope:
+  - Community: free local proof, one user/device, three projects;
+  - Pro: £19/month or £190/year for encrypted personal sync, unlimited projects, advanced rules/history/replay, adapters, and personal ROI;
+  - Team: £299/workspace/month or £2,990/year including five humans, ten active agents, shared projects, policy, approvals, audit, connectors, and governed-event allowance;
+  - Business: £999/workspace/month or £9,990/year for larger agent fleets, SSO, advanced access policy, DLP, retention, replay, private relay, and priority support;
+  - Enterprise: £30,000–£150,000+ annually plus £5,000–£25,000 scoped onboarding/services for private deployment, IAM, DLP, KMS, SIEM, compliance, regional controls, connectors, and SLAs.
+- Do not price per raw message in a way that rewards noise; favor active agents/workspaces plus governed delivery volume.
+- Test willingness to pay early through 5–10 instrumented six-week design-partner pilots at £1,500–£5,000, credited partially toward annual contracts when success gates are met.
+- Maximize sustainable lifetime gross profit, not short-term extraction: annual-first presentation, transparent monthly choice, workspace minimums, paid enterprise pilots, expansion by governed agents/connectors/workspaces, and evidence-led price increases.
+- Build the moat from outcome-labelled relevance data, a temporal provenance graph, durable cross-vendor adapters, policy/trust, local-first deployment, an evaluation suite, and control of the pre-action boundary.
+
+Adapt JobFilter's commercial discipline without copying its audience or branding: context quality over notification volume, explainable qualification, speed to action, a narrow first ICP, transparent proof, outcome attribution, and an ROI dashboard. Use Agent Nudge delivery classes such as `BLOCK`, `ACT_NOW`, `NEXT_BOUNDARY`, `DIGEST`, and `DROP`; do not reuse trade-lead terminology or GOLD/SILVER/BRONZE labels.
+
+### Explicit future non-goals for this build
+
+Do **not** add cloud sync, collaboration accounts, billing, SSO, SCIM, SPIFFE, OPA deployment, remote A2A networking, enterprise connectors, payments, marketplaces, blockchains, machine-learned routing, or a graph database to this MVP. Record interfaces and migration notes only. Any future architecture work that delays the local end-to-end product proof is a defect.
+
+The strategic success measure is not messages sent. It is consequential work improved: duplicate actions avoided, conflicts prevented, stale decisions blocked, resume time reduced, and high-risk context delivered with a low ignored-nudge rate.
+
+---
+
 ## PRODUCT VALIDATION AFTER THE BUILD
 
 Do not implement these as extra MVP scope, but include them in `docs/PRODUCT.md` as the recommended next experiment:
