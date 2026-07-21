@@ -160,14 +160,59 @@ RADAR
 # ============================================================
 echo ""
 echo "━━━ Complete ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "   Mind-OS Phase 0 基础设施已就绪。"
+echo "   Mind-OS 已就绪。"
 echo ""
-echo "   接下来："
-echo "   1. 修改 CLAUDE.md 追加宪法规则"
-echo "   2. 新建 AGENTS.md 代理发现文件"
-echo "   3. 新建 schema.md 结构约定文件"
-echo "   4. 新建 _templates/book-template.md"
-echo "   5. 新建 _templates/daily-journal.md"
-echo "   6. 在 .claude/skills/ 下新建 skill"
-echo "   7. 在 .claude/agents/ 下新建 5 个蒸馏 agent"
+echo "   已创建："
+echo "   - journals/        日记目录"
+echo "   - wiki/insights/   人类独占层"
+echo "   - wiki/books/      读书笔记 (含 density-tracker)"
+echo "   - _templates/      模板"
+echo "   - CLAUDE.md        已追加宪法规则"
+echo ""
+
+# Check if mind-os.json exists
+if [ ! -f "$MINDBASE/.vault-meta/mind-os.json" ]; then
+  cat > "$MINDBASE/.vault-meta/mind-os.json" << 'JSONEOF'
+{
+  "version": "1.0",
+  "description": "Collector configuration. Each collector has its own enabled toggle.",
+  "collectors": {
+    "aihot": {
+      "enabled": false,
+      "interval_minutes": 360,
+      "source": "huggingface_papers"
+    }
+  }
+}
+JSONEOF
+  echo "   ✚ written: .vault-meta/mind-os.json"
+fi
+
+# Append Mind-OS section to vault CLAUDE.md if not already present
+VCLAUDES="$MINDBASE/CLAUDE.md"
+if [ -f "$VCLAUDES" ] && ! grep -q "Mind-OS Extensions" "$VCLAUDES" 2>/dev/null; then
+  cat >> "$VCLAUDES" << 'APPEND'
+
+---
+
+## Mind-OS Extensions
+
+This vault runs Mind-OS extension layers on top of claude-obsidian.
+
+### Layer Boundaries
+- wiki/insights/ -- HUMAN ONLY. LLMs read but never write.
+- wiki/books/ -- RIA book notes. LLM writes only via the book-note skill.
+- journals/ -- Daily notes. Input carrier for the distillation layer.
+
+### Constitutional Rules
+1. NEVER write to wiki/insights/. Read-only.
+2. RIA book notes MUST satisfy the A-segment triple: verb + criterion + deadline.
+3. Distillation is SEMI-AUTOMATIC -- human invokes, agent responds.
+4. tech-radar grade adjustments are DRY-RUN by default.
+APPEND
+  echo "   ✚ appended Mind-OS section to CLAUDE.md"
+fi
+
+echo "   技能和 Agent 定义已随 claude-obsidian 安装。"
+echo "   采集脚本: bin/collect-aihot.sh (默认关闭)"
 echo ""

@@ -128,15 +128,21 @@ fi
 
 # Prompt for vault directory if not specified via --vault
 if [ -z "$VAULT_DIR" ]; then
-  # Suggest project root or current directory as default
-  DEFAULT_VAULT="$PROJECT_ROOT"
   echo ""
-  info "Vault directory not specified. Detected default: ${DEFAULT_VAULT}"
-  echo "  Skills need a vault to store wiki content. This is the directory"
+  error "Vault directory is REQUIRED."
+  echo "  Skills need a vault to store wiki content. The vault is the directory"
   echo "  that contains (or will contain) wiki/, .raw/, and .claude-obsidian-root."
-  echo -n "  Vault path [${DEFAULT_VAULT}]: "
+  echo ""
+  echo "  Provide it via:"
+  echo "    bash bin/install-toolkit.sh --vault /path/to/vault"
+  echo ""
+  echo -n "  Enter vault path: "
   read -r VAULT_DIR_ANSWER
-  VAULT_DIR="${VAULT_DIR_ANSWER:-$DEFAULT_VAULT}"
+  if [ -z "$VAULT_DIR_ANSWER" ]; then
+    error "No vault path provided. Installation aborted."
+    exit 1
+  fi
+  VAULT_DIR="$VAULT_DIR_ANSWER"
   info "Vault set to: $VAULT_DIR"
 fi
 
@@ -166,7 +172,7 @@ done
 # ── Copy root config files ─────────────────────────────────────────────────────
 header "Copying config files"
 
-for file in CLAUDE.md WIKI.md AGENTS.md Makefile .gitignore; do
+for file in CLAUDE.md WIKI.md AGENTS.md schema.md Makefile .gitignore; do
   src="$PROJECT_ROOT/$file"
   if [ -f "$src" ]; then
     cp "$src" "$TOOLKIT_DIR/$file"
