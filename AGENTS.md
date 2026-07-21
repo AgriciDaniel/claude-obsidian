@@ -37,6 +37,8 @@ bash bin/setup-multi-agent.sh
 | `defuddle` | clean this url, defuddle |
 | `obsidian-markdown` | obsidian syntax, wikilink, callout |
 | `obsidian-bases` | obsidian bases, .base file, dynamic table |
+| `book-note` | /book-note, create book note, RIA book note |
+| `distill` | /distill, distill this source, knowledge distillation |
 
 ## Key Conventions
 
@@ -48,6 +50,28 @@ bash bin/setup-multi-agent.sh
 - **Human judgments**: `wiki/insights/` (read-only for agents — never write to this directory)
 - **Daily notes**: `journals/` (read on request only)
 - **Manifest**: `.raw/.manifest.json` tracks ingested sources (delta tracking)
+
+## Available Agents (Mind-OS Distillation Layer)
+
+| Agent | Tag | Purpose |
+|---|---|---|
+| `lumina` | #lumina | Emotional companion (gentle, empathetic) |
+| `prism` | #prism | Insight breakout (counter-intuitive, architectural) |
+| `vector` | #vector | Action push (minimal next step) |
+| `nexus` | #nexus | Deep research (rigorous, must include wikilinks) |
+| `ember` | #ember | Book Socratic questioning (RIA quality check) |
+
+## Mind-OS Templates (in `_templates/`)
+
+- `book-template.md` — RIA three-section book note
+- `daily-journal.md` — Daily journal with agent tag annotations
+
+## Mind-OS Setup
+
+Run `bash bin/setup-mind-os.sh` from vault root:
+- Creates `journals/`, `wiki/insights/`, `wiki/books/`, `_templates/`
+- Writes `tech-radar.md`, `density-tracker.md`, `insights/README.md`
+- See `schema.md` for structural conventions
 
 ## Bootstrap
 

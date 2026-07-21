@@ -43,6 +43,20 @@ touch my-vault/.claude-obsidian-root
 claude settings set env.CLAUDE_OBSIDIAN_VAULT /absolute/path/to/my-vault
 ```
 
+
+## Mind-OS Extensions (optional)
+
+This fork includes Mind-OS layers that extend claude-obsidian:
+
+- **Post-ingest distillation**: after every ingest, automatically analyzes connections,
+  contradictions, and co-occurrences between new and existing content (skills/distill/)
+- **RIA book notes**: structured Reading-Interpretation-Appropriation notes (skills/book-note/)
+- **5 distillation agents**: lumina, prism, vector, nexus, ember (agents/)
+- **Collection layer**: optional AI-HOT signal collector (bin/collect-aihot.sh)
+
+**Enable with**: `bash bin/setup-mind-os.sh` from your vault root.
+**Toggle collectors**: edit `.vault-meta/mind-os.json` (created by setup script).
+**Full documentation**: `schema.md` and `AGENTS.md`.
 ## See also
 
 - [Toolkit CLAUDE.md](~/.claude/obsidian-toolkit/CLAUDE.md) — full orchestrator instructions
