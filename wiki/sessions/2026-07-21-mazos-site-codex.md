@@ -15,11 +15,17 @@ status: completed
 - Verified `npm run lint` and `npm run build` pass; `npm audit --omit=dev` reports zero vulnerabilities.
 - Measured Lighthouse: mobile 98 performance / 100 accessibility / 100 best practices / 100 SEO; desktop 100 across all four categories.
 - Confirmed all tested live product, asset, and GitHub links return HTTP 200.
+- Implemented the audit in two reviewable branches with independent product/career, founder, repository, accessibility, visual, security, and reliability perspectives.
+- Rebuilt JobFilter's live procurement path around bounded Find a Tender OCDS packages, authoritative CPV matching, latest-release merging, expiry filtering, source readiness, safe pagination/retries, cancellation, and fail-closed radius evidence.
+- Truth-aligned the portfolio around operational B2B/applied-AI engineering, promoted Agent Nudge as the current technical flagship, labelled JobFilter as source repair/validation, and added accessibility, metadata, local assets, security headers, deterministic tests, CI, and a working static start path.
+- Opened draft PRs `JobFilterV1#383` and `mazos-site#4`; all required GitHub Actions and Vercel preview checks passed.
+- Added `verify`-gated PR protection to `mazos-site/main`, enforced for admins with conversation resolution and force-push/deletion disabled. Enabled Dependabot security updates and improved repository metadata.
 
 ## Files changed
 
-- `wiki/sessions/2026-07-21-mazos-site-codex.md` only.
-- No project repository files were changed.
+- `C:\Users\manaz\JobFilterV1`: FTS fetch/mapping, postcode/radius logic, scan cancellation, source configuration, Find Jobs copy, CI, README, fixtures, and regression tests on `agents/jobfilter-find-a-tender`.
+- `C:\Users\manaz\Projects\mazos-site`: portfolio/case-study HTML, styles, metadata, headers, local images, runtime scripts, CI, tests, and README on `agents/portfolio-truth-and-quality`.
+- `wiki/sessions/2026-07-21-mazos-site-codex.md`.
 
 ## Decisions made
 
@@ -31,14 +37,13 @@ status: completed
 - Use a default opportunity allocation of 70% employment pipeline, 20% external product proof/pilots, and 10% founder exploration.
 - Highest-priority fixes are: repair JobFilter's source and product identity; fix GitHub/career identity; create external proof; clarify primary audience/CTA; add CI/branch protection; and then complete the site quality work.
 - Keep MAZos secondary as method evidence; use Agent Nudge as the temporary technical flagship and restore JobFilter only after source and customer validation.
+- Preserve honest zero-result states: buyer headquarters are not delivery-location evidence, and unproven distance must not be treated as zero miles.
+- Do not merge or deploy automatically; both implementation PRs remain drafts for owner review.
 
 ## Next steps
 
-1. Immediately remove/demote JobFilter's `Production` claim and migrate/dual-source ingestion to the Find a Tender OCDS API with pagination and a labelled relevance benchmark.
-2. Choose one JobFilter market: public-procurement qualification for construction SMEs or planning/EPC prospecting for local trades; stop mixing the two propositions.
-3. Complete the GitHub profile, pin intentional repositories, add licenses where open source is claimed, publish a one-page CV, and link the correct LinkedIn/profile.
-4. Recruit 10 procurement/trades interviews and 5 multi-agent developers; pursue one paid JobFilter pilot and five Agent Nudge testers.
-5. Publish reproducible evidence: the source-assumption postmortem, an Agent Nudge benchmark, and a verification-receipt explainer.
-6. Add GitHub Actions, tests/link checks, branch protection, Dependabot, and Node/npm pinning across promoted repositories; repair OpenFlowKit's failing main-branch CI.
-7. Fix the portfolio's ARIA, metadata, image, security-header, and conversion findings after the truth/positioning changes.
-8. Track qualified conversations, pilots, active users, introductions, interviews, and rejection reasons weekly; do not use project count or commit volume as success metrics.
+1. Review the green draft PRs: `https://github.com/manazoid4/JobFilterV1/pull/383` and `https://github.com/manazoid4/mazos-site/pull/4`.
+2. Complete `JobFilterV1#382`: label 100-500 notices, resolve NUTS/locality evidence, interview 10 SMEs, run 3 pilots, and gate paid activation on actionable territory coverage.
+3. Complete `mazos-site#3`: GitHub identity/profile README/pins, verified LinkedIn/CV destinations, and at least one external proof signal. GitHub profile API editing is blocked until the token has `user` scope.
+4. Publish reproducible evidence: the source-assumption postmortem, an Agent Nudge benchmark, and a verification-receipt explainer.
+5. Track qualified conversations, pilots, active users, introductions, interviews, and rejection reasons weekly; do not use project count or commit volume as success metrics.
