@@ -760,4 +760,34 @@ MIT License. See [LICENSE](LICENSE) for full text. Free for personal and commerc
 
 ---
 
+
+---
+
+## Mind-OS Extensions
+
+Mind-OS extends claude-obsidian with post-ingest knowledge distillation,
+RIA book notes, 5 distillation agents, and optional signal collection.
+
+### One-click install
+
+```bash
+git clone https://github.com/jzxyhjl/claude-obsidian.git
+cd claude-obsidian
+bash bin/install-toolkit.sh --vault /path/to/your/vault
+# vault path is REQUIRED -- no default, no guessing
+```
+
+This single command:
+1. Installs toolchain globally to ~/.claude/obsidian-toolkit/
+2. Registers plugin with Claude Code
+3. Sets CLAUDE_OBSIDIAN_VAULT in home-level settings
+4. Creates vault directory structure
+5. Initializes Mind-OS directories (journals/, wiki/insights/, wiki/books/)
+6. Appends Mind-OS constitutional rules to vault CLAUDE.md
+
+After install, open Claude Code from any directory -- all operations
+route to the vault correctly.
+
+See schema.md for structural conventions and sentinel mode design.
+
 *Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Built by [Agrici Daniel](https://agricidaniel.com/about). Compounding knowledge is the highest-leverage habit a thinking person can build.*
