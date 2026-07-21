@@ -25,6 +25,19 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-07-17] ingest | AI 大模型知识点全景图
+- Source: `.raw/AI大模型知识点全景图-2026-07-17.md`
+- Article Home: [[AI大模型知识点全景图-home]]
+- Summary: [[AI大模型知识点全景图]]
+- Pages created (22 total):
+  - Article Home: [[AI大模型知识点全景图-home]]
+  - Source: [[AI大模型知识点全景图]]
+  - Concepts: [[AI Large Model Architecture]], [[LLM Training Methods]], [[Model Alignment and Safety]], [[LLM Reasoning Methods]], [[Multimodal AI]], [[Chinese AI Model Ecosystem]], [[AI Agent Systems]], [[LLM Evaluation]], [[Model Scaling and Emergence]], [[RAG and Retrieval]], [[Model Optimization]], [[Prompt Engineering]]
+  - Entities: [[OpenAI GPT Series]], [[Anthropic Claude Series]], [[DeepSeek]], [[Meta LLaMA Series]], [[Google Gemini Series]], [[Qwen (Alibaba)]], [[GLM (Zhipu AI)]], [[Moonshot AI (Kimi)]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key insight: 73 页扫描版 AI 大模型全景图，覆盖模型架构/训练/对齐/推理/多模态/评测/安全/产业生态全部核心领域。国内模型（DeepSeek、Qwen、GLM）与国际模型（GPT、Claude、LLaMA、Gemini）的全面对比
+- Address range allocated: c-000002 to c-000022（DragonScale 地址已分配）
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)

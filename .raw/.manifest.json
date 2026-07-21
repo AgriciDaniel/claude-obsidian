@@ -2,8 +2,63 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    ".raw/AI大模型知识点全景图-2026-07-17.md": {
+      "hash": "staged",
+      "ingested_at": "2026-07-17",
+      "pages_created": [
+        "wiki/articles/AI大模型知识点全景图-home.md",
+        "wiki/sources/AI大模型知识点全景图.md",
+        "wiki/concepts/AI Large Model Architecture.md",
+        "wiki/concepts/LLM Training Methods.md",
+        "wiki/concepts/Model Alignment and Safety.md",
+        "wiki/concepts/LLM Reasoning Methods.md",
+        "wiki/concepts/Multimodal AI.md",
+        "wiki/concepts/Chinese AI Model Ecosystem.md",
+        "wiki/concepts/AI Agent Systems.md",
+        "wiki/concepts/LLM Evaluation.md",
+        "wiki/concepts/Model Scaling and Emergence.md",
+        "wiki/concepts/RAG and Retrieval.md",
+        "wiki/concepts/Model Optimization.md",
+        "wiki/concepts/Prompt Engineering.md",
+        "wiki/entities/OpenAI GPT Series.md",
+        "wiki/entities/Anthropic Claude Series.md",
+        "wiki/entities/DeepSeek.md",
+        "wiki/entities/Qwen (Alibaba).md",
+        "wiki/entities/Meta LLaMA Series.md",
+        "wiki/entities/Google Gemini Series.md",
+        "wiki/entities/GLM (Zhipu AI).md",
+        "wiki/entities/Moonshot AI (Kimi).md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    }
+  },
   "address_map": {
-    "wiki/concepts/DragonScale Memory.md": "c-000001"
+    "wiki/concepts/DragonScale Memory.md": "c-000001",
+    "wiki/sources/AI大模型知识点全景图.md": "c-000002",
+    "wiki/concepts/AI Large Model Architecture.md": "c-000003",
+    "wiki/concepts/LLM Training Methods.md": "c-000004",
+    "wiki/concepts/Model Alignment and Safety.md": "c-000005",
+    "wiki/concepts/LLM Reasoning Methods.md": "c-000006",
+    "wiki/concepts/Multimodal AI.md": "c-000007",
+    "wiki/concepts/Chinese AI Model Ecosystem.md": "c-000008",
+    "wiki/concepts/AI Agent Systems.md": "c-000009",
+    "wiki/concepts/LLM Evaluation.md": "c-000010",
+    "wiki/concepts/Model Scaling and Emergence.md": "c-000011",
+    "wiki/concepts/RAG and Retrieval.md": "c-000012",
+    "wiki/concepts/Model Optimization.md": "c-000013",
+    "wiki/concepts/Prompt Engineering.md": "c-000014",
+    "wiki/entities/OpenAI GPT Series.md": "c-000015",
+    "wiki/entities/Anthropic Claude Series.md": "c-000016",
+    "wiki/entities/DeepSeek.md": "c-000017",
+    "wiki/entities/Qwen (Alibaba).md": "c-000018",
+    "wiki/entities/Meta LLaMA Series.md": "c-000019",
+    "wiki/entities/Google Gemini Series.md": "c-000020",
+    "wiki/entities/GLM (Zhipu AI).md": "c-000021",
+    "wiki/entities/Moonshot AI (Kimi).md": "c-000022"
   }
 }

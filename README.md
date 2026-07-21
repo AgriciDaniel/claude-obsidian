@@ -170,6 +170,85 @@ Then scaffold the full wiki structure.
 
 ---
 
+## Decoupled Toolchain (v2.0+)
+
+Starting from v2.0, the claude-obsidian toolchain is **fully decoupled** from the vault project. Skills, scripts, agents, hooks, and commands are installed to a persistent location (`~/.claude/obsidian-toolkit/`) and registered globally with Claude Code. The vault project becomes a pure wiki content directory — you can delete it and the toolchain remains available.
+
+### One-click global install
+
+```bash
+# From any vault clone or downloaded repository
+git clone https://github.com/AgriciDaniel/claude-obsidian
+cd claude-obsidian
+
+# Install the toolchain globally (decoupled from this directory)
+bash bin/install-toolkit.sh
+
+# Optionally specify a vault directory
+bash bin/install-toolkit.sh --vault /path/to/your/vault
+```
+
+What happens:
+- Copies all scripts, skills, agents, hooks, commands, docs, and tests to `~/.claude/obsidian-toolkit/`
+- Registers the plugin in `~/.claude/settings.json` (globally available in all Claude Code sessions)
+- Sets `CLAUDE_OBSIDIAN_TOOLKIT` and `CLAUDE_OBSIDIAN_VAULT` environment variables
+- Creates a `.claude-obsidian-root` marker file in the vault directory
+
+After installation, you can delete the `claude-obsidian/` source directory — all skills remain available through the globally registered plugin.
+
+### Uninstall
+
+To completely remove the toolchain and clean up global settings:
+
+```bash
+bash bin/install-toolkit.sh --uninstall
+```
+
+This removes:
+- The `~/.claude/obsidian-toolkit/` directory
+- The plugin entry from `~/.claude/settings.json`
+- The `CLAUDE_OBSIDIAN_TOOLKIT` and `CLAUDE_OBSIDIAN_VAULT` environment variables
+
+Your vault content under `wiki/` is **not affected** — it remains as plain Markdown files.
+
+### How it works
+
+```
+~/.claude/obsidian-toolkit/       ← persistent toolchain (globally registered)
+    ├── scripts/                   ← 12+ shell + Python helpers
+    ├── skills/                    ← 15+ skill definitions (SKILL.md)
+    ├── agents/                    ← sub-agent prompt files
+    ├── hooks/                     ← git hooks (auto-commit, locking)
+    ├── bin/                       ← setup scripts
+    ├── commands/                  ← slash command definitions
+    ├── docs/                      ← documentation
+    ├── tests/                     ← hermetic test suites
+    └── CLAUDE.md                  ← orchestrator instructions
+
+<your-vault>/                      ← vault content (anywhere on disk, decoupled)
+    ├── .claude-obsidian-root      ← marker file for vault detection
+    ├── wiki/                      ← wiki pages (concepts, entities, sources, articles)
+    ├── .raw/                      ← source documents for ingestion
+    ├── .vault-meta/               ← runtime state (transport config, locks, address counter)
+    └── .obsidian/                 ← Obsidian app configuration
+```
+
+The vault is discovered in this order:
+1. `CLAUDE_OBSIDIAN_VAULT` environment variable (highest priority)
+2. `.claude-obsidian-root` marker file in current or parent directory
+3. Current working directory (fallback)
+
+### Plugin-level install (alternative)
+
+If you prefer the standard Claude Code plugin workflow (rather than the decoupled install), the original two-step process still works:
+
+```bash
+claude plugin marketplace add AgriciDaniel/claude-obsidian
+claude plugin install claude-obsidian@agricidaniel-claude-obsidian
+```
+
+---
+
 ## Commands
 
 | You say | Claude does |
@@ -610,14 +689,22 @@ An optional opt-in extension (`bash bin/setup-dragonscale.sh`) that adds four me
 
 ## Uninstall
 
-Plugin install:
+**Decoupled install (v2.0+):** run the uninstall script from any clone of the repository:
+
+```bash
+bash bin/install-toolkit.sh --uninstall
+```
+
+This removes `~/.claude/obsidian-toolkit/` and cleans up `~/.claude/settings.json`.
+
+**Plugin install (original):**
 
 ```bash
 claude plugin uninstall claude-obsidian@agricidaniel-claude-obsidian
 claude plugin marketplace remove AgriciDaniel/claude-obsidian
 ```
 
-Clone install (delete the folder):
+**Clone install (delete the folder):**
 
 ```bash
 rm -rf /path/to/claude-obsidian
@@ -672,5 +759,35 @@ MIT License. See [LICENSE](LICENSE) for full text. Free for personal and commerc
 </a>
 
 ---
+
+
+---
+
+## Mind-OS Extensions
+
+Mind-OS extends claude-obsidian with post-ingest knowledge distillation,
+RIA book notes, 5 distillation agents, and optional signal collection.
+
+### One-click install
+
+```bash
+git clone https://github.com/jzxyhjl/claude-obsidian.git
+cd claude-obsidian
+bash bin/install-toolkit.sh --vault /path/to/your/vault
+# vault path is REQUIRED -- no default, no guessing
+```
+
+This single command:
+1. Installs toolchain globally to ~/.claude/obsidian-toolkit/
+2. Registers plugin with Claude Code
+3. Sets CLAUDE_OBSIDIAN_VAULT in home-level settings
+4. Creates vault directory structure
+5. Initializes Mind-OS directories (journals/, wiki/insights/, wiki/books/)
+6. Appends Mind-OS constitutional rules to vault CLAUDE.md
+
+After install, open Claude Code from any directory -- all operations
+route to the vault correctly.
+
+See schema.md for structural conventions and sentinel mode design.
 
 *Based on [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Built by [Agrici Daniel](https://agricidaniel.com/about). Compounding knowledge is the highest-leverage habit a thinking person can build.*

@@ -11,9 +11,61 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ---
 
+## Decoupled Toolchain Path Resolution
+
+The claude-obsidian toolchain is decoupled from the vault project. Infrastructure
+(scripts, skills, agents, etc.) lives at the `$OBSIDIAN_TOOLKIT` path, while the
+vault content (wiki pages, sources, attachments) lives at the vault root.
+
+Resolve paths at the start of every ingest session:
+
+```bash
+# === Resolve vault root ===
+if [ -n "${CLAUDE_OBSIDIAN_VAULT:-}" ]; then
+  VAULT="$CLAUDE_OBSIDIAN_VAULT"
+elif [ -f ".claude-obsidian-root" ]; then
+  VAULT="$(pwd)"
+else
+  # Walk up looking for .claude-obsidian-root marker
+  VAULT="$(pwd)"
+  while [ "$VAULT" != "/" ]; do
+    if [ -f "$VAULT/.claude-obsidian-root" ]; then
+      break
+    fi
+    VAULT="$(dirname "$VAULT")"
+  done
+  [ "$VAULT" = "/" ] && VAULT="$(pwd)"
+fi
+
+# === Resolve toolkit path ===
+if [ -n "${CLAUDE_OBSIDIAN_TOOLKIT:-}" ]; then
+  OBSIDIAN_TOOLKIT="$CLAUDE_OBSIDIAN_TOOLKIT"
+elif [ -d "./scripts" ] && [ -f "./CLAUDE.md" ]; then
+  # Running from within the old monolithic project structure
+  OBSIDIAN_TOOLKIT="$(pwd)"
+else
+  OBSIDIAN_TOOLKIT="$HOME/.claude/obsidian-toolkit"
+fi
+
+# Export for child scripts
+export CLAUDE_OBSIDIAN_VAULT="$VAULT"
+export WIKI_LOCK_VAULT="$VAULT"  # wiki-lock.sh reads this
+```
+
+Then use `$OBSIDIAN_TOOLKIT` to call any infrastructure script:
+```bash
+bash "$OBSIDIAN_TOOLKIT/scripts/detect-transport.sh"
+python3 "$OBSIDIAN_TOOLKIT/scripts/wiki-mode.py" route source "My Source"
+bash "$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh" acquire wiki/concepts/Foo.md
+```
+
+Vault-relative paths (`wiki/`, `.raw/`, `.vault-meta/`) are resolved relative to `$CLAUDE_OBSIDIAN_VAULT`.
+
+---
+
 ## Transport (v1.7+)
 
-Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash scripts/detect-transport.sh`). Use the `preferred` transport per the fallback chain:
+Before mutating any vault file, consult `.vault-meta/transport.json` (auto-created by `bash "$OBSIDIAN_TOOLKIT/scripts/detect-transport.sh"`). Use the `preferred` transport per the fallback chain:
 
 - **cli** — `obsidian-cli write "$VAULT" "$NOTE" < content.md` (or `append`, `property:set`); see [`skills/wiki-cli/SKILL.md`](../wiki-cli/SKILL.md)
 - **mcp-obsidian** / **mcpvault** — `mcp__obsidian-vault__write_note` and friends; see [`skills/wiki/references/mcp-setup.md`](../wiki/references/mcp-setup.md)
@@ -25,23 +77,23 @@ Full decision tree: [`wiki/references/transport-fallback.md`](../../wiki/referen
 
 ## Mode awareness (v1.8+)
 
-Before creating any new wiki page, consult the vault's methodology mode via `python3 scripts/wiki-mode.py route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
+Before creating any new wiki page, consult the vault's methodology mode via `python3 "$OBSIDIAN_TOOLKIT/scripts/wiki-mode.py" route <type> "<name>"`. The router returns the vault-relative path where the page should be filed.
 
 ```bash
-SRC_PATH=$(python3 scripts/wiki-mode.py route source "Karpathy 2025 LLM Wiki essay")
+SRC_PATH=$(python3 "$OBSIDIAN_TOOLKIT/scripts/wiki-mode.py" route source "Karpathy 2025 LLM Wiki essay")
 # generic:      wiki/sources/Karpathy-2025-LLM-Wiki-essay.md
 # lyt:          wiki/notes/Karpathy-2025-LLM-Wiki-essay.md  (also update relevant MOC)
 # para:         wiki/resources/incoming/Karpathy-2025-LLM-Wiki-essay.md
 # zettelkasten: wiki/20260517123456-Karpathy-2025-LLM-Wiki-essay.md
 
-ENT_PATH=$(python3 scripts/wiki-mode.py route entity "Andrej Karpathy")
-CON_PATH=$(python3 scripts/wiki-mode.py route concept "Compounding Vault Pattern")
+ENT_PATH=$(python3 "$OBSIDIAN_TOOLKIT/scripts/wiki-mode.py" route entity "Andrej Karpathy")
+CON_PATH=$(python3 "$OBSIDIAN_TOOLKIT/scripts/wiki-mode.py" route concept "Compounding Vault Pattern")
 ```
 
 If `.vault-meta/mode.json` is absent, the router returns mode=generic paths (identical to v1.7 behavior). No special-casing needed in this skill.
 
 Mode-specific follow-up:
-- **LYT**: after filing the atomic note, update the relevant MOC (`wiki/mocs/<topic>-moc.md`) to link the new note. If no MOC exists for the topic, create one using `skills/wiki-mode/templates/lyt/moc-template.md`.
+- **LYT**: after filing the atomic note, update the relevant MOC (`wiki/mocs/<topic>-moc.md`) to link the new note. If no MOC exists for the topic, create one using `"$OBSIDIAN_TOOLKIT/skills/wiki-mode/templates/lyt/moc-template.md"`.
 - **Zettelkasten**: filename already includes the timestamp ID. Populate the `id:` frontmatter field to match.
 - **PARA**: new ingests land in `wiki/resources/incoming/` by default. Do NOT auto-guess the topic; leave in incoming/ for user review.
 
@@ -51,29 +103,29 @@ Mode-specific follow-up:
 
 ```bash
 # Acquire — blocks (returns 75 EX_TEMPFAIL) if another writer holds the lock
-if bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md; then
+if bash "$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh" acquire wiki/concepts/Foo.md; then
   # ... do the write via the §Transport-selected method ...
-  bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+  bash "$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh" release wiki/concepts/Foo.md
 else
   # rc=75: another writer is in flight. Retry once after 2s; if still held,
   # log to wiki/log.md and skip this page rather than overwrite.
   sleep 2
-  bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md && {
+  bash "$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh" acquire wiki/concepts/Foo.md && {
     # write …
-    bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
+    bash "$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh" release wiki/concepts/Foo.md
   } || echo "skipped wiki/concepts/Foo.md (locked); logged to wiki/log.md"
 fi
 ```
 
 Properties:
 - **Per-file granularity.** Locks key on `sha1(<vault-relative-path>)`; concurrent writes to DIFFERENT pages run in parallel.
-- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `scripts/wiki-lock.sh` header for the full semantics.
+- **Age-based staleness.** Default `STALE_AFTER_SEC=60`. A crashed holder unblocks in ≤60 seconds without manual intervention. See `"$OBSIDIAN_TOOLKIT/scripts/wiki-lock.sh"` header for the full semantics.
 - **Cross-process release.** Release is `rm -f` (no PID match required). Skill authors are trusted to release locks they acquire; cross-skill release is allowed by design (a janitor running `wiki-lock clear-stale --max-age 0` is the canonical recovery path).
-- **The PostToolUse hook now defers `git add` if any locks are currently held**, so the auto-commit doesn't fire mid-ingest and produce torn commits. See `hooks/hooks.json`.
+- **The PostToolUse hook now defers `git add` if any locks are currently held**, so the auto-commit doesn't fire mid-ingest and produce torn commits. See `"$OBSIDIAN_TOOLKIT/hooks/hooks.json"`.
 
 `wiki-lock` is unconditional in v1.7+ — there is no feature gate, no fallback. Skills that don't acquire locks are racing against any other writer. The script is in core, not opt-in.
 
-Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `scripts/allocate-address.sh`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `agents/wiki-ingest.md`.
+Sub-agent rule from v1.6 — *"Sub-agents MUST NOT call `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh"`"* — is preserved (orchestrator still backfills addresses to keep the counter monotonic). The NEW rule is: *sub-agents MAY now write pages, but MUST acquire locks first.* See `"$OBSIDIAN_TOOLKIT/agents/wiki-ingest.md"`.
 
 ---
 
@@ -164,27 +216,31 @@ Use cases: whiteboard photos, screenshots, diagrams, infographics, document scan
 
 Trigger: user drops a file into `.raw/` or pastes content.
 
+> For Article Home output (mid-ingest reading entry page), follow [`./article-home.md`](./article-home.md).
+
 Steps:
 
 1. **Read** the source completely. Do not skim.
 2. **Discuss** key takeaways with the user. Ask: "What should I emphasize? How granular?" Skip this if the user says "just ingest it."
-3. **Create** source summary in `wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
-4. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. Assign addresses to new entity pages.
-5. **Create or update** concept pages for significant ideas and frameworks. Assign addresses to new concept pages.
-6. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
-7. **Update** `wiki/overview.md` if the big picture changed.
-8. **Update** `wiki/index.md`. Add entries for all new pages.
-9. **Update** `wiki/hot.md` with this ingest's context.
-10. **Append** to `wiki/log.md` (new entries at the TOP):
+3. **Create** Article Home at `wiki/articles/<slug>-home.md`. Follow the 10 mandatory sections in `CLAUDE.md §Article Home`. Write concept/entity/source wikilinks as planned red links — they will be finalized after those pages are created. See [`./article-home.md`](./article-home.md) for full spec.
+4. **Create** source summary in `wiki/sources/`. MUST include a backlink `[[<slug>-home]]`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
+5. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. MUST include a backlink `[[<slug>-home]]`. Assign addresses to new entity pages.
+6. **Create or update** concept pages for significant ideas and frameworks. MUST include a backlink `[[<slug>-home]]`. Assign addresses to new concept pages.
+7. **Finalize Article Home** — update the "值得沉淀的 wiki 页面" section: replace planned wikilinks with actual page title wikilinks (e.g. `[[Planned Concept]]` → `[[Actual Concept Page]]`), confirm all backlinks from steps 4–6 are correct, and update "红链候选" with any remaining red links that genuinely have no page yet.
+8. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
+9. **Update** `wiki/overview.md` if the big picture changed.
+10. **Update** `wiki/index.md`. Add entries for all new pages including the Article Home.
+11. **Update** `wiki/hot.md` with this ingest's context. **Append** to `wiki/log.md` (new entries at the TOP):
     ```markdown
     ## [YYYY-MM-DD] ingest | Source Title
     - Source: `.raw/articles/filename.md`
+    - Article Home: [[<slug>-home]]
     - Summary: [[Source Title]]
     - Pages created: [[Page 1]], [[Page 2]]
     - Pages updated: [[Page 3]], [[Page 4]]
     - Key insight: One sentence on what is new.
     ```
-11. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
+12. **Check for contradictions.** If new info conflicts with existing pages, add `> [!contradiction]` callouts on both pages.
 
 ---
 
@@ -220,7 +276,7 @@ Token budget matters. Follow these rules during ingest:
 ## Contradictions
 
 > [!note] Custom callout dependency
-> The `[!contradiction]` callout type used below is a **custom callout** defined in `.obsidian/snippets/vault-colors.css` (auto-installed by `/wiki` scaffold). It renders with reddish-brown styling and an alert-triangle icon when the snippet is enabled. If the snippet is missing, Obsidian falls back to default callout styling, so the page still works without the visual flourish. See [[skills/wiki/references/css-snippets.md]] for the four custom callouts (`contradiction`, `gap`, `key-insight`, `stale`).
+> The `[!contradiction]` callout type used below is a **custom callout** defined in `.obsidian/snippets/vault-colors.css` (auto-installed by `/wiki` scaffold). It renders with reddish-brown styling and an alert-triangle icon when the snippet is enabled. If the snippet is missing, Obsidian falls back to default callout styling, so the page still works without the visual flourish. See `"$OBSIDIAN_TOOLKIT/skills/wiki/references/css-snippets.md"` for the four custom callouts (`contradiction`, `gap`, `key-insight`, `stale`).
 
 When new info contradicts an existing wiki page:
 
@@ -252,12 +308,12 @@ Do not silently overwrite old claims. Flag and let the user decide.
 
 ## Address Assignment (DragonScale Mechanism 2 MVP)
 
-**Opt-in feature**. DragonScale address assignment runs only if `scripts/allocate-address.sh` is present AND `.vault-meta/` exists. Otherwise, skip this entire section and proceed with ingest normally.
+**Opt-in feature**. DragonScale address assignment runs only if `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh"` is present AND `.vault-meta/` exists. Otherwise, skip this entire section and proceed with ingest normally.
 
 **Feature detection (run at start of every ingest)**:
 
 ```bash
-if [ -x ./scripts/allocate-address.sh ] && [ -d ./.vault-meta ]; then
+if [ -x "$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh" ] && [ -d "$VAULT/.vault-meta" ]; then
   DRAGONSCALE_ADDRESSES=1
 else
   DRAGONSCALE_ADDRESSES=0
@@ -280,12 +336,12 @@ Format: `c-<6-digit-counter>`. The `c-` prefix stands for "creation-order counte
 
 Rollout baseline: **2026-04-23** (Phase 2 ship date). Pages with `created:` >= this date are post-rollout and MUST have an address (unless excluded below). Pages with `created:` earlier are legacy-exempt until a deliberate backfill pass assigns `l-NNNNNN` addresses.
 
-### Required tool: `scripts/allocate-address.sh`
+### Required tool: `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh"`
 
 Address allocation is delegated to an atomic Bash helper. The helper uses `flock` on `.vault-meta/.address.lock` to prevent read-use-increment races and recovers the counter by scanning existing frontmatter if the counter file is missing.
 
 ```bash
-ADDR=$(./scripts/allocate-address.sh)
+ADDR=$("$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh")
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
@@ -293,13 +349,13 @@ ADDR=$(./scripts/allocate-address.sh)
 
 ### Helper modes
 
-- `./scripts/allocate-address.sh` — atomically reserves and returns the next address.
-- `./scripts/allocate-address.sh --peek` — prints the next value without reserving (safe, read-only).
-- `./scripts/allocate-address.sh --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
+- `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh"` — atomically reserves and returns the next address.
+- `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh" --peek` — prints the next value without reserving (safe, read-only).
+- `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh" --rebuild` — recomputes the counter from the highest observed `c-NNNNNN` in existing frontmatter. Never resets to 1 silently if pages already have addresses. Run this if the counter file is suspected corrupt.
 
 ### Assignment procedure (per new page)
 
-1. Before writing a new non-meta page, call `./scripts/allocate-address.sh` and capture the output.
+1. Before writing a new non-meta page, call `"$OBSIDIAN_TOOLKIT/scripts/allocate-address.sh"` and capture the output.
 2. Include `address: c-XXXXXX` in the page's frontmatter.
 3. Record the path-to-address mapping in `.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
 
@@ -345,7 +401,7 @@ Assign addresses sequentially during single-source-ingest for each source. Do no
 
 ## How to think (10-principle mapping)
 
-When working on this skill, apply the 10-principle loop. See [`skills/think/SKILL.md`](../think/SKILL.md) for the canonical framework.
+When working on this skill, apply the 10-principle loop. See `"$OBSIDIAN_TOOLKIT/skills/think/SKILL.md"` for the canonical framework.
 
 | # | Principle | Application here |
 |---|-----------|-------------------|

@@ -224,7 +224,7 @@ Every wiki page starts with flat YAML frontmatter. No nested objects. Obsidian's
 
 ```yaml
 ---
-type: <source|entity|concept|domain|comparison|question|overview|meta>
+type: <source|entity|concept|domain|comparison|question|overview|meta|article-home>
 title: "Human-Readable Title"
 created: 2026-04-07
 updated: 2026-04-07
@@ -420,6 +420,9 @@ Created: YYYY-MM-DD
 - All notes use YAML frontmatter: type, status, created, updated, tags (minimum)
 - Wikilinks use [[Note Name]] format — filenames are unique, no paths needed
 - .raw/ contains source documents — never modify them
+- wiki/articles/ contains Article Home — reading entry point per source (see CLAUDE.md §Article Home)
+- wiki/insights/ contains human-only judgments — LLM reads but never writes. This is a physical layer boundary: AI's role is to facilitate capture and synthesis, not to replace the human's value judgment.
+- journals/ contains daily notes — input carrier for the distillation layer. LLM reads on request.
 - wiki/index.md is the master catalog — update on every ingest
 - wiki/log.md is append-only — new entries go at the TOP, never edit past entries
 

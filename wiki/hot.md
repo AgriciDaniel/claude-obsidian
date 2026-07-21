@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-17T04:30:00
+updated: 2026-07-17
 tags:
   - meta
   - hot-cache
@@ -12,6 +12,7 @@ related:
   - "[[Wiki Map]]"
   - "[[getting-started]]"
   - "[[DragonScale Memory]]"
+  - "[[AI大模型知识点全景图-home]]"
 ---
 
 # Recent Context
@@ -19,6 +20,24 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-07-17: **AI 大模型知识点全景图 ingesting** — 73页扫描版PDF完整导入wiki。本次导入创建22个页面（12个概念 + 8个实体 + 1个源摘要 + 1个Article Home），地址范围 c-000002 到 c-000022。
+
+主要知识域已覆盖：
+- Transformer 架构与 MoE、Attention 机制演变（MHA→GQA→MLA）
+- 训练方法全景：Pre-training → SFT → RLHF/DPO/GRPO
+- 安全对齐与红队测试
+- 推理方法（CoT/ToT/ReAct/Reflexion + o1/R1 test-time compute）
+- 多模态 AI（VLM、T2I、T2V、TTS）
+- RAG 流水线和检索策略
+- 模型优化（量化、蒸馏、LoRA、KV-cache）
+- 评测基准体系
+- Agent 系统与工具调用
+- 国内外主要模型家族（GPT、Claude、LLaMA、Gemini、DeepSeek、Qwen、GLM、Kimi）
+
+当前 wiki 总计：56 pages | 3 sources ingested | 地址计数器至 22
+
+工具链解耦改造已完成：基础设施安装到 `~/.claude/obsidian-toolkit/`，与 vault 项目分离。支持一键安装（`bash bin/install-toolkit.sh`）和一键卸载（`--uninstall`）。
 
 2026-05-17 (very late, post-polish): **v1.7.1 patch + polish slice shipped locally** (branch `v1.7.0-compound-vault`, still NOT pushed). All 1 BLOCKER + 6 HIGH findings closed; then verifier agent re-pass surfaced 2 MEDIUM + 3 LOW polish items, all closed in `c2d7575`. Final verifier verdict: 0/0/0/0 SHIP. Score: 100/100 on the v1.7.1 patch dimensions (plan fidelity, behavioral correctness, test health, internal consistency, constraint honor, defect introduction, kernel application). 8 commits landed in this resumption session: `ca68bb6` (Fix 1+6 BLOCKER B1 + H6 — contextual-prefix `--allow-egress` flag default-off + `bin/setup-retrieve.sh` consent prompt + `skills/wiki-retrieve/SKILL.md` Data Privacy callout, mirror of `tiling-check.py:351` `--allow-remote-ollama` precedent), `4837d4f` (Fix 2 H1 — setup-retrieve exit 5 + 3-option recovery hint on Stage 1 failure), `7e1f187` (Fix 3 H2 — `make clean-test-state` extended to v1.7 artifacts), `7120970` (Fix 4 H3 — PostToolUse hook captures LOCK_RC directly, not via pipeline; defers commit on script error OR locks held), `722ac97` (Fix 5 H5 — `detect-transport.sh` `json_escape()` helper via `python3 json.dumps`), `3ea443f` (Fix 7 H4 — new `agents/verifier.md` read-only pre-commit specialist + CLAUDE.md reference), and the cross-cutting closeout `822c80a` (version bump 1.7.0 → 1.7.1, CHANGELOG entry, audit doc updated with §10.2 SHAs + v1.7.1 closeout block, audit benchmark scripts promoted to tracked files). `make test` ran 7/7 green after every fix. End-to-end verifications: `python3 scripts/contextual-prefix.py --peek` returns `tier=synthetic` even with `ANTHROPIC_API_KEY` set (default-deny works); `--allow-egress` correctly flips it; `echo "" | bash bin/setup-retrieve.sh` aborts at the consent prompt; `bash scripts/wiki-lock.sh acquire ...` then hook trigger correctly defers auto-commit. **Next step**: ask user whether to push + tag `v1.7.1`. Do NOT push without explicit go.
 

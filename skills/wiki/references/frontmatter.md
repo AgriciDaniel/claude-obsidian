@@ -10,7 +10,7 @@ Every page, no exceptions:
 
 ```yaml
 ---
-type: <source|entity|concept|domain|comparison|question|overview|meta>
+type: <source|entity|concept|domain|comparison|question|overview|meta|article-home>
 title: "Human-Readable Title"
 created: 2026-04-07
 updated: 2026-04-07
