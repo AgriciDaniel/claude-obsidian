@@ -20,11 +20,17 @@ status: completed
 - Truth-aligned the portfolio around operational B2B/applied-AI engineering, promoted Agent Nudge as the current technical flagship, labelled JobFilter as source repair/validation, and added accessibility, metadata, local assets, security headers, deterministic tests, CI, and a working static start path.
 - Opened draft PRs `JobFilterV1#383` and `mazos-site#4`; all required GitHub Actions and Vercel preview checks passed.
 - Added `verify`-gated PR protection to `mazos-site/main`, enforced for admins with conversation resolution and force-push/deletion disabled. Enabled Dependabot security updates and improved repository metadata.
+- Re-ran the portfolio work as an ultrawork overhaul against the Inference Group Junior AI Engineer archetype. Direct research found the advert is stale/syndicated and its Exeter location is not reliable, so the portfolio now targets the broader junior applied-AI engineering category rather than one expired vacancy.
+- Rebuilt the homepage positioning, information architecture, project copy, responsive layout, metadata, social card, sitemap, tests, and smoke checks around agent infrastructure, public-data pipelines, integrations, verification, and production safeguards.
+- Removed MAZos from recruiter navigation, homepage, metadata, and sitemap; the legacy route is now a no-index handoff into outcome-led project evidence.
+- Replaced the old JobFilter image with responsive local evidence captured from the repaired branch: a B14 building scan that returns zero rather than inventing a locality match.
+- Updated draft PR `mazos-site#4` at commit `2a622fd`; both required `verify` runs and the Vercel preview passed. Independent positioning and visual QA reported no remaining P0/P1 blockers.
 
 ## Files changed
 
 - `C:\Users\manaz\JobFilterV1`: FTS fetch/mapping, postcode/radius logic, scan cancellation, source configuration, Find Jobs copy, CI, README, fixtures, and regression tests on `agents/jobfilter-find-a-tender`.
 - `C:\Users\manaz\Projects\mazos-site`: portfolio/case-study HTML, styles, metadata, headers, local images, runtime scripts, CI, tests, and README on `agents/portfolio-truth-and-quality`.
+- Latest portfolio overhaul adds `public/jobfilter-scan-result.webp` and `public/jobfilter-scan-result-mobile.webp`, rewrites `app/page.tsx`, reduces `app/mazos/page.tsx` to a no-index handoff, and refreshes social/SEO assets and verification contracts.
 - `wiki/sessions/2026-07-21-mazos-site-codex.md`.
 
 ## Decisions made
@@ -39,6 +45,8 @@ status: completed
 - Keep MAZos secondary as method evidence; use Agent Nudge as the temporary technical flagship and restore JobFilter only after source and customer validation.
 - Preserve honest zero-result states: buyer headquarters are not delivery-location evidence, and unproven distance must not be treated as zero miles.
 - Do not merge or deploy automatically; both implementation PRs remain drafts for owner review.
+- Treat the linked Inference advert as a role archetype, not a live Exeter vacancy. Lead with junior applied-AI engineering while keeping model-development claims separate from agent infrastructure and software verification.
+- Do not keyword-stuff Python, model evaluation, cloud, teamwork, or client outcomes. Those remain genuine evidence gaps and should be closed with new work or confirmed personal information.
 
 ## Next steps
 
@@ -47,3 +55,5 @@ status: completed
 3. Complete `mazos-site#3`: GitHub identity/profile README/pins, verified LinkedIn/CV destinations, and at least one external proof signal. GitHub profile API editing is blocked until the token has `user` scope.
 4. Publish reproducible evidence: the source-assumption postmortem, an Agent Nudge benchmark, and a verification-receipt explainer.
 5. Track qualified conversations, pilots, active users, introductions, interviews, and rejection reasons weekly; do not use project count or commit volume as success metrics.
+6. Highest-leverage next proof: build a small Python retrieval/tool-use system over official tender documents with a labelled evaluation set, accuracy/quality metrics, latency/cost reporting, and a monitored cloud deployment.
+7. Confirm and add recruiter filters only when true: permanent UK work rights, notice period/availability, on-site or relocation stance, education, a current CV, and verified LinkedIn.
