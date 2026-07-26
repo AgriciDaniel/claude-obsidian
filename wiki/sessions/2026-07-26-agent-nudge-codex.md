@@ -2,7 +2,7 @@
 date: 2026-07-26
 project: agent-nudge
 agent: codex
-status: in-progress
+status: completed
 ---
 
 ## What I did
@@ -13,10 +13,15 @@ status: in-progress
 - Researched current Stripe webhook, Billing Entitlements, and customer portal guidance from official Stripe documentation.
 - Designed the commercial direction: keep assurance and security features free; charge for saved automation through managed workspaces, automatic drift watching, custom profiles, changelog writes, and direct agent handoffs.
 - Produced the working architecture and four-batch implementation sequence in conversation, but did not yet replace `docs/dogfood/MAZ-MODE-BUILD-PLAN.md`.
+- Implemented Agent Nudge v0.5.0: repository context health and receipts, safe repo bootstrap, deterministic changelogs, signed offline Pro licensing with a 14-day trial, daemon-enforced entitlements, allowlisted Claude/Codex/Aider handoffs, and Stripe Checkout/license delivery/portal/webhook API routes.
+- Rebuilt the compiler screen as a navy/yellow industrial workbench with context drift, token budget, Git state, changelog controls, runner output, and local license activation.
+- Hardened loopback CORS, process spawning, credential redaction, output bounds, file containment, and license-state permissions.
+- Verified 42 unit tests, 20 integration tests, 2 end-to-end tests, lint, typecheck, build, CLI flows, zero production dependency vulnerabilities, Windows installer/portable packaging, and a loopback-only portable executable smoke test.
 
 ## Files changed
 
 - `wiki/sessions/2026-07-26-agent-nudge-codex.md`
+- Project implementation spans `api/`, `src/{changelog,commerce,context-health,licensing,onboarding,runners}`, daemon/CLI/storage/UI/Electron integration, tests, README, environment template, and package metadata.
 
 ## Decisions made
 
@@ -27,10 +32,12 @@ status: in-progress
 - Treat the present wildcard loopback CORS policy as a release blocker before adding activation or process-launch endpoints.
 - Make direct handoffs use fixed provider adapters, argument arrays, `shell: false`, explicit previews, streamed receipts, and no arbitrary renderer-provided commands.
 - Make the first implementation step a failing fixture-based `tests/unit/context-health.test.ts`, then add the context-health inspector.
+- The shipped price is Community $0 and Pro $29/year. Stripe stays hosted; the desktop accepts only signed Ed25519 license tokens.
+- The local daemon is the entitlement boundary. Renderer controls never execute arbitrary commands; provider adapters use fixed argument arrays with `shell: false`.
+- Production dependencies audit clean. Remaining npm advisories are confined to development/build tooling and were not force-upgraded across breaking majors.
 
 ## Next steps
 
-- Replace `docs/dogfood/MAZ-MODE-BUILD-PLAN.md` with the complete commercial product plan.
-- Run formatting checks and `npm run build`.
-- Commit the project documentation on `agents/maz-mode-compiler`, then open a PR if requested.
-- Commit and push this vault session note without including unrelated vault changes.
+- Configure the production Stripe Price, secrets, webhook, and matching Ed25519 keypair from `.env.example`.
+- Perform final human visual QA when the in-app browser surface is available; automated UI language checks and production builds pass.
+- Commit/push the project branch and open a PR when explicitly requested.
