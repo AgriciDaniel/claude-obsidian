@@ -17,11 +17,18 @@ status: completed
 - Rebuilt the compiler screen as a navy/yellow industrial workbench with context drift, token budget, Git state, changelog controls, runner output, and local license activation.
 - Hardened loopback CORS, process spawning, credential redaction, output bounds, file containment, and license-state permissions.
 - Verified 42 unit tests, 20 integration tests, 2 end-to-end tests, lint, typecheck, build, CLI flows, zero production dependency vulnerabilities, Windows installer/portable packaging, and a loopback-only portable executable smoke test.
+- Added the canonical project `CHANGELOG.md`, linked it from the README, and recorded the v0.5.0 productization and security work.
+- Ran a multi-perspective commercial audit covering skeptical buyers, solo developers, team leads, security, conversion, retention, competition, pricing, email consent, and defensibility.
+- Wrote `docs/dogfood/COMMERCIAL-SITE-AUDIT.md` with the paid-launch blockers, one-time pricing recommendation, 14-day trial rules, consented email-list plan, moat ladder, and four implementation batches.
+- Rebuilt successfully after the documentation changes.
 
 ## Files changed
 
 - `wiki/sessions/2026-07-26-agent-nudge-codex.md`
 - Project implementation spans `api/`, `src/{changelog,commerce,context-health,licensing,onboarding,runners}`, daemon/CLI/storage/UI/Electron integration, tests, README, environment template, and package metadata.
+- `CHANGELOG.md`
+- `README.md`
+- `docs/dogfood/COMMERCIAL-SITE-AUDIT.md`
 
 ## Decisions made
 
@@ -35,9 +42,17 @@ status: completed
 - The shipped price is Community $0 and Pro $29/year. Stripe stays hosted; the desktop accepts only signed Ed25519 license tokens.
 - The local daemon is the entitlement boundary. Renderer controls never execute arbitrary commands; provider adapters use fixed argument arrays with `shell: false`.
 - Production dependencies audit clean. Remaining npm advisories are confined to development/build tooling and were not force-upgraded across breaking majors.
+- Superseded the proposed $29/year local-only plan: recommend $49 one-time Personal, a $29 founder offer, 12 months of included updates, and an optional $29/year Updates Pass.
+- Keep the 14-day trial cardless and preserve customer data when it falls back to Community.
+- Do not sell Team yet; recurring value begins only with shared policy, identity, approvals, encrypted sync, and audit history.
+- Treat the unauthenticated localhost control plane as the first paid-launch blocker. CORS is not authentication, and `null`-origin access must be removed before file mutation and process-launch routes can ship.
+- The durable moat is a cross-provider source → delivery → acknowledgement → outcome evidence graph, not context-file parsing or local feature gates.
 
 ## Next steps
 
 - Configure the production Stripe Price, secrets, webhook, and matching Ed25519 keypair from `.env.example`.
 - Perform final human visual QA when the in-app browser surface is available; automated UI language checks and production builds pass.
+- Add installation-secret authentication to the daemon and Electron preload, then fix first-run repository selection.
+- Resolve the `PUBLIC_APP_URL` / `PUBLIC_SITE_URL` mismatch and test purchase, redemption, recovery, refund, revocation, and device binding.
+- Add a signed installer funnel and a consented double-opt-in email list before charging strangers.
 - Commit/push the project branch and open a PR when explicitly requested.
