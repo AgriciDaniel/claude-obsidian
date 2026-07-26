@@ -25,6 +25,14 @@ status: completed
 - Detected production 404s on every direct SPA route, fixed the clean-URL rewrite through PR #25, verified the preview, and squash-merged the fix at `e97b29e`.
 - Deployed the exact merged tree to Vercel production (`dpl_7RzH9EPvxBzSALNCTkADmFZDBxPW`) and verified the canonical alias, all public routes, current pricing/changelog bundle content, static discovery files, and API method guards.
 - Restored the user-owned local `AGENTS.md`, MAZ build plan, and YouMind synthesis byte-for-byte after publishing; none entered the route-fix PR.
+- Normalized GitHub issue #7 into a ready execution gate, preserved the user-owned files in a dedicated stash, and branched `agents/v051-local-control-auth` from the latest `origin/main`.
+- Implemented v0.5.1 local control authentication: a random per-install credential outside repositories, Windows owner-only ACLs, loopback Host/Origin validation, daemon-wide bearer checks, stable instance identity, HMAC health challenges, and atomic credential rotation.
+- Replaced the unsafe Electron `Origin: null` path with a bounded preload/main-process request bridge; authenticated CLI, provider hooks, and connector outbox requests without exposing the credential to the renderer.
+- Added `agent-nudge auth rotate`, the public v0.5.1 security changelog entry, `docs/THREAT_MODEL.md`, and five focused authentication/leakage regressions.
+- Ran the pre-push production audit: no tracked junk, no real high-confidence secrets, zero production dependency vulnerabilities, changed-file formatting clean, lint/typecheck/build green, 62 unit + 27 integration + 2 end-to-end tests green, and built daemon/CLI rotation smoke green.
+- Published PR #26, waited for GitHub CI, confirmed zero review comments, and squash-merged it into `main` at `df931f3`.
+- Deployed the exact merged commit to Vercel production (`dpl_J4nscnCA3k6LCcEn17dTYa1qCwuE`) and verified all public routes, live v0.5.1 bundle strings, the canonical alias, and 405 method guards on commercial APIs.
+- Reapplied the user-owned files and verified all three match the preservation stash byte-for-byte; they remain unstaged.
 
 ## Files changed
 
@@ -33,6 +41,7 @@ status: completed
 - `CHANGELOG.md`
 - `README.md`
 - `docs/dogfood/COMMERCIAL-SITE-AUDIT.md`
+- v0.5.1 project changes: `src/security/local-control.ts`, daemon/CLI/hook/outbox/Electron/UI integration, `docs/THREAT_MODEL.md`, focused tests, README, changelog, and package metadata.
 
 ## Decisions made
 
@@ -52,12 +61,14 @@ status: completed
 - Treat the unauthenticated localhost control plane as the first paid-launch blocker. CORS is not authentication, and `null`-origin access must be removed before file mutation and process-launch routes can ship.
 - The durable moat is a cross-provider source → delivery → acknowledgement → outcome evidence graph, not context-file parsing or local feature gates.
 - Treat GitHub PR + green CI + exact merged-tree Vercel production deployment + route verification as the standing release path for live Agent Nudge changes.
+- Keep the local control credential out of renderer memory, URLs, logs, exports, manifests, fixtures, and normal errors; only trusted local clients read it from the owner-only file.
+- Split issue #7 deliberately: v0.5.1 ships the authentication boundary first; unified ownership-checked receipt mutations and sole-writer enforcement remain the next trust batch.
+- Do not enable paid checkout merely because authentication shipped; purchase recovery, refund/revocation, installer trust, and ten clean external activations remain commercial gates.
 
 ## Next steps
 
 - Configure the production Stripe Price, secrets, webhook, and matching Ed25519 keypair from `.env.example`.
 - Perform final human visual QA when the in-app browser surface is available; automated UI language checks and production builds pass.
-- Add installation-secret authentication to the daemon and Electron preload, then fix first-run repository selection.
+- Add unified versioned receipt mutations with project/session ownership, idempotency, valid transitions, and one database transaction; then enforce the daemon as sole SQLite writer.
 - Resolve the `PUBLIC_APP_URL` / `PUBLIC_SITE_URL` mismatch and test purchase, redemption, recovery, refund, revocation, and device binding.
 - Add a signed installer funnel and a consented double-opt-in email list before charging strangers.
-- Commit/push the project branch and open a PR when explicitly requested.
