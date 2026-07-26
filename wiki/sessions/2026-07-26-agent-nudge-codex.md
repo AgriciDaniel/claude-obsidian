@@ -21,6 +21,10 @@ status: completed
 - Ran a multi-perspective commercial audit covering skeptical buyers, solo developers, team leads, security, conversion, retention, competition, pricing, email consent, and defensibility.
 - Wrote `docs/dogfood/COMMERCIAL-SITE-AUDIT.md` with the paid-launch blockers, one-time pricing recommendation, 14-day trial rules, consented email-list plan, moat ladder, and four implementation batches.
 - Rebuilt successfully after the documentation changes.
+- Published the complete v0.5 branch through GitHub PR #24, waited for the full quality workflow, and squash-merged it into `main` at `ddcf9de`.
+- Detected production 404s on every direct SPA route, fixed the clean-URL rewrite through PR #25, verified the preview, and squash-merged the fix at `e97b29e`.
+- Deployed the exact merged tree to Vercel production (`dpl_7RzH9EPvxBzSALNCTkADmFZDBxPW`) and verified the canonical alias, all public routes, current pricing/changelog bundle content, static discovery files, and API method guards.
+- Restored the user-owned local `AGENTS.md`, MAZ build plan, and YouMind synthesis byte-for-byte after publishing; none entered the route-fix PR.
 
 ## Files changed
 
@@ -47,6 +51,7 @@ status: completed
 - Do not sell Team yet; recurring value begins only with shared policy, identity, approvals, encrypted sync, and audit history.
 - Treat the unauthenticated localhost control plane as the first paid-launch blocker. CORS is not authentication, and `null`-origin access must be removed before file mutation and process-launch routes can ship.
 - The durable moat is a cross-provider source → delivery → acknowledgement → outcome evidence graph, not context-file parsing or local feature gates.
+- Treat GitHub PR + green CI + exact merged-tree Vercel production deployment + route verification as the standing release path for live Agent Nudge changes.
 
 ## Next steps
 
