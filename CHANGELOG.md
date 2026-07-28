@@ -2,6 +2,16 @@
 
 All notable changes to claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- **macOS: BSD `wc -l` padding failed 6 test assertions** (`tests/test_allocate_address.sh`, `tests/test_concurrent_write.sh`, `tests/test_wiki_lock.sh`). BSD `wc -l` pads its output with leading spaces where GNU `wc -l` does not, so six assertions comparing a captured count against a bare integer literal failed with `expected '10', got '      10'`. The counts were numerically correct in every case, so this was a test-harness portability bug and not a defect in the locking or allocator code. Each capture is now wrapped in arithmetic expansion `$(( ... ))`, which normalizes identically on BSD and GNU. On macOS 15 (bash 3.2.57, arm64) `make test` now goes 9/9.
+
+### Documented
+
+- **`flock(1)` is a prerequisite for the core concurrency layer on macOS, not only for DragonScale** (`docs/install-guide.md`). The utility ships with `util-linux` on Linux but is absent from macOS. It is invoked by `scripts/wiki-lock.sh` (per-file advisory locks, gated by the `PostToolUse` auto-commit hook) and by `scripts/allocate-address.sh`, both of which are core v1.7 surfaces referenced from `CLAUDE.md`. It was previously mentioned only inside the optional DragonScale callout, so a stock macOS install hits `flock: command not found` on every lock call and the auto-commit hook silently defers on every write for the life of the vault. Promoted to its own prerequisite note with the `brew install flock` remedy, and clarified that the Python helpers (`bm25-index.py`, `rerank.py`, `tiling-check.py`) use `fcntl.flock(2)` from the stdlib and are unaffected.
+
 ## [1.9.2] - 2026-05-27 (prompt-cache hardening + path-handling robustness)
 
 Ports Anthropic prompt-caching best practices into the **one** place the plugin calls the Anthropic API directly: tier-1 contextual-prefix generation in `scripts/contextual-prefix.py`. Verified by full-repo sweep that `cache_control` and the Anthropic API surface exist nowhere else (incl. `claude-canvas/`). No change to retrieval output — API payload shape + observability only.
