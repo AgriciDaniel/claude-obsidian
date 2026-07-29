@@ -1,0 +1,12 @@
+{
+	"id": "quickadd",
+	"name": "QuickAdd",
+	"version": "2.12.0",
+	"minAppVersion": "1.11.4",
+	"description": "Quickly add new pages or content to your vault.",
+	"author": "Christian B. B. Houmann",
+	"authorUrl": "https://bagerbach.com",
+	"fundingUrl": "https://www.buymeacoffee.com/chhoumann",
+	"helpUrl": "https://quickadd.obsidian.guide/docs/",
+	"isDesktopOnly": false
+}

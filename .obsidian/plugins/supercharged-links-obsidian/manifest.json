@@ -1,0 +1,11 @@
+{
+	"id": "supercharged-links-obsidian",
+	"name": "Supercharged Links",
+	"version": "0.13.10",
+	"minAppVersion": "1.11.0",
+	"description": "Add properties and menu options to links and style them!",
+	"author": "mdelobelle & Emile",
+	"authorUrl": "https://github.com/mdelobelle/mdelobelle/tree/main",
+	"helpUrl": "https://github.com/mdelobelle/obsidian_supercharged_links#readme",
+	"isDesktopOnly": false
+}

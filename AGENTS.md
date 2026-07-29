@@ -1,5 +1,20 @@
 # claude-obsidian: Agent Instructions
 
+## Unified Vault
+
+This is the single canonical local vault for every agent.
+
+- Canonical path: `C:\Users\manaz\Desktop\Obsidian Main Vault`
+- Main personal notes: `Personal/`
+- Compounding agent wiki: `wiki/`
+- Local ingestion system: `Local Knowledge/`
+- Project knowledge: `Projects/`
+- Historical material kept for reference: `Archive/`
+
+Claude, Codex, OpenCode, and other local agents must use this root. Read `wiki/hot.md`, then `wiki/index.md`, before broad searches. For SwarmVault operations, change into `Local Knowledge/` or use the `local-knowledge` MCP server.
+
+Do not create additional general-purpose vaults. Project-specific repositories may retain source-note folders, but Obsidian and agent memory must point to this canonical vault.
+
 This repo is a Claude Code plugin **and** an Obsidian vault that builds persistent, compounding knowledge bases using Andrej Karpathy's LLM Wiki pattern. It works with **any AI coding agent** that supports the Agent Skills standard, including Codex CLI, OpenCode, and similar.
 
 Originally built for Claude Code, the skills follow the cross-platform Agent Skills spec. Newer skills (`wiki-fold`, `wiki-ingest`, `wiki-lint`) use only `name` and `description` frontmatter (kepano convention). Some older skills still carry an optional `allowed-tools` field for Claude Code compatibility; cross-platform agents that do not recognize it should ignore it.

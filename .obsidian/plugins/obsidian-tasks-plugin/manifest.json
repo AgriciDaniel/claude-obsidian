@@ -1,0 +1,12 @@
+{
+  "id": "obsidian-tasks-plugin",
+  "name": "Tasks",
+  "version": "7.23.1",
+  "minAppVersion": "1.4.0",
+  "description": "Track tasks across your vault. Supports due dates, recurring tasks, done dates, sub-set of checklist items, and filtering.",
+  "helpUrl": "https://publish.obsidian.md/tasks/",
+  "author": "Clare Macrae and Ilyas Landikov (created by Martin Schenck)",
+  "authorUrl": "https://github.com/obsidian-tasks-group",
+  "fundingUrl": "https://github.com/sponsors/claremacrae",
+  "isDesktopOnly": false
+}

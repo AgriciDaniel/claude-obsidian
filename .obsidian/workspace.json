@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "cb698273c33e48de",
+    "id": "25965855e353803a",
     "type": "split",
     "children": [
       {
-        "id": "477f1cf965ca606e",
+        "id": "91e9638aec82fae9",
         "type": "tabs",
         "children": [
           {
-            "id": "a31de1b302cdc5cf",
+            "id": "fcebea1ff64ec21c",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -23,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "db8d83ac47ae599f",
+    "id": "b61a28a7ec7292c2",
     "type": "split",
     "children": [
       {
-        "id": "554fd2b4fa6f8741",
+        "id": "1914ecf409cbd6b1",
         "type": "tabs",
         "children": [
           {
-            "id": "5565f1231fe95c42",
+            "id": "ef8cfa7c6d5fb07a",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,12 +44,12 @@
             }
           },
           {
-            "id": "832ab43d08cf9e30",
+            "id": "91b3922e865a5e26",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "build pro",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "097e8347bb8aa054",
+            "id": "457c582977e495ce",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -77,15 +77,15 @@
     "width": 300
   },
   "right": {
-    "id": "7092b65be1e76349",
+    "id": "b951853ab2bbdeeb",
     "type": "split",
     "children": [
       {
-        "id": "9f4de9402eae371b",
+        "id": "09e57584624b61bd",
         "type": "tabs",
         "children": [
           {
-            "id": "a32b7215b7814fbb",
+            "id": "64937f7ff6fca4ff",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -103,20 +103,21 @@
             }
           },
           {
-            "id": "7936f8ba26007091",
+            "id": "8dd61fcfd1183298",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
                 "linksCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from 13 Split Batches Codex vs Claude"
             }
           },
           {
-            "id": "ed8ccb323a603d61",
+            "id": "8b4069dfd197e841",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -131,7 +132,7 @@
             }
           },
           {
-            "id": "b140a331162907cf",
+            "id": "3d003740281c6b79",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -145,35 +146,36 @@
             }
           },
           {
-            "id": "111a21e12ab1a293",
+            "id": "ee03636b4c07d0aa",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
+                "file": "wiki/projects/jobfilter/Audit/13 Split Batches Codex vs Claude.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of 13 Split Batches Codex vs Claude"
             }
           },
           {
-            "id": "20a272e103b5d792",
+            "id": "9086d0c9243e7c05",
             "type": "leaf",
             "state": {
-              "type": "calendar",
+              "type": "mesh-view",
               "state": {},
-              "icon": "lucide-ghost",
-              "title": "calendar"
+              "icon": "lucide-file",
+              "title": "Mesh AI"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,9 +185,54 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "mesh-ai:Mesh AI Integration": false,
+      "omnisearch:Omnisearch": false,
+      "grimoire:Open Grimoire": false
     }
   },
-  "active": "a31de1b302cdc5cf",
-  "lastOpenFiles": []
+  "active": "fcebea1ff64ec21c",
+  "lastOpenFiles": [
+    "02-PROJECTS/MazOS/2026-07-19-mazos-v3-deep-spec-addendum.md",
+    "02-PROJECTS/MazOS/2026-07-18-mazos-v3-close-the-loop-plan.md",
+    "02-PROJECTS/MazOS/2026-07-18-mazos-v2-loop-cockpit-build-prompt.md",
+    "wiki/projects/mazos/MAZos v2 Loop Cockpit — Build Prompt.md",
+    "wiki/sessions/2026-07-13-scrap-finance-partners-pr-conflicts-codex.md",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.mjs.map",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.mjs",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.js.map",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.js",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.d.ts",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/nuxt/runtime/index.d.mts",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/sveltekit/index.mjs.map",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/sveltekit/index.mjs",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/sveltekit/index.js.map",
+    "10_Projects/scrap-finance-partners/node_modules/@vercel/analytics/dist/sveltekit/index.js",
+    "10_Projects/scrap-finance-partners/docs/OFFER_LADDER.md",
+    "10_Projects/scrap-finance-partners/agents/compliance-risk-agent.md",
+    "10_Projects/scrap-finance-partners/agents/client-onboarding-agent.md",
+    "10_Projects/scrap-finance-partners/DESIGN.md",
+    "wiki/sessions/2026-07-13-scrap-finance-partners-pricing-codex.md",
+    "10_Projects/scrap-finance-partners/audit-shots/pricing-new-desktop.png",
+    "10_Projects/scrap-finance-partners/audit-shots/pricing-new-mobile.png",
+    "wiki/sessions/2026-07-13-scrap-finance-partners-codex.md",
+    "wiki/sessions/2026-07-12-github-repos-codex.md",
+    "wiki/prompts/fable-power-prompts.md",
+    "wiki/projects/flowlens/2026-07-11-financial-model.md",
+    "wiki/portfolio/2026-07-11-portfolio-synthesis.md",
+    "wiki/portfolio/2026-07-11-fable-power-run.md",
+    "Projects/Projects/JobFilter/JobFilter/Prompts 1/⚡ FAST BUILD AGENT (FINAL — SELF-LEARNING + SAFE).md",
+    "04-SESSIONS/2026-06-29-mazos-obsidian-memory-session.md",
+    "06-SYSTEM/OBSIDIAN_IMMERSION_PLAN.md",
+    "_Hermes/01_CONTEXT_PACKS/MazOS_CONTEXT_PACK.md",
+    "_Hermes/01_CONTEXT_PACKS/JobFilter_CONTEXT_PACK.md",
+    "_attachments/youtube/how-it-works-B.png.md",
+    "06-SYSTEM/HERMES_RULES.md",
+    "03-MEMORY/USER_PROFILE.md",
+    "03-MEMORY/PROMPT_LIBRARY.md",
+    "03-MEMORY/PROJECT_INDEX.md",
+    "Local Knowledge/wiki/projects/JobFilter/vault/JobFilter/JobFilter Control Map.canvas",
+    "Local Knowledge/wiki/projects/JobFilter/vault/Airdrop Bot/Airdrop Bot Flow.canvas",
+    "Untitled.canvas"
+  ]
 }

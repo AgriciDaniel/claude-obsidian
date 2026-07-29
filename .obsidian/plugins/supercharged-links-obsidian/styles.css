@@ -1,0 +1,15 @@
+.css-boilerplate-result {
+    width: 30em
+}
+
+div.supercharged-modal {
+    height: 70vh;
+}
+
+div.supercharged-modal h4 {
+    margin: 0;
+}
+
+span.data-link-text > a.cm-underline {
+    color: inherit;
+}
