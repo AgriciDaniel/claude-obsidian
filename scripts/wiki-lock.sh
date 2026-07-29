@@ -60,6 +60,17 @@
 #   These are two distinct concerns; both are time-since-acquire but operate
 #   at different scopes. Do not unify the defaults.
 #
+# Portability (meta-lock):
+#   flock(1) ships with util-linux. It is NOT present on Git Bash / MSYS2
+#   (Windows) or on a default macOS install. Because every command routes
+#   through with_meta_lock, a flock-only implementation aborts with
+#   "could not acquire meta-lock within 5s" on those platforms — silently
+#   disabling vault locking entirely for anyone not on Linux. with_meta_lock
+#   therefore falls back to an atomic mkdir(2) mutex when flock is absent.
+#   Per-path acquire is independently race-safe via `set -o noclobber` (see
+#   Design above), so the meta-lock only serializes LOCK_DIR mutation between
+#   acquire/release/list/clear-stale.
+#
 # Usage:
 #   bash scripts/wiki-lock.sh acquire wiki/concepts/Foo.md
 #   bash scripts/wiki-lock.sh release wiki/concepts/Foo.md
@@ -147,15 +158,50 @@ is_alive() {
   kill -0 "$1" 2>/dev/null
 }
 
+mtime_of() {
+  # Epoch mtime of $1. GNU coreutils and BSD/macOS stat take different flags,
+  # and the mkdir-mutex fallback runs on exactly the platforms where that
+  # differs. Echo 0 on failure so callers treat unreadable entries as stale.
+  stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo 0
+}
+
 # Atomic meta-lock wrapper. Funcs that mutate LOCK_DIR call under this lock so
 # acquire/release/clear-stale don't race against each other.
+# Two implementations — flock(1) where available, atomic mkdir(2) otherwise.
+# See "Portability (meta-lock)" in the header for why the fallback exists.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
-    "$@"
-  ) 9>"$META_LOCK"
+  if command -v flock >/dev/null 2>&1; then
+    # Use flock under bash's redirect; meta lock is short-lived per command.
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # mkdir(2) is atomic on POSIX and on NTFS via MSYS. Same 5s ceiling as the
+    # flock branch (25 × 0.2s).
+    local d="${META_LOCK}.d" waited=0 rc=0
+    while ! mkdir "$d" 2>/dev/null; do
+      # Reap a mutex abandoned by a crashed holder, else we deadlock forever.
+      if [ -d "$d" ] && [ $(( $(now_epoch) - $(mtime_of "$d") )) -gt 30 ]; then
+        rm -rf "$d"
+        continue
+      fi
+      sleep 0.2
+      waited=$((waited + 1))
+      [ "$waited" -ge 25 ] && die "could not acquire meta-lock within 5s" 1
+    done
+    # `die` inside the payload calls exit(), unwinding the whole shell. The
+    # flock branch tolerated that because exit only left the ( … ) subshell and
+    # the lock released on fd close; here the mutex would leak and block every
+    # later invocation until the 30s reap. Clean up on any exit path. The value
+    # is baked in at trap-set time so it survives `d` leaving scope.
+    trap "rm -rf '$d'" EXIT
+    "$@" || rc=$?
+    trap - EXIT
+    rm -rf "$d"
+    return $rc
+  fi
 }
 
 read_lockfile() {
