@@ -22,6 +22,10 @@ FAIL=0
 
 assert_eq() {
   local label="$1" expected="$2" actual="$3"
+  # Trim leading/trailing whitespace before comparing: BSD/macOS `wc` pads its counts
+  # with spaces, which would fail an otherwise-correct numeric assertion.
+  expected="${expected#"${expected%%[![:space:]]*}"}"; expected="${expected%"${expected##*[![:space:]]}"}"
+  actual="${actual#"${actual%%[![:space:]]*}"}"; actual="${actual%"${actual##*[![:space:]]}"}"
   if [ "$expected" = "$actual" ]; then
     echo "OK   $label"
     PASS=$((PASS + 1))

@@ -38,11 +38,16 @@ PASS=0
 FAIL=0
 
 assert_eq() {
-  if [ "$2" = "$3" ]; then
+  # Trim leading/trailing whitespace before comparing: BSD/macOS `wc` pads its counts
+  # with spaces, which would fail an otherwise-correct numeric assertion.
+  local expected="$2" actual="$3"
+  expected="${expected#"${expected%%[![:space:]]*}"}"; expected="${expected%"${expected##*[![:space:]]}"}"
+  actual="${actual#"${actual%%[![:space:]]*}"}"; actual="${actual%"${actual##*[![:space:]]}"}"
+  if [ "$expected" = "$actual" ]; then
     echo "OK   $1"
     PASS=$((PASS + 1))
   else
-    echo "FAIL $1: expected '$2', got '$3'"
+    echo "FAIL $1: expected '$expected', got '$actual'"
     FAIL=$((FAIL + 1))
   fi
 }

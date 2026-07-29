@@ -151,11 +151,34 @@ is_alive() {
 # acquire/release/clear-stale don't race against each other.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
-    "$@"
-  ) 9>"$META_LOCK"
+  if command -v flock >/dev/null 2>&1; then
+    # Linux/util-linux: advisory fd lock, auto-released when the subshell exits.
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # macOS/BSD have no flock. Portable equivalent: an atomic mkdir lock. mkdir is
+    # atomic on every POSIX filesystem, so exactly one holder wins the race. Bounded
+    # retry (~5s, matching flock -w 5), age-based reap so a crashed holder cannot wedge
+    # the lock forever, and cleanup on both normal return and an unexpected exit.
+    local mdir="${META_LOCK}.mklock" waited=0 age rc
+    until mkdir "$mdir" 2>/dev/null; do
+      if [ -d "$mdir" ]; then
+        age=$(( $(now_epoch) - $(stat -f %m "$mdir" 2>/dev/null || stat -c %Y "$mdir" 2>/dev/null || echo 0) ))
+        if [ "$age" -ge 5 ]; then rmdir "$mdir" 2>/dev/null || true; continue; fi
+      fi
+      waited=$((waited + 1))
+      if [ "$waited" -ge 50 ]; then die "could not acquire meta-lock within 5s" 1; fi
+      sleep 0.1
+    done
+    trap 'rmdir "$mdir" 2>/dev/null || true' EXIT
+    rc=0
+    "$@" || rc=$?          # capture rc without tripping set -e; 75=held is a valid rc
+    rmdir "$mdir" 2>/dev/null || true
+    trap - EXIT
+    return "$rc"
+  fi
 }
 
 read_lockfile() {
