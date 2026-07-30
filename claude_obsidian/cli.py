@@ -565,6 +565,7 @@ DEFAULT_MODE_CONFIG: dict[str, Any] = {
             "entities_folder": "wiki/entities/",
             "concepts_folder": "wiki/concepts/",
             "sessions_folder": "wiki/sessions/",
+            "questions_folder": "wiki/questions/",
         },
     },
 }
