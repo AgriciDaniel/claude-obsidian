@@ -7,6 +7,11 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Added
+
+- ZCode host adapter (`--host zcode`) for portable, user-level skill discovery
+  into `~/.zcode/skills/`, with a `ZCODE.md` instruction pointer.
+
 ### Changed
 
 - Replaced the animated README hero with the selected static PNG cover while

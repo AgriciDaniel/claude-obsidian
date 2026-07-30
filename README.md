@@ -136,12 +136,12 @@ Then place a source in `inbox/` and invoke
 `/claude-obsidian:wiki-ingest`. Save an answer explicitly with
 `/claude-obsidian:save`; ask the vault with `/claude-obsidian:wiki-query`.
 
-For Codex, OpenCode, or Gemini, preview and then apply the portable skill links
-from the product checkout:
+For Codex, OpenCode, Gemini, or ZCode, preview and then apply the portable
+skill links from the product checkout:
 
 ```bash
-bash bin/setup-multi-agent.sh --host codex
-bash bin/setup-multi-agent.sh --host codex --apply
+bash bin/setup-multi-agent.sh --host zcode
+bash bin/setup-multi-agent.sh --host zcode --apply
 ```
 
 Cursor and Windsurf use workspace-local skill discovery. Marketplace setup,

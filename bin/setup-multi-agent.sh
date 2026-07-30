@@ -14,10 +14,11 @@ HOST_COUNT=0
 usage() {
   cat <<'EOF'
 Usage: bin/setup-multi-agent.sh [--check|--dry-run|--apply]
-       [--host codex|opencode|gemini|cursor|windsurf|all] [--workspace PATH]
+       [--host codex|opencode|gemini|zcode|cursor|windsurf|all] [--workspace PATH]
 
 Default: dry-run for Codex, OpenCode, and Gemini user-level per-skill links.
-Cursor and Windsurf require an explicit --workspace destination.
+ZCode, Cursor and Windsurf are opt-in and require an explicit --host selection;
+Cursor and Windsurf also require an explicit --workspace destination.
 Existing files and links pointing elsewhere are never replaced.
 EOF
 }
@@ -54,7 +55,7 @@ expanded=()
 for host in "${HOSTS[@]}"; do
   case "$host" in
     all) expanded+=(codex opencode gemini cursor windsurf) ;;
-    codex|opencode|gemini|cursor|windsurf) expanded+=("$host") ;;
+    codex|opencode|gemini|zcode|cursor|windsurf) expanded+=("$host") ;;
     *) echo "ERROR: unsupported host: $host" >&2; exit 2 ;;
   esac
 done
@@ -161,6 +162,7 @@ for host in "${expanded[@]}"; do
     codex) destination_root="$HOME/.agents/skills" ;;
     opencode) destination_root="$HOME/.config/opencode/skills" ;;
     gemini) destination_root="$HOME/.gemini/skills" ;;
+    zcode) destination_root="$HOME/.zcode/skills" ;;
     cursor|windsurf)
       if [ -z "$WORKSPACE" ]; then
         echo "ERROR: --host $host requires --workspace PATH" >&2
