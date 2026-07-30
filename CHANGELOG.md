@@ -26,6 +26,12 @@ implementation record for older releases.
   or `wiki-lint.json`; CLI and vault-config patterns are combined. The
   report's new `summary.excluded_paths` count reports how many walked files
   were dropped.
+- `claude_obsidian/page_schema.py` declares the page-type vocabulary once,
+  separating every valid `type` value from the subset the methodology router can
+  file. `wiki-mode.py` derives its accepted types from it instead of
+  keeping a fifth hand-maintained copy.
+- `question` is routable in all four modes, with a `questions_folder` generic
+  setting that defaults to `wiki/questions/`.
 
 ### Changed
 
@@ -44,6 +50,13 @@ implementation record for older releases.
 
 ### Fixed
 
+- `wiki-mode.py route` rejected `question`, `comparison`, `overview`, `meta`, and
+  `fold` — five of the nine page types WIKI.md documents — and did so through a
+  bare exit with no message, so a typo and a valid-but-unroutable type were
+  indistinguishable. Rejections now explain which case applies.
+- The frontmatter reference no longer restates a shorter type list that omitted
+  `session` and `fold`, and the save skill no longer names `synthesis`/`decision`
+  types that no other source declares.
 - The scaffolded vault's `.obsidian/app.json` now pins Obsidian's "New link
   format" setting to `absolute`. It was previously left unset, defaulting to
   Obsidian's own "shortest path when possible" — links created through
