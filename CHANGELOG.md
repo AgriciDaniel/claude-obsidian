@@ -41,6 +41,8 @@ implementation record for older releases.
   becomes `bash scripts/setup-mode.sh`. Update any local scripts, aliases, or
   CI that reference the old `bin/` paths. `RELEASE_MANIFEST.json` and
   `SHA256SUMS` are refreshed at release time.
+- ZCode host adapter (`--host zcode`) for portable, user-level skill discovery
+  into `~/.zcode/skills/`, with a `ZCODE.md` instruction pointer.
 
 ### Fixed
 
