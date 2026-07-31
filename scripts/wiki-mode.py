@@ -48,7 +48,7 @@ from claude_obsidian.mode_config import validate_mode_folders, validate_wiki_rou
 from claude_obsidian.page_schema import (
     LEGACY_TYPE_ALIASES,
     ROUTABLE_TYPES,
-    route_rejection_reason,
+    route_rejection,
 )
 from claude_obsidian.ledgers import strict_json_loads
 from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
@@ -263,12 +263,14 @@ def mint_zettel_id():
 
 def route_path(mode, content_type, name, cfg):
     """Return the suggested vault-relative path for new content under `mode`."""
-    reason = route_rejection_reason(content_type)
-    if reason is not None:
-        # Was a bare SystemExit(4): a caller could not tell a typo from a valid
-        # page type that simply has no filing destination.
-        print(f"ERR: {reason}", file=sys.stderr)
-        raise SystemExit(4)
+    rejection = route_rejection(content_type)
+    if rejection is not None:
+        # Was a bare SystemExit(4) for both cases: a caller could not tell a typo
+        # from a valid page type that simply has no filing destination. The
+        # message says which, and so does the exit code — a script branching on
+        # `$?` gains the distinction too, not just a human reading stderr.
+        print(f"ERR: {rejection.message}", file=sys.stderr)
+        raise SystemExit(rejection.exit_code)
     slug = slugify(name)
 
     raw = safe_name(name)  # case + spaces preserved, but path-traversal stripped

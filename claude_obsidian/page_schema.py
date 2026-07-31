@@ -28,6 +28,8 @@ so `VALID_TYPES` read like the vocabulary while being neither list.
 
 from __future__ import annotations
 
+from typing import NamedTuple
+
 
 # Authoritative page vocabulary. WIKI.md's table is the source this mirrors; the
 # doc now points here instead of restating the values.
@@ -43,14 +45,24 @@ PAGE_TYPES: tuple[str, ...] = (
     "fold",
 )
 
-# Types the router can place. See the module docstring for why the remainder are
-# excluded rather than missing.
-ROUTABLE_TYPES: tuple[str, ...] = (
-    "source",
-    "entity",
-    "concept",
-    "question",
-    "session",
+# The types the router deliberately does NOT place. See the module docstring for
+# why each is excluded rather than missing.
+NON_ROUTABLE_TYPES: tuple[str, ...] = (
+    "comparison",
+    "overview",
+    "meta",
+    "fold",
+)
+
+# Derived, never restated — this module exists because two copies of a list drift,
+# and writing ROUTABLE_TYPES out by hand would have reintroduced exactly that one
+# level up: nothing stopped a value from being routable without being a valid page
+# type, in which case `route_rejection` would clear a `type:` the frontmatter
+# vocabulary rejects. Subtraction makes ROUTABLE_TYPES ⊆ PAGE_TYPES structurally
+# true; a test covers the remaining direction (a typo in NON_ROUTABLE_TYPES would
+# silently leave a type routable).
+ROUTABLE_TYPES: tuple[str, ...] = tuple(
+    page_type for page_type in PAGE_TYPES if page_type not in NON_ROUTABLE_TYPES
 )
 
 # `research` was accepted by the router and documented nowhere. Its routing was
@@ -62,30 +74,55 @@ ROUTABLE_TYPES: tuple[str, ...] = (
 LEGACY_TYPE_ALIASES: dict[str, str] = {"research": "concept"}
 
 
-def route_rejection_reason(content_type: str) -> str | None:
+# Exit codes. `4` keeps its meaning for an unknown type, because that is what the
+# router already returned and callers may test for it. The unroutable case gets a
+# code of its own: the whole argument for this change is that a typo and a valid
+# page type with no filing destination are *different problems with different
+# fixes*, and a message alone only tells a human. A script still branched on one
+# number, so the distinction stopped at the terminal — the fix applied halfway.
+# `6` because 2, 3, 4 and 5 are already taken in `scripts/wiki-mode.py`.
+UNKNOWN_TYPE_EXIT = 4
+UNROUTABLE_TYPE_EXIT = 6
+
+
+class RouteRejection(NamedTuple):
+    """Why a type cannot be routed, in the two forms a caller needs."""
+
+    exit_code: int
+    message: str
+
+
+def route_rejection(content_type: str) -> RouteRejection | None:
     """Explain why ``content_type`` cannot be routed, or ``None`` when it can.
 
     The router used to exit on an unroutable type with no message, so a caller
     could not tell a typo from a valid type that has no filing destination. Those
-    are different problems with different fixes.
+    are different problems with different fixes — which is why the exit code
+    differs too, not only the text.
     """
 
     if content_type in ROUTABLE_TYPES or content_type in LEGACY_TYPE_ALIASES:
         return None
     if content_type in PAGE_TYPES:
-        return (
+        return RouteRejection(
+            UNROUTABLE_TYPE_EXIT,
             f"type {content_type!r} is a valid page type but is not routable: "
-            "it is created by a dedicated operation, not filed as a new note"
+            "it is created by a dedicated operation, not filed as a new note",
         )
-    return (
+    return RouteRejection(
+        UNKNOWN_TYPE_EXIT,
         f"unknown type {content_type!r}; valid page types are "
-        f"{', '.join(PAGE_TYPES)}"
+        f"{', '.join(PAGE_TYPES)}",
     )
 
 
 __all__ = [
     "LEGACY_TYPE_ALIASES",
+    "NON_ROUTABLE_TYPES",
     "PAGE_TYPES",
     "ROUTABLE_TYPES",
-    "route_rejection_reason",
+    "RouteRejection",
+    "UNKNOWN_TYPE_EXIT",
+    "UNROUTABLE_TYPE_EXIT",
+    "route_rejection",
 ]
