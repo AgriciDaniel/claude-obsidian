@@ -637,21 +637,83 @@ def test_question_is_routable_in_every_mode():
 
 def test_unroutable_valid_type_is_distinguished_from_unknown_type():
     """Regression: both cases exited 4 with no message, so a typo and a valid
-    page type that has no filing destination were indistinguishable."""
-    from claude_obsidian.page_schema import route_rejection_reason
+    page type that has no filing destination were indistinguishable.
+
+    The distinction must reach a SCRIPT, not only a human: the argument for this
+    change is that the two are different problems with different fixes, and a
+    caller branching on `$?` learns nothing from a message on stderr. Asserting
+    only the text would have left the fix applied halfway.
+    """
+    from claude_obsidian.page_schema import (
+        UNKNOWN_TYPE_EXIT,
+        UNROUTABLE_TYPE_EXIT,
+        route_rejection,
+    )
+
+    assert_true(
+        "the two rejection exit codes are distinct",
+        UNKNOWN_TYPE_EXIT != UNROUTABLE_TYPE_EXIT,
+        hint=f"{UNKNOWN_TYPE_EXIT} vs {UNROUTABLE_TYPE_EXIT}",
+    )
 
     for page_type in ("overview", "meta", "fold", "comparison"):
-        reason = route_rejection_reason(page_type)
+        rejection = route_rejection(page_type)
         assert_true(
             f"{page_type} is valid but not routable",
-            reason is not None and "valid page type" in reason,
-            hint=str(reason),
+            rejection is not None and "valid page type" in rejection.message,
+            hint=str(rejection),
         )
-    unknown = route_rejection_reason("garbage")
+        assert_eq(
+            f"{page_type} exits with the unroutable code",
+            UNROUTABLE_TYPE_EXIT,
+            rejection.exit_code,
+        )
+
+    unknown = route_rejection("garbage")
     assert_true(
         "unknown type says unknown",
-        unknown is not None and "unknown type" in unknown,
+        unknown is not None and "unknown type" in unknown.message,
         hint=str(unknown),
+    )
+    assert_eq("unknown type keeps exit 4", UNKNOWN_TYPE_EXIT, unknown.exit_code)
+
+
+def test_route_rejection_exit_codes_reach_the_command_line():
+    """The codes are only worth having if the CLI actually returns them."""
+    with tempfile.TemporaryDirectory() as directory:
+        vault = Path(directory)
+        (vault / "wiki").mkdir()
+        for page_type, expected in (("overview", 6), ("garbage", 4)):
+            done = subprocess.run(
+                [sys.executable, str(HELPER), "route", page_type, "x", "--vault", str(vault)],
+                capture_output=True, text=True, timeout=10,
+            )
+            assert_eq(f"`route {page_type}` exit code", expected, done.returncode)
+
+
+def test_routable_types_cannot_escape_the_page_vocabulary():
+    """Regression the first version of this module shipped: PAGE_TYPES and
+    ROUTABLE_TYPES were two hand-written tuples with nothing tying them together,
+    so a routable type that was not a valid page type would have been cleared by
+    `route_rejection` while the frontmatter vocabulary rejected it — the exact
+    two-copies-drift this module exists to end, reintroduced one level up.
+
+    ROUTABLE_TYPES is now subtraction, so ⊆ holds structurally. This covers the
+    direction subtraction cannot: a typo in NON_ROUTABLE_TYPES silently leaves a
+    type routable, and nothing else would notice.
+    """
+    from claude_obsidian.page_schema import (
+        NON_ROUTABLE_TYPES,
+        PAGE_TYPES,
+        ROUTABLE_TYPES,
+    )
+
+    unknown = sorted(set(NON_ROUTABLE_TYPES) - set(PAGE_TYPES))
+    assert_eq("every NON_ROUTABLE_TYPES value is a real page type", [], unknown)
+    assert_eq(
+        "routable and non-routable partition the vocabulary",
+        sorted(PAGE_TYPES),
+        sorted(set(ROUTABLE_TYPES) | set(NON_ROUTABLE_TYPES)),
     )
 
 
@@ -718,19 +780,53 @@ def test_legacy_mode_json_on_disk_routes_through_both_callers():
         assert_eq("legacy mode.json loads through the core CLI", 0, core.returncode)
 
 
+def _documented_page_types() -> list[str]:
+    """Page types read from WIKI.md's `| Type | Purpose |` TABLE.
+
+    Anchored on the table header and stopping at the first non-row, because a
+    whole-file substring search is not a check: the first version of this test
+    asked whether ``f"`{page_type}`"`` appeared anywhere in WIKI.md, and the same
+    commit added a paragraph naming five of the types in prose. Deleting the
+    entire table would have left it green — it was satisfied by its own PR's
+    wording rather than by the documentation it claimed to verify.
+    """
+    lines = (ROOT / "WIKI.md").read_text(encoding="utf-8").splitlines()
+    try:
+        start = lines.index("| Type | Purpose |")
+    except ValueError:  # pragma: no cover - asserted by the caller
+        return []
+    found = []
+    for line in lines[start + 2 :]:  # skip the header and its `|---|---|`
+        if not line.startswith("|"):
+            break
+        cell = line.split("|")[1].strip()
+        if cell.startswith("`") and cell.endswith("`"):
+            found.append(cell.strip("`"))
+    return found
+
+
 def test_page_vocabulary_matches_the_documented_table():
-    """Anti-drift: the point of one declaration is that the docs stop restating
-    it. WIKI.md's table is prose, so this asserts every documented type appears
-    in the module, which is what a reader of either one relies on."""
+    """Anti-drift, in BOTH directions.
+
+    One declaration only pays off if the doc and the module cannot disagree. The
+    previous assertion covered one direction (every module type is mentioned
+    somewhere) and would not have noticed WIKI.md documenting a tenth type the
+    code rejects — which is the very defect this PR was opened to fix, in the
+    other direction.
+    """
     from claude_obsidian.page_schema import PAGE_TYPES
 
-    documented = (ROOT / "WIKI.md").read_text(encoding="utf-8")
-    for page_type in PAGE_TYPES:
-        assert_true(
-            f"WIKI.md documents type {page_type}",
-            f"`{page_type}`" in documented,
-            hint=page_type,
-        )
+    documented = _documented_page_types()
+    assert_true(
+        "the WIKI.md type table was found and parsed",
+        len(documented) > 0,
+        hint="header `| Type | Purpose |` missing or table empty",
+    )
+    assert_eq(
+        "WIKI.md's table and PAGE_TYPES hold the same values",
+        sorted(PAGE_TYPES),
+        sorted(documented),
+    )
 
 
 def main():
@@ -761,8 +857,10 @@ def main():
     test_cli_set_is_unavailable()
     test_cli_templates_lists_six()
     test_routable_types_are_derived_not_restated()
+    test_routable_types_cannot_escape_the_page_vocabulary()
     test_question_is_routable_in_every_mode()
     test_unroutable_valid_type_is_distinguished_from_unknown_type()
+    test_route_rejection_exit_codes_reach_the_command_line()
     test_legacy_research_alias_keeps_its_exact_destinations()
     test_legacy_mode_json_on_disk_routes_through_both_callers()
     test_page_vocabulary_matches_the_documented_table()

@@ -14,7 +14,13 @@ implementation record for older releases.
   file. `wiki-mode.py` derives its accepted types from it instead of
   keeping a fifth hand-maintained copy.
 - `question` is routable in all four modes, with a `questions_folder` generic
-  setting that defaults to `wiki/questions/`.
+  setting that defaults to `wiki/questions/`. Note the asymmetry: only `generic`
+  routes it through a configurable folder key; `para` places questions under
+  `resources_folder + "questions/"`, matching how that mode treats its siblings.
+- `wiki-mode.py route` now exits `6` for a valid-but-unroutable page type and
+  keeps `4` for an unknown one. The two are different problems with different
+  fixes, so a script branching on `$?` can tell them apart — not only a human
+  reading stderr.
 
 ### Fixed
 
