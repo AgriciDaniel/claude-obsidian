@@ -13,12 +13,12 @@ MODE_FOLDER_KEYS = {
         "entities_folder",
         "concepts_folder",
         "sessions_folder",
+        "questions_folder",
     ),
     "lyt": ("moc_folder", "notes_folder"),
     "para": ("projects_folder", "areas_folder", "resources_folder", "archives_folder"),
     "zettelkasten": ("root_folder",),
 }
-
 
 def _has_control(value: str) -> bool:
     return any(unicodedata.category(character).startswith("C") for character in value)

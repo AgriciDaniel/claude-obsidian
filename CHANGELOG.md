@@ -32,6 +32,31 @@ Native Windows compatibility.
   behavior, since an absent init root on a case-insensitive volume cannot
   distinguish itself from an alien sibling.
 
+### Added
+
+- `claude_obsidian/page_schema.py` declares the page-type vocabulary once,
+  separating every valid `type` value from the subset the methodology router can
+  file. `wiki-mode.py` derives its accepted types from it instead of
+  keeping a fifth hand-maintained copy.
+- `question` is routable in all four modes, with a `questions_folder` generic
+  setting that defaults to `wiki/questions/`. Note the asymmetry: only `generic`
+  routes it through a configurable folder key; `para` places questions under
+  `resources_folder + "questions/"`, matching how that mode treats its siblings.
+- `wiki-mode.py route` now exits `6` for a valid-but-unroutable page type and
+  keeps `4` for an unknown one. The two are different problems with different
+  fixes, so a script branching on `$?` can tell them apart — not only a human
+  reading stderr.
+
+### Fixed
+
+- `wiki-mode.py route` rejected `question`, `comparison`, `overview`, `meta`, and
+  `fold` — five of the nine page types WIKI.md documents — and did so through a
+  bare exit with no message, so a typo and a valid-but-unroutable type were
+  indistinguishable. Rejections now explain which case applies.
+- The frontmatter reference no longer restates a shorter type list that omitted
+  `session` and `fold`, and the save skill no longer names `synthesis`/`decision`
+  types that no other source declares.
+
 ### Changed
 
 - Vault mutation on hosts without directory-descriptor confinement (native

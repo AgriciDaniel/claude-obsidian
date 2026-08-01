@@ -604,6 +604,231 @@ def test_cli_templates_lists_six():
         assert_eq("cli templates returns 6 paths", 6, len(lines))
 
 
+# ─── Single-source page vocabulary (claude_obsidian.page_schema) ─────────────
+def test_routable_types_are_derived_not_restated():
+    """Regression: VALID_TYPES was a fifth hand-maintained copy of the vocabulary.
+
+    Four sources declared `type` differently — WIKI.md, the frontmatter reference,
+    the save skill, and this router — with a union of twelve values and an
+    intersection of two. The router must now read the one declaration.
+    """
+    from claude_obsidian.page_schema import LEGACY_TYPE_ALIASES, ROUTABLE_TYPES
+
+    assert_eq(
+        "VALID_TYPES derives from page_schema",
+        set(ROUTABLE_TYPES) | set(LEGACY_TYPE_ALIASES),
+        set(wm.VALID_TYPES),
+    )
+
+
+def test_question_is_routable_in_every_mode():
+    """Regression: `question` is documented in WIKI.md and the root layout ships
+    wiki/questions/, yet the router rejected it — so the save skill's own default
+    note kind had no filing destination."""
+    cfg = wm.default_config()
+    for mode in ("generic", "lyt", "para", "zettelkasten"):
+        path = wm.route_path(mode, "question", "an open question", cfg)
+        assert_true(
+            f"question routes under {mode}",
+            path.startswith("wiki/") and path.endswith(".md"),
+            hint=path,
+        )
+
+
+def test_unroutable_valid_type_is_distinguished_from_unknown_type():
+    """Regression: both cases exited 4 with no message, so a typo and a valid
+    page type that has no filing destination were indistinguishable.
+
+    The distinction must reach a SCRIPT, not only a human: the argument for this
+    change is that the two are different problems with different fixes, and a
+    caller branching on `$?` learns nothing from a message on stderr. Asserting
+    only the text would have left the fix applied halfway.
+    """
+    from claude_obsidian.page_schema import (
+        UNKNOWN_TYPE_EXIT,
+        UNROUTABLE_TYPE_EXIT,
+        route_rejection,
+    )
+
+    assert_true(
+        "the two rejection exit codes are distinct",
+        UNKNOWN_TYPE_EXIT != UNROUTABLE_TYPE_EXIT,
+        hint=f"{UNKNOWN_TYPE_EXIT} vs {UNROUTABLE_TYPE_EXIT}",
+    )
+
+    for page_type in ("overview", "meta", "fold", "comparison"):
+        rejection = route_rejection(page_type)
+        assert_true(
+            f"{page_type} is valid but not routable",
+            rejection is not None and "valid page type" in rejection.message,
+            hint=str(rejection),
+        )
+        assert_eq(
+            f"{page_type} exits with the unroutable code",
+            UNROUTABLE_TYPE_EXIT,
+            rejection.exit_code,
+        )
+
+    unknown = route_rejection("garbage")
+    assert_true(
+        "unknown type says unknown",
+        unknown is not None and "unknown type" in unknown.message,
+        hint=str(unknown),
+    )
+    assert_eq("unknown type keeps exit 4", UNKNOWN_TYPE_EXIT, unknown.exit_code)
+
+
+def test_route_rejection_exit_codes_reach_the_command_line():
+    """The codes are only worth having if the CLI actually returns them."""
+    with tempfile.TemporaryDirectory() as directory:
+        vault = Path(directory)
+        (vault / "wiki").mkdir()
+        for page_type, expected in (("overview", 6), ("garbage", 4)):
+            done = subprocess.run(
+                [sys.executable, str(HELPER), "route", page_type, "x", "--vault", str(vault)],
+                capture_output=True, text=True, timeout=10,
+            )
+            assert_eq(f"`route {page_type}` exit code", expected, done.returncode)
+
+
+def test_routable_types_cannot_escape_the_page_vocabulary():
+    """Regression the first version of this module shipped: PAGE_TYPES and
+    ROUTABLE_TYPES were two hand-written tuples with nothing tying them together,
+    so a routable type that was not a valid page type would have been cleared by
+    `route_rejection` while the frontmatter vocabulary rejected it — the exact
+    two-copies-drift this module exists to end, reintroduced one level up.
+
+    ROUTABLE_TYPES is now subtraction, so ⊆ holds structurally. This covers the
+    direction subtraction cannot: a typo in NON_ROUTABLE_TYPES silently leaves a
+    type routable, and nothing else would notice.
+    """
+    from claude_obsidian.page_schema import (
+        NON_ROUTABLE_TYPES,
+        PAGE_TYPES,
+        ROUTABLE_TYPES,
+    )
+
+    unknown = sorted(set(NON_ROUTABLE_TYPES) - set(PAGE_TYPES))
+    assert_eq("every NON_ROUTABLE_TYPES value is a real page type", [], unknown)
+    assert_eq(
+        "routable and non-routable partition the vocabulary",
+        sorted(PAGE_TYPES),
+        sorted(set(ROUTABLE_TYPES) | set(NON_ROUTABLE_TYPES)),
+    )
+
+
+def test_legacy_research_alias_keeps_its_exact_destinations():
+    """`research` was accepted by the CLI and documented nowhere. It stays
+    accepted, and its paths must not move: rewriting it as an alias of `concept`
+    would silently relocate para-mode research folders."""
+    cfg = wm.default_config()
+    assert_eq(
+        "generic research destination unchanged",
+        "wiki/concepts/x.md",
+        wm.route_path("generic", "research", "x", cfg),
+    )
+    assert_eq(
+        "para research destination unchanged",
+        "wiki/resources/x/x.md",
+        wm.route_path("para", "research", "x", cfg),
+    )
+
+
+def test_legacy_mode_json_on_disk_routes_through_both_callers():
+    """Regression: `questions_folder` is a folder key added after release, so no
+    existing `mode.json` contains it. Both callers own a separate default document
+    and merge the on-disk file onto it, so this must be exercised on the REAL path
+    — through a file on disk — not by deleting a key from an in-memory default,
+    which is a state neither caller can reach.
+    """
+    with tempfile.TemporaryDirectory() as directory:
+        vault = Path(directory)
+        (vault / "wiki").mkdir()
+        meta = vault / ".vault-meta"
+        meta.mkdir()
+        legacy = {
+            "schema_version": 1,
+            "mode": "generic",
+            "configured_at": "2026-06-09T14:38:44Z",
+            "config": {
+                "generic": {
+                    "sources_folder": "wiki/sources/",
+                    "entities_folder": "wiki/entities/",
+                    "concepts_folder": "wiki/concepts/",
+                    "sessions_folder": "wiki/sessions/",
+                }
+            },
+        }
+        (meta / "mode.json").write_text(json.dumps(legacy), encoding="utf-8")
+
+        routed = subprocess.run(
+            [sys.executable, str(HELPER), "route", "question", "x", "--vault", str(vault)],
+            capture_output=True, text=True, timeout=10,
+        )
+        assert_eq("legacy mode.json routes question", 0, routed.returncode)
+        assert_eq(
+            "legacy mode.json gets the default questions_folder",
+            "wiki/questions/x.md",
+            routed.stdout.strip(),
+        )
+
+        core = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "claude-obsidian.py"),
+             "mode", "get", "--vault", str(vault)],
+            capture_output=True, text=True, timeout=15,
+        )
+        assert_eq("legacy mode.json loads through the core CLI", 0, core.returncode)
+
+
+def _documented_page_types() -> list[str]:
+    """Page types read from WIKI.md's `| Type | Purpose |` TABLE.
+
+    Anchored on the table header and stopping at the first non-row, because a
+    whole-file substring search is not a check: the first version of this test
+    asked whether ``f"`{page_type}`"`` appeared anywhere in WIKI.md, and the same
+    commit added a paragraph naming five of the types in prose. Deleting the
+    entire table would have left it green — it was satisfied by its own PR's
+    wording rather than by the documentation it claimed to verify.
+    """
+    lines = (ROOT / "WIKI.md").read_text(encoding="utf-8").splitlines()
+    try:
+        start = lines.index("| Type | Purpose |")
+    except ValueError:  # pragma: no cover - asserted by the caller
+        return []
+    found = []
+    for line in lines[start + 2 :]:  # skip the header and its `|---|---|`
+        if not line.startswith("|"):
+            break
+        cell = line.split("|")[1].strip()
+        if cell.startswith("`") and cell.endswith("`"):
+            found.append(cell.strip("`"))
+    return found
+
+
+def test_page_vocabulary_matches_the_documented_table():
+    """Anti-drift, in BOTH directions.
+
+    One declaration only pays off if the doc and the module cannot disagree. The
+    previous assertion covered one direction (every module type is mentioned
+    somewhere) and would not have noticed WIKI.md documenting a tenth type the
+    code rejects — which is the very defect this PR was opened to fix, in the
+    other direction.
+    """
+    from claude_obsidian.page_schema import PAGE_TYPES
+
+    documented = _documented_page_types()
+    assert_true(
+        "the WIKI.md type table was found and parsed",
+        len(documented) > 0,
+        hint="header `| Type | Purpose |` missing or table empty",
+    )
+    assert_eq(
+        "WIKI.md's table and PAGE_TYPES hold the same values",
+        sorted(PAGE_TYPES),
+        sorted(documented),
+    )
+
+
 def main():
     print("=== test_wiki_mode.py ===")
     test_load_config_defaults_to_generic_when_absent()
@@ -631,6 +856,14 @@ def main():
     test_cli_route_returns_path()
     test_cli_set_is_unavailable()
     test_cli_templates_lists_six()
+    test_routable_types_are_derived_not_restated()
+    test_routable_types_cannot_escape_the_page_vocabulary()
+    test_question_is_routable_in_every_mode()
+    test_unroutable_valid_type_is_distinguished_from_unknown_type()
+    test_route_rejection_exit_codes_reach_the_command_line()
+    test_legacy_research_alias_keeps_its_exact_destinations()
+    test_legacy_mode_json_on_disk_routes_through_both_callers()
+    test_page_vocabulary_matches_the_documented_table()
     print("\nAll wiki-mode tests passed.")
 
 
