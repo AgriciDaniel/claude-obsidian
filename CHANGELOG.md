@@ -32,6 +32,11 @@ Native Windows compatibility.
   behavior, since an absent init root on a case-insensitive volume cannot
   distinguish itself from an alien sibling.
 
+### Added
+
+- ZCode host adapter (`--host zcode`) for portable, user-level skill discovery
+  into `~/.zcode/skills/`, with a `ZCODE.md` instruction pointer.
+
 ### Changed
 
 - Vault mutation on hosts without directory-descriptor confinement (native
