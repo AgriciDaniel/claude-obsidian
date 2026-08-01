@@ -2,7 +2,7 @@
 date: 2026-08-01
 project: scrap-finance-partners
 agent: codex
-status: completed
+status: in-progress
 ---
 
 ## What I did
@@ -87,3 +87,31 @@ status: completed
 ### Deferred
 
 - Supabase login, signup, password recovery and protected client portal remain the next clean batch. The mandatory Probity hook could not evaluate TS/TSX edits until the updated Codex desktop runtime is restarted, so no untested authentication code or unused auth dependencies were committed.
+
+## Client workspace foundation continuation
+
+### What I did
+
+- Added the local Supabase project and a migration for organisations, roles, leads, reusable email
+  templates, suppression records, outbound messages and revenue attribution.
+- Applied row-level security to every workspace table with organisation isolation, owner-only member
+  management and owner/admin revenue mutations.
+- Added lead validation and generic placeholder rendering with three passing unit tests.
+- Added Supabase SSR dependencies and documented the environment/deployment gate; no remote Supabase
+  project was linked or changed.
+- Committed and pushed `0f0b012` to PR #25.
+
+### Verification
+
+- ESLint, TypeScript and the Next.js production build passed.
+- Account tests: 3/3 passed; acquisition tests: 4/4 passed.
+- Docker Desktop was not running, so the SQL migration could not be executed against the local
+  Supabase container in this session.
+
+### Blocker and next step
+
+- Probity still rejects all TS/TSX/JSX portal edits before they reach `apply_patch`: its configured
+  `gpt-5.6-sol` review model reports that the Codex desktop runtime must be newer. The npm CLI is
+  already 0.146.0, while the active desktop app is `OpenAI.Codex_26.721.11231.0`.
+- Restart/update the Codex desktop app, then implement the prepared auth callback, cookie refresh,
+  protected account shell, lead CRUD, template CRUD, draft composer, suppression checks and send log.
