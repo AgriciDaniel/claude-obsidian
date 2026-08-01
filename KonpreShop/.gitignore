@@ -1,0 +1,5 @@
+# Imágenes generadas / referencias descargadas (pesadas, reproducibles con los scripts)
+assets/pruebas/
+assets/lote/
+assets/casting/*.png
+!assets/casting/_CASTING_BOARD.png
