@@ -138,3 +138,26 @@ status: in-progress
 - Standing release preference: do not hand off a completed site batch at Preview only. Keep the
   protected `agents/*` branch + PR workflow, then merge approved work and verify the production
   alias before reporting it live.
+
+## Visible client lead portal
+
+- Used the connected GitHub repository API to create the code commit because the local Probity hook
+  remained incompatible with the active Codex runtime; the hook was not disabled or modified.
+- Added top-level Client Login, signup, password recovery, auth callback, session refresh and logout.
+- Added an organisation-scoped product workspace with Leads, Email templates, Email composer and
+  Message history, including source/contact-basis fields and suppression-aware delivery checks.
+- Added configuration-safe empty states: the interface is visible with zero seeded records while
+  inputs remain disabled until a dedicated Supabase project is connected.
+- Added a mobile/browser test for the Login-to-Leads path. ESLint, TypeScript, production build,
+  seven unit tests and all 124 Playwright tests passed; the Impeccable detector returned no issues.
+- Opened and merged PR #26. Production commit is `4d55589a7acef1cdc125adae94f7bc4d6a846e92`;
+  Vercel deployment `dpl_8mX3QiC2PMFqWMvCqwR8Zknw6p6Y` reached Ready.
+- Verified `https://scrap-finance-partners.vercel.app/login` and `/account/leads` both return HTTP
+  200, the Leads empty state renders, and no sample company names appear in live HTML.
+
+### Remaining activation dependency
+
+- Vercel has no Supabase URL or publishable key, and the migration has not been applied remotely.
+  Login, signup and persistent lead writes will activate only after creating/confirming the dedicated
+  Supabase project, applying the committed migration, and setting the two production variables.
+
