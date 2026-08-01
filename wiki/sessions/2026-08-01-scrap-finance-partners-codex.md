@@ -127,3 +127,14 @@ status: in-progress
 - Re-ran account/acquisition tests and ESLint successfully; production build had already passed after
   the data/template changes.
 - Committed and pushed `77d34c1` to PR #25.
+
+## Production promotion
+
+- Confirmed PR #25 was merged into the production `master` branch at commit
+  `505ecbb2e07d01a22ae168404a4c1fabea5161f8`.
+- Verified Vercel deployment `dpl_EPeDdU3QeAtVHDs7gebvSWKJCWDo` is Ready with target
+  `production` and owns the canonical `scrap-finance-partners.vercel.app` alias.
+- Verified the canonical live URL returns HTTP 200 and the Scrap Finance Partners page title.
+- Standing release preference: do not hand off a completed site batch at Preview only. Keep the
+  protected `agents/*` branch + PR workflow, then merge approved work and verify the production
+  alias before reporting it live.
