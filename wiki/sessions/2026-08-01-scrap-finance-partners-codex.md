@@ -54,3 +54,16 @@ status: completed
 - Create client-owned third-party accounts and complete KYC only after the agreement is signed.
 - Scope any additional feature requests through a written variation before implementation.
 - Confirm the client accepts the quieter production direction before starting another visual expansion.
+
+## Planning intake continuation
+
+- Audited the current `master` branch before the next requested major feature batch; no application code was changed.
+- Confirmed the production direction is now the quieter light editorial/evidence-led design, while root `DESIGN.md` still describes an older dark graphite system and needs reconciliation during the next batch.
+- Confirmed no client images, image guidelines, or photographic assets exist in the repository or its remote branches.
+- Deferred the implementation brief and formal recurring invoice pending the client's visual reference, the batch's primary commercial objective, and seller/VAT/payment details.
+
+### Next decision gate
+
+- Obtain the client's image/design reference or explicit permission to infer from the current live site.
+- Choose the first-order goal: enquiries, premium credibility, or YardLedger growth.
+- Confirm whether the recurring charge is GBP 150, whether VAT applies, the first billing date, and the supplier/client legal and payment details.
