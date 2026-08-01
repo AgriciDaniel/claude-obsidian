@@ -13,6 +13,10 @@ status: completed
 - Refreshed the codebase knowledge graph for the current repository structure.
 - Developed a four-year managed website and launch package with a larger Year 1 delivery and lower managed-service fees in Years 2–4.
 - Costed the current Vercel, Resend and business-email service levels and defined fair-use limits for third-party costs, updates, advertising and new feature work.
+- Applied client feedback that the terminal redesign was too loud.
+- Researched plain-English and low-friction content patterns, then restored the quieter light consultancy design.
+- Shortened homepage, Health Check and form copy; moved optional qualification fields behind a disclosure.
+- Merged PR #24 and verified the corrected production deployment.
 
 ## Files changed
 
@@ -20,6 +24,8 @@ status: completed
 - Updated app/page.tsx, components/site-header.tsx and components/site-footer.tsx with the blended Bloomberg/evidence-room treatment.
 - Added the legacy /insights redirect to next.config.ts.
 - Updated and pushed this vault session note.
+- Restored the pre-PR-23 versions of app/globals.css, app/page.tsx and the shared site shell, then refined the homepage and Health Check journey.
+- Updated components/lead-form.tsx, data/health-check.ts, tests/e2e/forms.spec.ts and the footer/legacy route handling.
 
 ## Decisions made
 
@@ -36,6 +42,10 @@ status: completed
 - Implemented the redesign on agents/scrap-finance-bloomberg-blend, passed lint, typecheck, production build and all 123 Playwright tests.
 - Opened and merged PR #23; Vercel production deployment dpl_BjwbZUFUnQAzqRtCCQsfcyqQziqB reached Ready and the public domain returned HTTP 200.
 - Revised commercial position to a two-year £10,800 agreement: £1,200/month for months 1–6 and £200/month for months 7–24, subject to confirming that “£1,200 for the next six months” means per month.
+- Client feedback superseded the Bloomberg-dominant direction: retain the first quiet consultancy design and use the later work only for content and service clarity.
+- Remove the ticker and commercial-control status language entirely.
+- Show only name, company and work email in the initial form; keep phone, priority and timing available but optional.
+- PR #24 passed lint, typecheck, production build, design detection and all 123 Playwright tests; production deployment dpl_61Ck7Au8kPUAfZNxz1y53EFdVUzC reached Ready.
 
 ## Next steps
 
@@ -43,3 +53,4 @@ status: completed
 - Confirm VAT status, client billing details, commencement date and the virtual-office/mailbox provider before issuing the first invoice.
 - Create client-owned third-party accounts and complete KYC only after the agreement is signed.
 - Scope any additional feature requests through a written variation before implementation.
+- Confirm the client accepts the quieter production direction before starting another visual expansion.
