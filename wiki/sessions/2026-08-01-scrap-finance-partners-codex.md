@@ -67,3 +67,23 @@ status: completed
 - Obtain the client's image/design reference or explicit permission to infer from the current live site.
 - Choose the first-order goal: enquiries, premium credibility, or YardLedger growth.
 - Confirm whether the recurring charge is GBP 150, whether VAT applies, the first billing date, and the supplier/client legal and payment details.
+
+## Client acquisition system
+
+- Reprioritised the next batch around winning suitable UK scrap and recycling clients for Scrap Finance Partners.
+- Built a private-by-default outreach workflow with corporate-recipient eligibility, consent gating for sole traders, suppression and duplicate handling, source recording, four-touch message generation and human approval before delivery.
+- Added a Resend delivery runner that is dry-run by default, requires `--confirm`, caps batches, rechecks suppression at send time and allows only one due message per prospect per run.
+- Added paid-revenue attribution and configurable commission reporting, defaulting to 15% of net collected revenue.
+- Added an operating guide, invented-data templates, environment template, changelog entry and an itemised GBP 150/month acquisition invoice with a separate success-fee section.
+- Kept all real prospect, send-log, queue and revenue data under Git-ignored `private/outreach/`.
+
+### Verification
+
+- Acquisition tests: 4/4 passed.
+- ESLint, TypeScript and production build passed.
+- Existing Playwright suite: 123/123 passed.
+- Production dependency audit: zero known vulnerabilities.
+
+### Deferred
+
+- Supabase login, signup, password recovery and protected client portal remain the next clean batch. The mandatory Probity hook could not evaluate TS/TSX edits until the updated Codex desktop runtime is restarted, so no untested authentication code or unused auth dependencies were committed.
