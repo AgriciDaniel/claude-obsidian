@@ -115,3 +115,15 @@ status: in-progress
   already 0.146.0, while the active desktop app is `OpenAI.Codex_26.721.11231.0`.
 - Restart/update the Codex desktop app, then implement the prepared auth callback, cookie refresh,
   protected account shell, lead CRUD, template CRUD, draft composer, suppression checks and send log.
+
+## No-fake-data requirement
+
+- Confirmed the client workspace will ship with zero seeded organisations, contacts, leads,
+  templates, messages, metrics or revenue.
+- Replaced the outreach, suppression and revenue example records with empty JSON arrays and disabled
+  Supabase database seeding.
+- Replaced realistic-looking test names with explicit `TEST-*` tokens and reserved `.test` domains;
+  these exist only in automated tests and cannot appear in the application or database.
+- Re-ran account/acquisition tests and ESLint successfully; production build had already passed after
+  the data/template changes.
+- Committed and pushed `77d34c1` to PR #25.
