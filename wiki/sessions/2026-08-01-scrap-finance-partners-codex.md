@@ -11,6 +11,8 @@ status: in-progress
 - Located the client-preferred Bloomberg-terminal redesign at commit `0c3cc5e` and compared its visual language with the current site.
 - Planned a Bloomberg-dominant blend that preserves the current evidence structure, approval gating, pricing, routes, mobile navigation, forms, and accessibility work.
 - Refreshed the codebase knowledge graph for the current repository structure.
+- Developed a four-year managed website and launch package with a larger Year 1 delivery and lower managed-service fees in Years 2–4.
+- Costed the current Vercel, Resend and business-email service levels and defined fair-use limits for third-party costs, updates, advertising and new feature work.
 
 ## Files changed
 
@@ -24,6 +26,11 @@ status: in-progress
 - Restore data density, terminal labels, compact status strips, tabular layouts, and a split hero while retaining the current pain-led copy and real conversion path.
 - Do not restore fake live claims, unverified savings figures, glass/glow, decorative grid/noise textures, or old inaccessible motion.
 - Prototype the shared shell and homepage first, obtain visual approval, then roll the system across all secondary routes.
+- Recommended commercial position: £8,500 total over four years — £4,750 in Year 1 and £1,250 in each of Years 2–4 — against an indicative standard value of £12,600.
+- Year 1 includes the redesign, launch infrastructure, one business mailbox, virtual-address setup/allowance, LinkedIn Company Page launch, three sales one-pagers, up to three ad creatives and £500 media spend.
+- Years 2–4 include managed commercial hosting, transactional email, one business mailbox, virtual-address renewal allowance, monitoring, backups, dependency/security maintenance and up to 12 hours or four planned production releases per year.
+- Larger features, extra advertising, extra mailboxes and usage overages require a written variation; recommended loyalty development rate is £55/hour or a fixed quote.
+- Client should own the domain and third-party accounts, retain super-admin access and complete any required identity/KYC checks.
 
 ## Next steps
 
@@ -31,3 +38,4 @@ status: in-progress
 - Build the shared dark token layer, header/footer, and homepage prototype.
 - Validate the prototype at desktop and mobile widths before extending it to Health Check, How We Help, Case Study, About, Ways to Work Together, Updates, Contact, and Privacy.
 - Run the production build, interaction tests, accessibility checks, and route screenshots before opening a PR.
+- Send the copy-ready estimate, confirm VAT status and client billing details, and convert the accepted estimate into a signed four-year agreement plus the Year 1 deposit invoice.
