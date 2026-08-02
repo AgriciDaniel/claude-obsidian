@@ -16,12 +16,20 @@ status: completed
 - Installed `agent-nudge-ingest:latest`, a Gemma 3 4B Ollama profile using 2.7 GB fully on the GTX 1660 Ti.
 - Installed the global `agent-nudge-ingest` command with clipboard fallback.
 - Added structured-output/reasoning controls and deterministic Maz dictation corrections, then pushed commit `514ef3a`.
+- Researched planning, structured outputs, Whisper normalization, and current local/API structured-output interfaces using primary sources.
+- Replaced the flat task list with a validated Kanban DAG and preserved the exact raw note outside the model-generated payload.
+- Proved the TypeScript service end-to-end against the installed Ollama model.
+- Passed 71 unit tests, lint, typecheck, and the production build; pushed commit `6917c9b` to PR #29.
 
 ## Files changed
 - `src/core/ingest.ts`
+- `src/core/ingest-schema.ts`
 - `tests/unit/ingest.test.ts`
+- `tests/unit/ingest-schema.test.ts`
 - `config/ollama/Modelfile.ingest`
 - `config/ollama/README.md`
+- `docs/INGESTION-RESEARCH.md`
+- `wiki/outputs/2026-08-02-agent-nudge-ingestion-research.md`
 - `C:/Users/manaz/.local/bin/agent-nudge-ingest.ps1`
 - `C:/Users/manaz/.local/bin/agent-nudge-ingest.cmd`
 
@@ -32,6 +40,9 @@ status: completed
 - Bound raw input, model output, task count, titles, and objectives before daemon or compiler integration.
 - Use Gemma 3 4B rather than 1B: 1B failed the output contract; 4B is the smallest reliable installed option.
 - Disable hidden reasoning and request JSON Schema at the OpenAI-compatible boundary.
+- Keep the provider wire schema small (`cleanedText` and `tasks`) and attach authoritative `originalText` in application code.
+- Validate semantic DAG invariants locally: unique IDs, valid references, dependency order, and acyclicity.
+- Avoid adding Vercel AI SDK solely for structured output; the existing injected adapter is smaller and model-agnostic.
 
 ## Next steps
 - Wire `POST /v1/ingest` into the daemon with a configured model adapter.
