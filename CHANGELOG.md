@@ -7,6 +7,16 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Added
+
+- Stop hook: an advisory-only line when `wiki/log.md` holds at least 85% of a
+  wiki-fold batch (`2**k` entries, default `k=4`, override with
+  `CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT`) above its most recent `fold` marker.
+  It reads at most the first 512 KiB of the log, is appended after any
+  recovery warnings, never recommends `transaction recover`, and never runs
+  wiki-fold or writes to the vault, since folding stays human-invoked per
+  `skills/wiki-fold/SKILL.md`.
+
 ## [2.2.0] - 2026-09-10
 
 Backlog triage: lint scoping, lock recovery, host validation, the `bin/`

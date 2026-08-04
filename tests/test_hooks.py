@@ -31,6 +31,24 @@ def make_vault(root: Path, hot: str) -> Path:
     return root
 
 
+def _log_entries(ops: list[str], detail: str = "- detail") -> str:
+    header = (
+        "---\ntype: meta\ntitle: Wiki Log\ncreated: 2026-06-22\n"
+        "updated: 2026-08-04\ntags: []\nstatus: active\n---\n"
+    )
+    body = "\n".join(
+        f"## [2026-08-0{index % 9 + 1}] {op} | entry {index}\n{detail}"
+        for index, op in enumerate(ops)
+    )
+    return header + body + "\n"
+
+
+def _backlog(vault: Path) -> int | None:
+    # _fold_backlog_count expects an already-canonical root, exactly as
+    # stop_status passes it (selection.root from resolve_vault_root).
+    return hook_adapter._fold_backlog_count(hook_adapter.canonical(vault))
+
+
 def opted_in() -> dict[str, str]:
     return {"CLAUDE_OBSIDIAN_SESSION_CONTEXT": "1"}
 
@@ -428,6 +446,144 @@ def test_stop_status_scopes_recovery_advice_for_mixed_journals() -> None:
         assert "inspect manually" in status
 
 
+def test_fold_backlog_counts_only_entries_above_the_latest_fold_marker() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        ops = ["save"] * 5 + ["fold"] * 2 + ["save"] * 40 + ["fold"] + ["save"] * 3
+        (vault / "wiki/log.md").write_text(_log_entries(ops), encoding="utf-8")
+        assert _backlog(vault) == 5
+
+
+def test_fold_backlog_is_silent_right_after_a_fold() -> None:
+    # wiki-fold prepends its marker above the entries it just folded, so a
+    # marker at the top of the log means there is no backlog at all.
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        ops = ["fold"] + ["save"] * 16 + ["fold"] + ["save"] * 16
+        (vault / "wiki/log.md").write_text(_log_entries(ops), encoding="utf-8")
+        assert _backlog(vault) == 0
+        assert (
+            stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin") == ""
+        )
+
+
+def test_fold_backlog_count_handles_crlf_line_endings() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        text = _log_entries(["save"] * 9 + ["fold"] + ["save"] * 2)
+        (vault / "wiki/log.md").write_bytes(text.replace("\n", "\r\n").encode("utf-8"))
+        assert _backlog(vault) == 9
+
+
+def test_fold_backlog_counts_everything_when_never_folded() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 6), encoding="utf-8")
+        assert _backlog(vault) == 6
+
+
+def test_fold_backlog_scan_is_bounded() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        detail = "x" * (64 * 1024)
+        (vault / "wiki/log.md").write_text(
+            _log_entries(["save"] * 20, detail=detail), encoding="utf-8"
+        )
+        # 20 entries of ~64 KiB exceed the 512 KiB window: undercount, never more.
+        count = _backlog(vault)
+        assert count is not None and 0 < count < 20
+
+
+def test_fold_backlog_ignores_symlinked_log() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+        vault = make_vault(base / "vault", "safe\n")
+        outside = base / "outside-log.md"
+        outside.write_text(_log_entries(["save"] * 20), encoding="utf-8")
+        try:
+            (vault / "wiki/log.md").symlink_to(outside)
+        except OSError:
+            return
+        assert _backlog(vault) is None
+        assert stop_status(start=vault, environ={}, plugin_root=base / "plugin") == ""
+
+
+def test_stop_status_silent_below_fold_backlog_threshold() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 13), encoding="utf-8")
+        assert (
+            stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin") == ""
+        )
+
+
+def test_stop_status_warns_at_fold_backlog_threshold() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 14), encoding="utf-8")
+        status = stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin")
+        assert "14 wiki log entries since the last fold" in status
+        assert "consider running wiki-fold" in status
+        # Advisory-only: nothing to recover, and no vault path or note content.
+        assert "transaction recover" not in status
+        assert "wiki/log.md" not in status
+        assert "entry 0" not in status
+
+
+def test_stop_status_fold_backlog_respects_batch_exponent_override() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 7), encoding="utf-8")
+        plugin_root = Path(td) / "plugin"
+        default_k = stop_status(
+            start=vault,
+            environ={"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "4"},
+            plugin_root=plugin_root,
+        )
+        assert default_k == ""
+        smaller_batch = stop_status(
+            start=vault,
+            environ={"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "3"},
+            plugin_root=plugin_root,
+        )
+        assert "consider running wiki-fold" in smaller_batch
+
+
+def test_fold_batch_exponent_falls_back_on_invalid_override() -> None:
+    key = "CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT"
+    assert hook_adapter._fold_batch_exponent({}) == 4
+    assert hook_adapter._fold_batch_exponent({key: "not-a-number"}) == 4
+    assert hook_adapter._fold_batch_exponent({key: "0"}) == 4
+    assert hook_adapter._fold_batch_exponent({key: "20"}) == 4
+    assert hook_adapter._fold_batch_exponent({key: "3"}) == 3
+
+
+def test_stop_status_fold_backlog_follows_recovery_warnings() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 14), encoding="utf-8")
+        journal = vault / ".vault-meta/transactions/operation-000/journal.json"
+        journal.parent.mkdir(parents=True)
+        journal.write_text(json.dumps({"state": "applying"}), encoding="utf-8")
+        status = stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin")
+        recovery = status.index("1 transaction journal(s) need recovery")
+        fold = status.index("consider running wiki-fold")
+        assert recovery < fold
+        assert "for the recognized recoverable journals" in status
+
+
+def test_stop_status_fold_backlog_does_not_recommend_recover_for_a_lock() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 14), encoding="utf-8")
+        (vault / ".vault-meta").mkdir()
+        (vault / ".vault-meta/mutation.lock").write_text("pid=1\n", encoding="utf-8")
+        status = stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin")
+        assert "a vault mutation lock is still present" in status
+        assert "consider running wiki-fold" in status
+        assert "transaction recover" not in status
+
+
 def main() -> None:
     test_hook_schema_uses_supported_session_start_shape()
     test_context_is_bounded_and_delimiter_safe()
@@ -445,6 +601,18 @@ def main() -> None:
     test_stop_status_actual_read_failure_requires_manual_inspection()
     test_stop_status_regular_journal_read_failure_requires_manual_inspection()
     test_stop_status_scopes_recovery_advice_for_mixed_journals()
+    test_fold_backlog_counts_only_entries_above_the_latest_fold_marker()
+    test_fold_backlog_is_silent_right_after_a_fold()
+    test_fold_backlog_count_handles_crlf_line_endings()
+    test_fold_backlog_counts_everything_when_never_folded()
+    test_fold_backlog_scan_is_bounded()
+    test_fold_backlog_ignores_symlinked_log()
+    test_stop_status_silent_below_fold_backlog_threshold()
+    test_stop_status_warns_at_fold_backlog_threshold()
+    test_stop_status_fold_backlog_respects_batch_exponent_override()
+    test_fold_batch_exponent_falls_back_on_invalid_override()
+    test_stop_status_fold_backlog_follows_recovery_warnings()
+    test_stop_status_fold_backlog_does_not_recommend_recover_for_a_lock()
     print("All hook tests passed.")
 
 

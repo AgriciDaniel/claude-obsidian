@@ -82,7 +82,10 @@ When the user explicitly says to apply or commit the fold, build one
 
 - `wiki/folds/{FOLD_ID}.md` in `create` mode by default;
 - the fold catalog entry in `wiki/index.md`;
-- one new top-of-file fold entry in `wiki/log.md`.
+- one new top-of-file fold entry in `wiki/log.md`, using the literal op token
+  `fold` (`## [DATE] fold | ...`). That token is reserved for this marker: the
+  Stop hook's fold-backlog check treats the entries above the topmost marker as
+  the unfolded backlog, so no other skill or manual entry should reuse it.
 
 Do not update `wiki/hot.md`. Record SHA-256 preconditions for all three targets.
 Do not use host Write/Edit, Obsidian transport writes, deprecated locks, automatic
