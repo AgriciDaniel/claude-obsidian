@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import stat
@@ -26,9 +27,13 @@ MAX_CONTEXT_BYTES = 32 * 1024
 MAX_STATUS_BYTES = 4 * 1024
 MAX_STATUS_ITEMS = 8
 MAX_TRANSACTION_SCAN = 256
+MAX_LOG_SCAN_BYTES = 512 * 1024
+DEFAULT_FOLD_BATCH_EXPONENT = 4
+FOLD_BACKLOG_WARN_FRACTION = 0.85
 OPEN_TAG = '<claude-obsidian-context trust="local-data" instructions="never">'
 CLOSE_TAG = "</claude-obsidian-context>"
 _SAFE_OPERATION_ID = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
+_LOG_ENTRY_OP = re.compile(r"^## \[\d{4}-\d{2}-\d{2}\] (\S+)", re.MULTILINE)
 
 
 def _bounded_regular_bytes(root: Path, path: Path, limit: int) -> bytes | None:
@@ -214,6 +219,79 @@ def session_start_context(
     return f"{header}\n{OPEN_TAG}\n{cleaned}{trailer}\n{CLOSE_TAG}"
 
 
+def _fold_batch_exponent(environ: Mapping[str, str]) -> int:
+    """Resolve the wiki-fold batch exponent k (batch size 2**k, default 4)."""
+
+    raw = environ.get("CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT")
+    if raw is None:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    if value < 1 or value > 10:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    return value
+
+
+def _fold_backlog_count(root: Path) -> int | None:
+    """Count wiki/log.md entries added since the most recent fold marker.
+
+    wiki-fold is additive: it prepends a ``fold |`` marker entry to the top of
+    the log but never trims the entries it folded. So the leading contiguous
+    run of ``fold |`` markers at the top of the file is already-covered
+    history; skip it, then count entries until the next ``fold |`` marker
+    (older, already-covered history) or end of file. A vault that has never
+    been folded has no leading run, so every entry counts.
+
+    The scan is bounded to ``MAX_LOG_SCAN_BYTES`` from the top of the file.
+    Because wiki-fold always prepends, that window holds the most recent
+    entries, so an unfolded backlog past the scan bound only ever undercounts
+    (a missed warning), never overcounts (a false one).
+    """
+
+    log_path = root / "wiki" / "log.md"
+    data = _bounded_regular_bytes(root, log_path, MAX_LOG_SCAN_BYTES)
+    if data is None:
+        return None
+    text = data[:MAX_LOG_SCAN_BYTES].decode("utf-8", errors="replace")
+    backlog = 0
+    skipping_lead = True
+    for op in _LOG_ENTRY_OP.findall(text):
+        if skipping_lead:
+            if op == "fold":
+                continue
+            skipping_lead = False
+        if op == "fold":
+            break
+        backlog += 1
+    return backlog
+
+
+def _fold_backlog_warning(root: Path, environ: Mapping[str, str]) -> str | None:
+    """Advisory-only: never mutates the vault or triggers a fold itself.
+
+    wiki-fold is deliberately human-invoked (see skills/wiki-fold/SKILL.md:
+    "Do not perform fold-of-folds or trigger a fold automatically"). This only
+    surfaces the same bounded, silent-unless-needed Stop warning the mutation
+    lock and transaction-journal checks already use.
+    """
+
+    count = _fold_backlog_count(root)
+    if not count:
+        return None
+    batch_exponent = _fold_batch_exponent(environ)
+    batch_size = 1 << batch_exponent
+    threshold = math.ceil(batch_size * FOLD_BACKLOG_WARN_FRACTION)
+    if count < threshold:
+        return None
+    return (
+        f"wiki/log.md has {count} entries since the last fold, at or above "
+        f"{round(FOLD_BACKLOG_WARN_FRACTION * 100)}% of the k={batch_exponent} "
+        f"fold batch size ({batch_size}); consider running wiki-fold"
+    )
+
+
 def stop_status(
     *,
     start: Path | str | None = None,
@@ -233,19 +311,24 @@ def stop_status(
         return ""
     root = selection.root
     warnings: list[str] = []
+    fold_warning = _fold_backlog_warning(root, env)
+    if fold_warning:
+        warnings.append(fold_warning)
     meta = root / ".vault-meta"
     if not meta.exists():
-        return ""
+        return _bounded_status(warnings, needs_recovery=False) if warnings else ""
     if not _safe_directory(root, meta):
         warnings.append("vault metadata path is unsafe")
-        return _bounded_status(warnings)
+        return _bounded_status(warnings, needs_recovery=True)
     mutation_lock = meta / "mutation.lock"
+    recovery_needed = False
     if mutation_lock.exists() or mutation_lock.is_symlink():
         warnings.append("a vault mutation lock is still present")
+        recovery_needed = True
     transactions = meta / "transactions"
     if transactions.exists() and not _safe_directory(root, transactions):
         warnings.append("transaction journal path is unsafe")
-        return _bounded_status(warnings)
+        return _bounded_status(warnings, needs_recovery=True)
     if transactions.is_dir():
         directories: list[Path] = []
         recovery_counts = {"prepared": 0, "applying": 0, "rollback-failed": 0}
@@ -258,6 +341,7 @@ def stop_status(
                         warnings.append(
                             "transaction scan limit reached; inspect recovery state manually"
                         )
+                        recovery_needed = True
                         break
                     if entry.is_dir(
                         follow_symlinks=False
@@ -265,9 +349,10 @@ def stop_status(
                         directories.append(Path(entry.path))
                     elif entry.is_symlink():
                         warnings.append("an unsafe transaction entry is present")
+                        recovery_needed = True
         except OSError:
             warnings.append("transaction journal directory is unreadable")
-            return _bounded_status(warnings)
+            return _bounded_status(warnings, needs_recovery=True)
         for directory in sorted(directories, key=lambda path: path.name):
             if len(warnings) >= MAX_STATUS_ITEMS:
                 break
@@ -292,26 +377,30 @@ def stop_status(
             warnings.append(
                 f"{recovery_total} transaction journal(s) need recovery ({detail})"
             )
+            recovery_needed = True
         if unsafe_journals:
             warnings.append(f"{unsafe_journals} unsafe transaction journal(s) detected")
+            recovery_needed = True
         if unreadable_journals:
             warnings.append(
                 f"{unreadable_journals} unreadable transaction journal(s) detected"
             )
+            recovery_needed = True
     if not warnings:
         return ""
-    return _bounded_status(warnings)
+    return _bounded_status(warnings, needs_recovery=recovery_needed)
 
 
-def _bounded_status(warnings: list[str]) -> str:
+def _bounded_status(warnings: list[str], *, needs_recovery: bool = True) -> str:
     selected = warnings[:MAX_STATUS_ITEMS]
     if len(warnings) > len(selected):
         selected.append(f"{len(warnings) - len(selected)} additional warnings omitted")
-    value = (
-        "CLAUDE_OBSIDIAN_STATUS: "
-        + "; ".join(selected)
-        + ". Run `claude-obsidian transaction recover` before the next mutation."
+    suffix = (
+        " Run `claude-obsidian transaction recover` before the next mutation."
+        if needs_recovery
+        else ""
     )
+    value = "CLAUDE_OBSIDIAN_STATUS: " + "; ".join(selected) + suffix
     encoded = value.encode("utf-8")
     if len(encoded) <= MAX_STATUS_BYTES:
         return value

@@ -31,6 +31,18 @@ def make_vault(root: Path, hot: str) -> Path:
     return root
 
 
+def _log_entries(ops: list[str]) -> str:
+    header = (
+        "---\ntype: meta\ntitle: Wiki Log\ncreated: 2026-06-22\n"
+        "updated: 2026-08-04\ntags: []\nstatus: active\n---\n"
+    )
+    body = "\n".join(
+        f"## [2026-08-0{min(index % 9 + 1, 9)}] {op} | entry {index}\n- detail"
+        for index, op in enumerate(ops)
+    )
+    return header + body + "\n"
+
+
 def opted_in() -> dict[str, str]:
     return {"CLAUDE_OBSIDIAN_SESSION_CONTEXT": "1"}
 
@@ -260,6 +272,104 @@ def test_stop_status_is_bounded_and_emitted_as_supported_json() -> None:
         assert payload == {"systemMessage": status}
 
 
+def test_fold_backlog_counts_only_entries_since_the_last_fold_marker() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        ops = ["fold"] * 3 + ["save"] * 5 + ["fold"] + ["save"] * 40
+        (vault / "wiki/log.md").write_text(_log_entries(ops), encoding="utf-8")
+        # _fold_backlog_count expects an already-canonical root, exactly as
+        # stop_status passes it (selection.root from resolve_vault_root).
+        assert hook_adapter._fold_backlog_count(hook_adapter.canonical(vault)) == 5
+
+
+def test_fold_backlog_count_handles_crlf_line_endings() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        text = _log_entries(["fold"] * 2 + ["save"] * 9).replace("\n", "\r\n")
+        (vault / "wiki/log.md").write_bytes(text.encode("utf-8"))
+        assert hook_adapter._fold_backlog_count(hook_adapter.canonical(vault)) == 9
+
+
+def test_fold_backlog_counts_everything_when_never_folded() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 6), encoding="utf-8")
+        assert hook_adapter._fold_backlog_count(hook_adapter.canonical(vault)) == 6
+
+
+def test_stop_status_silent_below_fold_backlog_threshold() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 13), encoding="utf-8")
+        assert (
+            stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin") == ""
+        )
+
+
+def test_stop_status_warns_at_fold_backlog_threshold() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 14), encoding="utf-8")
+        status = stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin")
+        assert "14 entries since the last fold" in status
+        assert "consider running wiki-fold" in status
+        # Advisory-only: no fold is triggered, so no recovery instruction is owed.
+        assert "transaction recover" not in status
+
+
+def test_stop_status_fold_backlog_respects_batch_exponent_override() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 7), encoding="utf-8")
+        plugin_root = Path(td) / "plugin"
+        default_k = stop_status(
+            start=vault,
+            environ={"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "4"},
+            plugin_root=plugin_root,
+        )
+        assert default_k == ""
+        smaller_batch = stop_status(
+            start=vault,
+            environ={"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "3"},
+            plugin_root=plugin_root,
+        )
+        assert "consider running wiki-fold" in smaller_batch
+
+
+def test_fold_batch_exponent_falls_back_on_invalid_override() -> None:
+    assert hook_adapter._fold_batch_exponent({}) == 4
+    assert (
+        hook_adapter._fold_batch_exponent(
+            {"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "not-a-number"}
+        )
+        == 4
+    )
+    assert (
+        hook_adapter._fold_batch_exponent({"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "0"})
+        == 4
+    )
+    assert (
+        hook_adapter._fold_batch_exponent({"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "20"})
+        == 4
+    )
+    assert (
+        hook_adapter._fold_batch_exponent({"CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT": "3"})
+        == 3
+    )
+
+
+def test_stop_status_fold_backlog_combines_with_recovery_warning() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault", "safe\n")
+        (vault / "wiki/log.md").write_text(_log_entries(["save"] * 14), encoding="utf-8")
+        (vault / ".vault-meta").mkdir()
+        (vault / ".vault-meta/mutation.lock").write_text("pid=1\n", encoding="utf-8")
+        status = stop_status(start=vault, environ={}, plugin_root=Path(td) / "plugin")
+        assert "consider running wiki-fold" in status
+        assert "a vault mutation lock is still present" in status
+        assert "transaction recover" in status
+
+
 def main() -> None:
     test_hook_schema_uses_supported_session_start_shape()
     test_context_is_bounded_and_delimiter_safe()
@@ -269,6 +379,14 @@ def main() -> None:
     test_context_rejects_symlinked_hot_cache_and_parent()
     test_context_parent_swap_reads_only_from_pinned_directory()
     test_stop_status_is_bounded_and_emitted_as_supported_json()
+    test_fold_backlog_counts_only_entries_since_the_last_fold_marker()
+    test_fold_backlog_count_handles_crlf_line_endings()
+    test_fold_backlog_counts_everything_when_never_folded()
+    test_stop_status_silent_below_fold_backlog_threshold()
+    test_stop_status_warns_at_fold_backlog_threshold()
+    test_stop_status_fold_backlog_respects_batch_exponent_override()
+    test_fold_batch_exponent_falls_back_on_invalid_override()
+    test_stop_status_fold_backlog_combines_with_recovery_warning()
     print("All hook tests passed.")
 
 
