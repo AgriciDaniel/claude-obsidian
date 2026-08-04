@@ -14,6 +14,13 @@ implementation record for older releases.
   (`wsl --status` hanging after install), approval-hash environment binding,
   and filesystem identity requirements. Linked from the README, install
   guide, compound vault guide, and the wiki skill's transaction reference.
+- Stop hook: an advisory-only warning when `wiki/log.md` has accumulated at
+  or above 85% of the wiki-fold batch size (`2**k` entries, default `k=4`)
+  worth of entries since the last fold marker, so a growing log doesn't go
+  unnoticed between sessions. Configurable via
+  `CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT`. It never runs wiki-fold or mutates
+  the vault itself, since folding stays human-invoked per
+  `skills/wiki-fold/SKILL.md`.
 
 ### Changed
 
