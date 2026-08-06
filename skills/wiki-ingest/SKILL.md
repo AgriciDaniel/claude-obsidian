@@ -100,6 +100,16 @@ claim needs a fresh active non-synthetic source; a high-risk accepted claim need
 two independent sources. If support is insufficient, file uncertainty or refuse
 the requested conclusion instead of inventing evidence.
 
+## Add navigation to created pages
+
+When a created or expanded canonical page has 3+ `##` sections, apply the
+`obsidian-nav` skill pattern:
+
+- Insert a `## 目录` heading with a `[!note]+ 📑 目录` folded TOC callout right
+  after frontmatter.
+- Add `[[#目录|↑ 返回目录]]` at the end of every `##` and `###` section.
+- Add a `📚 导航` cross-page footer at the bottom linking sibling pages.
+
 ## Build one Ingest transaction
 
 Read [the transaction contract](../wiki/references/operation-transactions.md).
