@@ -31,6 +31,9 @@ The command remains read-only either way.
 
 The deterministic parser understands Obsidian wikilinks and embeds, Markdown
 links, aliases, heading and block fragments, escaped aliases, and code fences.
+Link resolution honors `.gitignore` files inside the vault (no `git`
+subprocess): when a link is ambiguous between a page and a gitignored file
+such as a build artifact, the gitignored candidate is dropped.
 It reports such categories as dead or ambiguous links, orphan pages, required
 frontmatter gaps (including `title`), empty sections, stale index entries, and
 source/claim ledger contract violations. Report only the
