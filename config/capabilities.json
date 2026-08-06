@@ -500,6 +500,7 @@
       "read_scope": [
         "plugin:skills/wiki-lint/**",
         "plugin:skills/wiki/references/operation-transactions.md",
+        "vault:**/.gitignore",
         "vault:.vault-meta/lint-allowlist.json",
         "vault:.vault-meta/lint-allowlist.txt",
         "vault:.vault-meta/lint.json",

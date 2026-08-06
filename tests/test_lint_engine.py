@@ -731,5 +731,82 @@ tags:
         )
 
 
+class GitignoreDisambiguationTests(unittest.TestCase):
+    """Gitignored files must not shadow pages into ambiguity findings."""
+
+    def _lint(self, files: dict[str, str]) -> dict:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "vault"
+            for relative, content in files.items():
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content, encoding="utf-8")
+            return lint_engine.lint_vault(root)
+
+    def test_gitignored_shadow_candidate_is_dropped(self) -> None:
+        report = self._lint(
+            {
+                ".gitignore": "/bin/\n",
+                "bin/Thing": "binary artifact\n",
+                "wiki/concepts/Thing.md": "# Thing\n",
+                "wiki/Note.md": "[[Thing]]\n",
+            }
+        )
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual([], report["dead_links"])
+
+    def test_same_shadow_without_gitignore_stays_ambiguous(self) -> None:
+        report = self._lint(
+            {
+                "bin/Thing": "binary artifact\n",
+                "wiki/concepts/Thing.md": "# Thing\n",
+                "wiki/Note.md": "[[Thing]]\n",
+            }
+        )
+        self.assertEqual(1, len(report["ambiguous_targets"]))
+        self.assertEqual(
+            ["bin/Thing", "wiki/concepts/Thing.md"],
+            report["ambiguous_targets"][0]["candidates"],
+        )
+
+    def test_ambiguity_between_only_ignored_candidates_is_still_reported(self) -> None:
+        report = self._lint(
+            {
+                ".gitignore": "out/\n",
+                "out/a/Thing": "one\n",
+                "out/b/Thing": "two\n",
+                "wiki/Note.md": "[[Thing]]\n",
+            }
+        )
+        self.assertEqual(1, len(report["ambiguous_targets"]))
+        self.assertEqual(
+            ["out/a/Thing", "out/b/Thing"],
+            report["ambiguous_targets"][0]["candidates"],
+        )
+
+    def test_link_whose_only_candidate_is_ignored_still_resolves(self) -> None:
+        report = self._lint(
+            {
+                ".gitignore": "/bin/\n",
+                "bin/OnlyIgnored": "artifact\n",
+                "wiki/Note.md": "[[OnlyIgnored]]\n",
+            }
+        )
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual([], report["dead_links"])
+
+    def test_index_shadow_no_longer_reports_stale_entry(self) -> None:
+        report = self._lint(
+            {
+                ".gitignore": "artifacts/\n",
+                "artifacts/Thing": "binary\n",
+                "wiki/concepts/Thing.md": "# Thing\n",
+                "wiki/index.md": "[[Thing]]\n",
+            }
+        )
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual([], report["stale_index_entries"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
