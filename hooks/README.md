@@ -9,10 +9,10 @@ Plugin hooks for the vault-os wiki vault. Two files live here:
 
 | Event | Type | Purpose |
 |---|---|---|
-| `SessionStart` | command + prompt | Loads `wiki/hot.md` into context. Command type runs `[ -f wiki/hot.md ] && cat wiki/hot.md` as the canonical safety check (works for non-vault sessions without erroring). Prompt type complements with semantic context restoration. Matcher: `startup\|resume`. |
-| `PostCompact` | prompt | Re-loads `wiki/hot.md` after context compaction. Hook-injected context does NOT survive compaction (only `CLAUDE.md` does), so this hook restores the hot cache mid-session. |
-| `PostToolUse` | command | Auto-commits any wiki/ or .raw/ changes after Write or Edit tool calls. Guarded by `[ -d .git ]` so it never errors in non-git directories, and by `git diff --cached --quiet` so it never creates empty commits. |
-| `Stop` | prompt | Updates `wiki/hot.md` at the end of every Claude response with a brief summary of what changed. |
+| `SessionStart` | command + prompt | Runs `scripts/hot-sync.sh` when Ground Truth drifted, then `cat wiki/hot.md`. Also clears stale wiki locks. Prompt type asks the agent to silently treat hot.md as context. Matcher: `startup\|resume`. |
+| `PostCompact` | prompt | Re-loads `wiki/hot.md` after context compaction. Hook-injected context does NOT survive compaction (only `CLAUDE.md` does). |
+| `PostToolUse` | command | Auto-commits any wiki/ or .raw/ changes after Write or Edit tool calls. Guarded by `[ -d .git ]` and wiki-lock. |
+| `Stop` | command | If `wiki/` changed, runs `scripts/hot-sync.sh` (deterministic). No LLM "please update hot.md" prompt. |
 
 ## Cursor Events (`cursor-hooks.json`)
 
@@ -20,9 +20,9 @@ Cursor doesn't support prompt-injection hooks; the equivalent guidance is folded
 
 | Event | Purpose | Maps from |
 |---|---|---|
-| `sessionStart` | `cat wiki/hot.md` if present (safe in non-vault sessions). | Claude `SessionStart` command hook |
-| `afterFileEdit` | Auto-commits wiki/.raw/.vault-meta changes. Same one-liner as Claude. | Claude `PostToolUse` (Write\|Edit) |
-| `stop` | Emits `WIKI_CHANGED:` reminder when wiki/ has uncommitted changes so the agent updates `wiki/hot.md`. | Claude `Stop` prompt hook |
+| `sessionStart` | `hot-sync` (if drifted) then `cat wiki/hot.md` | Claude `SessionStart` |
+| `afterFileEdit` | Auto-commits wiki/.raw/.vault-meta changes | Claude `PostToolUse` |
+| `stop` | `hot-sync` when wiki/ has uncommitted changes | Claude `Stop` |
 
 Note: per [forum.cursor.com](https://forum.cursor.com/t/cursor-cli-doesnt-send-all-events-defined-in-hooks/148316), `stop` fires in the Cursor IDE but is not reliably emitted in cloud agents. Acceptable for v1; the always-applied rule covers end-of-session behavior in environments where the hook doesn't fire.
 
@@ -38,4 +38,4 @@ Note: per [forum.cursor.com](https://forum.cursor.com/t/cursor-cli-doesnt-send-a
 
 ## Non-Vault Sessions
 
-The SessionStart command hook uses `[ -f wiki/hot.md ] && cat wiki/hot.md || true` so it always exits 0, even when no vault is present. This makes the plugin safe to install globally without breaking non-vault Claude Code sessions.
+SessionStart commands exit 0 when `wiki/` or `scripts/hot-sync.sh` is missing, so the plugin stays safe to install globally.

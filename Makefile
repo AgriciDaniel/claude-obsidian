@@ -2,12 +2,12 @@
 # Test runner entry points for DragonScale and vault tooling.
 
 .PHONY: test test-address test-tiling test-boundary test-bm25 test-retrieve \
-        test-lock test-concurrent test-mode test-contextual setup-dragonscale \
-        setup-retrieve setup-mode clean-test-state help
+        test-lock test-concurrent test-mode test-contextual test-hot-sync \
+        setup-dragonscale setup-retrieve setup-mode clean-test-state help
 
 help:
-	@echo "claude-obsidian developer targets:"
-	@echo "  make test              Run all v1.7 tests (DragonScale + retrieval + concurrency)"
+	@echo "vault-os developer targets:"
+	@echo "  make test              Run all tests (DragonScale + retrieval + concurrency + hot-sync)"
 	@echo "  make test-address     scripts/allocate-address.sh tests (shell)"
 	@echo "  make test-tiling      scripts/tiling-check.py tests (python, no ollama required)"
 	@echo "  make test-boundary    scripts/boundary-score.py tests (python, no prereqs)"
@@ -17,12 +17,13 @@ help:
 	@echo "  make test-concurrent  multi-writer correctness gate (shell, hermetic)"
 	@echo "  make test-mode        scripts/wiki-mode.py tests (python, hermetic)"
 	@echo "  make test-contextual  scripts/contextual-prefix.py cache-floor tests (python, hermetic)"
+	@echo "  make test-hot-sync    scripts/hot-sync.sh tests (shell, hermetic)"
 	@echo "  make setup-dragonscale Run bin/setup-dragonscale.sh against this vault"
 	@echo "  make setup-retrieve   Run bin/setup-retrieve.sh against this vault (opt-in v1.7)"
 	@echo "  make setup-mode       Run bin/setup-mode.sh to pick a methodology mode (opt-in v1.8)"
 	@echo "  make clean-test-state Remove runtime lockfiles and tiling/embed caches"
 
-test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual
+test: test-address test-tiling test-boundary test-bm25 test-retrieve test-lock test-concurrent test-mode test-contextual test-hot-sync
 	@echo ""
 	@echo "All tests passed."
 
@@ -62,6 +63,10 @@ test-contextual:
 	@echo "=== test_contextual_prefix.py ==="
 	@python3 tests/test_contextual_prefix.py
 
+test-hot-sync:
+	@echo "=== test_hot_sync.sh ==="
+	@bash tests/test_hot_sync.sh
+
 setup-dragonscale:
 	@bash bin/setup-dragonscale.sh
 
@@ -79,5 +84,6 @@ clean-test-state:
 	      .vault-meta/embed-cache.*.tmp .vault-meta/transport.json \
 	      .vault-meta/transport.*.tmp
 	@rm -rf .vault-meta/chunks/ .vault-meta/bm25/ .vault-meta/locks/
-	@rm -f .vault-meta/mode.json .vault-meta/mode.*.tmp .vault-meta/hook.log
+	@rm -f .vault-meta/mode.json .vault-meta/mode.*.tmp .vault-meta/hook.log \
+	      .vault-meta/hot-sync.sha
 	@echo "Runtime lockfiles, caches, and v1.7/v1.8 runtime artifacts removed."

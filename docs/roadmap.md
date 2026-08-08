@@ -1,25 +1,25 @@
 # vault-os Roadmap
 
-## Phase 1 — Minimum Viable Fork (DONE)
+## Product stance (2026-08)
 
-- [x] Fork upstream `AgriciDaniel/claude-obsidian`
-- [x] Rebrand: plugin.json, marketplace.json, README, ATTRIBUTION
-- [x] Upstream remote configured for sync
-- [x] Branch `feat/sai-v1` → merged to main
+vault-os is an **independent product**. No routine `git merge upstream/main`.
+Historical credit: [ATTRIBUTION.md](../ATTRIBUTION.md).
 
-## Phase 2 — Harness & Hooks Layer
+## Shipped
 
-- [ ] `harness/` directory — custom orchestration layer
-- [ ] Opinionated defaults for infra/platform engineering workflows
-- [ ] Custom hooks: pre-ingest validation, post-ingest graph health
-- [ ] Custom skills: `/forge` integration, project scaffolding
-- [ ] Token-aware ingest (model selection, cost tracking)
-- [ ] Auto-commit and vault health monitoring
+- [x] Fork + rebrand as vault-os
+- [x] Cursor plugin (`.cursor-plugin/`, `rules/`, `hooks/cursor-hooks.json`)
+- [x] teams-new / teams-deploy / teams-sync
+- [x] hot-sync (`scripts/hot-sync.sh` + SessionStart/Stop wiring)
 
-## Phase 3 — First Public Release
+## Next (personal)
 
-- [ ] End-to-end install test (fresh machine)
-- [ ] Plugin marketplace submission
-- [ ] Documentation: setup guide, customization guide
-- [ ] Release notes and changelog
-- [ ] Community templates (infra wiki, SaaS brain, research vault)
+- [ ] Seed real work domains under `wiki/domains/` (`/teams-new`)
+- [ ] Archive inherited seed-wiki marketing pages (one-shot task)
+- [ ] Wire `/teams-deploy` into the repos you touch most
+
+## Later
+
+- [ ] Opinionated harness defaults for infra/platform workflows
+- [ ] Token-aware ingest / cost tracking
+- [ ] Community templates (infra wiki, SaaS brain)

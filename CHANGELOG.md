@@ -2,6 +2,16 @@
 
 All notable changes to vault-os and upstream claude-obsidian. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **hot-sync.** Deterministic `scripts/hot-sync.sh` regenerates `wiki/hot.md` Ground Truth from git + plugin.json; preserves Active Threads markers. Skill + `/hot-sync` command. SessionStart/Stop hooks run the script instead of asking the LLM to rewrite hot.md. Fingerprint skip avoids dirtying the tree when nothing changed. Tests: `make test-hot-sync`.
+
+### Changed
+
+- **Independent product.** vault-os no longer tracks routine upstream merges. Ownership docs (`CLAUDE.md`, `AGENTS.md`, `ATTRIBUTION.md`, `docs/architecture.md`, `docs/roadmap.md`, rules) treat the full tree as vault-os owned.
+
 ## [2.4.0] - 2026-06-15 (vault-os)
 
 ### Added

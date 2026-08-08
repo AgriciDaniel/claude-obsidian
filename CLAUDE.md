@@ -1,28 +1,24 @@
 # vault-os Development
 
-Fork of [claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) by AgriciDaniel.
-vault-os = upstream wiki skills + custom extensions, shipped as one plugin.
+Independent product descended from [claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) by AgriciDaniel.
+vault-os is no longer tracking upstream. See [ATTRIBUTION.md](ATTRIBUTION.md).
 
 ## Ownership Model
 
-| Directory | Owner | Editable? |
-|-----------|-------|-----------|
-| `skills/` (existing upstream skills) | upstream (claude-obsidian) | **No** — merge conflicts |
-| `agents/` (existing upstream agents) | upstream (claude-obsidian) | **No** — merge conflicts |
-| `hooks/hooks.json`, `commands/` | upstream (claude-obsidian) | **No** — merge conflicts |
-| `.claude-plugin/`, `README.md`, `ATTRIBUTION.md` | vault-os (branded) | Yes |
-| `.cursor-plugin/` | vault-os (branded, Cursor manifest) | Yes |
-| `rules/` (plugin-shipped Cursor rules) | vault-os (custom) | Yes |
-| `hooks/cursor-hooks.json` | vault-os (custom, Cursor hook config) | Yes |
-| `skills/<new-skill>/` (new dirs) | vault-os (custom) | Yes — this is where you build |
-| `agents/<new-agent>.md` (new files) | vault-os (custom) | Yes |
-| `docs/`, `bin/` | vault-os (custom) | Yes |
+The whole plugin tree is vault-os owned. Edit any path when the change serves this product.
 
-**Rule: new features go in new files/dirs. Never modify upstream files.**
+| Directory | Notes |
+|-----------|-------|
+| `skills/`, `agents/`, `commands/`, `hooks/` | First-class product surface |
+| `.claude-plugin/`, `.cursor-plugin/` | Marketplace manifests |
+| `rules/`, `scripts/`, `bin/`, `docs/` | Custom tooling and docs |
+| `wiki/`, `.raw/` | Dogfood vault (`.raw/` remains immutable at runtime) |
+
+Prefer additive skills (`skills/<new-name>/`) when introducing a capability so history stays readable. There is no upstream merge gate anymore.
 
 ## Dev Workflow
 
-This repo **is** the plugin. Claude Code auto-discovers skills/agents/hooks from the project directory.
+This repo **is** the plugin. Claude Code and Cursor auto-discover skills/agents/hooks from the project directory.
 
 ### Dev mode (building & testing)
 1. Work inside this repo — local auto-discovery loads all skills
@@ -94,15 +90,9 @@ Usage:
 - `/<name> [args]` — with arguments
 ```
 
-## Fork Sync
+## Upstream
 
-```bash
-git fetch upstream
-git merge upstream/main
-```
-
-Conflicts only hit branded files (`.claude-plugin/`, `README.md`, `ATTRIBUTION.md`).
-Custom skills in new dirs are never touched by upstream merges.
+vault-os does **not** routinely merge `upstream/main`. The `upstream` git remote may remain for archaeology or rare cherry-picks. Do not run `git merge upstream/main` as part of normal development.
 
 ## Branch Convention
 
@@ -110,7 +100,7 @@ Custom skills in new dirs are never touched by upstream merges.
 
 ## Release Checklist
 
-1. Bump version in `.claude-plugin/plugin.json`
+1. Bump version in `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`
 2. Test locally (dev mode) — invoke each new skill
 3. Test as consumer (marketplace mode) from a different project
 4. Push to `main`

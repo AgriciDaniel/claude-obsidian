@@ -3,6 +3,9 @@
   "hooks": {
     "sessionStart": [
       {
+        "command": "[ -x scripts/hot-sync.sh ] && bash scripts/hot-sync.sh >/dev/null 2>&1 || true"
+      },
+      {
         "command": "[ -f wiki/hot.md ] && cat wiki/hot.md || true"
       }
     ],
@@ -13,7 +16,7 @@
     ],
     "stop": [
       {
-        "command": "[ -d wiki ] && [ -d .git ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && echo 'WIKI_CHANGED: update wiki/hot.md with a brief summary (<500 words, factual, overwrite). Format: Last Updated, Key Recent Facts, Recent Changes, Active Threads.' || true"
+        "command": "[ -d wiki ] && [ -x scripts/hot-sync.sh ] && git diff --name-only HEAD 2>/dev/null | grep -q '^wiki/' && bash scripts/hot-sync.sh >/dev/null 2>&1 || true"
       }
     ]
   }

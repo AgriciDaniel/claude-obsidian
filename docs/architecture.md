@@ -2,7 +2,7 @@
 
 ## What It Is
 
-A Claude Code plugin that turns any directory into a persistent, compounding Obsidian wiki vault. Fork of claude-obsidian with an opinionated harness layer.
+A Claude Code + Cursor plugin that turns any directory into a persistent, compounding Obsidian wiki vault. Descended from claude-obsidian; vault-os is now an independent product (no routine upstream merges).
 
 ## Plugin Structure
 
@@ -11,38 +11,20 @@ vault-os/
 ├── .claude-plugin/        Plugin manifests (vault-os branded)
 │   ├── plugin.json        Plugin identity, version, author
 │   └── marketplace.json   Marketplace distribution config
-├── skills/                Claude Code skills (from upstream)
-│   ├── wiki/              Main wiki orchestrator
-│   ├── wiki-ingest/       Source ingestion
-│   ├── wiki-query/        Query wiki content
-│   ├── wiki-lint/         Health checks
-│   ├── save/              Save conversation as note
-│   ├── autoresearch/      Autonomous research loop
-│   └── canvas/            Visual canvas layer
-├── hooks/                 Claude Code hooks (from upstream)
-├── agents/                Agent definitions (from upstream)
-│   ├── wiki-ingest/       Parallel batch ingestion agent
-│   └── wiki-lint/         Wiki health check agent
-├── commands/              CLI commands (from upstream)
-├── harness/               [Phase 2] vault-os custom layer
-├── bin/                   Setup and utility scripts
+├── skills/                Agent skills (wiki, hot-sync, teams-*, …)
+├── hooks/                 Claude (`hooks.json`) + Cursor (`cursor-hooks.json`)
+├── agents/                Agent definitions
+├── commands/              Slash commands
+├── scripts/               Vault tooling (hot-sync, retrieve, locks, …)
+├── bin/                   Setup scripts
+├── rules/                 Cursor always-on rules
 ├── docs/                  Project documentation
 └── CLAUDE.md              Agent dev instructions
 ```
 
-## Upstream vs Custom
+## Ownership
 
-| Layer | Source | Can modify? |
-|-------|--------|-------------|
-| Existing skills/, hooks/, agents/, commands/ | Upstream (claude-obsidian) | No — sync breaks |
-| .claude-plugin/, README, ATTRIBUTION | Branded | Yes — our 4 files |
-| New `skills/<name>/` directories | vault-os custom | Yes — add new dirs |
-| New `agents/<name>.md` files | vault-os custom | Yes — add new files |
-| New `commands/<name>.md` files | vault-os custom | Yes — add new files |
-| harness/ | vault-os custom | Yes — new dir |
-| docs/ | vault-os custom | Yes — new dir |
-
-Custom skills/agents are added as **new files alongside upstream**. Both are auto-discovered by Claude Code and shipped together as one plugin.
+The full tree is vault-os owned. Prefer additive `skills/<new-name>/` for new capabilities. Historical credit for the fork lineage lives in `ATTRIBUTION.md`. Do not plan work around upstream merge conflicts.
 
 ## Per-Vault Runtime (not committed)
 

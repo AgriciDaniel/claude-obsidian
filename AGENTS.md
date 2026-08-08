@@ -35,6 +35,7 @@ ln -s "$(pwd)/skills" ~/.opencode/skills/vault-os
 | `wiki-query` | query, what do you know about, query quick:, query deep: |
 | `wiki-lint` | lint the wiki, health check, find orphans |
 | `wiki-fold` | fold the log, run a fold, log rollup (DragonScale Mechanism 1, opt-in) |
+| `hot-sync` | /hot-sync, /hot, refresh hot cache, regenerate hot.md |
 | `save` | /save, file this conversation |
 | `autoresearch` | autoresearch, autonomous research loop |
 | `canvas` | /canvas, add to canvas, create canvas |
@@ -45,10 +46,11 @@ ln -s "$(pwd)/skills" ~/.opencode/skills/vault-os
 ## Key Conventions
 
 - **Vault root**: the directory containing `wiki/` and `.raw/`
-- **Hot cache**: `wiki/hot.md` (read at session start, updated at session end)
+- **Hot cache**: `wiki/hot.md` (read at session start; Ground Truth owned by `scripts/hot-sync.sh`)
 - **Source documents**: `.raw/` (immutable: agents never modify these)
 - **Generated knowledge**: `wiki/` (agent-owned, links to sources via wikilinks)
 - **Manifest**: `.raw/.manifest.json` tracks ingested sources (delta tracking)
+- **Lineage**: descended from claude-obsidian; vault-os is the product of record and does not track upstream merges
 
 ## Bootstrap
 
@@ -56,13 +58,12 @@ When the user opens this project for the first time:
 
 1. Read this file (`AGENTS.md`) and the project `CLAUDE.md` for full context
 2. Read `skills/wiki/SKILL.md` for the orchestration pattern
-3. If `wiki/hot.md` exists, read it silently to restore recent context
+3. If `wiki/hot.md` exists, read it silently to restore recent context (SessionStart may have already run `scripts/hot-sync.sh`)
 4. If the user types `/wiki` (or "set up wiki"), follow the wiki skill's scaffold workflow
 
 ## Reference
 
 - Plugin source: https://github.com/saixso/vault-os
-- Upstream: https://github.com/AgriciDaniel/claude-obsidian
-- Upstream mirror (early-access): https://github.com/AI-Marketing-Hub
+- Historical upstream: https://github.com/AgriciDaniel/claude-obsidian
 - Pattern source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 - Cross-reference: https://github.com/kepano/obsidian-skills (authoritative Obsidian-specific skills)

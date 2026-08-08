@@ -40,18 +40,20 @@ The following Obsidian community plugins ship with this vault as pre-installed b
 
 ---
 
-## claude-obsidian (upstream)
+## claude-obsidian (historical upstream)
 
 **Author:** AgriciDaniel / AI Marketing Hub
 **License:** MIT (see [LICENSE](LICENSE))
 **Repository:** https://github.com/AgriciDaniel/claude-obsidian
 
-vault-os is a fork of claude-obsidian. All original work, architecture, and design credit belongs to AgriciDaniel.
+vault-os started as a fork of claude-obsidian. Architecture and early skills descend from that work. Credit remains with AgriciDaniel.
+
+As of 2026-08, vault-os is an **independent product**. It does not routinely merge upstream. The `upstream` remote may exist for history or rare cherry-picks only.
 
 ---
 
-## vault-os fork
+## vault-os
 
 **Maintainer:** saixso
 **Repository:** https://github.com/saixso/vault-os
-**Changes:** Rebranding, opinionated defaults, harness and hooks layer (in progress)
+**Changes:** Rebranding, Cursor plugin support, teams skills, hot-sync, and further product work owned here
