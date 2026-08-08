@@ -48,3 +48,27 @@ status: completed
 
 ## Next steps
 - New skills should be available from the next Codex turn/session.
+
+---
+
+date: 2026-08-08
+project: Vault
+agent: codex
+status: completed
+
+## What I did
+- Installed Codex skills from `zhaoxuya520/reverse-skill`.
+- Added persistent skill routing instructions to consider Matt Pocock, Addy Osmani, and reverse-skill packs task-by-task.
+- Verified representative reverse/security skill directories under `C:\Users\manaz\.codex\skills`.
+
+## Files changed
+- `C:\Users\manaz\.codex\skills\*` skill directories from `zhaoxuya520/reverse-skill`.
+- `C:\Users\manaz\.codex\AGENTS.md`
+- `wiki/sessions/2026-08-08-vault-codex.md`
+
+## Decisions made
+- Installed concrete directories containing `SKILL.md`.
+- Added a routing pointer instead of listing every installed skill in AGENTS.md, so future agents reference the packs without loading irrelevant instructions.
+
+## Next steps
+- Reverse/security skills should be available from the next Codex turn/session.
