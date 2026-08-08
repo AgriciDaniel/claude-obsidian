@@ -72,3 +72,30 @@ status: completed
 
 ## Next steps
 - Reverse/security skills should be available from the next Codex turn/session.
+
+---
+
+date: 2026-08-08
+project: Vault
+agent: codex
+status: completed
+
+## What I did
+- Installed the Codex `clone-website` skill from `JCodesMore/ai-website-cloner-template`.
+- Installed canonical Agent Native skills from `BuilderIO/agent-native`.
+- Updated persistent skill routing instructions to include website cloning and Agent Native task families.
+- Verified representative installed directories under `C:\Users\manaz\.codex\skills`.
+
+## Files changed
+- `C:\Users\manaz\.codex\skills\clone-website`
+- `C:\Users\manaz\.codex\skills\*` Agent Native skill directories
+- `C:\Users\manaz\.codex\AGENTS.md`
+- `wiki/sessions/2026-08-08-vault-codex.md`
+
+## Decisions made
+- Installed the `.codex/skills/clone-website` copy from the website cloner repo because the repo includes duplicate Claude/Codex/GitHub skill copies.
+- Installed Agent Native canonical source skills and plugin/root skills, while skipping app/template duplicate copies.
+- Kept AGENTS.md as a compact routing pointer so future sessions consider all installed packs without loading irrelevant skill bodies.
+
+## Next steps
+- Website cloning and Agent Native skills should be available from the next Codex turn/session.
