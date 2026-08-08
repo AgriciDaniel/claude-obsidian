@@ -116,17 +116,30 @@ session_id: 019fe272-7b91-7220-bc12-60298909a4b9
 - Confirmed local Codex skills are available under `C:\Users\manaz\.codex\skills`.
 - Updated project location records so Codex can use the verified local paths rather than stale Desktop paths.
 - Updated persistent Codex standing orders with the same verified vault and repo paths.
+- Added durable sync policy requiring repo/skill/instruction changes to be recorded in local knowledge and pushed to the Obsidian GitHub vault.
+- Spawned low-cost worker agent `019fe29d-47f2-7761-80d4-d7038c57044d` to inspect local previous-conversation/session artifacts for missing skills and GitHub repos.
+- Added FlowLens as a durable project record.
+- Added `AgentWrapper/agent-orchestrator` as a durable external reference.
+- Copied Claude-only skills into Codex skills: `task-observer`, `agency-agents`, and `agent-skills`.
 
 ## Files changed
 
 - `wiki/projects/project-locations.md`
+- `wiki/projects/flowlens/INDEX.md`
+- `wiki/references/agent-orchestrator.md`
 - `wiki/sessions/2026-08-08-vault-codex.md`
+- `Local Knowledge/agent/codex-durable-sync-policy.md`
+- `Local Knowledge/agent/2026-08-08-missing-skills-repos-sweep.md`
 - `C:\Users\manaz\.codex\AGENTS.md`
+- `C:\Users\manaz\.codex\skills\task-observer`
+- `C:\Users\manaz\.codex\skills\agency-agents`
+- `C:\Users\manaz\.codex\skills\agent-skills`
 
 ## Decisions made
 
 - Use `C:\Users\manaz\Desktop\Obsidian Main Vault` for Git commands against the vault because the `C:\Users\manaz\claude-obsidian` junction can fail with `git -C`.
 - Treat the Obsidian vault plus `fork main` remote as durable operating memory.
+- Treat `C:\Users\manaz\LocalKnowledgeVault` as the local knowledge vault; it is included in Obsidian vault commits because it is a junction into `Local Knowledge`.
 - Use relevant local skills only after reading their `SKILL.md`.
 
 ## Next steps

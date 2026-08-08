@@ -16,6 +16,7 @@ Clean map of active projects, local PC folders, and GitHub repositories.
 | InkWeave | `C:\Users\manaz\Desktop\inkweave` | https://github.com/manazoid4/inkweave |
 | OpenFlowKit | `C:\Users\manaz\openflowkit` | https://github.com/manazoid4/openflowkit |
 | FlipSignal | `C:\Users\manaz\Desktop\flipsignal` | https://github.com/manazoid4/flipsignal |
+| FlowLens | `C:\Users\manaz\flowlens` | https://github.com/manazoid4/flowlens |
 | khutba.io | `C:\Users\manaz\Desktop\khutba-io` | https://github.com/manazoid4/khutba-io |
 | Recall | `C:\Users\manaz\saved-brain` | https://github.com/manazoid4/recall |
 | Zawiya Growth Hub | `C:\Users\manaz\zawiya-growth-hub` | https://github.com/manazoid4/zawiya-growth-hub |
@@ -33,6 +34,7 @@ Clean map of active projects, local PC folders, and GitHub repositories.
 - [[jobfilter/index|JobFilter]]
 - [[inkweave/overview|InkWeave]]
 - [[openflowkit/overview|OpenFlowKit]]
+- [[flowlens/INDEX|FlowLens]]
 - [[flipsignal/index|FlipSignal]]
 - [[khutba.io/overview|khutba.io]]
 - [[recall/index|Recall]]
