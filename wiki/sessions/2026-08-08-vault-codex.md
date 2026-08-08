@@ -4,6 +4,7 @@ project: vault
 agent: codex
 status: blocked
 ---
+
 ## What I did
 
 - Set `mcp_servers.local-knowledge.startup_timeout_sec` to 120 in the active Codex config.
@@ -99,3 +100,35 @@ status: completed
 
 ## Next steps
 - Website cloning and Agent Native skills should be available from the next Codex turn/session.
+
+---
+
+date: 2026-08-08
+project: vault
+agent: codex
+status: completed
+session_id: 019fe272-7b91-7220-bc12-60298909a4b9
+
+## What I did
+
+- Pulled the online Obsidian vault from `fork main`.
+- Verified the local Obsidian vault path and GitHub remotes.
+- Confirmed local Codex skills are available under `C:\Users\manaz\.codex\skills`.
+- Updated project location records so Codex can use the verified local paths rather than stale Desktop paths.
+- Updated persistent Codex standing orders with the same verified vault and repo paths.
+
+## Files changed
+
+- `wiki/projects/project-locations.md`
+- `wiki/sessions/2026-08-08-vault-codex.md`
+- `C:\Users\manaz\.codex\AGENTS.md`
+
+## Decisions made
+
+- Use `C:\Users\manaz\Desktop\Obsidian Main Vault` for Git commands against the vault because the `C:\Users\manaz\claude-obsidian` junction can fail with `git -C`.
+- Treat the Obsidian vault plus `fork main` remote as durable operating memory.
+- Use relevant local skills only after reading their `SKILL.md`.
+
+## Next steps
+
+- For each future project task, pull the vault first, read relevant project context, inspect the actual repo worktree, use codebase-memory MCP when available, and push a session note at the end.
