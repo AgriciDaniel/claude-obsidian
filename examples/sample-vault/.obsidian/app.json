@@ -1,4 +1,5 @@
 {
+  "newLinkFormat": "absolute",
   "userIgnoreFilters": [
     ".raw/",
     ".vault-meta/"

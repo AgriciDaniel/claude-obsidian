@@ -9,6 +9,14 @@ implementation record for older releases.
 
 ### Fixed
 
+- The scaffolded vault's `.obsidian/app.json` now pins Obsidian's "New link
+  format" setting to `absolute`. It was previously left unset, defaulting to
+  Obsidian's own "shortest path when possible" — links created through
+  Obsidian's UI under that default resolve fine inside Obsidian but are
+  unresolvable (or, once a second file shares a basename, silently wrong) to
+  every other link-touching part of the product, which all resolve wikilinks
+  by exact vault-relative path with no fuzzy resolution: resync scripts, the
+  terminology linker, and lint's dead/ambiguous-link detection.
 - `stop_status` now reads transaction journals up to the package's existing
   8 MiB runtime JSON bound, so large valid journals are not misreported as
   unreadable. Unsafe or unreadable journals now require manual inspection, and
