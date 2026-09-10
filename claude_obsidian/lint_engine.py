@@ -22,6 +22,13 @@ own indexer, so a duplicated or archived page under a hidden folder (a
 globs, passed to ``lint_vault`` or set vault-side, scope specific paths out of
 every finding category.
 
+Link resolution is gitignore-aware: when a wikilink resolves to multiple
+candidates and at least one is not gitignored, gitignored candidates (for
+example build artifacts shadowing a page's name) are dropped before ambiguity
+is reported. Only ``.gitignore`` files inside the vault root are consulted —
+never ``.git/info/exclude``, global excludes, or a ``git`` subprocess — so
+reports stay deterministic and process-free.
+
 This module never creates directories or files. Even its command-line entry
 point writes only to stdout. Provenance freshness uses the explicit ``as_of``
 date when supplied and the current UTC calendar date otherwise.
@@ -48,6 +55,7 @@ from typing import Any, Iterable, Mapping, Sequence, cast
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from claude_obsidian.gitignore import GitignoreMatcher
 from claude_obsidian.json_utils import strict_json_loads
 
 REPORT_VERSION = 1
@@ -1032,6 +1040,7 @@ def lint_vault(
         wiki_pages = []
 
     resolver = _Resolver(targets, wiki_prefix)
+    gitignore = GitignoreMatcher(root_path)
     incoming: dict[str, set[str]] = {page.path: set() for page in wiki_pages}
     dead_links: list[dict[str, Any]] = []
     ambiguous_targets: list[dict[str, Any]] = []
@@ -1044,6 +1053,14 @@ def lint_vault(
         for link in _parse_links(page):
             links_scanned += 1
             candidates = resolver.resolve(link)
+            if len(candidates) > 1:
+                unignored = [
+                    candidate
+                    for candidate in candidates
+                    if not gitignore.is_ignored(candidate.path)
+                ]
+                if unignored:
+                    candidates = unignored
             if len(candidates) > 1:
                 entry = {
                     "source": link.source,
