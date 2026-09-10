@@ -355,6 +355,27 @@ def test_url_privacy_policy_has_no_network_dependency() -> None:
         socket.socket = original_socket
 
 
+def test_public_host_validation_rejects_alternate_loopback_spellings() -> None:
+    must_block = {
+        "hex_dotted": "https://0x7f.0.0.1/",
+        "octal_dotted": "https://0177.0.0.1/",
+        "short_form": "https://127.1/",
+        "hex_all_labels": "https://0x7f.0x0.0x0.0x1/",
+    }
+    still_blocked = {
+        "decimal_single_label": "https://2130706433/",
+        "hex_single_label": "https://0x7f000001/",
+        "ipv6_loopback": "https://[::1]/",
+        "ipv4_mapped_ipv6": "https://[::ffff:127.0.0.1]/",
+        "link_local_metadata": "https://169.254.169.254/",
+        "trailing_dot_localhost": "https://localhost./",
+    }
+    for label, url in must_block.items():
+        expect_code("URL_PRIVATE_HOST", lambda url=url: validate_https_url(url))
+    for label, url in still_blocked.items():
+        expect_code("URL_PRIVATE_HOST", lambda url=url: validate_https_url(url))
+
+
 def test_aws_signed_urls_and_userinfo_are_rejected() -> None:
     expect_code(
         "URL_USERINFO_FORBIDDEN",
@@ -1161,6 +1182,7 @@ def main() -> None:
     test_batch_budgets_are_preflighted_before_copy()
     test_direct_batch_rolls_back_as_one_transaction()
     test_url_privacy_policy_has_no_network_dependency()
+    test_public_host_validation_rejects_alternate_loopback_spellings()
     test_aws_signed_urls_and_userinfo_are_rejected()
     test_external_work_is_only_an_inert_plan()
     test_queue_lifecycle_is_idempotent()

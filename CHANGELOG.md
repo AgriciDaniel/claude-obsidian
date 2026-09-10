@@ -34,6 +34,11 @@ implementation record for older releases.
   `UnicodeEncodeError` on the first such print. Both files now reconfigure
   stdout to UTF-8 on startup, guarded so a captured/redirected runner without
   a `reconfigure`-capable stdout still runs.
+- `capture.py`'s public-host validator now rejects hex-dotted, octal-dotted,
+  and short-form loopback spellings (`0x7f.0.0.1`, `0177.0.0.1`, `127.1`,
+  `0x7f.0x0.0x0.0x1`) that `ipaddress.ip_address()` does not parse and that
+  previously fell through to only a single-label check. Mirrors the existing
+  numeric-label rejection in the source-ledger URL canonicalizer.
 
 ## [2.1.1] - 2026-08-26
 
