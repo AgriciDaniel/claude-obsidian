@@ -81,6 +81,16 @@ implementation record for older releases.
   archived page under a dot-prefixed folder became a real link-resolution
   candidate, turning a single healthy `[[Wikilink]]` into a spurious
   `ambiguous_targets` (and, on index pages, `stale_index_entries`) finding.
+- `--force-stale-lock` can now reap a mutation lock or capture queue lock
+  younger than `--stale-after` when the recorded owner PID is confirmed dead
+  on the same host. It still never reaps a live same-host owner before
+  `--stale-after` elapses and still keeps the age gate for a foreign-host or
+  unresolvable owner. Both `recover` help texts now describe this precisely.
+- Reading transaction runtime files now tolerates a single external
+  mtime-only touch (for example a sync client refreshing metadata) by
+  re-reading up to three times and accepting the content once two
+  consecutive reads are byte-identical. Any size, inode, device, or mode
+  change still fails closed immediately with `CORRUPT_RUNTIME_STATE`.
 
 ## [2.1.1] - 2026-08-26
 

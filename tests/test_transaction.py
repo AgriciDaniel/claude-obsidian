@@ -10,6 +10,7 @@ import os
 import socket
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1880,6 +1881,110 @@ def test_explicit_recovery_can_reap_stale_pid_reuse_lock() -> None:
         assert not lock.exists()
 
 
+def test_force_stale_lock_reaps_dead_same_host_owner_before_stale_after() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        lock = vault / ".vault-meta/mutation.lock"
+        lock.mkdir(parents=True)
+        (lock / "owner.json").write_text(
+            json.dumps(
+                {
+                    "schema": "claude-obsidian.mutation-lock.v1",
+                    "pid": 999999,
+                    "token": "dead-owner",
+                    "host": socket.gethostname(),
+                    "started_epoch": time.time() - 780,
+                }
+            ),
+            encoding="utf-8",
+        )
+        original_alive = transaction_module._process_alive
+        transaction_module._process_alive = lambda pid: False
+        try:
+            try:
+                MutationLock(vault, timeout=0, stale_after=3600.0).acquire()
+            except TransactionConflict as exc:
+                assert exc.code == "LOCK_TIMEOUT"
+            else:
+                raise AssertionError("automatic recovery must not steal a young lock")
+            assert lock.is_dir()
+
+            with MutationLock(
+                vault,
+                timeout=0,
+                stale_after=3600.0,
+                force_stale_lock=True,
+            ):
+                assert lock.is_dir()
+            assert not lock.exists()
+        finally:
+            transaction_module._process_alive = original_alive
+
+
+def test_force_stale_lock_does_not_reap_a_live_same_host_owner() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        lock = vault / ".vault-meta/mutation.lock"
+        lock.mkdir(parents=True)
+        (lock / "owner.json").write_text(
+            json.dumps(
+                {
+                    "schema": "claude-obsidian.mutation-lock.v1",
+                    "pid": os.getpid(),
+                    "token": "live-owner",
+                    "host": socket.gethostname(),
+                    "started_epoch": time.time() - 780,
+                }
+            ),
+            encoding="utf-8",
+        )
+        try:
+            MutationLock(
+                vault,
+                timeout=0,
+                stale_after=3600.0,
+                force_stale_lock=True,
+            ).acquire()
+        except TransactionConflict as exc:
+            assert exc.code == "LOCK_TIMEOUT"
+        else:
+            raise AssertionError("force must never reap a live same-host owner")
+        assert lock.is_dir()
+        assert (lock / "owner.json").is_file()
+
+
+def test_force_stale_lock_keeps_the_age_gate_for_a_foreign_host_owner() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        lock = vault / ".vault-meta/mutation.lock"
+        lock.mkdir(parents=True)
+        (lock / "owner.json").write_text(
+            json.dumps(
+                {
+                    "schema": "claude-obsidian.mutation-lock.v1",
+                    "pid": 999999,
+                    "token": "foreign-owner",
+                    "host": f"not-{socket.gethostname()}",
+                    "started_epoch": time.time() - 780,
+                }
+            ),
+            encoding="utf-8",
+        )
+        try:
+            MutationLock(
+                vault,
+                timeout=0,
+                stale_after=3600.0,
+                force_stale_lock=True,
+            ).acquire()
+        except TransactionConflict as exc:
+            assert exc.code == "LOCK_TIMEOUT"
+        else:
+            raise AssertionError("force must keep the age gate off this host")
+        assert lock.is_dir()
+        assert (lock / "owner.json").is_file()
+
+
 def test_ownerless_mutation_lock_requires_explicit_force() -> None:
     with tempfile.TemporaryDirectory() as td:
         vault = make_vault(Path(td) / "vault")
@@ -2184,6 +2289,82 @@ def test_recovery_never_reads_a_replaced_external_operation() -> None:
         assert victim.read_text(encoding="utf-8") == "victim-safe\n"
         assert external_journal.read_bytes() == external_before
         assert sorted(path.name for path in external.iterdir()) == ["journal.json"]
+
+
+def _seed_runtime_read_probe(base: Path) -> tuple[Path, bytes]:
+    """Write one bounded runtime file used by the stability read probes."""
+
+    target = base / "runtime-file.json"
+    payload = b'{"schema": "claude-obsidian.runtime-read-probe.v1"}\n'
+    target.write_bytes(payload)
+    return target, payload
+
+
+def test_read_runtime_bytes_tolerates_a_single_external_mtime_touch() -> None:
+    if not transaction_module._supports_confined_dirfd():
+        return
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+        target, payload = _seed_runtime_read_probe(base)
+        directory_fd = os.open(base, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+        original_fstat = os.fstat
+        calls = 0
+
+        def counting_fstat(descriptor):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                stamp = original_fstat(descriptor).st_mtime_ns + 5_000_000_000
+                os.utime(target, ns=(stamp, stamp))
+            return original_fstat(descriptor)
+
+        os.fstat = counting_fstat
+        try:
+            read = transaction_module._read_runtime_bytes_at(
+                directory_fd,
+                "runtime-file.json",
+                label="runtime read probe",
+                limit=1024,
+            )
+        finally:
+            os.fstat = original_fstat
+            os.close(directory_fd)
+        assert read == payload
+        assert calls >= 3
+
+
+def test_read_runtime_bytes_fails_closed_on_a_genuine_size_change() -> None:
+    if not transaction_module._supports_confined_dirfd():
+        return
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+        target, payload = _seed_runtime_read_probe(base)
+        directory_fd = os.open(base, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+        original_fstat = os.fstat
+        calls = 0
+
+        def counting_fstat(descriptor):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                target.write_bytes(payload + b"external-append-must-fail-closed\n")
+            return original_fstat(descriptor)
+
+        os.fstat = counting_fstat
+        try:
+            transaction_module._read_runtime_bytes_at(
+                directory_fd,
+                "runtime-file.json",
+                label="runtime read probe",
+                limit=1024,
+            )
+        except TransactionRecoveryError as exc:
+            assert exc.code == "CORRUPT_RUNTIME_STATE"
+        else:
+            raise AssertionError("a genuine runtime size change must fail closed")
+        finally:
+            os.fstat = original_fstat
+            os.close(directory_fd)
 
 
 def test_runtime_directory_cardinality_and_removal_are_bounded() -> None:
@@ -2634,12 +2815,17 @@ def main() -> None:
     test_binary_content_file_is_hash_checked_and_create_only()
     test_fresh_lock_survives_and_times_out()
     test_explicit_recovery_can_reap_stale_pid_reuse_lock()
+    test_force_stale_lock_reaps_dead_same_host_owner_before_stale_after()
+    test_force_stale_lock_does_not_reap_a_live_same_host_owner()
+    test_force_stale_lock_keeps_the_age_gate_for_a_foreign_host_owner()
     test_ownerless_mutation_lock_requires_explicit_force()
     test_mutation_lock_release_and_reaping_ignore_replaced_external_alias()
     test_mutation_lock_serializes_across_meta_directory_replacement()
     test_apply_runtime_namespaces_are_descriptor_anchored()
     test_meta_managed_targets_rollback_inside_pinned_namespace()
     test_recovery_never_reads_a_replaced_external_operation()
+    test_read_runtime_bytes_tolerates_a_single_external_mtime_touch()
+    test_read_runtime_bytes_fails_closed_on_a_genuine_size_change()
     test_runtime_directory_cardinality_and_removal_are_bounded()
     test_runtime_removal_enumerates_through_a_fresh_descriptor()
     test_mutation_and_runtime_descriptors_do_not_leak()

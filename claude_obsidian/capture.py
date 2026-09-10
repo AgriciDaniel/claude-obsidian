@@ -1502,13 +1502,19 @@ class CaptureQueueLock:
         pid, started = owner.get("pid"), owner.get("started_epoch")
         if not isinstance(pid, int) or not isinstance(started, (int, float)):
             return False
+        same_host = owner.get("host") == socket.gethostname()
+        alive = _process_alive(pid) if same_host else None
+        if self.force_stale_lock and same_host and alive is False:
+            # An explicit override may reap a confirmed-dead same-host owner
+            # immediately: age alone must never be what stands between an
+            # operator and a queue lock whose owner is provably gone on this
+            # host.
+            return True
         if now - float(started) <= self.stale_after:
             return False
         if self.force_stale_lock:
             return True
-        return (
-            owner.get("host") == socket.gethostname() and _process_alive(pid) is False
-        )
+        return same_host and alive is False
 
     def acquire(self) -> None:
         if self.acquired:

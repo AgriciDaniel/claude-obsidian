@@ -755,6 +755,48 @@ def test_explicit_queue_recovery_can_reap_stale_pid_reuse_lock() -> None:
         assert not seeded.path.exists()
 
 
+def test_queue_force_stale_lock_reaps_dead_same_host_owner() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        seeded = CaptureQueueLock(vault)
+        seeded.path.mkdir()
+        seeded.owner_path.write_text(
+            json.dumps(
+                {
+                    "schema": "claude-obsidian.capture-lock.v1",
+                    "pid": 999999,
+                    "host": socket.gethostname(),
+                    "token": "dead-owner",
+                    "started_epoch": time.time() - 780,
+                }
+            ),
+            encoding="utf-8",
+        )
+        original_alive = capture_module._process_alive
+        capture_module._process_alive = lambda pid: False
+        try:
+            try:
+                CaptureQueueLock(vault, timeout=0, stale_after=3600.0).acquire()
+            except CaptureConflict as exc:
+                assert exc.code == "QUEUE_LOCK_TIMEOUT"
+            else:
+                raise AssertionError(
+                    "automatic recovery must not steal a young queue lock"
+                )
+            assert seeded.path.is_dir()
+
+            with CaptureQueueLock(
+                vault,
+                timeout=0,
+                stale_after=3600.0,
+                force_stale_lock=True,
+            ):
+                assert seeded.path.is_dir()
+            assert not seeded.path.exists()
+        finally:
+            capture_module._process_alive = original_alive
+
+
 def test_ownerless_queue_lock_requires_explicit_force() -> None:
     with tempfile.TemporaryDirectory() as td:
         vault = make_vault(Path(td) / "vault")
@@ -1194,6 +1236,7 @@ def main() -> None:
     test_queue_lock_maps_advisory_lock_platform_errors()
     test_concurrent_queue_writers_are_lossless_and_serialized()
     test_explicit_queue_recovery_can_reap_stale_pid_reuse_lock()
+    test_queue_force_stale_lock_reaps_dead_same_host_owner()
     test_ownerless_queue_lock_requires_explicit_force()
     test_queue_lock_release_and_reaping_ignore_replaced_external_alias()
     test_queue_io_stays_on_pinned_runtime_across_directory_replacement()

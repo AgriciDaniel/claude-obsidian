@@ -953,8 +953,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--force-stale-lock",
         action="store_true",
         help=(
-            "Reap an old lock even when its host/PID identity cannot be disproved; "
-            "use only after confirming no writer is active"
+            "Reap an old lock, bypassing --stale-after only when the recorded "
+            "owner PID is confirmed dead on this host; a live same-host owner, "
+            "or an unresolvable or foreign-host owner, still requires "
+            "--stale-after to elapse. Use only after confirming no writer is "
+            "active"
         ),
     )
     recover.set_defaults(handler=command_transaction_recover)
@@ -1125,8 +1128,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--force-stale-lock",
         action="store_true",
         help=(
-            "Reap an old queue lock even when its host/PID identity cannot be disproved; "
-            "use only after confirming no queue worker is active"
+            "Reap an old queue lock, bypassing --lock-stale-after only when "
+            "the recorded owner PID is confirmed dead on this host; a live "
+            "same-host owner, or an unresolvable or foreign-host owner, still "
+            "requires --lock-stale-after to elapse. Use only after confirming "
+            "no queue worker is active"
         ),
     )
     queue_recover.set_defaults(handler=command_capture_queue_recover)
