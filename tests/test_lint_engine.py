@@ -731,5 +731,118 @@ tags:
         )
 
 
+class WalkScopeTests(unittest.TestCase):
+    def test_raw_claude_and_trash_captures_are_not_walked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            vault = Path(directory) / "vault"
+            concepts = vault / "wiki" / "concepts"
+            concepts.mkdir(parents=True)
+            (concepts / "Thing.md").write_text(
+                "---\ntitle: Thing\ntype: concept\nstatus: draft\ncreated: "
+                "2026-07-01\nupdated: 2026-07-01\ntags: []\n---\n\nThe thing.\n",
+                encoding="utf-8",
+            )
+            (vault / "wiki" / "Note.md").write_text(
+                "---\ntitle: Note\ntype: note\nstatus: draft\ncreated: "
+                "2026-07-01\nupdated: 2026-07-01\ntags: []\n---\n\n"
+                "See [[Thing]].\n",
+                encoding="utf-8",
+            )
+            for hidden in (
+                vault / ".raw" / "captures",
+                vault / ".claude" / "worktrees" / "example" / "wiki" / "concepts",
+                vault / ".trash",
+            ):
+                hidden.mkdir(parents=True)
+                (hidden / "Thing.md").write_text(
+                    "---\ntitle: Thing\ntype: concept\nstatus: draft\ncreated: "
+                    "2026-07-01\nupdated: 2026-07-01\ntags: []\n---\n\n"
+                    "A duplicated capture.\n",
+                    encoding="utf-8",
+                )
+            report = lint_engine.lint_vault(vault)
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual([], report["dead_links"])
+        self.assertEqual(2, report["summary"]["pages_scanned"])
+
+    def test_exclude_param_and_vault_config_scope_out_pages_and_orphans(self) -> None:
+        def build_vault(directory: Path) -> Path:
+            vault = directory / "vault"
+            scratchpad = vault / "wiki" / "scratchpad"
+            scratchpad.mkdir(parents=True)
+            (scratchpad / "Draft.md").write_text("Unfinished draft.\n", encoding="utf-8")
+            (vault / "wiki" / "index.md").write_text(
+                "---\ntitle: Index\ntype: index\nstatus: draft\ncreated: "
+                "2026-07-01\nupdated: 2026-07-01\ntags: []\n---\n\nIndex.\n",
+                encoding="utf-8",
+            )
+            return vault
+
+        draft_path = "wiki/scratchpad/Draft.md"
+
+        with tempfile.TemporaryDirectory() as directory:
+            vault = build_vault(Path(directory))
+            report = lint_engine.lint_vault(vault)
+        self.assertIn(draft_path, {item["path"] for item in report["orphans"]})
+        self.assertEqual(0, report["summary"]["excluded_paths"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            vault = build_vault(Path(directory))
+            report = lint_engine.lint_vault(vault, exclude=["wiki/scratchpad/*"])
+        self.assertNotIn(draft_path, {item["path"] for item in report["orphans"]})
+        self.assertNotIn(
+            draft_path, {item["path"] for item in report["missing_frontmatter"]}
+        )
+        self.assertEqual(1, report["summary"]["excluded_paths"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            vault = build_vault(Path(directory))
+            meta = vault / ".vault-meta"
+            meta.mkdir(parents=True, exist_ok=True)
+            (meta / "lint.json").write_text(
+                json.dumps({"exclude": ["wiki/scratchpad/*"]}), encoding="utf-8"
+            )
+            report = lint_engine.lint_vault(vault)
+        self.assertNotIn(draft_path, {item["path"] for item in report["orphans"]})
+        self.assertNotIn(
+            draft_path, {item["path"] for item in report["missing_frontmatter"]}
+        )
+        self.assertEqual(1, report["summary"]["excluded_paths"])
+
+    def test_cli_exclude_flag_matches_engine_parameter(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            vault = Path(directory) / "vault"
+            scratchpad = vault / "wiki" / "scratchpad"
+            scratchpad.mkdir(parents=True)
+            (scratchpad / "Draft.md").write_text("Unfinished draft.\n", encoding="utf-8")
+            (vault / "wiki" / "index.md").write_text(
+                "---\ntitle: Index\ntype: index\nstatus: draft\ncreated: "
+                "2026-07-01\nupdated: 2026-07-01\ntags: []\n---\n\nIndex.\n",
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "claude-obsidian.py"),
+                    "lint",
+                    "--vault",
+                    str(vault),
+                    "--format",
+                    "json",
+                    "--exclude",
+                    "wiki/scratchpad/*",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=10,
+                check=False,
+            )
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        report = json.loads(completed.stdout)
+        self.assertNotIn(
+            "wiki/scratchpad/Draft.md", {item["path"] for item in report["orphans"]}
+        )
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

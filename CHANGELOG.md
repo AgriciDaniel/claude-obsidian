@@ -28,6 +28,15 @@ implementation record for older releases.
   becomes `bash scripts/setup-mode.sh`. Update any local scripts, aliases, or
   CI that reference the old `bin/` paths. `RELEASE_MANIFEST.json` and
   `SHA256SUMS` are refreshed at release time.
+- A repeatable `lint --exclude GLOB` CLI flag and a matching
+  `lint_vault(..., exclude=...)` engine parameter scope specific paths (for
+  example a `wiki/scratchpad/` folder) out of page, link-resolution, orphan,
+  frontmatter, empty-section, and stale-index scanning. The same glob list
+  may be set vault-side via an `exclude` (or `exclude_globs` /
+  `excluded_paths`) array in `.vault-meta/lint.json`, `lint-allowlist.json`,
+  or `wiki-lint.json`; CLI and vault-config patterns are combined. The
+  report's new `summary.excluded_paths` count reports how many walked files
+  were dropped.
 
 ### Fixed
 
@@ -66,6 +75,12 @@ implementation record for older releases.
   directory under `$PRODUCT_ROOT`, never the selected vault's `wiki/`
   directory. Package validation now flags any such link missing that anchor
   sentence.
+- Lint no longer walks dot-prefixed directories (`.raw/` ingest archives,
+  `.claude/` agent worktrees, Obsidian's own `.trash/`, and similar) by
+  default, matching Obsidian's own indexer. Previously a duplicated or
+  archived page under a dot-prefixed folder became a real link-resolution
+  candidate, turning a single healthy `[[Wikilink]]` into a spurious
+  `ambiguous_targets` (and, on index pages, `stale_index_entries`) finding.
 
 ## [2.1.1] - 2026-08-26
 

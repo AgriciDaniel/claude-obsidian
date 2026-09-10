@@ -218,7 +218,7 @@ def command_hook_stop(args: argparse.Namespace) -> int:
 
 def command_lint(args: argparse.Namespace) -> int:
     selection = _selection(args)
-    report = lint_vault(selection.root, as_of=args.as_of)
+    report = lint_vault(selection.root, as_of=args.as_of, exclude=args.exclude)
     if args.format == "markdown":
         sys.stdout.write(render_markdown(report))
     else:
@@ -978,6 +978,16 @@ def build_parser() -> argparse.ArgumentParser:
     _add_vault_argument(lint)
     lint.add_argument("--format", choices=("json", "markdown"), default="json")
     lint.add_argument("--as-of", help="ISO YYYY-MM-DD provenance freshness date")
+    lint.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        metavar="GLOB",
+        help=(
+            "Exclude paths matching GLOB (relative to the resolved vault "
+            "root; '*' also matches '/'); repeatable"
+        ),
+    )
     lint.add_argument(
         "--strict", action="store_true", help="Exit 1 when findings exist"
     )

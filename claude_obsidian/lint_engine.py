@@ -15,6 +15,13 @@ small allowlist may be placed at ``.vault-meta/lint-allowlist.json`` (a JSON
 array, or an object with a ``dangling_links``-style array) or at
 ``.vault-meta/lint-allowlist.txt`` (one target or glob per line).
 
+The walk skips every dot-prefixed directory by default, mirroring Obsidian's
+own indexer, so a duplicated or archived page under a hidden folder (a
+``.raw`` ingest archive, a ``.claude`` agent worktree, Obsidian's own
+``.trash``, and similar) is never a link-resolution candidate. ``exclude``
+globs, passed to ``lint_vault`` or set vault-side, scope specific paths out of
+every finding category.
+
 This module never creates directories or files. Even its command-line entry
 point writes only to stdout. Provenance freshness uses the explicit ``as_of``
 date when supplied and the current UTC calendar date otherwise.
@@ -54,14 +61,17 @@ REQUIRED_FRONTMATTER_FIELDS = ("title", "type", "status", "created", "updated", 
 _EXTENSIONLESS_WIKILINK_SUFFIXES = frozenset({".md", ".canvas", ".base"})
 
 _IGNORED_WALK_DIRS = {
-    ".git",
-    ".obsidian",
-    ".vault-meta",
-    ".cache",
-    ".pytest_cache",
-    "__pycache__",
     "node_modules",
+    "__pycache__",
 }
+# Obsidian hides every dot-prefixed folder from its own indexer (app/plugin
+# state such as .obsidian and .vault-meta, and any user- or tool-created
+# hidden directory such as a .raw ingest archive, .claude agent worktrees, or
+# Obsidian's own .trash). The linter mirrors that rule by default so
+# link-resolution candidates match what Obsidian itself would resolve. Add a
+# name here only for a confirmed, legitimate dot-prefixed vault-content
+# directory that must still be walked; none is known today.
+_DOT_DIR_KEEPLIST: frozenset[str] = frozenset()
 _ORPHAN_EXCLUDED_NAMES = {
     "_index.md",
     "index.md",
@@ -378,6 +388,7 @@ def _walk_files(root: Path) -> list[Path]:
                 name
                 for name in dirnames
                 if name not in _IGNORED_WALK_DIRS
+                and not (name.startswith(".") and name not in _DOT_DIR_KEEPLIST)
                 and not (current_path / name).is_symlink()
             ),
             key=lambda value: (value.casefold(), value),
@@ -602,23 +613,67 @@ def _allowlist_values(data: Any) -> list[str]:
     return values
 
 
-def _load_allowlist(root: Path) -> tuple[tuple[str, ...], list[dict[str, str]]]:
+_EXCLUDE_KEYS = {
+    "exclude",
+    "exclude_globs",
+    "excluded_paths",
+}
+
+
+def _exclude_values(data: Any) -> list[str]:
+    if not isinstance(data, dict):
+        return []
+    values: list[str] = []
+    for key, value in data.items():
+        if str(key).casefold() in _EXCLUDE_KEYS and isinstance(value, list):
+            values.extend(
+                item.strip() for item in value if isinstance(item, str) and item.strip()
+            )
+    return values
+
+
+def _normalize_exclude_patterns(values: Sequence[str] | None) -> tuple[str, ...]:
+    if not values:
+        return ()
+    result: list[str] = []
+    for value in values:
+        if not isinstance(value, str):
+            raise ValueError("exclude patterns must be strings")
+        stripped = value.strip()
+        if stripped:
+            result.append(stripped)
+    return tuple(result)
+
+
+def _is_excluded(relative: str, patterns: Sequence[str]) -> bool:
+    if not patterns:
+        return False
+    candidate = relative.casefold()
+    return any(
+        fnmatch.fnmatchcase(candidate, pattern.casefold()) for pattern in patterns
+    )
+
+
+def _load_allowlist(
+    root: Path,
+) -> tuple[tuple[str, ...], tuple[str, ...], list[dict[str, str]]]:
     meta = root / ".vault-meta"
     patterns: list[str] = []
+    exclude_patterns: list[str] = []
     errors: list[dict[str, str]] = []
     try:
         meta.lstat()
     except FileNotFoundError:
-        return (), []
+        return (), (), []
     except OSError as exc:
-        return (), [
+        return (), (), [
             {
                 "path": ".vault-meta",
                 "message": f"cannot inspect allowlist directory: {exc.__class__.__name__}",
             }
         ]
     if meta.is_symlink() or not meta.is_dir():
-        return (), [
+        return (), (), [
             {
                 "path": ".vault-meta",
                 "message": "allowlist directory must be a non-symlink directory",
@@ -641,6 +696,7 @@ def _load_allowlist(root: Path) -> tuple[tuple[str, ...], list[dict[str, str]]]:
             )
             continue
         patterns.extend(_allowlist_values(data))
+        exclude_patterns.extend(_exclude_values(data))
 
     text_path = meta / "lint-allowlist.txt"
     try:
@@ -657,8 +713,10 @@ def _load_allowlist(root: Path) -> tuple[tuple[str, ...], list[dict[str, str]]]:
                 "message": f"invalid allowlist text: {exc.__class__.__name__}",
             }
         )
-    return tuple(sorted(set(patterns), key=_path_sort_key)), sorted(
-        errors, key=_entry_sort_key
+    return (
+        tuple(sorted(set(patterns), key=_path_sort_key)),
+        tuple(sorted(set(exclude_patterns), key=_path_sort_key)),
+        sorted(errors, key=_entry_sort_key),
     )
 
 
@@ -886,13 +944,28 @@ def _sanitize_report_value(value: Any) -> Any:
 
 
 def lint_vault(
-    root: str | os.PathLike[str], *, as_of: date | str | None = None
+    root: str | os.PathLike[str],
+    *,
+    as_of: date | str | None = None,
+    exclude: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """Return a deterministic, JSON-serializable lint report.
 
     ``root`` is normally the vault directory containing ``wiki/``.  Passing a
     directory named ``wiki`` is also supported.  Symlinked files and symlinked
     directories are not followed.  The function performs no filesystem writes.
+
+    ``exclude`` is an optional sequence of shell-style glob patterns (matched
+    case-insensitively with :mod:`fnmatch`, where ``*`` also matches ``/``)
+    evaluated against each candidate's path relative to ``root``. A matching
+    path is dropped before page parsing, so it contributes no page, no
+    link-resolution candidate, and no orphan/frontmatter/empty-section/
+    stale-index finding. The same patterns may be set vault-side via an
+    ``exclude`` (or ``exclude_globs`` / ``excluded_paths``) array in
+    ``.vault-meta/lint-allowlist.json``, ``wiki-lint.json``, or ``lint.json``;
+    CLI-supplied and vault-config patterns are combined. When ``root`` is the
+    ``wiki`` directory itself, relative paths omit the ``wiki/`` prefix, so
+    vault-config patterns written as ``wiki/...`` do not match in that mode.
     """
 
     root_path = Path(root).expanduser()
@@ -914,14 +987,24 @@ def lint_vault(
             raise ValueError("as_of must be an ISO YYYY-MM-DD date") from exc
     else:
         raise ValueError("as_of must be an ISO date, date object, or null")
-    patterns, configuration_errors = _load_allowlist(vault_root)
+    patterns, config_exclude_patterns, configuration_errors = _load_allowlist(vault_root)
 
     all_paths = _walk_files(root_path)
+    exclude_patterns = tuple(
+        sorted(
+            {*_normalize_exclude_patterns(exclude), *config_exclude_patterns},
+            key=_path_sort_key,
+        )
+    )
+    excluded_paths = 0
     pages_by_path: dict[str, _Page] = {}
     targets: list[_Target] = []
     read_errors: list[dict[str, str]] = []
     for path in all_paths:
         relative = path.relative_to(root_path).as_posix()
+        if _is_excluded(relative, exclude_patterns):
+            excluded_paths += 1
+            continue
         page: _Page | None = None
         if path.suffix.casefold() == ".md":
             try:
@@ -1107,6 +1190,7 @@ def lint_vault(
             "links_scanned": links_scanned,
             "issues_found": issues_found,
             "allowlisted_dangling_links": len(allowlisted),
+            "excluded_paths": excluded_paths,
             "category_counts": category_counts,
         },
         **categories,
@@ -1150,6 +1234,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         f"- Pages scanned: {summary.get('pages_scanned', 0)}",
         f"- Links scanned: {summary.get('links_scanned', 0)}",
+        f"- Excluded paths: {summary.get('excluded_paths', 0)}",
         f"- Issues found: {summary.get('issues_found', 0)}",
         f"- Allowlisted dangling links: {summary.get('allowlisted_dangling_links', 0)}",
     ]

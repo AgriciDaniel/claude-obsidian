@@ -28,14 +28,20 @@ Resolve the user vault, then run one of:
 ```bash
 python3 "$CORE" lint --vault "$VAULT"
 python3 "$CORE" lint --vault "$VAULT" --format markdown
+python3 "$CORE" lint --vault "$VAULT" --exclude "wiki/scratchpad/*"
 ```
+
+The repeatable `--exclude GLOB` flag scopes a path (for example a scratchpad
+folder) out of page, link-resolution, orphan, frontmatter, empty-section, and
+stale-index scanning.
 
 Use `--strict` only when a nonzero exit for findings is useful in automation.
 The command remains read-only either way.
 
 The deterministic parser understands Obsidian wikilinks and embeds, Markdown
 links, aliases, heading and block fragments, escaped aliases, and code fences.
-It reports such categories as dead or ambiguous links, orphan pages, required
+It skips dot-prefixed directories by default, mirroring Obsidian's own
+indexer. It reports such categories as dead or ambiguous links, orphan pages, required
 frontmatter gaps (including `title`), empty sections, stale index entries, and
 source/claim ledger contract violations. Report only the
 checks and counts present in its output; do not claim that it performed
