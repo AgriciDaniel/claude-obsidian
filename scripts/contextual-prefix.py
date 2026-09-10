@@ -141,7 +141,7 @@ EXIT_CHUNK_DIR = 4
 EXIT_ADDRESS_COLLISION = 5
 EXIT_LOCK = 6
 
-FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
+FRONTMATTER_RE = re.compile(r"^---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
 ADDRESS_RE = re.compile(r"^address:\s*([cl]-\d{6})\s*$", re.MULTILINE)
 TITLE_RE = re.compile(r"^title:\s*['\"]?(.+?)['\"]?\s*$", re.MULTILINE)
 

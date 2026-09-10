@@ -848,6 +848,15 @@ def test_read_page_preserves_crlf_bytes() -> None:
         assert "\r\n" in text, "read_page must not normalize line endings"
 
 
+def test_parse_frontmatter_accepts_crlf() -> None:
+    frontmatter, content = cp.parse_frontmatter(
+        "---\r\naddress: c-000777\r\ntitle: Windows page\r\n---\r\nBody\r\n"
+    )
+    assert_eq("CRLF frontmatter address is parsed", "c-000777", frontmatter["address"])
+    assert_eq("CRLF frontmatter title is parsed", "Windows page", frontmatter["title"])
+    assert_eq("CRLF frontmatter body is separated", "Body\r\n", content)
+
+
 def main():
     print("=== test_contextual_prefix.py ===")
     test_below_floor_returns_none()
@@ -870,6 +879,7 @@ def main():
     test_pinned_contextual_write_survives_root_replacement()
     test_chunk_parent_swap_never_redirects_atomic_publication()
     test_read_page_preserves_crlf_bytes()
+    test_parse_frontmatter_accepts_crlf()
     print("\nAll contextual-prefix tests passed.")
 
 
