@@ -2147,7 +2147,6 @@ def _bounded_runtime_names(directory_fd: int, *, limit: int, label: str) -> list
     return sorted(names)
 
 
-_RUNTIME_READ_STABILITY_ATTEMPTS = 3
 _RUNTIME_READ_STABILITY_DELAY = 0.02
 
 
@@ -2215,24 +2214,20 @@ def _read_runtime_bytes_at(
 
         raw, after = _read_current()
         _require_stable_identity(after)
-        attempts = 1
-        while True:
-            if after.st_mtime_ns == opened.st_mtime_ns:
-                return raw
-            if attempts >= _RUNTIME_READ_STABILITY_ATTEMPTS:
-                raise error_type(
-                    "CORRUPT_RUNTIME_STATE", f"{label} changed while it was read"
-                )
-            # A metadata-only touch (a sync client refreshing timestamps) moves
-            # the mtime without moving a byte, so re-read and accept the content
-            # only once two consecutive reads are byte-identical.
-            time.sleep(_RUNTIME_READ_STABILITY_DELAY)
-            next_raw, next_after = _read_current()
-            attempts += 1
-            _require_stable_identity(next_after)
-            if next_raw == raw:
-                return next_raw
-            raw, after = next_raw, next_after
+        if after.st_mtime_ns == opened.st_mtime_ns:
+            return raw
+        # A metadata-only touch (a sync client refreshing timestamps) moves the
+        # mtime without moving a byte. Re-read once and accept only if the bytes
+        # are identical to the first read; any difference means the content
+        # changed while it was read and the read fails closed.
+        time.sleep(_RUNTIME_READ_STABILITY_DELAY)
+        confirmation, confirmed = _read_current()
+        _require_stable_identity(confirmed)
+        if confirmation != raw:
+            raise error_type(
+                "CORRUPT_RUNTIME_STATE", f"{label} changed while it was read"
+            )
+        return raw
     except TransactionError:
         raise
     except OSError as exc:

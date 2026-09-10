@@ -17,6 +17,16 @@ implementation record for older releases.
   requirement (a current release; the exec-form `args` command hook and the
   `compact` `SessionStart` matcher need it), linking to the Claude Code hooks
   contract.
+- A repeatable `lint --exclude GLOB` CLI flag and a matching
+  `lint_vault(..., exclude=...)` engine parameter scope specific paths (for
+  example a `wiki/scratchpad/` folder) out of page, link-resolution, orphan,
+  frontmatter, empty-section, and stale-index scanning. The same glob list
+  may be set vault-side via an `exclude` (or `exclude_globs` /
+  `excluded_paths`) array in `.vault-meta/lint.json`, `lint-allowlist.json`,
+  or `wiki-lint.json`; CLI and vault-config patterns are combined. The
+  report's new `summary.excluded_paths` count reports how many walked files
+  were dropped.
+
 ### Changed
 
 - The five setup shell scripts (`setup-dragonscale.sh`, `setup-mode.sh`,
@@ -28,15 +38,6 @@ implementation record for older releases.
   becomes `bash scripts/setup-mode.sh`. Update any local scripts, aliases, or
   CI that reference the old `bin/` paths. `RELEASE_MANIFEST.json` and
   `SHA256SUMS` are refreshed at release time.
-- A repeatable `lint --exclude GLOB` CLI flag and a matching
-  `lint_vault(..., exclude=...)` engine parameter scope specific paths (for
-  example a `wiki/scratchpad/` folder) out of page, link-resolution, orphan,
-  frontmatter, empty-section, and stale-index scanning. The same glob list
-  may be set vault-side via an `exclude` (or `exclude_globs` /
-  `excluded_paths`) array in `.vault-meta/lint.json`, `lint-allowlist.json`,
-  or `wiki-lint.json`; CLI and vault-config patterns are combined. The
-  report's new `summary.excluded_paths` count reports how many walked files
-  were dropped.
 
 ### Fixed
 
@@ -48,6 +49,9 @@ implementation record for older releases.
   every other link-touching part of the product, which all resolve wikilinks
   by exact vault-relative path with no fuzzy resolution: resync scripts, the
   terminology linker, and lint's dead/ambiguous-link detection.
+- The repository root `.gitignore` now ignores `.mcp.json`, matching the vault
+  template and the install guide, which treat a project-scope MCP config as a
+  potential credential carrier. Suggested by PR #44.
 - `stop_status` now reads transaction journals up to the package's existing
   8 MiB runtime JSON bound, so large valid journals are not misreported as
   unreadable. Unsafe or unreadable journals now require manual inspection, and
@@ -86,11 +90,11 @@ implementation record for older releases.
   on the same host. It still never reaps a live same-host owner before
   `--stale-after` elapses and still keeps the age gate for a foreign-host or
   unresolvable owner. Both `recover` help texts now describe this precisely.
-- Reading transaction runtime files now tolerates a single external
-  mtime-only touch (for example a sync client refreshing metadata) by
-  re-reading up to three times and accepting the content once two
-  consecutive reads are byte-identical. Any size, inode, device, or mode
-  change still fails closed immediately with `CORRUPT_RUNTIME_STATE`.
+- Reading transaction runtime files now tolerates an external mtime-only
+  touch (for example a sync client refreshing metadata) by re-reading once
+  and accepting the content only if the bytes are identical to the first
+  read. Any size, inode, device, or mode change, and any content change
+  during the read, still fails closed with `CORRUPT_RUNTIME_STATE`.
 
 ## [2.1.1] - 2026-08-26
 

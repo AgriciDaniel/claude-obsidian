@@ -2367,6 +2367,42 @@ def test_read_runtime_bytes_fails_closed_on_a_genuine_size_change() -> None:
             os.close(directory_fd)
 
 
+def test_read_runtime_bytes_fails_closed_on_a_same_size_content_change() -> None:
+    if not transaction_module._supports_confined_dirfd():
+        return
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+        target, payload = _seed_runtime_read_probe(base)
+        directory_fd = os.open(base, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+        original_fstat = os.fstat
+        calls = 0
+        tampered = bytes(reversed(payload))
+        assert len(tampered) == len(payload) and tampered != payload
+
+        def counting_fstat(descriptor):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                target.write_bytes(tampered)
+            return original_fstat(descriptor)
+
+        os.fstat = counting_fstat
+        try:
+            transaction_module._read_runtime_bytes_at(
+                directory_fd,
+                "runtime-file.json",
+                label="runtime read probe",
+                limit=1024,
+            )
+        except TransactionRecoveryError as exc:
+            assert exc.code == "CORRUPT_RUNTIME_STATE"
+        else:
+            raise AssertionError("a same-size content change must fail closed")
+        finally:
+            os.fstat = original_fstat
+            os.close(directory_fd)
+
+
 def test_runtime_directory_cardinality_and_removal_are_bounded() -> None:
     with tempfile.TemporaryDirectory() as td:
         vault = make_vault(Path(td) / "vault")
@@ -2826,6 +2862,7 @@ def main() -> None:
     test_recovery_never_reads_a_replaced_external_operation()
     test_read_runtime_bytes_tolerates_a_single_external_mtime_touch()
     test_read_runtime_bytes_fails_closed_on_a_genuine_size_change()
+    test_read_runtime_bytes_fails_closed_on_a_same_size_content_change()
     test_runtime_directory_cardinality_and_removal_are_bounded()
     test_runtime_removal_enumerates_through_a_fresh_descriptor()
     test_mutation_and_runtime_descriptors_do_not_leak()
