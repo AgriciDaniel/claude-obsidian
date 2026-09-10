@@ -20,6 +20,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 ROOT = Path(__file__).resolve().parent.parent
 HELPER = ROOT / "scripts" / "wiki-mode.py"
 os.environ["CLAUDE_OBSIDIAN_VAULT"] = str(ROOT)

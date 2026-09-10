@@ -28,6 +28,12 @@ implementation record for older releases.
   to the existing timeout, preventing an oversized response from consuming
   unbounded memory. Response-body read failures, invalid UTF-8, excessive JSON
   nesting, and malformed response shapes fail closed.
+- `tests/test_contextual_prefix.py` and `tests/test_wiki_mode.py` no longer
+  crash on native Windows before their assertions finish running. Both print
+  `→` in test labels; Windows' default `cp1252` console encoding raised
+  `UnicodeEncodeError` on the first such print. Both files now reconfigure
+  stdout to UTF-8 on startup, guarded so a captured/redirected runner without
+  a `reconfigure`-capable stdout still runs.
 
 ## [2.1.1] - 2026-08-26
 
