@@ -4,20 +4,20 @@
     {
       "mode": "0644",
       "path": ".claude-plugin/marketplace.json",
-      "sha256": "6984752e225e08e98a49fcaf25e3e6bf518162a576a8b7dfe4a6e35d8dcc8c47",
+      "sha256": "59af06f75bcd18523fc3ecd2e300b7aafd3440c2ddb2d26b24d7855be293368f",
       "size": 841
     },
     {
       "mode": "0644",
       "path": ".claude-plugin/plugin.json",
-      "sha256": "c328cbb63fc0e62efaa61f1072b6780b5d1e8845c1e50bc8827f78eff56a7220",
+      "sha256": "77f1651bd15ac961474639e76f24114dae95a3a13aa40b40707391a51d00aa1c",
       "size": 970
     },
     {
       "mode": "0644",
       "path": ".cursor/rules/claude-obsidian.mdc",
-      "sha256": "e3e3f92ee043547cbb830d071247fde2def3b270545e230ec480d6397e01d416",
-      "size": 1154
+      "sha256": "790ef7f05c12b245feeecf4fe8ddd592088dfad2ee84a57b7c6eca908838587a",
+      "size": 1162
     },
     {
       "mode": "0644",
@@ -40,8 +40,8 @@
     {
       "mode": "0644",
       "path": ".github/ISSUE_TEMPLATE/feature_request.md",
-      "sha256": "7c4f9ec6e92bc4bd631ee37b83ff50723162cddacb8003e9cc5c5f8d38b22ea3",
-      "size": 1201
+      "sha256": "ef251dd645db15495847d7ac7bd9e6f41fa27636ae6ad943f3f329baff6219b2",
+      "size": 1205
     },
     {
       "mode": "0644",
@@ -64,14 +64,14 @@
     {
       "mode": "0644",
       "path": ".gitignore",
-      "sha256": "c9d9bb4a1bd450480412ec3c36cb7d963f66c36b24d678c5caa4146c95ac4d84",
-      "size": 3715
+      "sha256": "8aaab4be51693e472108ad3153047617ee90469f4d589b536038dd9373f537e5",
+      "size": 3815
     },
     {
       "mode": "0644",
       "path": ".windsurf/rules/claude-obsidian.md",
-      "sha256": "3b125876870d16942b5c9497e74e0d80da9e44d0b4a0f70bccf110ddbac99630",
-      "size": 768
+      "sha256": "63def845007b3d475a464f0c56d7400126363f290dc54a84ba9aafab53f063d4",
+      "size": 772
     },
     {
       "mode": "0644",
@@ -82,19 +82,19 @@
     {
       "mode": "0644",
       "path": "ATTRIBUTION.md",
-      "sha256": "8c24b56cea5e32d640edb0ac3919b0cd240505f5c5980fb8cc4cc59078363f8c",
-      "size": 2188
+      "sha256": "372c188cec4b631202349edbaca54e1d288133ba07bb7f1a9681ce7aa1e50f94",
+      "size": 2946
     },
     {
       "mode": "0644",
       "path": "CHANGELOG.md",
-      "sha256": "a70fa0d0ed4038d3cbba5a9a25c2e83b8b39a6f5a69663bac5e53fc7574e55d9",
-      "size": 13025
+      "sha256": "c3ac5c6a2e7e99864b43c6152ffa2706653bf554a7b20a12a511abc56a2f980e",
+      "size": 21421
     },
     {
       "mode": "0644",
       "path": "CITATION.cff",
-      "sha256": "0d31fe94bf44b399050b92249e97cfd6a8773ab273a4a7331001029ee49da2be",
+      "sha256": "3d4f591e594aa8e68380958c55cfe13b0dd4d3bc0365c51e4cc46023a5c4eb05",
       "size": 468
     },
     {
@@ -118,8 +118,8 @@
     {
       "mode": "0644",
       "path": "GEMINI.md",
-      "sha256": "267b205d74e9afcb23297c9acd32dee77094f21b21d99cbc4c32ad9635572a07",
-      "size": 964
+      "sha256": "e8665f96eadeb53685a68314e933de24859834811ce4fa0addcec72e520a21f0",
+      "size": 972
     },
     {
       "mode": "0644",
@@ -130,8 +130,8 @@
     {
       "mode": "0644",
       "path": "Makefile",
-      "sha256": "8dcba333e4abc60a1cd70c869ec39fa5e6e780135d76520cb20c39a6ebe761be",
-      "size": 2551
+      "sha256": "0c92bf80061f6df35255b12992c1591ff914594280895ccb40003b7ef5f9929c",
+      "size": 2563
     },
     {
       "mode": "0644",
@@ -142,8 +142,8 @@
     {
       "mode": "0644",
       "path": "README.md",
-      "sha256": "b384f942c9c728340f1f9880bf96a43ab18802751c4614e72afbd7d46f747985",
-      "size": 16778
+      "sha256": "9ce6461bbac0772819e42cd8c82ed8217b5a55af1c12e1f72d2bade353e0d15f",
+      "size": 17160
     },
     {
       "mode": "0644",
@@ -154,8 +154,14 @@
     {
       "mode": "0644",
       "path": "WIKI.md",
-      "sha256": "cac08db66f6c15cf137aa50cc18538aed595a2f76c4fe7873b5204fd6853640a",
-      "size": 9409
+      "sha256": "7655847ebd6dbe36a044d08740d2d3c3f3057e95e5fabfd47d18279fdb08e588",
+      "size": 9936
+    },
+    {
+      "mode": "0644",
+      "path": "ZCODE.md",
+      "sha256": "fe0d36e702e8da50f61b745097cc65366edef4db86f811a46dd01f9935fdb683",
+      "size": 1376
     },
     {
       "mode": "0644",
@@ -172,8 +178,8 @@
     {
       "mode": "0644",
       "path": "agents/wiki-lint.md",
-      "sha256": "00dbca675b5f9ecc76ba92e8d2bef3c9283760f8cda2e5c90a28169abde0495c",
-      "size": 3008
+      "sha256": "7abb46a3ed549cc83a70a8d2d4096a4ceed58f7617a81441c786be6734df233f",
+      "size": 3120
     },
     {
       "mode": "0644",
@@ -206,39 +212,9 @@
       "size": 218000
     },
     {
-      "mode": "0755",
-      "path": "bin/setup-dragonscale.sh",
-      "sha256": "91e3f5f652447ff40ff8a9f3f7f89273734e96cf7dd4dd345a7327acf0ce2647",
-      "size": 2185
-    },
-    {
-      "mode": "0755",
-      "path": "bin/setup-mode.sh",
-      "sha256": "98564f4de5ec27cb0f892546491c0d735d49504b1a7f06ce4299396dc633bec5",
-      "size": 2286
-    },
-    {
-      "mode": "0755",
-      "path": "bin/setup-multi-agent.sh",
-      "sha256": "57e0015784b70fb2331b188c24ddd15ed090e877fc899b843b8a3239ac99da4c",
-      "size": 5062
-    },
-    {
-      "mode": "0755",
-      "path": "bin/setup-retrieve.sh",
-      "sha256": "adf3783152dc72d162e7046774cc52d5336f0ceaaf9b7a8689c17b64db675d14",
-      "size": 3133
-    },
-    {
-      "mode": "0755",
-      "path": "bin/setup-vault.sh",
-      "sha256": "6ae0dedbdcbc8687697b18414b17fe3884e0e4c59e39b30fd803201072c8850f",
-      "size": 5314
-    },
-    {
       "mode": "0644",
       "path": "claude_obsidian/__init__.py",
-      "sha256": "fc9eded2259f55c00e36899e2572a876c110e3c0d6b51084d860aabe2d52be24",
+      "sha256": "2668fa2485413e7450bab4fe51ec493de601580aca3d56d3fb8412f96ea0a84b",
       "size": 296
     },
     {
@@ -250,20 +226,20 @@
     {
       "mode": "0644",
       "path": "claude_obsidian/capture.py",
-      "sha256": "9fded207710e1e9b2fb60c6616b0675338b5eeaa1959f4ad972faec3c1ebd891",
-      "size": 83828
+      "sha256": "ed0e6c87077dd5a49ec63151ccfe7df684e5a53799daf90cac09f6f8f7429ad7",
+      "size": 85077
     },
     {
       "mode": "0644",
       "path": "claude_obsidian/checkpoint.py",
-      "sha256": "12fb1522321cddc72e2fe2123f56010a1c81ff0a0ec91b8659c2451a566a3e85",
-      "size": 50166
+      "sha256": "9770df91a8c2db82b2be04abecd04c38f6adf3380fd47907b05e42c811bfe9b6",
+      "size": 50861
     },
     {
       "mode": "0644",
       "path": "claude_obsidian/cli.py",
-      "sha256": "38703e6db742f1c76ba6f8cce797b8ecf69a7cdf2ff1f9c739df60acab7e973a",
-      "size": 44772
+      "sha256": "c98da735432052262a30d593dbc8bc0fde105f78311d4033cc10de4bdb116175",
+      "size": 45505
     },
     {
       "mode": "0644",
@@ -285,9 +261,15 @@
     },
     {
       "mode": "0644",
+      "path": "claude_obsidian/gitignore.py",
+      "sha256": "2513d7591f59fac2984705d78e044e04bacd192e64f71248ef3bc694891f0dc3",
+      "size": 6934
+    },
+    {
+      "mode": "0644",
       "path": "claude_obsidian/hook_adapter.py",
-      "sha256": "79a3824641fd146a8960b57ca74bc4cd7fa29688f8928cdcd0e6ecbce5b35743",
-      "size": 11886
+      "sha256": "ed148a8ff5a9fa36a1ccf80323ab252a8b81d37f3eef89da02478ddf15a40419",
+      "size": 12602
     },
     {
       "mode": "0644",
@@ -310,20 +292,26 @@
     {
       "mode": "0644",
       "path": "claude_obsidian/lint_engine.py",
-      "sha256": "775cecd84170774fc3bf2f95a61c8b68df30e870baf863b4ac054b08587b94c3",
-      "size": 44602
+      "sha256": "a7cba8be7388d6ace8b406eb986a480a904d3177f776427ff01a995109434945",
+      "size": 49006
     },
     {
       "mode": "0644",
       "path": "claude_obsidian/mode_config.py",
-      "sha256": "0dfa01bfcf52e55bcc50f5f7bbc4b2c2cc945f333cb5847b933da9c2a2579cbb",
-      "size": 2800
+      "sha256": "2f3e1a6d907f46d13ed405c8bc6456da7cf2bc243a30ae8182aa79782fb7249e",
+      "size": 2827
     },
     {
       "mode": "0644",
       "path": "claude_obsidian/package_validation.py",
-      "sha256": "963a54659a961de4e9791dd9abaffa9ede7a9e490a48bccadb5f4122cdd731ef",
-      "size": 20819
+      "sha256": "e9fa069476627811d32cc289907a998b466d2a80febf130c7dedace52861eccd",
+      "size": 22291
+    },
+    {
+      "mode": "0644",
+      "path": "claude_obsidian/page_schema.py",
+      "sha256": "1fc1c41548df703f5921f1a07eef735de5fe9686f2eff137a05345447414fc45",
+      "size": 5119
     },
     {
       "mode": "0644",
@@ -340,8 +328,8 @@
     {
       "mode": "0644",
       "path": "claude_obsidian/transaction.py",
-      "sha256": "e007e3b7d08f72eabc4a95c7031fb596c201562432cf37cc649136b02b223de2",
-      "size": 179506
+      "sha256": "98d4bf38334c5b1a22175cd88a927c2b1d93829ed52524c99e0de81c36d406c3",
+      "size": 180945
     },
     {
       "mode": "0644",
@@ -364,56 +352,56 @@
     {
       "mode": "0644",
       "path": "config/capabilities.json",
-      "sha256": "9a372c18db93608f7112e8956f8dbb520c266e537b3794dee14b7436de3bc246",
-      "size": 17496
+      "sha256": "6d34feb5b9005d00bab8c88ad65fb9a61f7241ffd700697615628e7eb4f4a231",
+      "size": 17539
     },
     {
       "mode": "0644",
       "path": "config/product-contract.json",
-      "sha256": "b4455ef26fb0b8a1c327220d4156a13afe0dd3aa619d98ff2ed4eda44eae5ccd",
-      "size": 6716
+      "sha256": "f0c89f99242584afd7276bc4a40ae623cfff3b11b2740054780922ec080880a7",
+      "size": 6752
     },
     {
       "mode": "0644",
       "path": "config/public-marketplace.json",
-      "sha256": "6984752e225e08e98a49fcaf25e3e6bf518162a576a8b7dfe4a6e35d8dcc8c47",
+      "sha256": "59af06f75bcd18523fc3ecd2e300b7aafd3440c2ddb2d26b24d7855be293368f",
       "size": 841
     },
     {
       "mode": "0644",
       "path": "config/release-allowlist.json",
-      "sha256": "2f09ac8a89734c39c0023ce5b09bb028a3f46cdc97f49af99bcd0af6749ff88c",
-      "size": 2054
+      "sha256": "1150353485cae6ac60381f4777cf8622c3df9fd3f47455889260f9793d7b52f1",
+      "size": 2059
     },
     {
       "mode": "0644",
       "path": "docs/compound-vault-guide.md",
-      "sha256": "3ad7192a28509f88992c5d12b5ec26e7d6810a0f9fe7e51371bf83ce21356b11",
-      "size": 9554
+      "sha256": "5137806a01e81d210dffd8076a4db7abccdd0394793154d82577d9bcebac46ed",
+      "size": 9562
     },
     {
       "mode": "0644",
       "path": "docs/dragonscale-guide.md",
-      "sha256": "f52eb7da023d165d61cbf2e9a64682b6152376fb36aa784b4752f383c95205e3",
-      "size": 3731
+      "sha256": "75c3daaed5981112e0dd9166ee6e272a4102ce27aa95cc893aa3e262698c3411",
+      "size": 3739
     },
     {
       "mode": "0644",
       "path": "docs/install-guide.md",
-      "sha256": "e56a79480e8d34fe2eaff02e531a3fb73641eb6c075f747817bc596c42615cea",
-      "size": 9994
+      "sha256": "3c86618ddf27565a0c5eefdbeff4e754d7f90e6fe663b051267ba596aefafaae",
+      "size": 10278
     },
     {
       "mode": "0644",
       "path": "docs/methodology-modes-guide.md",
-      "sha256": "034369dfca27c5d81c60bc8e406ef58353e24848b69c3242378f3e54e2008c19",
-      "size": 4122
+      "sha256": "c9b784316aded172d634c7837ee7ee581c2f42bdded8a20142228a59204101c3",
+      "size": 4130
     },
     {
       "mode": "0644",
       "path": "docs/windows-wsl.md",
-      "sha256": "b37331c18326cb9c362564f96d7d039a49d85071c719fefe7a26e3e9fb56340c",
-      "size": 4306
+      "sha256": "8be22db12f77d84479eb55e830bdf8cfd70cfdeb3c88b54027d227c063684a24",
+      "size": 5923
     },
     {
       "mode": "0644",
@@ -430,8 +418,8 @@
     {
       "mode": "0644",
       "path": "examples/sample-vault/.obsidian/app.json",
-      "sha256": "b8c736f8900e4d28ead438125440572f32f5a475dd094ba7155b0879dc253c4b",
-      "size": 65
+      "sha256": "98d4091972008418f3be54fd91d5f3ff43bb6c056543d6fa303f5a2e4413e10a",
+      "size": 96
     },
     {
       "mode": "0644",
@@ -496,8 +484,8 @@
     {
       "mode": "0644",
       "path": "hooks/README.md",
-      "sha256": "ab529c807de8733f92958815c4206aa47eb664f26417eb04eaa274cc8ce3ccf8",
-      "size": 1393
+      "sha256": "24a44afc3a498295ae45c31ec8f88413a75d39ad43dedd6986bcf3d16f8cfc5e",
+      "size": 1817
     },
     {
       "mode": "0644",
@@ -532,8 +520,8 @@
     {
       "mode": "0755",
       "path": "scripts/contextual-prefix.py",
-      "sha256": "2c0244bbe0a33f694f47c7e97933e285c2e3ed97001a7ae95eff5e3b27872f65",
-      "size": 37586
+      "sha256": "d9f3656cd98a049b288e80595c884cf55d126c029bd2b4ce166adc9ee8a693f4",
+      "size": 38808
     },
     {
       "mode": "0755",
@@ -550,8 +538,38 @@
     {
       "mode": "0755",
       "path": "scripts/retrieve.py",
-      "sha256": "4ff0584c351239c63da5eb8324ac81279b5d90471629a5a77b4f5f4cfb4251fd",
-      "size": 13936
+      "sha256": "ad6d85f8f9acdd92187830b0d8040e376404b6e8c839b5ff3ce54ae8ae4654be",
+      "size": 13944
+    },
+    {
+      "mode": "0755",
+      "path": "scripts/setup-dragonscale.sh",
+      "sha256": "09ee0475c9fe57d51cad4d617b5f0790ec6ff34e311abc8acd889cf0a83d13ff",
+      "size": 2189
+    },
+    {
+      "mode": "0755",
+      "path": "scripts/setup-mode.sh",
+      "sha256": "2d71c2b397eef078bbd9171bdb1cd3185a3b44b0d9324e81a974eb75d95e2c15",
+      "size": 2290
+    },
+    {
+      "mode": "0755",
+      "path": "scripts/setup-multi-agent.sh",
+      "sha256": "6e3c90aa168f1ebd52e1b669ec7815820fafc5f88dc81cf0ca3a8d427f7af332",
+      "size": 5216
+    },
+    {
+      "mode": "0755",
+      "path": "scripts/setup-retrieve.sh",
+      "sha256": "f2c23e0ec8564a633c618a278f5a23c20c5cc6d593e03f9a777669d536f57b76",
+      "size": 3137
+    },
+    {
+      "mode": "0755",
+      "path": "scripts/setup-vault.sh",
+      "sha256": "4926d09f13278ab1b4328f84988dc722e08a8876b80f6482e04ca245c270f580",
+      "size": 5330
     },
     {
       "mode": "0755",
@@ -568,14 +586,14 @@
     {
       "mode": "0755",
       "path": "scripts/wiki-mode.py",
-      "sha256": "f3c990d4ea2a8bec9752ed1474903532eac4a662af7c6e9f16927260596e12a5",
-      "size": 14345
+      "sha256": "627e0602a9635980dc26fcb12474921a58022001b3defd0dade3fb196792ef5e",
+      "size": 15722
     },
     {
       "mode": "0644",
       "path": "skills/autoresearch/SKILL.md",
-      "sha256": "e369ab3e1181ddebd70fd61eeb623edc7eab7d123ea32ff4e6ac75ec315db0ce",
-      "size": 6202
+      "sha256": "54ca6599760e6e5827cee50d448b182e40ff77e784a7eda5cd44976b968b5970",
+      "size": 6392
     },
     {
       "mode": "0644",
@@ -586,8 +604,8 @@
     {
       "mode": "0644",
       "path": "skills/canvas/SKILL.md",
-      "sha256": "cc2eea755757765f512b1604dde8444ef0c5836a7ea3baa3df927e13db947ab6",
-      "size": 5250
+      "sha256": "f41c4fae57eafae3191ffc8a04c81c131b819fb0cf8a1afe22b2bf9c1135bbd8",
+      "size": 5440
     },
     {
       "mode": "0644",
@@ -598,26 +616,26 @@
     {
       "mode": "0644",
       "path": "skills/defuddle/SKILL.md",
-      "sha256": "458b6a3fbd2051ce908790983f091e424af09ee680adf6b72495be4a40318c7a",
-      "size": 4387
+      "sha256": "f87f3ef756830d1cf1472af38ab3b47e67309d11638cd56e37a19c6ee15a7a96",
+      "size": 4577
     },
     {
       "mode": "0644",
       "path": "skills/obsidian-bases/SKILL.md",
-      "sha256": "58828855d8b4f58c6d0dbe8ec56c1675e44464f92ca414f902744cbd8221b878",
-      "size": 4485
+      "sha256": "3cdfbd83629c52cfb551a9d22e941d570d0a9cf12903630f1e873718f356f817",
+      "size": 4675
     },
     {
       "mode": "0644",
       "path": "skills/obsidian-markdown/SKILL.md",
-      "sha256": "b56603d91740117460ecc3bbf30f7ce1e83ae184e4af5be955e8b1a7b04fb63c",
-      "size": 4303
+      "sha256": "bfee21f23247a8d677b56c0ccfc2e5ee8a25748cc30ac9bf16f32ae427316458",
+      "size": 4493
     },
     {
       "mode": "0644",
       "path": "skills/save/SKILL.md",
-      "sha256": "b98a175ed02f00f73c19fe386379f3a45d2d7c86e1936d47bc8d981c1171be4c",
-      "size": 4995
+      "sha256": "22d7864e0f059c21d3f62be5719197ef0f5cd7740f16bae100c7a9dbcb29470b",
+      "size": 5383
     },
     {
       "mode": "0644",
@@ -628,14 +646,14 @@
     {
       "mode": "0644",
       "path": "skills/wiki-cli/SKILL.md",
-      "sha256": "2885621fc55c1edd0954f86089f2258618ac38c92f329cae19cfdca8334145ec",
-      "size": 2855
+      "sha256": "468df53c8712379c1681a897225e898771ca36f21e4e6e02dc8eec9f02fc8c87",
+      "size": 3045
     },
     {
       "mode": "0644",
       "path": "skills/wiki-fold/SKILL.md",
-      "sha256": "a887e48737eab42303e584085cbcb18a679af8a0181c84d2c4035345d66080cb",
-      "size": 4423
+      "sha256": "df61e257eaaed9a3ea413af9cb5e27bc8b3f6bac04eff96565af484787bb823f",
+      "size": 4613
     },
     {
       "mode": "0644",
@@ -646,20 +664,20 @@
     {
       "mode": "0644",
       "path": "skills/wiki-ingest/SKILL.md",
-      "sha256": "3fb3bc9b9b6dafe988cd71883fced9820af60f8ca8ba1278d6d74a15b0e8bffa",
-      "size": 7562
+      "sha256": "a0f819843af60799a5a9d26f06793671c05d8a424e16d4da148a9b111a8b88b2",
+      "size": 8087
     },
     {
       "mode": "0644",
       "path": "skills/wiki-lint/SKILL.md",
-      "sha256": "e268098bb634c979cb288a560e230d4d4bab776b42320551157c21b7edf61f9c",
-      "size": 3029
+      "sha256": "a660684a0b1cb5ea1382556922976b1abafa19e77992e694a7d8d9496d8a8215",
+      "size": 3752
     },
     {
       "mode": "0644",
       "path": "skills/wiki-mode/SKILL.md",
-      "sha256": "13800d7af8548db487475f5a7249a620febb584d0b9ce39338bc91756d70ae1d",
-      "size": 3992
+      "sha256": "4862cce74fa58fba69f4f85039205f2a7b432a5bc4562a68070694049e54e21c",
+      "size": 4182
     },
     {
       "mode": "0644",
@@ -700,8 +718,8 @@
     {
       "mode": "0644",
       "path": "skills/wiki-query/SKILL.md",
-      "sha256": "21f6c4f2e9dbcf583c4867765c1b3b19c8849e0815197fc6b7e49c2fea17b892",
-      "size": 4497
+      "sha256": "37d2686d7d9fe2409dec02dccb1d59a5199b687b27a57e8e04bf8983e84221c1",
+      "size": 4687
     },
     {
       "mode": "0644",
@@ -724,8 +742,8 @@
     {
       "mode": "0644",
       "path": "skills/wiki/references/frontmatter.md",
-      "sha256": "8c2adb0feeaddfe13d6fcc05ba0daa477ca129eade00f24d7c63d96dc9765eaf",
-      "size": 2322
+      "sha256": "98188fa68cfaf853e54393d4b2e0b384889aa82ef71c12df435beb1088347195",
+      "size": 2565
     },
     {
       "mode": "0644",
@@ -736,8 +754,8 @@
     {
       "mode": "0644",
       "path": "skills/wiki/references/install-modes.md",
-      "sha256": "1ae30c16ed0d205a70b10926a1c11667cc690a223a170478e63b4f047266f69f",
-      "size": 1922
+      "sha256": "e144fd3d74f7ad6495f5b9d5c29e225e9ccf8572d91f4af40d913a278433c5b0",
+      "size": 1926
     },
     {
       "mode": "0644",
@@ -784,8 +802,8 @@
     {
       "mode": "0644",
       "path": "templates/vault/.obsidian/app.json",
-      "sha256": "b8c736f8900e4d28ead438125440572f32f5a475dd094ba7155b0879dc253c4b",
-      "size": 65
+      "sha256": "98d4091972008418f3be54fd91d5f3ff43bb6c056543d6fa303f5a2e4413e10a",
+      "size": 96
     },
     {
       "mode": "0644",
@@ -1006,14 +1024,14 @@
     {
       "mode": "0644",
       "path": "tests/test_capture.py",
-      "sha256": "af75f0d7c4ad50266cc04170bed462229a320a6a7bc5d4e25d74a990328c97c2",
-      "size": 44833
+      "sha256": "bf23779303707bbc90db6bcc3cea5b77eb00411e24b04f8c8e4bd2062da84692",
+      "size": 47348
     },
     {
       "mode": "0644",
       "path": "tests/test_checkpoint.py",
-      "sha256": "baa14a92785dde360e40de817db711a4aae3a57d2d4e19f2623297face9668d1",
-      "size": 20485
+      "sha256": "d08ee9d466ff7ed76e054dfb9656bd2424ac275211a8ac6ad9bdf0494721a5be",
+      "size": 23495
     },
     {
       "mode": "0644",
@@ -1036,8 +1054,8 @@
     {
       "mode": "0644",
       "path": "tests/test_contextual_prefix.py",
-      "sha256": "7bb992b4285b76eb77e6237f45c21a1517f1afc4c10e734543dd329f52f8d6d3",
-      "size": 25723
+      "sha256": "bc06955230dba6be2ef1af408f6dfa3c633f543a37ab710429b2238f49555a82",
+      "size": 30646
     },
     {
       "mode": "0644",
@@ -1071,15 +1089,21 @@
     },
     {
       "mode": "0644",
+      "path": "tests/test_gitignore.py",
+      "sha256": "5150548c027547ce497b9e0baf568a4ee450d668b8fd0edc653dc19553f11b6b",
+      "size": 4500
+    },
+    {
+      "mode": "0644",
       "path": "tests/test_hooks.py",
-      "sha256": "98064cbed515efbe786dccc246940288e40ad37ed267d6e1a7bc87a93ad9c5ed",
-      "size": 9701
+      "sha256": "323065eca5949fd5ba7f537f9120a6d8f1e68d04a47103048fbc4d91328375c8",
+      "size": 17220
     },
     {
       "mode": "0644",
       "path": "tests/test_installed_tree_boundary.py",
-      "sha256": "a3dc89337bb48f75641834617f07d635fb620762eebb028873cdc93b5f700a80",
-      "size": 10317
+      "sha256": "43f562cea8d157af1afd58a68c073dff926784c1ae8e4a408fa91c1d1e8fdb86",
+      "size": 10520
     },
     {
       "mode": "0644",
@@ -1102,14 +1126,14 @@
     {
       "mode": "0644",
       "path": "tests/test_lint_engine.py",
-      "sha256": "594c5017abe07d807121267f5cfde1047a7df16447f373bb31a154753f8b96ed",
-      "size": 29070
+      "sha256": "c956f82d8091b75c98ea1ccfae474a25b9b3611c57d7663ae7b2ec7fa1566edc",
+      "size": 37056
     },
     {
       "mode": "0644",
       "path": "tests/test_package_validation.py",
-      "sha256": "2e48dbc38a0d889c5bfa4ffe34b44c5223d61e0d002d96aaad6795202f180e1c",
-      "size": 13378
+      "sha256": "5078bc7dd982addae7909d7d153628659daca8106d642c32fa44071b79363d79",
+      "size": 15322
     },
     {
       "mode": "0644",
@@ -1132,26 +1156,26 @@
     {
       "mode": "0644",
       "path": "tests/test_setup_multi_agent.py",
-      "sha256": "61a29b59601baa318729271b532b55f4bb13459b93c16cfac386495dbb58d2d0",
-      "size": 5667
+      "sha256": "4342cdad9b99b82a95eb23c3751a4684c8e6e730f827dc81aa75b69bea08ce96",
+      "size": 7546
     },
     {
       "mode": "0644",
       "path": "tests/test_setup_retrieve.py",
-      "sha256": "b0f714dfd23b239f8da44e67fd78857486b56a0d376bc694bdd605cf56158c50",
-      "size": 2696
+      "sha256": "416969c5056436c982c1930ca5b13fd7c9bf5b089538455bf3bdb908929b5a7d",
+      "size": 2700
     },
     {
       "mode": "0644",
       "path": "tests/test_setup_vault.py",
-      "sha256": "f8fd563ac33d0660b5852b9d52bf6554ac315cad4674235dad300e65a646566c",
-      "size": 13936
+      "sha256": "73a5d56d8c2a12c60f113a80412f6a48d801f5a721df4cd19470a868da5d075c",
+      "size": 15267
     },
     {
       "mode": "0644",
       "path": "tests/test_setup_wrappers.py",
-      "sha256": "2f83412d4dd808648f5b0370e67e59b86acb381534acb2e620ba7cbc8844c13d",
-      "size": 7952
+      "sha256": "e67824dd76e681f0bcd7ad429161d53c59bbd96a6827b9ad5a7f4e7ae16419e3",
+      "size": 7964
     },
     {
       "mode": "0755",
@@ -1162,8 +1186,8 @@
     {
       "mode": "0644",
       "path": "tests/test_transaction.py",
-      "sha256": "8ae629551c3cd50255d2f0a23c4c6203599a21f083a2d6a9d6f462897cac516e",
-      "size": 104048
+      "sha256": "2a052bc54817efdc9c43f791ba1fa9dc116b67323cf52d9309ffb8902d3f0ab9",
+      "size": 112101
     },
     {
       "mode": "0644",
@@ -1186,8 +1210,8 @@
     {
       "mode": "0644",
       "path": "tests/test_wiki_mode.py",
-      "sha256": "036219c9f047af36f3182be2a8457a838e0296fd78340c4cbc96774cacad5353",
-      "size": 23545
+      "sha256": "353b679267bc2c23d906b9f1736d417ec642ed52c34a231006f5724f7b851d05",
+      "size": 33222
     },
     {
       "mode": "0644",
@@ -1211,6 +1235,6 @@
     }
   },
   "schema_version": 1,
-  "source_commit": "d766d115f95ac454dcc948fec0c2a73de212cc0d",
-  "source_date_epoch": 1787698719
+  "source_commit": "de39db6a6be1c5447949b167a6d1894b7bed26b7",
+  "source_date_epoch": 1789051381
 }
