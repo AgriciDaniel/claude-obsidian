@@ -7,6 +7,12 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-09-10
+
+Backlog triage: lint scoping, lock recovery, host validation, the `bin/`
+to `scripts/` move for claude.ai plugin distribution, a single page-type
+vocabulary, gitignore-aware link resolution, and a ZCode host adapter.
+
 ### Added
 
 - `docs/windows-wsl.md`: a "Claude Code hooks and python3 on Windows" section

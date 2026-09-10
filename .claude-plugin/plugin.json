@@ -1,6 +1,6 @@
 {
   "name": "claude-obsidian",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Local-first Agent Skills package and Claude Code plugin for source-cited Obsidian knowledge bases. Provides explicit vault initialization and adoption, recoverable operation transactions, deterministic lint and retrieval, provenance ledgers, offline-first capture foundations, and optional methodology modes. User vaults stay outside the plugin cache; network and destructive actions require explicit consent.",
   "author": {
     "name": "AgriciDaniel",
