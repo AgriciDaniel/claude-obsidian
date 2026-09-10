@@ -345,6 +345,12 @@ remain yours.
   without it
 - Bash for setup, optional extensions, and shell test suites
 - Git only for development, releases, or an explicit knowledge checkpoint
+- A current Claude Code release for the Claude Code plugin path: the
+  exec-form `args` command hook and the `compact` `SessionStart` matcher used
+  by `hooks/hooks.json` need it (see the
+  [Claude Code hooks contract](https://code.claude.com/docs/en/hooks)). Other
+  supported hosts and the portable CLI have no Claude Code version
+  dependency.
 
 CI exercises Linux and macOS, plus a native-Windows smoke job for the portable
 surface. On native Windows (including Git Bash), read-only inspection and

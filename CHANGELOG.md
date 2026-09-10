@@ -7,6 +7,17 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Added
+
+- `docs/windows-wsl.md`: a "Claude Code hooks and python3 on Windows" section
+  and a platform-support-matrix row documenting that hooks require an
+  interpreter reachable as `python3` on `PATH`, with native Windows setup
+  notes for the python.org installer and the Microsoft Store alias stub.
+- `hooks/README.md` and `README.md`: a stated minimum Claude Code
+  requirement (a current release; the exec-form `args` command hook and the
+  `compact` `SessionStart` matcher need it), linking to the Claude Code hooks
+  contract.
+
 ### Fixed
 
 - The scaffolded vault's `.obsidian/app.json` now pins Obsidian's "New link
