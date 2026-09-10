@@ -78,6 +78,13 @@ bash scripts/setup-multi-agent.sh --host cursor --host windsurf \
   --workspace <workspace> --apply
 ```
 
+ZCode is opt-in and user-level (no `--workspace` needed):
+
+```bash
+bash scripts/setup-multi-agent.sh --host zcode
+bash scripts/setup-multi-agent.sh --host zcode --apply
+```
+
 You can also create equivalent per-skill links manually. For each `<name>` under
 the product's `skills/` directory, link that directory at:
 
@@ -85,6 +92,7 @@ the product's `skills/` directory, link that directory at:
 Codex:     ~/.agents/skills/<name>          -> <product-repository>/skills/<name>
 OpenCode:  ~/.config/opencode/skills/<name> -> <product-repository>/skills/<name>
 Gemini:    ~/.gemini/skills/<name>          -> <product-repository>/skills/<name>
+ZCode:     ~/.zcode/skills/<name>           -> <product-repository>/skills/<name>
 Cursor:    <workspace>/.cursor/skills/<name>   -> <product-repository>/skills/<name>
 Windsurf:  <workspace>/.windsurf/skills/<name> -> <product-repository>/skills/<name>
 ```

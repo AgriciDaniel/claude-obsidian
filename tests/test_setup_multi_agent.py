@@ -76,6 +76,42 @@ class SetupMultiAgentTests(unittest.TestCase):
             self.assertEqual("preserve", marker.read_text(encoding="utf-8"))
             self.assertTrue((home / ".agents/skills/save/SKILL.md").is_file())
 
+    def test_zcode_host_installs_global_links(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            first = self.invoke(home, "--apply", "--host", "zcode")
+            self.assertEqual(0, first.returncode, first.stderr)
+            skill_root = home / ".zcode/skills"
+            expected = sorted(
+                path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")
+            )
+            self.assertEqual(15, len(expected))
+            discovered = sorted(
+                path.parent.name for path in skill_root.glob("*/SKILL.md")
+            )
+            self.assertEqual(expected, discovered)
+            for skill_name in expected:
+                link = skill_root / skill_name
+                self.assertTrue(link.is_symlink(), skill_name)
+                self.assertEqual(ROOT / "skills" / skill_name, link.resolve())
+            # ZCode is opt-in: the default hosts are not installed alongside it.
+            self.assertFalse((home / ".agents/skills").exists())
+            second = self.invoke(home, "--apply", "--host", "zcode")
+            self.assertEqual(0, second.returncode, second.stderr)
+            self.assertEqual(15, second.stdout.count("READY"))
+
+    def test_zcode_host_conflict_is_preserved(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            conflict = home / ".zcode/skills/wiki"
+            conflict.mkdir(parents=True)
+            marker = conflict / "mine"
+            marker.write_text("preserve", encoding="utf-8")
+            result = self.invoke(home, "--apply", "--host", "zcode")
+            self.assertEqual(2, result.returncode)
+            self.assertEqual("preserve", marker.read_text(encoding="utf-8"))
+            self.assertTrue((home / ".zcode/skills/save/SKILL.md").is_file())
+
     def test_workspace_hosts_are_explicit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
