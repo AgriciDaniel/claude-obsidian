@@ -47,6 +47,20 @@ manual installation guidance instead.
 
 ---
 
+## Adopted contributor designs
+
+Two community pull requests diagnosed retrieval bugs and proposed fixes that
+the v2.0.0 refoundation implemented in near-identical form. The pull requests
+were not merged as submitted because the surrounding files were rewritten, but
+the designs are theirs.
+
+| Change | Contributor | Pull request |
+|--------|-------------|--------------|
+| Nomic `search_query` and `search_document` task prefixes in the reranker, including the `with_task_prefix` helper and cache-scheme invalidation | maartengoet | https://github.com/AgriciDaniel/claude-obsidian/pull/77 |
+| BM25 fallback order preserved in reranker no-op paths (`bm25_score` before `score`) | vinsocci | https://github.com/AgriciDaniel/claude-obsidian/pull/62 |
+
+---
+
 ## claude-obsidian
 
 **Author:** AgriciDaniel / AI Marketing Hub

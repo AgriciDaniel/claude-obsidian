@@ -29,6 +29,9 @@ implementation record for older releases.
 
 ### Changed
 
+- `ATTRIBUTION.md` now credits the contributor designs behind the reranker task
+  prefixes (PR #77, maartengoet) and the BM25 fallback order fix (PR #62,
+  vinsocci) that v2.0.0 adopted.
 - The five setup shell scripts (`setup-dragonscale.sh`, `setup-mode.sh`,
   `setup-multi-agent.sh`, `setup-retrieve.sh`, `setup-vault.sh`) moved from
   the top-level `bin/` directory to `scripts/`. claude.ai rejects any plugin
