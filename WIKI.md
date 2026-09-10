@@ -81,6 +81,15 @@ Common page types:
 | `meta` | Index, log, cache, convention, or maintenance page |
 | `fold` | Extractive rollup of identified log entries |
 
+`claude_obsidian/page_schema.py` is the one declaration of this vocabulary. The
+table above documents it for a reader; code reads the module rather than
+restating the values, and a test asserts the two stay in step.
+
+`source`, `entity`, `concept`, `question`, and `session` are *routable*: the
+methodology router can place a new page of that type. `comparison`, `overview`,
+`meta`, and `fold` are valid frontmatter and not routable, because the product
+creates them through a dedicated operation instead of filing a new note.
+
 Common statuses are `seed`, `active`, `developing`, `evergreen`, `answered`,
 `provisional`, `contested`, `deprecated`, and `archived`. Use only statuses the
 vault's dashboards and conventions understand.
