@@ -3,12 +3,15 @@
 Read `AGENTS.md` as the canonical host-neutral contract. Skills live in
 `skills/<name>/SKILL.md` and the portable core lives in `claude_obsidian/`.
 
-ZCode reads `AGENTS.md` at the workspace and user scope natively, so no
-mirrored rules file is needed. Install skill discovery with:
+ZCode reads `AGENTS.md` at the workspace and user scope natively (per the
+ZCode Agent documentation, https://zcode.z.ai/en/docs/agents), so no mirrored
+rules file is needed. User-level skills are discovered at
+`~/.zcode/skills/<skill-name>/SKILL.md` (https://zcode.z.ai/en/docs/skill).
+Install skill discovery with:
 
 ```bash
-bash bin/setup-multi-agent.sh --host zcode
-bash bin/setup-multi-agent.sh --host zcode --apply
+bash scripts/setup-multi-agent.sh --host zcode
+bash scripts/setup-multi-agent.sh --host zcode --apply
 ```
 
 The first command previews the links; the second applies that reviewed scope.

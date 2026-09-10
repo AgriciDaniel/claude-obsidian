@@ -81,8 +81,8 @@ bash scripts/setup-multi-agent.sh --host cursor --host windsurf \
 ZCode is opt-in and user-level (no `--workspace` needed):
 
 ```bash
-bash bin/setup-multi-agent.sh --host zcode
-bash bin/setup-multi-agent.sh --host zcode --apply
+bash scripts/setup-multi-agent.sh --host zcode
+bash scripts/setup-multi-agent.sh --host zcode --apply
 ```
 
 You can also create equivalent per-skill links manually. For each `<name>` under

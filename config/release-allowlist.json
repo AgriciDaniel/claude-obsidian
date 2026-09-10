@@ -44,7 +44,8 @@
     "PRIVACY.md",
     "README.md",
     "SECURITY.md",
-    "WIKI.md"
+    "WIKI.md",
+    "ZCODE.md"
   ],
   "include_globs": [
     ".github/*.md",
