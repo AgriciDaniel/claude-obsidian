@@ -17,6 +17,10 @@ CORE="$PRODUCT_ROOT/scripts/claude-obsidian.py"
 test -f "$CORE"
 ```
 
+Every `../wiki/references/` link in this file resolves the same way, relative
+to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
+selected vault's `wiki/` directory.
+
 If a separately installed `kepano/obsidian-skills` `defuddle` skill is
 available, prefer it for current CLI flags. Retain the privacy, consent, and
 transaction rules in this skill.

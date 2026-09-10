@@ -50,6 +50,11 @@ implementation record for older releases.
   `0x7f.0x0.0x0.0x1`) that `ipaddress.ip_address()` does not parse and that
   previously fell through to only a single-label check. Mirrors the existing
   numeric-label rejection in the source-ledger URL canonicalizer.
+- Twelve `SKILL.md` files that link into `skills/wiki/references/` now state
+  that a `../wiki/references/` link resolves relative to the skill's own
+  directory under `$PRODUCT_ROOT`, never the selected vault's `wiki/`
+  directory. Package validation now flags any such link missing that anchor
+  sentence.
 
 ## [2.1.1] - 2026-08-26
 

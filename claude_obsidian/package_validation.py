@@ -307,6 +307,28 @@ def _validate_skill_helper_paths(root: Path) -> list[dict[str, str]]:
     return findings
 
 
+def _validate_wiki_reference_link_anchors(root: Path) -> list[dict[str, str]]:
+    """A ../wiki/references/ link must state its skill-relative resolution root."""
+
+    findings: list[dict[str, str]] = []
+    link_pattern = re.compile(r"\.\./wiki/references/")
+    anchor_phrase = "relative to this skill's own directory under `$PRODUCT_ROOT`"
+    for path in sorted((root / "skills").glob("*/SKILL.md")):
+        text = path.read_text(encoding="utf-8")
+        if not link_pattern.search(text):
+            continue
+        normalized = " ".join(text.split())
+        if anchor_phrase not in normalized:
+            findings.append(
+                _finding(
+                    "unanchored_wiki_reference_link",
+                    path.relative_to(root).as_posix(),
+                    "a ../wiki/references/ link needs the skill-relative resolution sentence",
+                )
+            )
+    return findings
+
+
 def _validate_hooks(root: Path) -> list[dict[str, str]]:
     document, errors = _load_json(root, "hooks/hooks.json")
     if errors:
@@ -522,6 +544,7 @@ def validate_package(root: Path) -> dict[str, Any]:
         *_validate_skills(root),
         *_validate_documented_apply_examples(root),
         *_validate_skill_helper_paths(root),
+        *_validate_wiki_reference_link_anchors(root),
         *_validate_hooks(root),
         *_validate_versions(root),
     ]

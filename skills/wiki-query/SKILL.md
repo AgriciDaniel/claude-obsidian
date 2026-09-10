@@ -24,6 +24,10 @@ RETRIEVE="$PRODUCT_ROOT/scripts/retrieve.py"
 test -f "$CORE" && test -f "$RETRIEVE"
 ```
 
+Every `../wiki/references/` link in this file resolves the same way, relative
+to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
+selected vault's `wiki/` directory.
+
 ## Select depth
 
 - **Quick**: read `wiki/hot.md` and `wiki/index.md`; answer only when those

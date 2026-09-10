@@ -18,6 +18,10 @@ DETECT_TRANSPORT="$PRODUCT_ROOT/scripts/detect-transport.sh"
 test -f "$DETECT_TRANSPORT"
 ```
 
+Every `../wiki/references/` link in this file resolves the same way, relative
+to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
+selected vault's `wiki/` directory.
+
 ## Detect safely
 
 Probe without persisting host state:

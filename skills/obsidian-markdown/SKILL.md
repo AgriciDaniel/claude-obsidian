@@ -19,6 +19,10 @@ CORE="$PRODUCT_ROOT/scripts/claude-obsidian.py"
 test -f "$CORE"
 ```
 
+Every `../wiki/references/` link in this file resolves the same way, relative
+to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
+selected vault's `wiki/` directory.
+
 Answer syntax questions read-only. If the user requests a vault edit, draft the
 complete note, read [operation-transactions.md](../wiki/references/operation-transactions.md),
 and build one `claude-obsidian.transaction.v1` bundle with

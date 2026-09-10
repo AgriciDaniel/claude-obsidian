@@ -327,6 +327,35 @@ class PackageValidationTests(unittest.TestCase):
                 )
             )
 
+    def test_wiki_reference_links_require_the_skill_relative_anchor_sentence(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(
+                root, frontmatter="---\nname: sample\ndescription: Sample.\n---"
+            )
+            skill = root / "skills/sample/SKILL.md"
+            skill.write_text(
+                skill.read_text(encoding="utf-8")
+                + "\nRead [the transaction contract]"
+                "(../wiki/references/operation-transactions.md).\n",
+                encoding="utf-8",
+            )
+            codes = {item["code"] for item in validate_package(root)["findings"]}
+            self.assertIn("unanchored_wiki_reference_link", codes)
+
+            skill.write_text(
+                skill.read_text(encoding="utf-8")
+                + "\nEvery `../wiki/references/` link in this file resolves the"
+                " same way, relative to this skill's own directory under"
+                " `$PRODUCT_ROOT`, never relative to the selected vault's"
+                " `wiki/` directory.\n",
+                encoding="utf-8",
+            )
+            codes = {item["code"] for item in validate_package(root)["findings"]}
+            self.assertNotIn("unanchored_wiki_reference_link", codes)
+
 
 if __name__ == "__main__":
     unittest.main()
