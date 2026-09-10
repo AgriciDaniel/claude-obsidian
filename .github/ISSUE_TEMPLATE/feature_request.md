@@ -26,7 +26,7 @@ Which existing surface(s) does this touch?
 
 ## Compatibility
 - Does this change behavior for existing v1.x vaults? Yes / No
-- Does it require a new opt-in (`bin/setup-*.sh`)? Yes / No
+- Does it require a new opt-in (`scripts/setup-*.sh`)? Yes / No
 - Does it introduce a new dependency? Yes / No
 
 ## Testing

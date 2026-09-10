@@ -2,7 +2,7 @@
 
 Read `AGENTS.md` as the canonical host-neutral contract. Preview and then
 install Cascade skill links with
-`bash bin/setup-multi-agent.sh --host windsurf --workspace "$PWD"` followed by
+`bash scripts/setup-multi-agent.sh --host windsurf --workspace "$PWD"` followed by
 the same command with `--apply`, and load the matching
 `skills/<name>/SKILL.md` when a request triggers it.
 

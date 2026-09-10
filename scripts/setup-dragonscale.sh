@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Thin compatibility wrapper for transactional methodology configuration.
+# Compatibility entry point for dry-run-first DragonScale state provisioning.
 
 set -euo pipefail
 export PYTHONDONTWRITEBYTECODE=1
@@ -7,7 +7,6 @@ export PYTHONDONTWRITEBYTECODE=1
 PLUGIN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLI="$PLUGIN_ROOT/scripts/claude-obsidian.py"
 VAULT=""
-MODE=""
 APPLY=false
 CHECK=false
 GENERATED_AT=""
@@ -15,13 +14,13 @@ APPROVED_PLAN_SHA256=""
 
 usage() {
   cat <<'EOF'
-Usage: bin/setup-mode.sh [--vault PATH] [--mode MODE] [--check] [--apply]
-                         [--generated-at ISO-UTC]
-                         [--approved-plan-sha256 SHA256]
+Usage: scripts/setup-dragonscale.sh [--vault PATH] [--check] [--apply]
+                                [--generated-at ISO-UTC]
+                                [--approved-plan-sha256 SHA256]
 
-MODE is generic, lyt, para, or zettelkasten. Without --apply, setting a mode
-prints a complete transaction dry run. Without --mode, the current config is
-shown. This command never moves existing notes or seeds folders implicitly.
+The default prints a create-only transaction plan. --apply creates only missing
+address/tiling compatibility state. Existing values and raw manifests are never
+replaced. This does not install, probe, or download Ollama or any model.
 Pin --generated-at for the preview, then repeat that exact value with the
 reviewed --approved-plan-sha256 when applying the plan.
 EOF
@@ -32,11 +31,6 @@ while [ "$#" -gt 0 ]; do
     --vault)
       [ "$#" -ge 2 ] || { echo "ERROR: --vault requires a path" >&2; exit 2; }
       VAULT="$2"
-      shift
-      ;;
-    --mode)
-      [ "$#" -ge 2 ] || { echo "ERROR: --mode requires a value" >&2; exit 2; }
-      MODE="$2"
       shift
       ;;
     --check) CHECK=true ;;
@@ -57,21 +51,22 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 
-if $CHECK || [ -z "$MODE" ]; then
-  if [ -n "$VAULT" ]; then
-    exec python3 "$CLI" mode get --vault "$VAULT"
-  fi
-  exec python3 "$CLI" mode get
+if $CHECK && $APPLY; then
+  echo "ERROR: --check cannot be combined with --apply" >&2
+  exit 2
+fi
+if $CHECK && [ -n "$APPROVED_PLAN_SHA256" ]; then
+  echo "ERROR: --check cannot be combined with --approved-plan-sha256" >&2
+  exit 2
 fi
 
-case "$MODE" in
-  generic|lyt|para|zettelkasten) ;;
-  *) echo "ERROR: invalid mode: $MODE" >&2; exit 2 ;;
-esac
-
-arguments=(mode set "$MODE")
+arguments=(extension dragonscale)
 [ -n "$VAULT" ] && arguments+=(--vault "$VAULT")
 $APPLY && arguments+=(--apply)
 [ -n "$APPROVED_PLAN_SHA256" ] && arguments+=(--approved-plan-sha256 "$APPROVED_PLAN_SHA256")
 [ -n "$GENERATED_AT" ] && arguments+=(--generated-at "$GENERATED_AT")
+
+if $CHECK; then
+  arguments+=(--check)
+fi
 exec python3 "$CLI" "${arguments[@]}"

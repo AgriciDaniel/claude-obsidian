@@ -15,7 +15,7 @@ ALLOW_REMOTE_OLLAMA=false
 
 usage() {
   cat <<'EOF'
-Usage: bin/setup-retrieve.sh [--vault PATH] [--check] [--apply]
+Usage: scripts/setup-retrieve.sh [--vault PATH] [--check] [--apply]
        [--no-llm|--allow-egress] [--rebuild] [--allow-remote-ollama]
 
 Default is a read-only synthetic-prefix preview. --apply builds vault-scoped

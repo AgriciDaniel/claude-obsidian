@@ -41,13 +41,13 @@ test-package:
 validate: test-contracts test-package
 
 setup-dragonscale:
-	@bash bin/setup-dragonscale.sh
+	@bash scripts/setup-dragonscale.sh
 
 setup-retrieve:
-	@bash bin/setup-retrieve.sh
+	@bash scripts/setup-retrieve.sh
 
 setup-mode:
-	@bash bin/setup-mode.sh
+	@bash scripts/setup-mode.sh
 
 clean-test-state:
 	@rm -rf .vault-meta/mutation.lock .vault-meta/mutation.lock.reaping-* \

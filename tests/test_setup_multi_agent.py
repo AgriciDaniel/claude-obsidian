@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin/setup-multi-agent.sh"
+SCRIPT = ROOT / "scripts/setup-multi-agent.sh"
 
 
 class SetupMultiAgentTests(unittest.TestCase):

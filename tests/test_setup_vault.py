@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SCRIPT = ROOT / "bin" / "setup-vault.sh"
+SCRIPT = ROOT / "scripts" / "setup-vault.sh"
 FIXTURES = ROOT / "tests" / "fixtures" / "setup"
 _OPERATION_COUNTER = itertools.count(1)
 _GENERATED_AT = "2026-07-11T12:00:00Z"

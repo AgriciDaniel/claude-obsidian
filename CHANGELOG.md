@@ -7,6 +7,41 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Added
+
+- `docs/windows-wsl.md`: a "Claude Code hooks and python3 on Windows" section
+  and a platform-support-matrix row documenting that hooks require an
+  interpreter reachable as `python3` on `PATH`, with native Windows setup
+  notes for the python.org installer and the Microsoft Store alias stub.
+- `hooks/README.md` and `README.md`: a stated minimum Claude Code
+  requirement (a current release; the exec-form `args` command hook and the
+  `compact` `SessionStart` matcher need it), linking to the Claude Code hooks
+  contract.
+- A repeatable `lint --exclude GLOB` CLI flag and a matching
+  `lint_vault(..., exclude=...)` engine parameter scope specific paths (for
+  example a `wiki/scratchpad/` folder) out of page, link-resolution, orphan,
+  frontmatter, empty-section, and stale-index scanning. The same glob list
+  may be set vault-side via an `exclude` (or `exclude_globs` /
+  `excluded_paths`) array in `.vault-meta/lint.json`, `lint-allowlist.json`,
+  or `wiki-lint.json`; CLI and vault-config patterns are combined. The
+  report's new `summary.excluded_paths` count reports how many walked files
+  were dropped.
+
+### Changed
+
+- `ATTRIBUTION.md` now credits the contributor designs behind the reranker task
+  prefixes (PR #77, maartengoet) and the BM25 fallback order fix (PR #62,
+  vinsocci) that v2.0.0 adopted.
+- The five setup shell scripts (`setup-dragonscale.sh`, `setup-mode.sh`,
+  `setup-multi-agent.sh`, `setup-retrieve.sh`, `setup-vault.sh`) moved from
+  the top-level `bin/` directory to `scripts/`. claude.ai rejects any plugin
+  that ships a top-level `bin/` directory (it is reserved for the plugin's
+  Bash `PATH`); this repository never relied on that PATH behavior, so the
+  only change is the invocation path, for example `bash bin/setup-mode.sh`
+  becomes `bash scripts/setup-mode.sh`. Update any local scripts, aliases, or
+  CI that reference the old `bin/` paths. `RELEASE_MANIFEST.json` and
+  `SHA256SUMS` are refreshed at release time.
+
 ### Fixed
 
 - The scaffolded vault's `.obsidian/app.json` now pins Obsidian's "New link
@@ -17,6 +52,9 @@ implementation record for older releases.
   every other link-touching part of the product, which all resolve wikilinks
   by exact vault-relative path with no fuzzy resolution: resync scripts, the
   terminology linker, and lint's dead/ambiguous-link detection.
+- The repository root `.gitignore` now ignores `.mcp.json`, matching the vault
+  template and the install guide, which treat a project-scope MCP config as a
+  potential credential carrier. Suggested by PR #44.
 - `stop_status` now reads transaction journals up to the package's existing
   8 MiB runtime JSON bound, so large valid journals are not misreported as
   unreadable. Unsafe or unreadable journals now require manual inspection, and
@@ -34,6 +72,32 @@ implementation record for older releases.
   `UnicodeEncodeError` on the first such print. Both files now reconfigure
   stdout to UTF-8 on startup, guarded so a captured/redirected runner without
   a `reconfigure`-capable stdout still runs.
+- `capture.py`'s public-host validator now rejects hex-dotted, octal-dotted,
+  and short-form loopback spellings (`0x7f.0.0.1`, `0177.0.0.1`, `127.1`,
+  `0x7f.0x0.0x0.0x1`) that `ipaddress.ip_address()` does not parse and that
+  previously fell through to only a single-label check. Mirrors the existing
+  numeric-label rejection in the source-ledger URL canonicalizer.
+- Twelve `SKILL.md` files that link into `skills/wiki/references/` now state
+  that a `../wiki/references/` link resolves relative to the skill's own
+  directory under `$PRODUCT_ROOT`, never the selected vault's `wiki/`
+  directory. Package validation now flags any such link missing that anchor
+  sentence.
+- Lint no longer walks dot-prefixed directories (`.raw/` ingest archives,
+  `.claude/` agent worktrees, Obsidian's own `.trash/`, and similar) by
+  default, matching Obsidian's own indexer. Previously a duplicated or
+  archived page under a dot-prefixed folder became a real link-resolution
+  candidate, turning a single healthy `[[Wikilink]]` into a spurious
+  `ambiguous_targets` (and, on index pages, `stale_index_entries`) finding.
+- `--force-stale-lock` can now reap a mutation lock or capture queue lock
+  younger than `--stale-after` when the recorded owner PID is confirmed dead
+  on the same host. It still never reaps a live same-host owner before
+  `--stale-after` elapses and still keeps the age gate for a foreign-host or
+  unresolvable owner. Both `recover` help texts now describe this precisely.
+- Reading transaction runtime files now tolerates an external mtime-only
+  touch (for example a sync client refreshing metadata) by re-reading once
+  and accepting the content only if the bytes are identical to the first
+  read. Any size, inode, device, or mode change, and any content change
+  during the read, still fails closed with `CORRUPT_RUNTIME_STATE`.
 
 ## [2.1.1] - 2026-08-26
 

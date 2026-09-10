@@ -12,9 +12,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODE = ROOT / "bin/setup-mode.sh"
-DRAGONSCALE = ROOT / "bin/setup-dragonscale.sh"
-SETUP_VAULT = ROOT / "bin/setup-vault.sh"
+MODE = ROOT / "scripts/setup-mode.sh"
+DRAGONSCALE = ROOT / "scripts/setup-dragonscale.sh"
+SETUP_VAULT = ROOT / "scripts/setup-vault.sh"
 
 
 class SetupWrapperTests(unittest.TestCase):

@@ -355,6 +355,27 @@ def test_url_privacy_policy_has_no_network_dependency() -> None:
         socket.socket = original_socket
 
 
+def test_public_host_validation_rejects_alternate_loopback_spellings() -> None:
+    must_block = {
+        "hex_dotted": "https://0x7f.0.0.1/",
+        "octal_dotted": "https://0177.0.0.1/",
+        "short_form": "https://127.1/",
+        "hex_all_labels": "https://0x7f.0x0.0x0.0x1/",
+    }
+    still_blocked = {
+        "decimal_single_label": "https://2130706433/",
+        "hex_single_label": "https://0x7f000001/",
+        "ipv6_loopback": "https://[::1]/",
+        "ipv4_mapped_ipv6": "https://[::ffff:127.0.0.1]/",
+        "link_local_metadata": "https://169.254.169.254/",
+        "trailing_dot_localhost": "https://localhost./",
+    }
+    for label, url in must_block.items():
+        expect_code("URL_PRIVATE_HOST", lambda url=url: validate_https_url(url))
+    for label, url in still_blocked.items():
+        expect_code("URL_PRIVATE_HOST", lambda url=url: validate_https_url(url))
+
+
 def test_aws_signed_urls_and_userinfo_are_rejected() -> None:
     expect_code(
         "URL_USERINFO_FORBIDDEN",
@@ -732,6 +753,48 @@ def test_explicit_queue_recovery_can_reap_stale_pid_reuse_lock() -> None:
         ).recover()
         assert recovered["schema"] == "claude-obsidian.capture-queue.v1"
         assert not seeded.path.exists()
+
+
+def test_queue_force_stale_lock_reaps_dead_same_host_owner() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        seeded = CaptureQueueLock(vault)
+        seeded.path.mkdir()
+        seeded.owner_path.write_text(
+            json.dumps(
+                {
+                    "schema": "claude-obsidian.capture-lock.v1",
+                    "pid": 999999,
+                    "host": socket.gethostname(),
+                    "token": "dead-owner",
+                    "started_epoch": time.time() - 780,
+                }
+            ),
+            encoding="utf-8",
+        )
+        original_alive = capture_module._process_alive
+        capture_module._process_alive = lambda pid: False
+        try:
+            try:
+                CaptureQueueLock(vault, timeout=0, stale_after=3600.0).acquire()
+            except CaptureConflict as exc:
+                assert exc.code == "QUEUE_LOCK_TIMEOUT"
+            else:
+                raise AssertionError(
+                    "automatic recovery must not steal a young queue lock"
+                )
+            assert seeded.path.is_dir()
+
+            with CaptureQueueLock(
+                vault,
+                timeout=0,
+                stale_after=3600.0,
+                force_stale_lock=True,
+            ):
+                assert seeded.path.is_dir()
+            assert not seeded.path.exists()
+        finally:
+            capture_module._process_alive = original_alive
 
 
 def test_ownerless_queue_lock_requires_explicit_force() -> None:
@@ -1161,6 +1224,7 @@ def main() -> None:
     test_batch_budgets_are_preflighted_before_copy()
     test_direct_batch_rolls_back_as_one_transaction()
     test_url_privacy_policy_has_no_network_dependency()
+    test_public_host_validation_rejects_alternate_loopback_spellings()
     test_aws_signed_urls_and_userinfo_are_rejected()
     test_external_work_is_only_an_inert_plan()
     test_queue_lifecycle_is_idempotent()
@@ -1172,6 +1236,7 @@ def main() -> None:
     test_queue_lock_maps_advisory_lock_platform_errors()
     test_concurrent_queue_writers_are_lossless_and_serialized()
     test_explicit_queue_recovery_can_reap_stale_pid_reuse_lock()
+    test_queue_force_stale_lock_reaps_dead_same_host_owner()
     test_ownerless_queue_lock_requires_explicit_force()
     test_queue_lock_release_and_reaping_ignore_replaced_external_alias()
     test_queue_io_stays_on_pinned_runtime_across_directory_replacement()

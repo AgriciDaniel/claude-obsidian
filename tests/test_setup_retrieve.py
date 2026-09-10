@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "bin/setup-retrieve.sh"
+SCRIPT = ROOT / "scripts/setup-retrieve.sh"
 
 
 class SetupRetrieveTests(unittest.TestCase):

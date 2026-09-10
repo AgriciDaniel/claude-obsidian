@@ -15,6 +15,7 @@ import json
 import math
 import mimetypes
 import os
+import re
 import socket
 import stat
 import struct
@@ -1052,6 +1053,16 @@ def _normalize_host(host: str) -> str:
         ) from exc
 
 
+# Every dot-label is a bare decimal or 0x-hex numeral: this is never a real
+# public DNS name (numeric-only TLDs do not exist) and is instead an
+# alternate spelling of an IP address that ipaddress.ip_address() does not
+# parse, for example "0x7f.0.0.1", "0177.0.0.1", "127.1", "0x7f.0x0.0x0.0x1".
+# Mirrors the equivalent check in ledgers.py::_canonical_url_host. Wildcard
+# DNS services that map a name to loopback (for example 127.0.0.1.nip.io)
+# are a known residual gap and are deliberately not blocklisted here.
+_NUMERIC_OR_HEX_LABEL = re.compile(r"(?:[0-9]+|0x[0-9a-f]+)")
+
+
 def _validate_public_host(host: str) -> str:
     normalized = _normalize_host(host)
     if normalized == "localhost" or normalized.endswith(
@@ -1064,9 +1075,15 @@ def _validate_public_host(host: str) -> str:
     try:
         address = ipaddress.ip_address(unbracketed)
     except ValueError:
-        if "." not in normalized:
+        labels = normalized.split(".")
+        if len(labels) < 2:
             raise CaptureValidationError(
                 "URL_PRIVATE_HOST", "single-label URL hosts are forbidden"
+            )
+        if all(_NUMERIC_OR_HEX_LABEL.fullmatch(label) for label in labels):
+            raise CaptureValidationError(
+                "URL_PRIVATE_HOST",
+                "numeric or hex-encoded URL hosts are forbidden",
             )
     else:
         if not address.is_global:
@@ -1485,13 +1502,19 @@ class CaptureQueueLock:
         pid, started = owner.get("pid"), owner.get("started_epoch")
         if not isinstance(pid, int) or not isinstance(started, (int, float)):
             return False
+        same_host = owner.get("host") == socket.gethostname()
+        alive = _process_alive(pid) if same_host else None
+        if self.force_stale_lock and same_host and alive is False:
+            # An explicit override may reap a confirmed-dead same-host owner
+            # immediately: age alone must never be what stands between an
+            # operator and a queue lock whose owner is provably gone on this
+            # host.
+            return True
         if now - float(started) <= self.stale_after:
             return False
         if self.force_stale_lock:
             return True
-        return (
-            owner.get("host") == socket.gethostname() and _process_alive(pid) is False
-        )
+        return same_host and alive is False
 
     def acquire(self) -> None:
         if self.acquired:

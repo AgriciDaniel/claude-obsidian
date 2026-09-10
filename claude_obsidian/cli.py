@@ -218,7 +218,7 @@ def command_hook_stop(args: argparse.Namespace) -> int:
 
 def command_lint(args: argparse.Namespace) -> int:
     selection = _selection(args)
-    report = lint_vault(selection.root, as_of=args.as_of)
+    report = lint_vault(selection.root, as_of=args.as_of, exclude=args.exclude)
     if args.format == "markdown":
         sys.stdout.write(render_markdown(report))
     else:
@@ -953,8 +953,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--force-stale-lock",
         action="store_true",
         help=(
-            "Reap an old lock even when its host/PID identity cannot be disproved; "
-            "use only after confirming no writer is active"
+            "Reap an old lock, bypassing --stale-after only when the recorded "
+            "owner PID is confirmed dead on this host; a live same-host owner, "
+            "or an unresolvable or foreign-host owner, still requires "
+            "--stale-after to elapse. Use only after confirming no writer is "
+            "active"
         ),
     )
     recover.set_defaults(handler=command_transaction_recover)
@@ -978,6 +981,16 @@ def build_parser() -> argparse.ArgumentParser:
     _add_vault_argument(lint)
     lint.add_argument("--format", choices=("json", "markdown"), default="json")
     lint.add_argument("--as-of", help="ISO YYYY-MM-DD provenance freshness date")
+    lint.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        metavar="GLOB",
+        help=(
+            "Exclude paths matching GLOB (relative to the resolved vault "
+            "root; '*' also matches '/'); repeatable"
+        ),
+    )
     lint.add_argument(
         "--strict", action="store_true", help="Exit 1 when findings exist"
     )
@@ -1115,8 +1128,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--force-stale-lock",
         action="store_true",
         help=(
-            "Reap an old queue lock even when its host/PID identity cannot be disproved; "
-            "use only after confirming no queue worker is active"
+            "Reap an old queue lock, bypassing --lock-stale-after only when "
+            "the recorded owner PID is confirmed dead on this host; a live "
+            "same-host owner, or an unresolvable or foreign-host owner, still "
+            "requires --lock-stale-after to elapse. Use only after confirming "
+            "no queue worker is active"
         ),
     )
     queue_recover.set_defaults(handler=command_capture_queue_recover)

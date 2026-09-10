@@ -57,8 +57,8 @@ not convert the product repository into a user vault.
 The installer defaults to a no-write preview for Codex, OpenCode, and Gemini:
 
 ```bash
-bash bin/setup-multi-agent.sh
-bash bin/setup-multi-agent.sh --apply
+bash scripts/setup-multi-agent.sh
+bash scripts/setup-multi-agent.sh --apply
 ```
 
 It links each canonical `skills/<name>/` directory into the host's direct
@@ -67,14 +67,14 @@ when absent; an existing skill or link is never replaced. Check readiness
 without writing:
 
 ```bash
-bash bin/setup-multi-agent.sh --check
+bash scripts/setup-multi-agent.sh --check
 ```
 
 Cursor and Windsurf use workspace-local discovery and require an explicit
 workspace:
 
 ```bash
-bash bin/setup-multi-agent.sh --host cursor --host windsurf \
+bash scripts/setup-multi-agent.sh --host cursor --host windsurf \
   --workspace <workspace> --apply
 ```
 
@@ -182,9 +182,9 @@ bash scripts/detect-transport.sh --peek --vault <vault>
 Optional extensions are explicit and vault-scoped:
 
 ```bash
-bash bin/setup-mode.sh --vault <vault>
-bash bin/setup-retrieve.sh --vault <vault>
-bash bin/setup-dragonscale.sh --vault <vault>
+bash scripts/setup-mode.sh --vault <vault>
+bash scripts/setup-retrieve.sh --vault <vault>
+bash scripts/setup-dragonscale.sh --vault <vault>
 ```
 
 Read each script's preview before applying. Retrieval may use local BM25 alone;

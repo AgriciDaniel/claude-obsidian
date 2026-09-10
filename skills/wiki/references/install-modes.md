@@ -27,7 +27,7 @@ directory, or configure the vault explicitly.
 
 ## Portable Agent Skills
 
-Use `bin/setup-multi-agent.sh` or link each `skills/<name>/` directory at the
+Use `scripts/setup-multi-agent.sh` or link each `skills/<name>/` directory at the
 host's direct `<skill-root>/<name>/SKILL.md` discovery path. Codex, OpenCode,
 and other Agent Skills hosts consume the same `SKILL.md` files. Claude-only
 hooks are adapters, not core workflow logic.

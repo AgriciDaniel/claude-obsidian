@@ -1689,14 +1689,20 @@ class MutationLock:
         host = owner.get("host")
         if not isinstance(started, (int, float)) or not isinstance(pid, int):
             return False
+        same_host = isinstance(host, str) and host == socket.gethostname()
+        alive = _process_alive(pid) if same_host else None
+        if self.force_stale_lock and same_host and alive is False:
+            # An explicit override may reap a confirmed-dead same-host owner
+            # immediately: age alone must never be what stands between an
+            # operator and a lock whose owner is provably gone on this host.
+            return True
         age = now - float(started)
         if age <= self.stale_after:
             return False
         if self.force_stale_lock:
             return True
-        if not isinstance(host, str) or host != socket.gethostname():
+        if not same_host:
             return False
-        alive = _process_alive(pid)
         return alive is False
 
     def duplicate_parent_fd(self) -> int:
@@ -2141,6 +2147,9 @@ def _bounded_runtime_names(directory_fd: int, *, limit: int, label: str) -> list
     return sorted(names)
 
 
+_RUNTIME_READ_STABILITY_DELAY = 0.02
+
+
 def _read_runtime_bytes_at(
     directory_fd: int,
     name: str,
@@ -2177,25 +2186,48 @@ def _read_runtime_bytes_at(
             raise error_type(
                 "CORRUPT_RUNTIME_STATE", f"{label} changed before it was read"
             )
-        chunks: list[bytes] = []
-        total = 0
-        while True:
-            block = os.read(descriptor, min(1024 * 1024, limit + 1 - total))
-            if not block:
-                break
-            chunks.append(block)
-            total += len(block)
-            if total > limit:
+
+        def _read_current() -> tuple[bytes, os.stat_result]:
+            os.lseek(descriptor, 0, os.SEEK_SET)
+            chunks: list[bytes] = []
+            total = 0
+            while True:
+                block = os.read(descriptor, min(1024 * 1024, limit + 1 - total))
+                if not block:
+                    break
+                chunks.append(block)
+                total += len(block)
+                if total > limit:
+                    raise error_type(
+                        "CORRUPT_RUNTIME_STATE", f"{label} exceeds its size limit"
+                    )
+            return b"".join(chunks), os.fstat(descriptor)
+
+        def _require_stable_identity(observed: os.stat_result) -> None:
+            rigid = ("st_dev", "st_ino", "st_size", "st_mode")
+            if any(
+                getattr(opened, field) != getattr(observed, field) for field in rigid
+            ):
                 raise error_type(
-                    "CORRUPT_RUNTIME_STATE", f"{label} exceeds its size limit"
+                    "CORRUPT_RUNTIME_STATE", f"{label} changed while it was read"
                 )
-        after = os.fstat(descriptor)
-        stable = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_mode")
-        if any(getattr(opened, field) != getattr(after, field) for field in stable):
+
+        raw, after = _read_current()
+        _require_stable_identity(after)
+        if after.st_mtime_ns == opened.st_mtime_ns:
+            return raw
+        # A metadata-only touch (a sync client refreshing timestamps) moves the
+        # mtime without moving a byte. Re-read once and accept only if the bytes
+        # are identical to the first read; any difference means the content
+        # changed while it was read and the read fails closed.
+        time.sleep(_RUNTIME_READ_STABILITY_DELAY)
+        confirmation, confirmed = _read_current()
+        _require_stable_identity(confirmed)
+        if confirmation != raw:
             raise error_type(
                 "CORRUPT_RUNTIME_STATE", f"{label} changed while it was read"
             )
-        return b"".join(chunks)
+        return raw
     except TransactionError:
         raise
     except OSError as exc:
