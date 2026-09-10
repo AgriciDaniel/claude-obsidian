@@ -42,7 +42,7 @@ through Obsidian under their respective licenses.
 | Obsidian Excalidraw | Zsolt Viczian | https://github.com/zsviczian/obsidian-excalidraw-plugin |
 | Obsidian Banners | Danny Hernandez | https://github.com/noatpad/obsidian-banners |
 
-`bin/setup-vault.sh` does not download unverified plugin binaries. It prints
+`scripts/setup-vault.sh` does not download unverified plugin binaries. It prints
 manual installation guidance instead.
 
 ---

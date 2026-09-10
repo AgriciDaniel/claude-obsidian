@@ -7,7 +7,7 @@ new content of type X be filed under mode Y." Consumed by:
   - skills/wiki-ingest/SKILL.md  (where to file new source/entity/concept pages)
   - skills/save/SKILL.md         (where to file session notes)
   - skills/autoresearch/SKILL.md (where to file research output)
-  - bin/setup-mode.sh            (delegates configuration to the transaction core)
+  - scripts/setup-mode.sh            (delegates configuration to the transaction core)
 
 If `.vault-meta/mode.json` is absent → mode = "generic" → behavior identical
 to v1.7. No skill needs to special-case the missing-config path.

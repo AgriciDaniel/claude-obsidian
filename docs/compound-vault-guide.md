@@ -102,8 +102,8 @@ The optional retrieval pipeline stores contextual chunks and BM25 state below
 `.vault-meta/`. Provisioning is preview-first:
 
 ```bash
-bash bin/setup-retrieve.sh --vault <vault> --no-llm
-bash bin/setup-retrieve.sh --vault <vault> --no-llm --apply
+bash scripts/setup-retrieve.sh --vault <vault> --no-llm
+bash scripts/setup-retrieve.sh --vault <vault> --no-llm --apply
 ```
 
 BM25 is deterministic and local. Optional cosine reranking defaults to the

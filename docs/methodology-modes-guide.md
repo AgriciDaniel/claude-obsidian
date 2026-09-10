@@ -50,8 +50,8 @@ python3 scripts/claude-obsidian.py mode set para --vault <vault> \
 The compatibility wrapper has the same behavior:
 
 ```bash
-bash bin/setup-mode.sh --vault <vault> --mode para
-bash bin/setup-mode.sh --vault <vault> --mode para \
+bash scripts/setup-mode.sh --vault <vault> --mode para
+bash scripts/setup-mode.sh --vault <vault> --mode para \
   --generated-at <ISO-UTC> --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 

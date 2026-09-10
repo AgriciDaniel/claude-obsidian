@@ -141,8 +141,8 @@ For Codex, OpenCode, or Gemini, preview and then apply the portable skill links
 from the product checkout:
 
 ```bash
-bash bin/setup-multi-agent.sh --host codex
-bash bin/setup-multi-agent.sh --host codex --apply
+bash scripts/setup-multi-agent.sh --host codex
+bash scripts/setup-multi-agent.sh --host codex --apply
 ```
 
 Cursor and Windsurf use workspace-local skill discovery. Marketplace setup,

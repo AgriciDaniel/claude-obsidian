@@ -141,7 +141,7 @@ def import_sibling(name, filename):
     target = SCRIPTS_DIR / filename
     if not target.is_file():
         log(f"ERR: sibling helper {filename} not found at {target}")
-        log("  Run `bash bin/setup-retrieve.sh --check` to verify the install.")
+        log("  Run `bash scripts/setup-retrieve.sh --check` to verify the install.")
         sys.exit(EXIT_NOT_PROVISIONED)
     try:
         spec = importlib.util.spec_from_file_location(name, target)
@@ -257,7 +257,7 @@ def main(argv=None):
         return EXIT_USAGE
 
     if not BM25_INDEX.is_file():
-        log(f"ERR: no BM25 index at {BM25_INDEX}. Run `bash bin/setup-retrieve.sh` "
+        log(f"ERR: no BM25 index at {BM25_INDEX}. Run `bash scripts/setup-retrieve.sh` "
             "to provision, or fall back to legacy hot→index→drill.")
         return EXIT_NOT_PROVISIONED
     if not CHUNKS_DIR.is_dir() or not any(CHUNKS_DIR.iterdir()):

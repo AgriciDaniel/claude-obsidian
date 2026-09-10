@@ -9,13 +9,13 @@ their maturity and dependencies differ.
 Preview the create-only setup transaction:
 
 ```bash
-bash bin/setup-dragonscale.sh --vault <vault>
+bash scripts/setup-dragonscale.sh --vault <vault>
 ```
 
 Apply only after reviewing the missing paths:
 
 ```bash
-bash bin/setup-dragonscale.sh --vault <vault> \
+bash scripts/setup-dragonscale.sh --vault <vault> \
   --generated-at <ISO-UTC> --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 

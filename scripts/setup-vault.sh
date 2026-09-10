@@ -6,11 +6,11 @@
 # dry-run planning, exact plan approval, and recoverable transactions live.
 #
 # Usage:
-#   bash bin/setup-vault.sh [--dry-run] [--init|--adopt] [--vault PATH|PATH]
-#   bash bin/setup-vault.sh --check [--vault PATH|PATH]
-#   bash bin/setup-vault.sh --apply --approved-plan-sha256 HASH \
+#   bash scripts/setup-vault.sh [--dry-run] [--init|--adopt] [--vault PATH|PATH]
+#   bash scripts/setup-vault.sh --check [--vault PATH|PATH]
+#   bash scripts/setup-vault.sh --apply --approved-plan-sha256 HASH \
 #     --generated-at ISO-UTC --operation-id ID [--init|--adopt] [--vault PATH|PATH]
-#   bash bin/setup-vault.sh --dry-run --force --adopt [--vault PATH|PATH]
+#   bash scripts/setup-vault.sh --dry-run --force --adopt [--vault PATH|PATH]
 #
 # Compatibility:
 #   - preview is the default;

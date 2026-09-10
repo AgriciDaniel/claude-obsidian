@@ -329,6 +329,21 @@ def _validate_wiki_reference_link_anchors(root: Path) -> list[dict[str, str]]:
     return findings
 
 
+def _validate_no_legacy_bin_directory(root: Path) -> list[dict[str, str]]:
+    """claude.ai rejects a plugin distributing a top-level bin/ directory."""
+
+    if (root / "bin").exists():
+        return [
+            _finding(
+                "top_level_bin_directory",
+                "bin",
+                "top-level bin/ is rejected by claude.ai plugin distribution; "
+                "use scripts/ instead",
+            )
+        ]
+    return []
+
+
 def _validate_hooks(root: Path) -> list[dict[str, str]]:
     document, errors = _load_json(root, "hooks/hooks.json")
     if errors:
@@ -545,6 +560,7 @@ def validate_package(root: Path) -> dict[str, Any]:
         *_validate_documented_apply_examples(root),
         *_validate_skill_helper_paths(root),
         *_validate_wiki_reference_link_anchors(root),
+        *_validate_no_legacy_bin_directory(root),
         *_validate_hooks(root),
         *_validate_versions(root),
     ]

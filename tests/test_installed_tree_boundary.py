@@ -15,18 +15,26 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PYTHON_LAUNCHERS = tuple(sorted((ROOT / "scripts").glob("*.py")))
-SHELL_LAUNCHERS = (
-    *sorted((ROOT / "bin").glob("*.sh")),
-    *sorted(
+SETUP_SCRIPT_NAMES = frozenset(
+    {
+        "setup-dragonscale.sh",
+        "setup-mode.sh",
+        "setup-multi-agent.sh",
+        "setup-retrieve.sh",
+        "setup-vault.sh",
+    }
+)
+SHELL_LAUNCHERS = tuple(
+    sorted(
         path
         for path in (ROOT / "scripts").glob("*.sh")
-        if "python3" in path.read_text(encoding="utf-8")
-    ),
+        if path.name in SETUP_SCRIPT_NAMES
+        or "python3" in path.read_text(encoding="utf-8")
+    )
 )
 PRODUCT_DIRS = (
     ".claude-plugin",
     "agents",
-    "bin",
     "claude_obsidian",
     "config",
     "hooks",
@@ -134,7 +142,7 @@ class InstalledTreeBoundaryTests(unittest.TestCase):
                     (
                         [
                             "bash",
-                            str(installed / "bin/setup-dragonscale.sh"),
+                            str(installed / "scripts/setup-dragonscale.sh"),
                             "--vault",
                             str(vault),
                             "--check",
@@ -144,7 +152,7 @@ class InstalledTreeBoundaryTests(unittest.TestCase):
                     (
                         [
                             "bash",
-                            str(installed / "bin/setup-mode.sh"),
+                            str(installed / "scripts/setup-mode.sh"),
                             "--vault",
                             str(vault),
                             "--check",
@@ -154,7 +162,7 @@ class InstalledTreeBoundaryTests(unittest.TestCase):
                     (
                         [
                             "bash",
-                            str(installed / "bin/setup-multi-agent.sh"),
+                            str(installed / "scripts/setup-multi-agent.sh"),
                             "--dry-run",
                             "--host",
                             "codex",
@@ -164,7 +172,7 @@ class InstalledTreeBoundaryTests(unittest.TestCase):
                     (
                         [
                             "bash",
-                            str(installed / "bin/setup-retrieve.sh"),
+                            str(installed / "scripts/setup-retrieve.sh"),
                             "--vault",
                             str(vault),
                             "--check",
@@ -174,7 +182,7 @@ class InstalledTreeBoundaryTests(unittest.TestCase):
                     (
                         [
                             "bash",
-                            str(installed / "bin/setup-vault.sh"),
+                            str(installed / "scripts/setup-vault.sh"),
                             "--vault",
                             str(vault),
                             "--check",

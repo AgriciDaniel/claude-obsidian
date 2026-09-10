@@ -17,6 +17,17 @@ implementation record for older releases.
   requirement (a current release; the exec-form `args` command hook and the
   `compact` `SessionStart` matcher need it), linking to the Claude Code hooks
   contract.
+### Changed
+
+- The five setup shell scripts (`setup-dragonscale.sh`, `setup-mode.sh`,
+  `setup-multi-agent.sh`, `setup-retrieve.sh`, `setup-vault.sh`) moved from
+  the top-level `bin/` directory to `scripts/`. claude.ai rejects any plugin
+  that ships a top-level `bin/` directory (it is reserved for the plugin's
+  Bash `PATH`); this repository never relied on that PATH behavior, so the
+  only change is the invocation path, for example `bash bin/setup-mode.sh`
+  becomes `bash scripts/setup-mode.sh`. Update any local scripts, aliases, or
+  CI that reference the old `bin/` paths. `RELEASE_MANIFEST.json` and
+  `SHA256SUMS` are refreshed at release time.
 
 ### Fixed
 

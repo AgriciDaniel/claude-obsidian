@@ -13,7 +13,7 @@ HOST_COUNT=0
 
 usage() {
   cat <<'EOF'
-Usage: bin/setup-multi-agent.sh [--check|--dry-run|--apply]
+Usage: scripts/setup-multi-agent.sh [--check|--dry-run|--apply]
        [--host codex|opencode|gemini|cursor|windsurf|all] [--workspace PATH]
 
 Default: dry-run for Codex, OpenCode, and Gemini user-level per-skill links.

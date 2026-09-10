@@ -6,8 +6,8 @@ Read `AGENTS.md` as the canonical host-neutral contract. Skills live in
 Install skill discovery with:
 
 ```bash
-bash bin/setup-multi-agent.sh --host gemini
-bash bin/setup-multi-agent.sh --host gemini --apply
+bash scripts/setup-multi-agent.sh --host gemini
+bash scripts/setup-multi-agent.sh --host gemini --apply
 ```
 
 The first command previews the links; the second applies that reviewed scope.

@@ -254,7 +254,7 @@
       "tier": "core",
       "implementation_paths": [
         "skills/wiki/SKILL.md",
-        "bin/setup-vault.sh"
+        "scripts/setup-vault.sh"
       ],
       "read_scope": [
         "plugin:skills/**",
@@ -531,7 +531,7 @@
       "tier": "extension",
       "implementation_paths": [
         "skills/wiki-mode/SKILL.md",
-        "bin/setup-mode.sh",
+        "scripts/setup-mode.sh",
         "scripts/wiki-mode.py"
       ],
       "read_scope": [
@@ -599,7 +599,7 @@
       "tier": "extension",
       "implementation_paths": [
         "skills/wiki-retrieve/SKILL.md",
-        "bin/setup-retrieve.sh",
+        "scripts/setup-retrieve.sh",
         "scripts/bm25-index.py",
         "scripts/contextual-prefix.py",
         "scripts/rerank.py",

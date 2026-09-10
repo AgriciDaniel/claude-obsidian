@@ -25,8 +25,8 @@ mutable knowledge belongs in a separately resolved user vault.
 Preview and then install workspace-local skill links with:
 
 ```bash
-bash bin/setup-multi-agent.sh --host cursor --workspace "$PWD"
-bash bin/setup-multi-agent.sh --host cursor --workspace "$PWD" --apply
+bash scripts/setup-multi-agent.sh --host cursor --workspace "$PWD"
+bash scripts/setup-multi-agent.sh --host cursor --workspace "$PWD" --apply
 ```
 
 Public canonical: https://github.com/AgriciDaniel/claude-obsidian

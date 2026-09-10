@@ -356,6 +356,20 @@ class PackageValidationTests(unittest.TestCase):
             codes = {item["code"] for item in validate_package(root)["findings"]}
             self.assertNotIn("unanchored_wiki_reference_link", codes)
 
+    def test_top_level_bin_directory_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(
+                root, frontmatter="---\nname: sample\ndescription: Sample.\n---"
+            )
+            (root / "bin").mkdir()
+            (root / "bin" / "setup-example.sh").write_text(
+                "#!/usr/bin/env bash\n", encoding="utf-8"
+            )
+            findings = validate_package(root)["findings"]
+            codes = {item["code"] for item in findings}
+            self.assertIn("top_level_bin_directory", codes)
+
 
 if __name__ == "__main__":
     unittest.main()
