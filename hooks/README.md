@@ -12,7 +12,7 @@ for native Windows setup.
 | Event | Matcher | Behavior |
 |---|---|---|
 | `SessionStart` | `startup|resume|clear|compact` | Silent by default. With `CLAUDE_OBSIDIAN_SESSION_CONTEXT=1`, resolves a real user vault and emits a bounded, sanitized `wiki/hot.md` data block. A workspace-configured vault outside that project also requires an exact `CLAUDE_OBSIDIAN_SESSION_CONTEXT_VAULT` path. |
-| `Stop` | unsupported/omitted | Emits a bounded, aggregate JSON `systemMessage` when recovery is needed. It omits operation identifiers, paths, and note content; otherwise it is silent. |
+| `Stop` | unsupported/omitted | Emits a bounded, aggregate JSON `systemMessage` when recovery is needed. It also emits one advisory line, after any recovery warnings, when `wiki/log.md` holds at least 85% of a wiki-fold batch (`2**k` entries, default `k=4`, override with `CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT`) above its most recent `fold` marker. That check reads at most the first 512 KiB of the log, never recommends `transaction recover`, never runs wiki-fold, and never writes. It omits operation identifiers, paths, and note content; otherwise it is silent. |
 
 Both are `command` hooks using an executable plus an argument array and
 `${CLAUDE_PLUGIN_ROOT}` only to locate plugin code. They do not use the plugin
