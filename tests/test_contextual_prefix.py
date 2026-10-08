@@ -79,6 +79,19 @@ def test_above_floor_returns_ephemeral():
     )
 
 
+# ─── Haiku 5.5: model id and its 512-token cache floor ───────────────────────
+def test_haiku55_model_and_floor():
+    """Haiku 5.5's minimum cacheable prompt is 512 tokens (Haiku 4.5: 4,096),
+    so a ~2 KB page body is cached instead of being sent uncached."""
+    assert_eq("tier-1 model is Haiku 5.5", "claude-haiku-5-5", cp.ANTHROPIC_MODEL)
+    assert_eq("floor is 512 tokens * 4 chars", 2048, cp.HAIKU_CACHE_MIN_CHARS)
+    assert_eq(
+        "2 KB body → ephemeral",
+        {"type": "ephemeral"},
+        cp.cache_control_for("x" * 2048),
+    )
+
+
 # ─── Integration: built payload attaches cache_control only above the floor ──
 def test_payload_attaches_cache_control_by_body_size():
     """Mock the network. Assert the API payload attaches cache_control to the
@@ -863,6 +876,7 @@ def main():
     test_empty_body_returns_none()
     test_at_floor_returns_ephemeral()
     test_above_floor_returns_ephemeral()
+    test_haiku55_model_and_floor()
     test_payload_attaches_cache_control_by_body_size()
     test_anthropic_api_response_read_is_bounded()
     test_anthropic_api_response_boundaries_and_shapes()

@@ -9,10 +9,10 @@ prefixed text is what gets BM25-indexed and embedded. Anthropic reported a
 implementation requires evaluation on each vault and makes no fixed gain claim.
 
 Three-tier prefix generation (chosen per-run automatically):
-  1. If ANTHROPIC_API_KEY is set      → direct Anthropic API call (Haiku 4.5)
+  1. If ANTHROPIC_API_KEY is set      → direct Anthropic API call (Haiku 5.5)
                                          with prompt caching on the page body
-                                         (only when the body clears the ~16 KB
-                                         Haiku 4.5 cache floor; see
+                                         (only when the body clears the ~2 KB
+                                         Haiku 5.5 cache floor; see
                                          cache_control_for()).
                                          Cost varies by current provider pricing,
                                          model, cache behavior, and document size.
@@ -117,22 +117,25 @@ CHUNK_OVERLAP_CHARS = 200
 CHUNK_HARD_MAX_CHARS = 4000
 CONTEXT_PREFIX_MAX_CHARS = 1000
 
-ANTHROPIC_MODEL = "claude-haiku-4-5-20251001"
+ANTHROPIC_MODEL = "claude-haiku-5-5"
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_TIMEOUT_SEC = 30
 ANTHROPIC_RESPONSE_MAX_BYTES = 256 * 1024
 CLAUDE_CLI_TIMEOUT_SEC = 60
 
 # Anthropic prompt caching ignores any cached prefix below the model's minimum
-# cacheable size — 4,096 tokens for Haiku 4.5 (verified against the prompt-caching
-# docs, 2026-05). At ~4 chars/token that is ~16 KB. We attach cache_control only
+# cacheable size — 512 tokens for Haiku 5.5 (verified against the prompt-caching
+# docs, 2026-10-08; Haiku 4.5 needed 4,096). At ~4 chars/token that is ~2 KB;
+# Haiku 5.5's tokenizer yields ~30% more tokens per character than 4.5's, so
+# 4 chars/token overstates the characters needed and the floor stays on the
+# conservative side. We attach cache_control only
 # when the body clears this floor so the marker reflects reality: below the floor
 # the API treats it as a silent no-op. The per-call local cache statistics in
 # anthropic_api_prefix() is what actually measures hit rate. The check counts the
 # body only — a deliberately conservative ~370-char underestimate that ignores the
 # system_msg + <page> wrapper also inside the cached prefix — so near the boundary
 # it errs toward not-marking, never toward a wrongly-attached marker.
-HAIKU_CACHE_MIN_CHARS = 16384  # 4096 tokens * 4 chars/token
+HAIKU_CACHE_MIN_CHARS = 2048  # 512 tokens * 4 chars/token
 
 EXIT_OK = 0
 EXIT_USAGE = 2

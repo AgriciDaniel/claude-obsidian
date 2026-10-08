@@ -7,6 +7,13 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Changed
+
+- `scripts/contextual-prefix.py` calls Claude Haiku 5.5 (`claude-haiku-5-5`,
+  released 2026-10-07) instead of Haiku 4.5, and lowers the prompt-cache floor
+  to Haiku 5.5's 512-token minimum (`HAIKU_CACHE_MIN_CHARS` 16384 → 2048), so
+  page bodies between ~2 KB and ~16 KB are now cached.
+
 ## [2.2.0] - 2026-09-10
 
 Backlog triage: lint scoping, lock recovery, host validation, the `bin/`
