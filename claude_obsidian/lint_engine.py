@@ -420,7 +420,9 @@ def _wiki_location(root: Path) -> tuple[Path, str]:
     return candidate, "wiki"
 
 
-def _split_fragment(target: str) -> tuple[str, str | None, str | None]:
+def _split_fragment(
+    target: str, *, decode_fragment: bool = False
+) -> tuple[str, str | None, str | None]:
     delimiter = -1
     escaped = False
     for index, char in enumerate(target):
@@ -435,6 +437,8 @@ def _split_fragment(target: str) -> tuple[str, str | None, str | None]:
         return target, None, None
     file_part = target[:delimiter]
     fragment = target[delimiter + 1 :].strip()
+    if decode_fragment:
+        fragment = urllib.parse.unquote(fragment)
     if fragment.startswith("^"):
         return file_part, fragment[1:], "block"
     return file_part, fragment, "heading"
@@ -501,7 +505,11 @@ def _parse_links(page: _Page) -> list[_Link]:
         ):
             continue
         decoded = urllib.parse.unquote(destination)
-        file_part, fragment, fragment_kind = _split_fragment(decoded)
+        # Split the encoded URL so a literal %23 in its path is not an anchor.
+        # The resolver decodes file_part once, preserving literal %xx filenames.
+        file_part, fragment, fragment_kind = _split_fragment(
+            destination, decode_fragment=True
+        )
         syntax = "markdown-embed" if match.group("embed") else "markdown-link"
         links.append(
             _Link(

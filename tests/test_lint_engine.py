@@ -107,6 +107,39 @@ class LintEngineTests(unittest.TestCase):
         self.assertNotIn("Inline Code Ghost", all_reported_targets)
         self.assertNotIn("Fence Ghost", all_reported_targets)
 
+    def test_markdown_encoded_paths_preserve_literal_hashes_and_fragments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            files = {
+                "wiki/dir #1/中文 100%.md": "# Known heading\n\nText ^known-block\n",
+                "wiki/literal%23.md": "# Encoded hash\n",
+                "wiki/literal#.md": "# Different target\n",
+                "wiki/assets #1/picture.txt": "Attachment\n",
+            }
+            for relative, content in files.items():
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content, encoding="utf-8")
+            destination = "dir%20%231/%E4%B8%AD%E6%96%87%20100%25.md"
+            (root / "wiki/index.md").write_text(
+                f"[Page]({destination})\n"
+                f"[Heading]({destination}#Known%20heading)\n"
+                f"[Block]({destination}#%5Eknown-block)\n"
+                "![Attachment](assets%20%231/picture.txt)\n"
+                "[Literal escape](literal%2523.md#Encoded%20hash)\n"
+                f"[Missing heading]({destination}#Missing%20heading)\n",
+                encoding="utf-8",
+            )
+
+            report = lint_engine.lint_vault(root, as_of="2026-10-08")
+
+        self.assertEqual(6, report["summary"]["links_scanned"])
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual(
+            [("dir #1/中文 100%.md#Missing heading", "heading-not-found")],
+            [(item["target"], item["reason"]) for item in report["dead_links"]],
+        )
+
     def test_ambiguous_basename_and_stale_index_entries(self) -> None:
         self.assertEqual(
             [

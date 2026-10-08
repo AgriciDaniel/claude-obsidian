@@ -7,6 +7,13 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Fixed
+
+- Lint splits Markdown link fragments before URL-decoding their paths, so
+  percent-encoded `#` characters in filenames no longer become false anchors.
+  Paths are decoded only once; literal percent escapes, attachments, and
+  encoded heading/block fragments retain their intended targets.
+
 ## [2.2.0] - 2026-09-10
 
 Backlog triage: lint scoping, lock recovery, host validation, the `bin/`
