@@ -9,10 +9,10 @@ tags:
   - sample
 ---
 
-# Example Source
+# Fonte de Exemplo
 
-This is synthetic fixture content, not evidence for a real-world claim. It
-illustrates how a source page can support [[Source-grounded notes]] and record a
-relationship to [[Example Maintainer]].
+Este é conteúdo de fixture sintética, não evidência para uma alegação do
+mundo real. Ilustra como uma página de fonte pode sustentar
+[[Source-grounded notes]] e registrar uma relação com [[Example Maintainer]].
 
-See the [[index|Sample Wiki Index]].
+Veja o [[index|Sample Wiki Index]].

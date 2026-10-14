@@ -9,9 +9,10 @@ tags:
   - sample
 ---
 
-# Source-grounded notes
+# Notas com base na fonte
 
-In this synthetic example, a note states what its evidence supports and links
-back to [[Example Source]]. The validation question is [[What supports source-grounded notes]].
+Neste exemplo sintético, uma nota declara o que suas evidências sustentam e
+faz link de volta para [[Example Source]]. A pergunta de validação é
+[[What supports source-grounded notes]].
 
-See the [[index|Sample Wiki Index]].
+Veja o [[index|Sample Wiki Index]].

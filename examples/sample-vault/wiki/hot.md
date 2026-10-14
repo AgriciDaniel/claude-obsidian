@@ -10,6 +10,7 @@ tags:
   - sample
 ---
 
-# Recent Context
+# Contexto recente
 
-The sample vault contains only synthetic notes and no contributor context.
+O vault de amostra contém apenas notas sintéticas e nenhum contexto do
+colaborador.

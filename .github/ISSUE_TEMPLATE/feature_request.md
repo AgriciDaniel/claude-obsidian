@@ -6,31 +6,36 @@ labels: enhancement
 assignees: ''
 ---
 
-## Problem
-What user need or workflow gap motivates this request? Be specific about the situation where today's behavior falls short.
+## Problema
+Qual necessidade do usuário ou lacuna no fluxo de trabalho motiva esta
+solicitação? Seja específico sobre a situação em que o comportamento atual deixa
+a desejar.
 
-## Proposed solution
-Describe what you'd like to see. New skill? New agent? Change to an existing one? Sketch the interface (slash command, trigger phrases, expected output).
+## Solução proposta
+Descreva o que você gostaria de ver. Nova skill? Novo agente? Mudança em um
+existente? Esboce a interface (slash command, frases de gatilho, saída
+esperada).
 
-## Alternatives considered
-What other approaches did you think about, and why is this one preferred?
+## Alternativas consideradas
+Quais outras abordagens você considerou e por que esta é a preferida?
 
-## Scope
-Which existing surface(s) does this touch?
-- [ ] A new skill (`skills/<name>/`)
-- [ ] A new agent (`agents/<name>.md`)
-- [ ] A new script (`scripts/<name>`)
-- [ ] Change to existing skill: (which?)
-- [ ] Change to plugin manifest / hooks / setup scripts
-- [ ] Documentation only
+## Escopo
+Quais superfícies existentes isso afeta?
+- [ ] Uma nova skill (`skills/<name>/`)
+- [ ] Um novo agente (`agents/<name>.md`)
+- [ ] Um novo script (`scripts/<name>`)
+- [ ] Mudança em skill existente: (qual?)
+- [ ] Mudança no manifest do plugin / hooks / scripts de setup
+- [ ] Apenas documentação
 
-## Compatibility
-- Does this change behavior for existing v1.x vaults? Yes / No
-- Does it require a new opt-in (`scripts/setup-*.sh`)? Yes / No
-- Does it introduce a new dependency? Yes / No
+## Compatibilidade
+- Isso muda o comportamento de vaults v1.x existentes? Sim / Não
+- Requer um novo opt-in (`scripts/setup-*.sh`)? Sim / Não
+- Introduz uma nova dependência? Sim / Não
 
-## Testing
-How would this be tested hermetically? (No network, no external services.)
+## Testes
+Como isso seria testado de forma hermética? (Sem rede, sem serviços externos.)
 
-## Additional context
-Links, examples, or references to similar features in other tools.
+## Contexto adicional
+Links, exemplos ou referências a funcionalidades similares em outras
+ferramentas.

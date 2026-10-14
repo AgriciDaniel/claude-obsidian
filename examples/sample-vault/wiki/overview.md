@@ -9,7 +9,7 @@ tags:
   - sample
 ---
 
-# Sample Vault Overview
+# Visão Geral do Vault de Amostra
 
-The fixture connects [[Example Source]], [[Source-grounded notes]],
-[[Example Maintainer]], and [[What supports source-grounded notes]].
+A fixture conecta [[Example Source]], [[Source-grounded notes]],
+[[Example Maintainer]] e [[What supports source-grounded notes]].

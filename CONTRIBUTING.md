@@ -1,62 +1,66 @@
-# Contributing to claude-obsidian
+# Contribuindo com claude-obsidian
 
-Contributions are welcome in the public canonical repository:
+Contribuições são bem-vindas no repositório canônico público:
 https://github.com/AgriciDaniel/claude-obsidian.
 
-For a substantial change, open an issue that describes the user problem,
-proposed behavior, compatibility impact, privacy/egress implications, and a
-hermetic test strategy. Security reports follow [SECURITY.md](SECURITY.md), not
-the public issue tracker.
+Para uma mudança substancial, abra uma issue que descreva o problema do
+usuário, comportamento proposto, impacto de compatibilidade, implicações de
+privacidade/egresso e uma estratégia de teste hermética. Relatórios de
+segurança seguem [SECURITY.md](SECURITY.md), não o tracker público de issues.
 
-## Engineering contract
+## Contrato de engenharia
 
-- Read the affected behavior, callers, contracts, and tests before editing.
-- Keep product code and user-vault state separate.
-- Prefer the smallest deterministic implementation with explicit failure and
-  recovery behavior.
-- Preserve existing user files unless the user reviews an explicit replacement
-  or destructive plan.
-- Route one logical knowledge mutation through one recoverable transaction.
-- Keep parallel workers draft-only and query/lint operations read-only.
-- Require explicit consent for remote egress, destructive repair, and external
-  state changes.
-- Do not add capability, performance, or competitor claims without current,
-  traceable evidence.
-- Keep skill frontmatter to exactly `name` and `description`.
+- Leia o comportamento afetado, chamadores, contratos e testes antes de
+  editar.
+- Mantenha o código do produto e o estado do vault de usuário separados.
+- Prefira a menor implementação determinística com comportamento explícito de
+  falha e recuperação.
+- Preserve arquivos existentes do usuário a menos que o usuário revise uma
+  substituição explícita ou plano destrutivo.
+- Rodeie uma mutação lógica de conhecimento através de uma transação
+  recuperável.
+- Mantenha workers paralelos apenas-rascunho e operações query/lint em modo
+  somente leitura.
+- Requeira consentimento explícito para egresso remoto, reparo destrutivo e
+  mudanças de estado externo.
+- Não adicione alegações de capacidade, desempenho ou concorrentes sem
+  evidência atual e rastreável.
+- Mantenha o frontmatter das skills em exatamente `name` e `description`.
 
-## Local workflow
+## Fluxo de trabalho local
 
-Create a focused branch from a public fork. Python 3.11 or newer is required.
-The public default branch is an artifact-clean, self-validating product tree;
-never add root vault state (`wiki/`, `.raw/`, or `.vault-meta/`) to a
-contribution.
+Crie um branch focalizado a partir de um fork público. Python 3.11 ou mais
+recente é requerido. O branch público padrão é uma árvore de produto
+auto-validada e limpa de artefato; nunca adicione estado de vault raiz (`wiki/`,
+`.raw/` ou `.vault-meta/`) a uma contribuição.
 
 ```bash
 make test
 ```
 
-The test target discovers every `tests/test_*.py` and `tests/test_*.sh` file,
-then executes product/capability and package contracts. Tests must be hermetic:
-no network, model server, personal paths, global config, or persistent product
-state. A network integration belongs behind an explicit consent flag and needs
-an offline test double.
+O alvo de teste descobre cada arquivo `tests/test_*.py` e `tests/test_*.sh`,
+depois executa contratos de produto/capacidade e pacote. Testes devem ser
+herméticos: sem rede, servidor de modelo, paths pessoais, config global ou
+estado persistente do produto. Uma integração de rede pertence atrás de um
+flag de consentimento explícito e precisa de um teste duplo offline.
 
-Behavior changes should include:
+Mudanças comportamentais devem incluir:
 
-1. a regression test that fails for the old behavior;
-2. success, conflict, invalid-input, and recovery coverage proportional to risk;
-3. updated user and contract documentation;
-4. an entry under `## [Unreleased]` in `CHANGELOG.md`.
+1. um teste de regressão que falha para o comportamento antigo;
+2. cobertura de sucesso, conflito, entrada inválida e recuperação proporcional
+   ao risco;
+3. documentação de usuário e de contrato atualizada;
+4. uma entrada sob `## [Unreleased]` em `CHANGELOG.md`.
 
-Run the read-only fresh-context verifier in `agents/verifier.md` for non-trivial
-changes. It may inspect the full worktree or a declared path scope; it never
-stages, commits, pushes, or modifies files. Resolve BLOCKER and HIGH findings
-before requesting review.
+Execute o verificador de contexto fresco somente-leitura em `agents/verifier.md`
+para mudanças não triviais. Ele pode inspecionar o worktree completo ou um
+escopo de path declarado; nunca stage, commita, faz push ou modifica arquivos.
+Resolva achados BLOCKER e HIGH antes de solicitar revisão.
 
-Use Conventional Commits where practical. The pull request should explain the
-problem, behavior, compatibility/rollback story, exact verification run, and
-any remaining limitations. Do not include vault content, credentials, generated
-runtime state, or unreviewed binaries.
+Use Conventional Commits onde for prático. O pull request deve explicar o
+problema, comportamento, história de compatibilidade/rollback, verificação
+executada exata e quaisquer limitações remanescentes. Não inclua conteúdo de
+vault, credenciais, estado de runtime gerado ou binários não revisados.
 
-By contributing, you agree that your contribution is licensed under the
-[MIT License](LICENSE) and governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Ao contribuir, você concorda que sua contribuição é licenciada sob a
+[MIT License](LICENSE) e regida por [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

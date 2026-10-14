@@ -1,26 +1,32 @@
-# Install claude-obsidian
+# Instalar o claude-obsidian
 
-claude-obsidian has two independent parts:
+O claude-obsidian tem duas partes independentes:
 
-1. the product package—skills, portable core, Claude adapter, and templates;
-2. a user-owned Obsidian vault containing mutable knowledge.
+1. o pacote do produto — skills, núcleo portátil, adaptador Claude e
+   templates;
+2. um vault do Obsidian de propriedade do usuário contendo conhecimento
+   mutável.
 
-Do not use an installed plugin cache as the vault. A source clone is suitable
-for development, but a normal user vault should be a separate directory.
+Não use um cache de plugin instalado como o vault. Um clone de fonte é
+adequado para desenvolvimento, mas um vault normal de usuário deve ser um
+diretório separado.
 
-## Requirements
+## Requisitos
 
-- Python 3.11 or newer
-- an Agent Skills compatible host, or Claude Code for the plugin adapter
-- Obsidian when you want its visual editor
-- Bash for installer and optional legacy-extension scripts
-- Git only for source development, release builds, or explicit checkpoints
-- On Windows: WSL for vault writes; native Windows supports read-only
-  inspection and dry-runs — see the [Windows and WSL guide](windows-wsl.md)
+- Python 3.11 ou mais recente
+- um host compatível com Agent Skills, ou Claude Code para o adaptador de
+  plugin
+- Obsidian quando você quiser seu editor visual
+- Bash para o instalador e scripts de extensão legada opcionais
+- Git apenas para desenvolvimento de fonte, builds de release ou checkpoints
+  explícitos
+- No Windows: WSL para escritas no vault; Windows nativo suporta inspeção
+  somente-leitura e dry-runs — veja o [guia Windows e WSL](windows-wsl.md)
 
-## Claude Code marketplace
+## Marketplace Claude Code
 
-Add the artifact-clean public catalog and install the namespaced plugin:
+Adicione o catálogo público com artefato limpo e instale o plugin com
+namespace:
 
 ```bash
 claude plugin marketplace add AgriciDaniel/claude-obsidian
@@ -28,65 +34,68 @@ claude plugin install claude-obsidian@agricidaniel-claude-obsidian
 claude plugin list
 ```
 
-The private development tree deliberately has no
-`.claude-plugin/marketplace.json`; it can contain contributor-vault state and
-must not be added as a marketplace. The deterministic release builder injects
-that manifest only into its audited output. The public default branch must be
-promoted from the extracted audited artifact before these marketplace commands
-are advertised for a new version.
+A árvore privada de desenvolvimento deliberadamente não tem
+`.claude-plugin/marketplace.json`; ela pode conter estado de vault de
+contribuidores e não deve ser adicionada como marketplace. O construtor
+determinístico de release injeta esse manifest apenas em sua saída auditada.
+O branch público default deve ser promovido a partir do artefato auditado
+extraído antes que esses comandos de marketplace sejam anunciados para uma
+nova versão.
 
-Invoke skills as `/claude-obsidian:wiki`,
-`/claude-obsidian:wiki-ingest`, and `/claude-obsidian:save`.
+Invoque skills como `/claude-obsidian:wiki`, `/claude-obsidian:wiki-ingest` e
+`/claude-obsidian:save`.
 
-The plugin cache contains read-only product assets. Run Claude from the user
-vault, set `CLAUDE_OBSIDIAN_VAULT`, or pass `--vault` to portable commands.
+O cache de plugin contém ativos de produto somente-leitura. Execute Claude a
+partir do vault do usuário, defina `CLAUDE_OBSIDIAN_VAULT`, ou passe `--vault`
+para comandos portáteis.
 
-## Local Claude plugin development
+## Desenvolvimento local de plugin Claude
 
-From a product clone:
+A partir de um clone do produto:
 
 ```bash
 claude --plugin-dir <product-repository>
 ```
 
-This mode is for testing uninstalled changes. Skills remain namespaced. It does
-not convert the product repository into a user vault.
+Este modo é para testar alterações não instaladas. Skills permanecem com
+namespace. Ele não converte o repositório do produto em um vault de usuário.
 
-## Portable Agent Skills hosts
+## Hosts Agent Skills portáteis
 
-The installer defaults to a no-write preview for Codex, OpenCode, and Gemini:
+O instalador default para uma pré-visualização sem escrita para Codex, OpenCode
+e Gemini:
 
 ```bash
 bash scripts/setup-multi-agent.sh
 bash scripts/setup-multi-agent.sh --apply
 ```
 
-It links each canonical `skills/<name>/` directory into the host's direct
-`<skill-root>/<name>/SKILL.md` discovery layout. Destinations are created only
-when absent; an existing skill or link is never replaced. Check readiness
-without writing:
+Ele liga cada diretório canônico `skills/<name>/` no layout de descoberta
+direto `<skill-root>/<name>/SKILL.md` do host. Destinos são criados apenas
+quando ausentes; uma skill ou link existente nunca é substituído. Verifique a
+prontidão sem escrever:
 
 ```bash
 bash scripts/setup-multi-agent.sh --check
 ```
 
-Cursor and Windsurf use workspace-local discovery and require an explicit
-workspace:
+Cursor e Windsurf usam descoberta local ao workspace e exigem um workspace
+explícito:
 
 ```bash
 bash scripts/setup-multi-agent.sh --host cursor --host windsurf \
   --workspace <workspace> --apply
 ```
 
-ZCode is opt-in and user-level (no `--workspace` needed):
+ZCode é opt-in e de nível de usuário (sem necessidade de `--workspace`):
 
 ```bash
 bash scripts/setup-multi-agent.sh --host zcode
 bash scripts/setup-multi-agent.sh --host zcode --apply
 ```
 
-You can also create equivalent per-skill links manually. For each `<name>` under
-the product's `skills/` directory, link that directory at:
+Você também pode criar links equivalentes por skill manualmente. Para cada
+`<name>` sob o diretório `skills/` do produto, ligue esse diretório em:
 
 ```text
 Codex:     ~/.agents/skills/<name>          -> <product-repository>/skills/<name>
@@ -97,17 +106,17 @@ Cursor:    <workspace>/.cursor/skills/<name>   -> <product-repository>/skills/<n
 Windsurf:  <workspace>/.windsurf/skills/<name> -> <product-repository>/skills/<name>
 ```
 
-## Create a new vault
+## Criar um novo vault
 
-Review the initialization plan first:
+Revise primeiro o plano de inicialização:
 
 ```bash
 python3 scripts/claude-obsidian.py init <new-vault> \
   --generated-at <ISO-UTC> --operation-id init-reviewed
 ```
 
-Apply the same operation only after the destination and changed paths look
-correct:
+Aplique a mesma operação apenas após o destino e os paths alterados
+parecerem corretos:
 
 ```bash
 python3 scripts/claude-obsidian.py init <new-vault> \
@@ -115,24 +124,26 @@ python3 scripts/claude-obsidian.py init <new-vault> \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-The generated vault contains:
+O vault gerado contém:
 
-- `.gitignore`—privacy-safe defaults excluding `.vault-meta/` runtime state,
-  Obsidian workspace state, and live `.mcp.json` launch configuration;
-- `.claude-obsidian.json`—workspace identity and vault selection;
-- `inbox/`—visible source intake;
-- `.raw/`—immutable source payloads and legacy delta manifest;
-- `wiki/`—index, log, hot cache, overview, and generated notes;
-- `.obsidian/`—minimal non-destructive Obsidian defaults;
-- `.vault-meta/`—ignored runtime state created when needed.
+- `.gitignore` — defaults seguros para privacidade excluindo o estado de tempo
+  de execução `.vault-meta/`, estado de workspace do Obsidian e configuração
+  de launch `.mcp.json` live;
+- `.claude-obsidian.json` — identidade de workspace e seleção de vault;
+- `inbox/` — entrada de fontes visível;
+- `.raw/` — payloads de fonte imutáveis e manifest legado de deltas;
+- `wiki/` — índice, log, cache de hot, overview e notas geradas;
+- `.obsidian/` — defaults mínimos e não-destrutivos do Obsidian;
+- `.vault-meta/` — estado de tempo de execução ignorado criado quando
+  necessário.
 
-Initialization does not add an upstream Git remote or install community
-plugins. Open the new directory through Obsidian's vault picker.
+A inicialização não adiciona um remote Git upstream nem instala plugins da
+comunidade. Abra o novo diretório através do seletor de vault do Obsidian.
 
-## Adopt an existing vault
+## Adotar um vault existente
 
-Adoption scans an existing Obsidian directory and proposes only missing product
-metadata and foundation files:
+A adoção escaneia um diretório existente do Obsidian e propõe apenas metadata
+de produto e arquivos de fundação ausentes:
 
 ```bash
 python3 scripts/claude-obsidian.py adopt <existing-vault> \
@@ -142,11 +153,12 @@ python3 scripts/claude-obsidian.py adopt <existing-vault> \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-It preserves existing notes and Obsidian JSON. `--force` is intentionally
-separate and should be used only after inspecting replacement targets.
+Ela preserva notas existentes e JSONs do Obsidian. `--force` é
+intencionalmente separado e deve ser usado apenas após inspecionar os alvos
+de substituição.
 
-For older claude-obsidian layouts, add provenance ledgers and workspace config
-with an additive migration:
+Para layouts mais antigos do claude-obsidian, adicione ledgers de
+proveniência e configuração de workspace com uma migração aditiva:
 
 ```bash
 python3 scripts/claude-obsidian.py migrate --vault <existing-vault> \
@@ -156,38 +168,38 @@ python3 scripts/claude-obsidian.py migrate --vault <existing-vault> \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-Migration is idempotent, does not infer claims from prose, and leaves the
-legacy `.raw/.manifest.json` byte-for-byte unchanged.
+A migração é idempotente, não infere claims a partir de prosa, e deixa o
+`.raw/.manifest.json` legado byte a byte inalterado.
 
-## Vault selection
+## Seleção de vault
 
-Mutable commands use this precedence:
+Comandos mutáveis usam esta precedência:
 
 1. `--vault <path>`
 2. `CLAUDE_OBSIDIAN_VAULT`
-3. nearest `.claude-obsidian.json`
-4. nearest unambiguous initialized vault from the current directory
+3. `.claude-obsidian.json` mais próximo
+4. vault inicializado inequívoco mais próximo a partir do diretório atual
 
-If selection fails, the command exits without mutation. The product/plugin root
-is rejected as an implicit vault.
+Se a seleção falhar, o comando sai sem mutação. A raiz do produto/plugin é
+rejeitada como um vault implícito.
 
-Verify a selected vault:
+Verifique um vault selecionado:
 
 ```bash
 python3 scripts/claude-obsidian.py doctor --vault <vault>
 python3 scripts/claude-obsidian.py contracts --verify --vault <vault>
 ```
 
-## Optional configuration
+## Configuração opcional
 
-The portable filesystem transport always remains available. Detect an active,
-supported Obsidian CLI without persisting a snapshot:
+O transporte portátil de filesystem sempre permaneça disponível. Detecte uma
+CLI do Obsidian ativa e suportada sem persistir um snapshot:
 
 ```bash
 bash scripts/detect-transport.sh --peek --vault <vault>
 ```
 
-Optional extensions are explicit and vault-scoped:
+Extensões opcionais são explícitas e com escopo no vault:
 
 ```bash
 bash scripts/setup-mode.sh --vault <vault>
@@ -195,19 +207,21 @@ bash scripts/setup-retrieve.sh --vault <vault>
 bash scripts/setup-dragonscale.sh --vault <vault>
 ```
 
-Read each script's preview before applying. Retrieval may use local BM25 alone;
-model-based contextual prefixes or remote endpoints require explicit egress
-consent. Optional tools such as Ollama and defuddle are capability-detected.
+Leia a pré-visualização de cada script antes de aplicar. A recuperação pode
+usar apenas BM25 local; prefixos contextuais baseados em modelo ou endpoints
+remotos exigem consentimento explícito de egress. Ferramentas opcionais como
+Ollama e defuddle são detectadas por capacidade.
 
-## First operation
+## Primeira operação
 
-Place a source in `inbox/`. Inspect the byte-capture plan:
+Coloque uma fonte em `inbox/`. Inspecione o plano de captura de bytes:
 
 ```bash
 python3 scripts/claude-obsidian.py capture plan --vault <vault>
 ```
 
-Create immutable content-addressed copies only when the plan is correct:
+Crie cópias imutáveis endereçadas por conteúdo apenas quando o plano estiver
+correto:
 
 ```bash
 python3 scripts/claude-obsidian.py capture apply --vault <vault> \
@@ -217,59 +231,64 @@ python3 scripts/claude-obsidian.py capture apply --vault <vault> \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-Then invoke the host's `wiki-ingest` skill. Image, PDF, and EPUB semantic
-extraction is not built into the core; those formats currently receive bounded
-metadata unless a separately configured adapter is explicitly approved.
+Então invoque a skill `wiki-ingest` do host. Extração semântica de imagem,
+PDF e EPUB não é embutida no núcleo; esses formatos atualmente recebem
+metadados limitados a menos que um adapter separadamente configurado seja
+explicitamente aprovado.
 
-## Upgrade and rollback
+## Upgrade e rollback
 
-Upgrade product code independently from the user vault. Before a migration or
-large ingest, make a normal backup or snapshot. Knowledge writes are journaled;
-run recovery after an interrupted operation:
+Faça upgrade do código do produto independentemente do vault do usuário. Antes
+de uma migração ou ingest grande, faça um backup ou snapshot normal. Escritas
+de conhecimento são registradas em journal; execute a recuperação após uma
+operação interrompida:
 
 ```bash
 python3 scripts/claude-obsidian.py transaction recover --vault <vault>
 ```
 
-Recovery conservatively preserves stale or foreign lock identities. Only after
-confirming no writer is active may an operator add `--force-stale-lock`.
+A recuperação preserva conservadoramente identidades de lock obsoletas ou
+alheias. Somente após confirmar que nenhum escritor está ativo, um operador
+pode adicionar `--force-stale-lock`.
 
-Git history is optional and never automatic. To checkpoint exactly one
-completed transaction:
+O histórico Git é opcional e nunca automático. Para fazer checkpoint de
+exatamente uma transação concluída:
 
 ```bash
 python3 scripts/claude-obsidian.py checkpoint <operation-id> --vault <vault> \
   --as-of YYYY-MM-DD
 ```
 
-Checkpointing uses a temporary index, verifies exact Git blob bytes, refuses
-pre-existing staged state, and resumes an interrupted ref/index finalization
-from its vault-local pending record.
+O checkpoint usa um índice temporário, verifica bytes exatos de blob Git,
+recusa estado staged pré-existente e retoma uma finalização de ref/index
+interrompida a partir de seu registro pending local ao vault.
 
-## Uninstall
+## Desinstalar
 
-Remove the host integration, not the vault:
+Remova a integração do host, não o vault:
 
 ```bash
 claude plugin uninstall claude-obsidian@agricidaniel-claude-obsidian
 claude plugin marketplace remove agricidaniel-claude-obsidian
 ```
 
-For portable hosts, remove only the per-skill links that the installer reported.
-User notes, sources, ledgers, and Obsidian settings remain untouched.
+Para hosts portáteis, remova apenas os links por skill que o instalador
+reportou. Notas do usuário, fontes, ledgers e configurações do Obsidian
+permanecem intactos.
 
-## Troubleshooting
+## Solução de problemas
 
-| Symptom | Check |
+| Sintoma | Verificação |
 |---|---|
-| Skill is not discovered | Confirm `<host-skill-root>/<name>/SKILL.md` resolves to the matching product skill; rerun installer `--check`. |
-| Command says no vault selected | Run from the vault, pass `--vault`, or set `CLAUDE_OBSIDIAN_VAULT`. |
-| Plugin-root refusal | Select a separate user vault; plugin cache writes are unsupported. |
-| Transaction conflict / exit 75 | Another operation is active or a target changed; reread, rebuild, and inspect a new bundle. |
-| Obsidian CLI is unavailable | Use filesystem reads; start/update Obsidian before retrying CLI transport. |
-| Capture adapter is not implemented | Inspect `capture adapters`; configure a separate runner only with explicit consent. |
-| Writes refused with `UNSUPPORTED_PLATFORM` on Windows | Vault mutation requires WSL; see the [Windows and WSL guide](windows-wsl.md). |
-| WSL installed but `wsl --status` hangs | Follow Microsoft's diagnostic and reporting flow in the [Windows and WSL guide](windows-wsl.md#wsl-troubleshooting); do not assume a cause without evidence. |
-| Native dry-run approval fails in WSL with `PLAN_CHANGED` | Approval hashes bind the reviewing environment; redo the dry-run inside WSL ([details](windows-wsl.md#wsl-troubleshooting)). |
+| Skill não é descoberto | Confirme que `<host-skill-root>/<name>/SKILL.md` resolve para a skill do produto correspondente; rode novamente o instalador `--check`. |
+| Comando diz nenhum vault selecionado | Execute a partir do vault, passe `--vault`, ou defina `CLAUDE_OBSIDIAN_VAULT`. |
+| Recusa da raiz do plugin | Selecione um vault de usuário separado; escritas no cache de plugin não são suportadas. |
+| Conflito de transação / exit 75 | Outra operação está ativa ou um alvo mudou; releia, reconstrua e inspecione um novo bundle. |
+| CLI do Obsidian indisponível | Use leituras de filesystem; inicie/atualize o Obsidian antes de tentar o transporte CLI. |
+| Adapter de captura não implementado | Inspecione `capture adapters`; configure um runner separado apenas com consentimento explícito. |
+| Escritas recusadas com `UNSUPPORTED_PLATFORM` no Windows | A mutação do vault exige WSL; veja o [guia Windows e WSL](windows-wsl.md). |
+| WSL instalado mas `wsl --status` trava | Siga o fluxo de diagnóstico e reporte da Microsoft no [guia Windows e WSL](windows-wsl.md#wsl-troubleshooting); não assuma uma causa sem evidência. |
+| Aprovação de dry-run nativa falha dentro do WSL com `PLAN_CHANGED` | Hashes de aprovação vinculam o ambiente de revisão; refaça o dry-run dentro do WSL ([detalhes](windows-wsl.md#wsl-troubleshooting)). |
 
-Run `make test` in the product repository when developing or packaging changes.
+Execute `make test` no repositório do produto ao desenvolver ou empacotar
+alterações.

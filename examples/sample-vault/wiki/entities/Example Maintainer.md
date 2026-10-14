@@ -9,9 +9,9 @@ tags:
   - sample
 ---
 
-# Example Maintainer
+# Mantenedor de Exemplo
 
-This fictional entity appears only to exercise links from [[Example Source]]
-and [[overview|Sample Vault Overview]].
+Esta entidade fictícia aparece apenas para exercitar links de
+[[Example Source]] e [[overview|Sample Vault Overview]].
 
-See the [[index|Sample Wiki Index]].
+Veja o [[index|Sample Wiki Index]].

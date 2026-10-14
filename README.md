@@ -5,8 +5,8 @@
 <h1 align="center">claude-obsidian</h1>
 
 <p align="center">
-  <strong>Build an Obsidian knowledge base that becomes more useful every time you use it.</strong><br>
-  Capture sources, create connected notes, retrieve grounded answers, and keep the vault healthy—without giving up ownership of your files.
+  <strong>Construa uma base de conhecimento Obsidian que se torna mais útil a cada uso.</strong><br>
+  Capture fontes, crie notas conectadas, recupere respostas fundamentadas e mantenha o vault saudável — sem abrir mão da propriedade dos seus arquivos.
 </p>
 
 <p align="center">
@@ -17,44 +17,44 @@
 </p>
 
 <p align="center">
-  <a href="#from-source-to-living-knowledge">See the workflow</a> ·
-  <a href="#quick-start">Quick start</a> ·
-  <a href="#15-skills-one-system">Explore the skills</a> ·
-  <a href="docs/install-guide.md">Installation guide</a> ·
+  <a href="#from-source-to-living-knowledge">Veja o fluxo de trabalho</a> ·
+  <a href="#quick-start">Início rápido</a> ·
+  <a href="#15-skills-one-system">Explore as skills</a> ·
+  <a href="docs/install-guide.md">Guia de instalação</a> ·
   <a href="docs/windows-wsl.md">Windows &amp; WSL</a>
 </p>
 
-claude-obsidian is a local-first knowledge system for Claude Code and compatible
-[Agent Skills](https://agentskills.io) hosts. It turns source material into
-linked, source-cited Obsidian pages; answers from the evidence already in the
-vault; and provides explicit workflows for research, retrieval, maintenance,
-and visual mapping.
+claude-obsidian é um sistema de conhecimento local-first para Claude Code e hosts
+compatíveis com [Agent Skills](https://agentskills.io). Ele transforma material
+fonte em páginas Obsidian com links e citações de fonte; responde a partir das
+evidências já presentes no vault; e fornece fluxos de trabalho explícitos para
+pesquisa, recuperação, manutenção e mapeamento visual.
 
-Your vault remains a normal directory of Markdown, JSON, and source files. It is
-not hidden in a plugin cache, locked in a cloud database, or silently uploaded
-to a model.
+Seu vault permanece um diretório normal de arquivos Markdown, JSON e fontes. Não
+está oculto em um cache de plugin, trancado em um banco de dados na nuvem, ou
+silenciosamente enviado a um modelo.
 
-## From source to living knowledge
+## Da fonte ao conhecimento vivo
 
-Most AI note workflows stop after saving text. claude-obsidian is organized
-around a repeatable loop: retain the source, ground the claims, connect the
-knowledge, then put it back to work.
+A maioria dos fluxos de anotação com IA para após salvar o texto. claude-obsidian
+é organizado em torno de um loop repetível: reter a fonte, fundamentar as
+afirmações, conectar o conhecimento e depois colocá-lo de volta em uso.
 
 ![The claude-obsidian compounding knowledge loop](assets/diagrams/knowledge-loop.svg)
 
-- **Capture with context.** Bring local sources through a visible inbox and
-  preserve immutable, content-addressed copies before synthesis.
-- **Ground every important claim.** Source and claim ledgers retain authority,
-  freshness, support, contradiction, confidence, and review state.
-- **Connect what you learn.** Build linked pages, indexes, Maps of Content,
-  methodology-aware structures, and Obsidian Canvas views.
-- **Use the vault again.** Query, research, retrieve, lint, and fold what is
-  already known instead of starting every conversation from zero.
+- **Capture com contexto.** Traga fontes locais através de uma inbox visível e
+  preserve cópias imutáveis endereçadas por conteúdo antes da síntese.
+- **Fundamente cada afirmação importante.** Ledgers de fonte e de afirmação retêm
+  autoridade, frescor, suporte, contradição, confiança e estado de revisão.
+- **Conecte o que você aprenda.** Construa páginas com links, índices, Mapas de
+  Conteúdo, estruturas que reconhecem metodologias e visões em Obsidian Canvas.
+- **Use o vault novamente.** Pesquise, recupere, linte e dobre o que já é conhecido
+  em vez de começar cada conversa do zero.
 
-## See the vault
+## Veja o vault
 
-The output is meant to remain useful with or without an agent: plain Markdown
-for portability, Obsidian for navigation and visual exploration.
+A saída deve permanecer útil com ou sem um agente: Markdown puro para
+portabilidade, Obsidian para navegação e exploração visual.
 
 <p align="center">
   <img src="assets/screenshots/graph-view.png" alt="Example claude-obsidian vault in Obsidian Graph view" width="49%">
@@ -62,40 +62,42 @@ for portability, Obsidian for navigation and visual exploration.
 </p>
 
 <p align="center">
-  <sub>Linked knowledge in Graph view · A visual knowledge map in Obsidian Canvas</sub>
+  <sub>Conhecimento conectado na visão Graph · Um mapa visual do conhecimento em Obsidian Canvas</sub>
 </p>
 
-## Why it feels different
+## Por que parece diferente
 
-- **Local by default.** The vault is user-owned and works as ordinary files.
-  Network egress is a separate, explicit decision.
-- **Sources survive the summary.** Notes point back to durable source evidence;
-  unsupported and contradictory claims remain visible.
-- **Knowledge compounds deliberately.** Ingestion, querying, linting, retrieval,
-  research, and rollups share one provenance-aware model.
-- **Parallel agents cannot race the vault.** Workers return drafts. One
-  orchestrator inspects and applies one recoverable transaction.
-- **Capabilities are stated honestly.** Optional tools are detected, maturity
-  is declared, and missing adapters degrade clearly instead of being simulated.
+- **Local por padrão.** O vault pertence ao usuário e funciona como arquivos
+  comuns. A egresso de rede é uma decisão separada e explícita.
+- **As fontes sobrevivem ao resumo.** As notas apontam de volta para evidências
+  duráveis; afirmações sem suporte e contraditórias permanecem visíveis.
+- **O conhecimento compõe deliberadamente.** Ingestão, consulta, lint, recuperação,
+  pesquisa e rollups compartilham um modelo que reconhece procedência.
+- **Agentes paralelos não correm contra o vault.** Workers retornam rascunhos. Um
+  orquestrador inspeciona e aplica uma transação recuperável.
+- **Capacidades são declaradas honestamente.** Ferramentas opcionais são
+  detectadas, maturidade é declarada e adaptadores ausentes degradam de forma
+  clara em vez de simulados.
 
-This is not an automatic transcript recorder, a cloud sync service, a factual
-oracle, or a substitute for backups and source control.
+Isto não é um gravador automático de transcrições, um serviço de sincronização
+em nuvem, um oráculo factual, ou um substituto para backups e controle de fonte.
 
-## Quick start
+## Início rápido
 
-The safest first run uses a source checkout and a separate user vault. Every
-mutating setup command previews its exact operation before it can apply.
+A primeira execução mais segura usa um checkout do fonte e um vault de usuário
+separado. Todo comando de configuração que altera dados visualiza sua operação
+exata antes de aplicá-la.
 
-### 1. Get the product
+### 1. Obtenha o produto
 
 ```bash
 git clone https://github.com/AgriciDaniel/claude-obsidian.git
 cd claude-obsidian
 ```
 
-The checkout contains the product. It is not your knowledge vault.
+O checkout contém o produto. Não é seu vault de conhecimento.
 
-### 2. Initialize a separate vault
+### 2. Inicialize um vault separado
 
 ```bash
 export GENERATED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -105,8 +107,8 @@ python3 scripts/claude-obsidian.py init "$HOME/Documents/MyKnowledgeVault" \
   --generated-at "$GENERATED_AT" --operation-id "$OPERATION_ID"
 ```
 
-Review the JSON plan and copy its `approved_plan_sha256`, then apply that exact
-operation:
+Reveja o plano JSON e copie seu `approved_plan_sha256`, depois aplique essa
+operação exata:
 
 ```bash
 python3 scripts/claude-obsidian.py init "$HOME/Documents/MyKnowledgeVault" \
@@ -114,178 +116,180 @@ python3 scripts/claude-obsidian.py init "$HOME/Documents/MyKnowledgeVault" \
   --approved-plan-sha256 "<sha256-from-the-plan>" --apply
 ```
 
-For an existing Obsidian vault, use the non-destructive `adopt` workflow
-described in the [installation guide](docs/install-guide.md#adopt-an-existing-vault).
+Para um vault Obsidian existente, use o fluxo `adopt` não destrutivo
+descrito no [guia de instalação](docs/install-guide.md#adopt-an-existing-vault).
 
-### 3. Start from the vault
+### 3. Comece a partir do vault
 
-Open the new directory in Obsidian, then run Claude Code from that directory
-with the local plugin:
+Abra o novo diretório no Obsidian, depois execute Claude Code a partir desse
+diretório com o plugin local:
 
 ```bash
 cd "$HOME/Documents/MyKnowledgeVault"
 claude --plugin-dir /absolute/path/to/claude-obsidian
 ```
 
-Start with:
+Comece com:
 
 ```text
 /claude-obsidian:wiki
 ```
 
-Then place a source in `inbox/` and invoke
-`/claude-obsidian:wiki-ingest`. Save an answer explicitly with
-`/claude-obsidian:save`; ask the vault with `/claude-obsidian:wiki-query`.
+Depois coloque uma fonte em `inbox/` e invoque
+`/claude-obsidian:wiki-ingest`. Salve uma resposta explicitamente com
+`/claude-obsidian:save`; pergunte ao vault com `/claude-obsidian:wiki-query`.
 
-For Codex, OpenCode, Gemini, or ZCode, preview and then apply the portable
-skill links from the product checkout:
+Para Codex, OpenCode, Gemini ou ZCode, visualize e depois aplique as skills
+portáteis do checkout do produto:
 
 ```bash
 bash scripts/setup-multi-agent.sh --host codex
 bash scripts/setup-multi-agent.sh --host codex --apply
 ```
 
-Cursor and Windsurf use workspace-local skill discovery. Marketplace setup,
-every supported host, vault adoption, upgrades, and uninstall steps are covered
-in the [full installation guide](docs/install-guide.md).
+Cursor e Windsurf usam descoberta de skills no workspace. Configuração de
+marketplace, todos os hosts suportados, adoção de vault, upgrades e passos de
+desinstalação estão cobertos no [guia de instalação completo](docs/install-guide.md).
 
-## 15 skills, one system
+## 15 skills, um sistema
 
-The skills are small enough to invoke directly and coordinated enough to share
-the same evidence, vault-selection, and mutation rules.
+As skills são pequenas o suficiente para invocação direta e coordenadas o
+suficiente para compartilhar as mesmas evidências, seleção de vault e regras de
+mutação.
 
-### Build and use the wiki
+### Construa e use a wiki
 
-| Skill | What it does |
+| Skill | O que faz |
 |---|---|
-| `wiki` | Initializes or adopts a vault, diagnoses readiness, and routes work |
-| `save` | Saves one scoped answer or insight—never an automatic transcript |
-| `wiki-ingest` | Turns captured sources into linked pages and provenance records |
-| `wiki-query` | Answers read-only from relevant vault evidence |
-| `wiki-lint` | Reports dead links, orphans, metadata gaps, stale indexes, and empty sections |
+| `wiki` | Inicializa ou adota um vault, diagnostica prontidão e roteia trabalho |
+| `save` | Salva uma resposta ou insight com escopo — nunca uma transcrição automática |
+| `wiki-ingest` | Transforma fontes capturadas em páginas conectadas e registros de procedência |
+| `wiki-query` | Responde em modo somente leitura a partir de evidências relevantes do vault |
+| `wiki-lint` | Reporta links mortos, órfãos, lacunas de metadados, índices desatualizados e seções vazias |
 
-### Extend the workflow
+### Estenda o fluxo de trabalho
 
-| Skill | What it adds |
+| Skill | O que adiciona |
 |---|---|
-| `autoresearch` | Bounded web research with explicit egress and a separate canonical merge |
-| `canvas` | Wiki-scoped Obsidian Canvas creation and maintenance |
-| `defuddle` | Clean, readable web content before ingestion |
-| `wiki-fold` | Extractive, traceable rollups of the operation log |
-| `wiki-mode` | Generic, LYT, PARA, or Zettelkasten filing conventions |
-| `wiki-retrieve` | Contextual prefixes, BM25, and optional cosine reranking |
-| `wiki-cli` | Obsidian CLI reads and search with transaction-safe writes |
+| `autoresearch` | Pesquisa web delimitada com egresso explícito e merge canônico separado |
+| `canvas` | Criação e manutenção de Obsidian Canvas com escopo na wiki |
+| `defuddle` | Conteúdo web limpo e legível antes da ingestão |
+| `wiki-fold` | Rollups extrativos e rastreáveis do log de operações |
+| `wiki-mode` | Convenções de arquivamento Generic, LYT, PARA ou Zettelkasten |
+| `wiki-retrieve` | Prefixos contextuais, BM25 e reranking por cosseno opcional |
+| `wiki-cli` | Leitura e busca via Obsidian CLI com escritas seguras por transação |
 
-### Reference skills
+### Skills de referência
 
-| Skill | What it provides |
+| Skill | O que fornece |
 |---|---|
-| `obsidian-markdown` | Correct Obsidian Flavored Markdown, links, embeds, and callouts |
-| `obsidian-bases` | Native `.base` tables, cards, filters, formulas, and summaries |
-| `think` | A structured observe, listen, connect, create, and grow review loop |
+| `obsidian-markdown` | Markdown Obsidian correto, links, embeds e callouts |
+| `obsidian-bases` | Tabelas nativas `.base`, cards, filtros, fórmulas e resumos |
+| `think` | Um loop de revisão estruturado: observar, ouvir, conectar, criar e crescer |
 
-Claude Code exposes namespaced invocations such as
-`/claude-obsidian:wiki-lint`; other hosts use their native Agent Skills
-invocation. Trigger phrases and exact contracts live in each
+Claude Code expõe invocações com namespace como
+`/claude-obsidian:wiki-lint`; outros hosts usam sua invocação nativa de Agent
+Skills. Frases-gatilho e contratos exatos vivem em cada
 `skills/<name>/SKILL.md`.
 
-## Trust is part of the architecture
+## Confiança faz parte da arquitetura
 
 ![The claude-obsidian product and vault trust boundary](assets/diagrams/product-vault-boundary.svg)
 
-The product never treats a source checkout, plugin cache, or contributor state
-as the default vault. A vault is selected explicitly, through
-`CLAUDE_OBSIDIAN_VAULT`, by the nearest `.claude-obsidian.json`, or by one
-unambiguous initialized ancestor. If selection is uncertain, the command exits
-without writing.
+O produto nunca trata um checkout do fonte, cache de plugin ou estado de
+contribuidor como o vault padrão. Um vault é selecionado explicitamente, através de
+`CLAUDE_OBSIDIAN_VAULT`, pelo `.claude-obsidian.json` mais próximo, ou por um
+ancestral inicializado inequívoco. Se a seleção for incerta, o comando sai sem
+escrever.
 
-One logical knowledge operation is one recoverable transaction:
+Uma operação lógica de conhecimento é uma transação recuperável:
 
-1. Read every target and record its expected SHA-256.
-2. Let parallel workers return drafts and evidence only.
-3. Merge the complete change into one operation bundle.
-4. Inspect the bundle, then apply it once.
-5. Report the operation ID and exact changed paths.
+1. Leia cada alvo e registre seu SHA-256 esperado.
+2. Permita que workers paralelos retornem apenas rascunhos e evidências.
+3. Funda a mudança completa em um bundle de operação.
+4. Inspecione o bundle, depois aplique-o uma vez.
+5. Reporte o ID da operação e os paths exatos alterados.
 
-The core holds one process-lifetime vault lock, journals backups, uses atomic
-replacement, and restores the prior state if an apply cannot finish. A changed
-target is a conflict, never a silent overwrite. Git checkpoints, destructive
-repairs, network egress, and canonical research merges remain explicit
-operations.
+O núcleo mantém um lock de vault por tempo de vida do processo, journals de
+backups, usa substituição atômica e restaura o estado anterior se uma aplicação
+não puder terminar. Um alvo alterado é um conflito, nunca uma sobrescrita
+silenciosa. Checkpoints do Git, reparos destrutivos, egresso de rede e merges
+de pesquisa canônica permanecem operações explícitas.
 
-Read the [transaction contract](skills/wiki/references/operation-transactions.md),
-[provenance contract](skills/wiki/references/provenance.md), and
-[Compound Vault architecture](docs/compound-vault-guide.md) for the
-machine-facing detail.
+Leia o [contrato de transação](skills/wiki/references/operation-transactions.md),
+[contrato de procedência](skills/wiki/references/provenance.md) e
+[arquitetura Compound Vault](docs/compound-vault-guide.md) para detalhes
+legíveis por máquina.
 
-## Honest capability boundaries
+## Limites honestos de capacidade
 
-| Input or capability | Current support |
+| Entrada ou capacidade | Suporte atual |
 |---|---|
-| Local filesystem sources | Implemented bounded, content-addressed byte capture |
-| Images | Metadata, hash, size, and bounded dimensions when available |
-| PDF and EPUB | Metadata, hash, and size; no built-in semantic extraction |
-| URL and YouTube | Validated consent plans; a configured external runner is required |
-| OCR | Local-file consent plan; a configured external runner is required |
-| BM25 retrieval | Local and deterministic |
-| Contextual prefixes or remote models | Optional and gated by explicit egress consent |
-| Obsidian CLI | Optional for reads/search; filesystem transport remains available |
+| Fontes do filesystem local | Captura delimitada e endereçada por conteúdo implementada |
+| Imagens | Metadados, hash, tamanho e dimensões delimitadas quando disponíveis |
+| PDF e EPUB | Metadados, hash e tamanho; sem extração semântica embutida |
+| URL e YouTube | Planos de consentimento validados; requer runner externo configurado |
+| OCR | Plano de consentimento para arquivo local; requer runner externo configurado |
+| Recuperação BM25 | Local e determinística |
+| Prefixos contextuais ou modelos remotos | Opcionais e condicionados a consentimento explícito de egresso |
+| Obsidian CLI | Opcional para leitura/busca; transporte por filesystem permanece disponível |
 
-High-risk accepted claims require two independent sources. Unsupported or
-contradictory evidence stays visible, and a grounded refusal is preferred over
-an invented citation. Model-based retrieval falls back to deterministic BM25
-when the embedding or reranking stage cannot be trusted.
+Afirmações aceitas de alto risco requerem duas fontes independentes. Evidência
+sem suporte ou contraditória permanece visível, e uma recusa fundamentada é
+preferível a uma citação inventada. A recuperação baseada em modelo cai para BM25
+determinístico quando o estágio de embedding ou reranking não pode ser
+confiado.
 
-## Shape the vault to the way you think
+## Modele o vault ao seu jeito de pensar
 
-`wiki-mode` can route new notes using four methodologies without bulk-moving
-existing knowledge:
+`wiki-mode` pode rotear novas notas usando quatro metodologias sem mover em
+massa o conhecimento existente:
 
-| Mode | Filing principle |
+| Modo | Princípio de arquivamento |
 |---|---|
-| Generic | Sources, concepts, entities, and sessions |
-| LYT | Maps of Content and linked atomic notes |
-| PARA | Projects, Areas, Resources, and Archives |
-| Zettelkasten | Stable identifiers, atomic notes, and dense links |
+| Generic | Fontes, conceitos, entidades e sessões |
+| LYT | Mapas de Conteúdo e notas atômicas conectadas |
+| PARA | Projetos, Áreas, Recursos e Arquivos |
+| Zettelkasten | Identificadores estáveis, notas atômicas e links densos |
 
-Generic is the default when no mode is configured. Switching modes changes how
-new notes are routed; it does not silently reorganize old ones. See the
-[methodology modes guide](docs/methodology-modes-guide.md).
+Generic é o padrão quando nenhum modo está configurado. Mudar de modo altera
+como novas notas são roteadas; não reorganiza silenciosamente as antigas. Veja
+o [guia de modos de metodologia](docs/methodology-modes-guide.md).
 
-## Operator reference
+## Referência do operador
 
 <details>
-<summary><strong>Portable CLI</strong></summary>
+<summary><strong>CLI portátil</strong></summary>
 
-The wrapper is `python3 scripts/claude-obsidian.py`.
+O wrapper é `python3 scripts/claude-obsidian.py`.
 
-| Command | Effect |
+| Comando | Efeito |
 |---|---|
-| `doctor --vault PATH` | Show vault selection and readiness |
-| `init PATH [--approved-plan-sha256 HASH --apply]` | Plan or create a separate vault |
-| `adopt PATH [--approved-plan-sha256 HASH --apply]` | Plan or adopt an existing Obsidian vault |
-| `migrate --vault PATH [--approved-plan-sha256 HASH --apply]` | Add v1 ledgers and configuration without rewriting legacy data |
-| `transaction inspect BUNDLE --vault PATH` | Validate a write bundle without mutation |
-| `transaction apply BUNDLE --vault PATH --approved-plan-sha256 HASH` | Apply one inspected, recoverable operation |
-| `transaction recover --vault PATH [--force-stale-lock]` | Restore an interrupted operation |
-| `lint --vault PATH [--as-of YYYY-MM-DD] [--exclude GLOB]...` | Emit findings deterministic for the declared UTC date |
-| `contracts --verify --vault PATH` | Execute capability readiness contracts |
-| `capture plan --vault PATH [SOURCE ...]` | Run a local capture preflight without writes |
-| `capture apply --vault PATH [SOURCE ...]` | Plan or create immutable content-addressed copies |
-| `checkpoint OPERATION_ID --vault PATH` | Explicitly commit one completed operation |
-| `package validate` | Check skills, hooks, manifests, and documentation coherence |
-| `release build --output FILE.zip` | Build and self-audit a deterministic public artifact |
-| `release audit FILE.zip` | Audit an artifact without extracting or publishing it |
+| `doctor --vault PATH` | Mostra seleção do vault e prontidão |
+| `init PATH [--approved-plan-sha256 HASH --apply]` | Planeja ou cria um vault separado |
+| `adopt PATH [--approved-plan-sha256 HASH --apply]` | Planeja ou adota um vault Obsidian existente |
+| `migrate --vault PATH [--approved-plan-sha256 HASH --apply]` | Adiciona ledgers e configuração v1 sem reescrever dados legados |
+| `transaction inspect BUNDLE --vault PATH` | Valida um bundle de escrita sem mutação |
+| `transaction apply BUNDLE --vault PATH --approved-plan-sha256 HASH` | Aplica uma operação inspecionada e recuperável |
+| `transaction recover --vault PATH [--force-stale-lock]` | Restaura uma operação interrompida |
+| `lint --vault PATH [--as-of YYYY-MM-DD] [--exclude GLOB]...` | Emite achados determinísticos para a data UTC declarada |
+| `contracts --verify --vault PATH` | Executa contratos de prontidão de capacidade |
+| `capture plan --vault PATH [SOURCE ...]` | Executa um preflight de captura local sem escritas |
+| `capture apply --vault PATH [SOURCE ...]` | Planeja ou cria cópias imutáveis endereçadas por conteúdo |
+| `checkpoint OPERATION_ID --vault PATH` | Commita explicitamente uma operação concluída |
+| `package validate` | Verifica coerência de skills, hooks, manifests e documentação |
+| `release build --output FILE.zip` | Constrói e autoaudita um artefato público determinístico |
+| `release audit FILE.zip` | Audita um artefato sem extraí-lo ou publicá-lo |
 
-High-level mutating planners emit `approved_plan_sha256`. Pin
-`--generated-at` and `--operation-id`, review the JSON operation, and pass that
-exact hash with `--apply`. Filesystem or generated-bundle drift fails before a
-vault write.
+Planejadores de mutação de alto nível emitem `approved_plan_sha256`. Fixe
+`--generated-at` e `--operation-id`, reveja a operação JSON e passe esse hash
+exato com `--apply`. Drift de filesystem ou de bundle gerado falha antes de uma
+escrita no vault.
 
 </details>
 
 <details>
-<summary><strong>Repository and vault layout</strong></summary>
+<summary><strong>Layout do repositório e do vault</strong></summary>
 
 ```text
 product repository/                user vault/
@@ -299,99 +303,101 @@ product repository/                user vault/
 └── tests/
 ```
 
-Public artifacts contain product code, deterministic templates, and reviewed
-README assets. They reject contributor hot/log state, root raw sources, runtime
-metadata, private paths, recognizable personal email addresses, secrets,
-symlinks, unsafe archive entries, and unreviewed binaries.
+Artefatos públicos contêm código do produto, templates determinísticos e
+assets de README revisados. Rejeitam estado hot/log de contribuidor, fontes raw
+raiz, metadados de runtime, paths privados, endereços de email pessoal
+reconhecíveis, segredos, symlinks, entradas de archive inseguras e binários
+não revisados.
 
-The private development checkout deliberately has no marketplace catalog. The
-release builder injects the reviewed catalog only into the distribution-clean
-artifact. A public default branch must be populated from that audited tree,
-never by pushing contributor-vault state.
+O checkout de desenvolvimento privadamente não tem catálogo de marketplace. O
+construtor de release injeta o catálogo revisado apenas no artefato limpo para
+distribuição. Um branch público padrão deve ser preenchido a partir dessa
+árvore auditada, nunca enviando estado de vault de contribuidor.
 
 </details>
 
 <details>
-<summary><strong>Upgrade, rollback, and uninstall</strong></summary>
+<summary><strong>Upgrade, rollback e desinstalação</strong></summary>
 
-Upgrade the product independently from the vault. For an older vault, first
-preview the additive, idempotent migration:
+Atualize o produto independentemente do vault. Para um vault mais antigo,
+primeiro visualize a migração aditiva e idempotente:
 
 ```bash
 python3 scripts/claude-obsidian.py migrate --vault /path/to/vault \
   --generated-at "$GENERATED_AT" --operation-id migrate-reviewed
 ```
 
-Review its hash and rerun with `--approved-plan-sha256 HASH --apply`.
-Migration preserves the legacy raw manifest byte-for-byte and does not infer
-claims from prose.
+Reveja seu hash e execute novamente com `--approved-plan-sha256 HASH --apply`.
+A migração preserva o manifesto raw legado byte a byte e não infere afirmações
+de prosa.
 
-After an interrupted operation, run:
+Após uma operação interrompida, execute:
 
 ```bash
 python3 scripts/claude-obsidian.py transaction recover --vault /path/to/vault
 ```
 
-Removing the plugin or host links never removes the vault. Delete only the
-integration you installed; user notes, sources, ledgers, and Obsidian settings
-remain yours.
+Remover o plugin ou links de host nunca remove o vault. Delete apenas a
+integração que você instalou; notas de usuário, fontes, ledgers e configurações
+do Obsidian permanecem seus.
 
 </details>
 
-## Requirements
+## Requisitos
 
-- Python 3.11 or newer for the portable core
-- Obsidian for the visual vault experience; plain Markdown remains usable
-  without it
-- Bash for setup, optional extensions, and shell test suites
-- Git only for development, releases, or an explicit knowledge checkpoint
-- A current Claude Code release for the Claude Code plugin path: the
-  exec-form `args` command hook and the `compact` `SessionStart` matcher used
-  by `hooks/hooks.json` need it (see the
-  [Claude Code hooks contract](https://code.claude.com/docs/en/hooks)). Other
-  supported hosts and the portable CLI have no Claude Code version
-  dependency.
+- Python 3.11 ou mais recente para o núcleo portátil
+- Obsidian para a experiência visual do vault; Markdown puro permanece utilizável
+  sem ele
+- Bash para configuração, extensões opcionais e suítes de teste em shell
+- Git apenas para desenvolvimento, releases ou um checkpoint explícito de
+  conhecimento
+- Uma release atual do Claude Code para o caminho do plugin Claude Code: o hook
+  de comando `args` em formato exec e o matcher `SessionStart` `compact` usados
+  por `hooks/hooks.json` precisam dele (veja o
+  [contrato de hooks do Claude Code](https://code.claude.com/docs/en/hooks)). Outros
+  hosts suportados e o CLI portátil não têm dependência de versão do Claude Code.
 
-CI exercises Linux and macOS, plus a native-Windows smoke job for the portable
-surface. On native Windows (including Git Bash), read-only inspection and
-dry-run commands work; vault writes require WSL and fail closed with an
-`UNSUPPORTED_PLATFORM` error otherwise. Approval hashes bind to the reviewing
-environment, so review inside WSL when the apply will happen there. Platform
-details, the support matrix, and evidence-bounded WSL hang troubleshooting
-live in the
-[Windows and WSL guide](docs/windows-wsl.md). The bash setup scripts and shell
-test suites remain POSIX-only. Optional tools such as Obsidian CLI, Ollama,
-and defuddle are capability-detected and affect only their dependent workflow.
+CI exercita Linux e macOS, além de um job smoke de Windows nativo para a
+superfície portátil. No Windows nativo (incluindo Git Bash), inspeção em modo
+somente leitura e comandos dry-run funcionam; escritas no vault requerem WSL e
+falham fechadas com erro `UNSUPPORTED_PLATFORM` caso contrário. Hashes de
+aprovação vinculam-se ao ambiente de revisão, então reveja dentro do WSL quando
+a aplicação ocorrerá lá. Detalhes de plataforma, a matriz de suporte e a solução
+de problemas de hang WSL com limites de evidência vivem no
+[guia de Windows e WSL](docs/windows-wsl.md). Os scripts de configuração bash e
+suítes de teste em shell permanecem apenas POSIX. Ferramentas opcionais como
+Obsidian CLI, Ollama e defuddle são detectadas por capacidade e afetam apenas seu
+fluxo de trabalho dependente.
 
-## Development and release
+## Desenvolvimento e release
 
 ```bash
 make test
 ```
 
-The test target runs every hermetic Python and shell suite, product and
-capability contracts, skill and hook validation, manifest checks, and package
-boundaries. CI repeats the suite on supported Linux and macOS/Python
-combinations and verifies a byte-reproducible release build.
+O alvo de teste executa cada suíte Python e shell hermética, contratos de
+produto e capacidade, validação de skills e hooks, verificações de manifest e
+limites de pacote. CI repete a suíte em combinações Linux e macOS/Python
+suportadas e verifica um build de release byte-reproduzível.
 
-Build and audit locally without publishing:
+Construa e audite localmente sem publicar:
 
 ```bash
 python3 scripts/claude-obsidian.py release build --output dist/claude-obsidian.zip
 python3 scripts/claude-obsidian.py release audit dist/claude-obsidian.zip
 ```
 
-No command pushes, tags, publishes, opens issues, or creates releases
-automatically. See [CONTRIBUTING.md](CONTRIBUTING.md),
-[SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Nenhum comando faz push, tag, publicação, abre issues ou cria releases
+automaticamente. Veja [CONTRIBUTING.md](CONTRIBUTING.md),
+[SECURITY.md](SECURITY.md) e [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-## Lineage, license, and attribution
+## Linhagem, licença e atribuição
 
-The design follows
-[Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
-and uses [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills)
-as the reference substrate for Obsidian Markdown, Bases, and JSON Canvas
-syntax.
+O design segue
+[o padrão LLM Wiki de Andrej Karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+e usa [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills)
+como substrato de referência para sintaxe de Obsidian Markdown, Bases e JSON
+Canvas.
 
-MIT licensed. See [ATTRIBUTION.md](ATTRIBUTION.md) and
+Licenciado sob MIT. Veja [ATTRIBUTION.md](ATTRIBUTION.md) e
 [CITATION.cff](CITATION.cff).

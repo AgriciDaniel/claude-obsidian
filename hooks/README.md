@@ -1,29 +1,30 @@
-# Claude Code hooks
+# Hooks Claude Code
 
-`hooks.json` is a thin Claude Code adapter around the portable core.
+`hooks.json` é um adaptador Claude Code fino em torno do núcleo portátil.
 
-Hooks require a current Claude Code release: the exec-form `command` and
-`args` hook shape and the `compact` `SessionStart` matcher used below need it
-(see the [Claude Code hooks contract](https://code.claude.com/docs/en/hooks)).
-Both hooks also need an interpreter reachable as `python3` on `PATH`; see the
-[Windows and WSL guide](../docs/windows-wsl.md#claude-code-hooks-and-python3-on-windows)
-for native Windows setup.
+Hooks exigem uma release atual do Claude Code: o shape `command`/`args` do
+hook exec-form e o matcher `compact` `SessionStart` usado abaixo precisam
+disso (veja o [contrato de hooks do Claude Code](https://code.claude.com/docs/en/hooks)).
+Ambos os hooks também precisam de um interpretador alcançável como `python3` no
+`PATH`; veja o [guia Windows e WSL](../docs/windows-wsl.md#claude-code-hooks-and-python3-on-windows)
+para configuração no Windows nativo.
 
-| Event | Matcher | Behavior |
+| Evento | Matcher | Comportamento |
 |---|---|---|
-| `SessionStart` | `startup|resume|clear|compact` | Silent by default. With `CLAUDE_OBSIDIAN_SESSION_CONTEXT=1`, resolves a real user vault and emits a bounded, sanitized `wiki/hot.md` data block. A workspace-configured vault outside that project also requires an exact `CLAUDE_OBSIDIAN_SESSION_CONTEXT_VAULT` path. |
-| `Stop` | unsupported/omitted | Emits a bounded, aggregate JSON `systemMessage` when recovery is needed. It omits operation identifiers, paths, and note content; otherwise it is silent. |
+| `SessionStart` | `startup\|resume\|clear\|compact` | Silencioso por padrão. Com `CLAUDE_OBSIDIAN_SESSION_CONTEXT=1`, resolve um vault real de usuário e emite um bloco de dados `wiki/hot.md` limitado e sanitizado. Um vault configurado fora do projeto também exige um path exato `CLAUDE_OBSIDIAN_SESSION_CONTEXT_VAULT`. |
+| `Stop` | unsupported/omitido | Emite um JSON `systemMessage` limitado e agregado quando a recuperação for necessária. Omite identificadores de operação, paths e conteúdo de notas; do contrário, é silencioso. |
 
-Both are `command` hooks using an executable plus an argument array and
-`${CLAUDE_PLUGIN_ROOT}` only to locate plugin code. They do not use the plugin
-cache as a vault.
+Ambos são hooks `command` usando um executável mais um array de argumentos e
+`${CLAUDE_PLUGIN_ROOT}` apenas para localizar o código do plugin. Eles não usam
+o cache de plugin como vault.
 
-The response shapes follow the current [Claude Code hooks contract](https://code.claude.com/docs/en/hooks):
-An opted-in SessionStart may add context through stdout, while Stop warnings use the
-supported top-level `systemMessage` field. Stop has no matcher because that
-event does not support one. Both readers reject symlinked paths and cap their
-scan count and output bytes.
+Os shapes de resposta seguem o [contrato de hooks do Claude Code](https://code.claude.com/docs/en/hooks)
+atual: um `SessionStart` opt-in pode adicionar contexto via stdout, enquanto
+avisos do `Stop` usam o campo `systemMessage` de nível superior suportado. O
+`Stop` não tem matcher porque esse evento não suporta um. Ambos os leitores
+rejeitam paths symlink e limitam sua contagem de varredura e bytes de saída.
 
-Hooks never write knowledge, update `wiki/hot.md`, stage files, commit Git, run
-remote calls, or bypass transaction approval. The same workflows remain usable
-on hosts that do not support Claude hooks.
+Hooks nunca escrevem conhecimento, atualizam `wiki/hot.md`, preparam arquivos,
+commitam no Git, executam chamadas remotas ou contornam a aprovação de
+transações. Os mesmos fluxos de trabalho permanecem utilizáveis em hosts que
+não suportam hooks Claude.

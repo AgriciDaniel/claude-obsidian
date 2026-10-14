@@ -10,22 +10,22 @@ tags:
   - sample
 ---
 
-# Sample Wiki Index
+# Índice do Wiki de Amostra
 
-This deterministic fixture demonstrates a small, connected, synthetic vault.
+Esta fixture determinística demonstra um pequeno vault sintético e conectado.
 
-## Sources
+## Fontes
 
 - [[Example Source]]
 
-## Concepts
+## Conceitos
 
 - [[Source-grounded notes]]
 
-## Entities
+## Entidades
 
 - [[Example Maintainer]]
 
-## Questions
+## Perguntas
 
 - [[What supports source-grounded notes]]

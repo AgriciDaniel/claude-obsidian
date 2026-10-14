@@ -1,103 +1,108 @@
-# DragonScale compatibility extension
+# Extensão de compatibilidade DragonScale
 
-DragonScale is an optional set of memory-maintenance experiments. The base
-vault does not require it. The extension consists of four independent ideas;
-their maturity and dependencies differ.
+DragonScale é um conjunto opcional de experimentos de manutenção de memória.
+O vault base não o exige. A extensão consiste em quatro ideias independentes;
+sua maturidade e dependências diferem.
 
-## Provisioning
+## Provisionamento
 
-Preview the create-only setup transaction:
+Pré-visualize a transação de setup apenas-create:
 
 ```bash
 bash scripts/setup-dragonscale.sh --vault <vault>
 ```
 
-Apply only after reviewing the missing paths:
+Aplique apenas após revisar os paths ausentes:
 
 ```bash
 bash scripts/setup-dragonscale.sh --vault <vault> \
   --generated-at <ISO-UTC> --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-Setup creates only missing address-counter, tiling-threshold, legacy-exception,
-and legacy-manifest files. It never replaces existing values, downloads a
-model, changes product scripts, probes a service, or modifies notes.
+O setup cria apenas arquivos ausentes de address-counter, tiling-threshold,
+legacy-exception e legacy-manifest. Ele nunca substitui valores existentes,
+baixa um modelo, altera scripts do produto, sonda um serviço ou modifica notas.
 
-## 1. Extractive log folds
+## 1. Folds extrativos de log
 
-`wiki-fold` creates a bounded rollup from recent `wiki/log.md` entries. A fold
-must be:
+`wiki-fold` cria um rollup limitado a partir de entradas recentes do
+`wiki/log.md`. Um fold deve ser:
 
-- extractive—every statement points to a child entry;
-- additive—children remain unchanged;
-- structurally idempotent—the same input set produces the same fold identity;
-- previewed before one transaction applies the fold, index, and log update.
+- extrativo — cada afirmação aponta para uma entrada filha;
+- aditivo — os filhos permanecem inalterados;
+- estruturalmente idempotente — o mesmo conjunto de entrada produz a mesma
+  identidade de fold;
+- pré-visualizado antes de uma transação aplicar o fold, o índice e a
+  atualização do log.
 
-Folds are navigation aids, not new evidence. Delete or revert only the fold
-operation if a rollup is unhelpful.
+Folds são auxílios de navegação, não novas evidências. Apenas a operação de
+fold deve ser apagada ou revertida se um rollup for inútil.
 
-## 2. Stable addresses
+## 2. Endereços estáveis
 
-Modern operations request addresses through the main transaction bundle. The
-engine allocates the counter, injects page frontmatter, and updates the legacy
-address map inside the same journal. Do not call the legacy allocator for new
-ingestion workflows.
+Operações modernas solicitam endereços através do bundle principal de
+transação. O motor aloca o contador, injeta o frontmatter da página e
+atualiza o mapa de endereços legado dentro do mesmo journal. Não chame o
+alocador legado para novos fluxos de ingestão.
 
-`scripts/allocate-address.sh` remains a read-only compatibility diagnostic for
-older vaults. It accepts an explicit vault and never creates or acquires a lock.
-Its output does not replace the transaction engine's expected-hash, allocation,
-concurrency, or rollback guarantees.
+`scripts/allocate-address.sh` permanece um diagnóstico de compatibilidade
+somente-leitura para vaults mais antigos. Ele aceita um vault explícito e
+nunca cria nem adquire um lock. Sua saída não substitui as garantenas de
+hash esperado, alocação, concorrência ou rollback do motor de transação.
 
-## 3. Semantic tiling diagnostics
+## 3. Diagnósticos de tiling semântico
 
-`scripts/tiling-check.py` embeds eligible pages through an Ollama model and
-compares every distinct page pair for possible duplication. It is optional and
-its seed thresholds are uncalibrated. A score is a review signal, not proof
-that two pages should be merged.
+`scripts/tiling-check.py` embeda páginas elegíveis através de um modelo
+Ollama e compara cada par distinto de páginas para possível duplicação. É
+opcional e seus limiares de seed não são calibrados. Uma pontuação é um sinal
+de revisão, não prova de que duas páginas devem ser mescladas.
 
-Preview without writing a report:
+Pré-visualize sem escrever um relatório:
 
 ```bash
 python3 scripts/tiling-check.py --vault <vault> --peek
 ```
 
-Remote Ollama hosts are refused unless `--allow-remote-ollama` is supplied.
-Calibrate thresholds on labeled examples from the selected vault before using
-them as policy. If Ollama or the model is absent, report that capability state;
-do not imply the check ran.
+Hosts remotos de Ollama são recusados a menos que `--allow-remote-ollama` seja
+fornecido. Calibre os limiares em exemplos rotulados do vault selecionado
+antes de usá-los como política. Se Ollama ou o modelo estiver ausente,
+reporte esse estado de capacidade; não implique que a verificação rodou.
 
-## 4. Boundary scoring
+## 4. Pontuação de fronteira
 
-`scripts/boundary-score.py` ranks pages that may deserve more research using
-current graph structure and recency. It is deterministic and read-only:
+`scripts/boundary-score.py` classifica páginas que podem merecer mais
+pesquisa usando a estrutura atual do grafo e a recência. É determinístico e
+somente-leitura:
 
 ```bash
 python3 scripts/boundary-score.py --vault <vault> --json --top 10
 ```
 
-The score proposes attention; it does not establish importance or truth. Use a
-candidate as an autoresearch topic only after reviewing its underlying links
-and the research budget.
+A pontuação propõe atenção; ela não estabelece importância ou verdade. Use
+um candidato como tópico de autoresearch apenas após revisar seus links
+subjacentes e o orçamento de pesquisa.
 
-## Failure and recovery
+## Falha e recuperação
 
-- A setup conflict means an expected path changed; generate a new plan.
-- An interrupted setup uses the normal transaction recovery command.
-- A corrupt legacy counter should be rebuilt from observed addresses only after
-  checking duplicates and the address map.
-- A tiling cache or BM25 index is derived and may be regenerated. Source pages
-  and provenance ledgers are not derived caches.
-- Disabling DragonScale requires no bulk rewrite. Stop invoking the optional
-  helpers; existing fold pages and addresses remain normal vault content.
+- Um conflito de setup significa que um path esperado mudou; gere um novo
+  plano.
+- Um setup interrompido usa o comando normal de recuperação de transação.
+- Um contador legado corrompido deve ser reconstruído a partir dos endereços
+  observados apenas após verificar duplicatas e o mapa de endereços.
+- Um cache de tiling ou índice BM25 é derivado e pode ser regenerado. Páginas
+  de fonte e ledgers de proveniência não são caches derivados.
+- Desabilitar DragonScale não exige reescrita em massa. Pare de invocar os
+  helpers opcionais; as páginas de fold e endereços existentes permanecem
+  conteúdo normal do vault.
 
-## Verification
+## Verificação
 
-Run the relevant hermetic tests or the full suite:
+Execute os testes herméticos relevantes ou a suíte completa:
 
 ```bash
 make test
 ```
 
-Capability maturity is based on executed checks, not the presence of a setup
-file. Keep each mechanism optional and fail closed when its prerequisites are
-unavailable.
+A maturidade da capacidade é baseada em verificações executadas, não na
+presença de um arquivo de setup. Mantenha cada mecanismo opcional e falhe de
+forma segura quando seus pré-requisitos estiverem indisponíveis.

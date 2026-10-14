@@ -1,19 +1,23 @@
-# claude-obsidian Copilot instructions
+# Instruções do Copilot para claude-obsidian
 
-Read `AGENTS.md` before proposing changes. The repository is an Agent Skills
-package, Claude Code adapter, standard-library Python core, and deterministic
-vault template—not the default live user vault.
+Leia `AGENTS.md` antes de propor mudanças. O repositório é um pacote de Agent
+Skills, um adaptador de Claude Code, um núcleo Python de biblioteca padrão e um
+template de vault determinístico — não o vault de usuário ativo padrão.
 
-When editing:
+Ao editar:
 
-- Keep skill frontmatter to exactly `name` and single-line `description`.
-- Use Obsidian Flavored Markdown, flat YAML properties, and `YYYY-MM-DD` dates.
-- Never modify existing raw source payloads.
-- Route all logical knowledge mutations through one inspected operation bundle.
-- Keep workers draft-only and lint/query read-only.
-- Preserve vault path containment and product/vault separation.
-- Add hermetic regression tests for behavior changes and run `make test`.
-- Do not add secrets, private paths, unsupported capability claims, or duplicate
-  command wrappers.
+- Mantenha o frontmatter da skill em exatamente `name` e `description` de linha
+  única.
+- Use Obsidian Flavored Markdown, propriedades YAML planas e datas no formato
+  `YYYY-MM-DD`.
+- Nunca modifique payloads de fonte bruta existentes.
+- Encaminhe todas as mutações lógicas de conhecimento através de um único
+  bundle de operação inspecionado.
+- Mantenha trabalhadores somente para rascunhos e lint/query somente-leitura.
+- Preserve a contenção de paths do vault e a separação produto/vault.
+- Adicione testes de regressão herméticos para mudanças de comportamento e
+  execute `make test`.
+- Não adicione segredos, paths privados, alegações de capacidade sem suporte
+  nem wrappers de comando duplicados.
 
 Public canonical: https://github.com/AgriciDaniel/claude-obsidian

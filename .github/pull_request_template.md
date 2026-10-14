@@ -1,58 +1,63 @@
-# Pull request
+# Pedido de pull request
 
-## Summary
-One-paragraph description of what this PR changes and why.
+## Resumo
+Descrição de um parágrafo sobre o que este pull request muda e por quê.
 
-## Type
-- [ ] Bug fix (`fix:`)
-- [ ] New feature (`feat:`)
-- [ ] Documentation (`docs:`)
-- [ ] Refactor (`refactor:`)
-- [ ] Test coverage (`test:`)
-- [ ] Chore / build / maintenance (`chore:`)
+## Tipo
+- [ ] Correção de bug (`fix:`)
+- [ ] Nova funcionalidade (`feat:`)
+- [ ] Documentação (`docs:`)
+- [ ] Refatoração (`refactor:`)
+- [ ] Cobertura de testes (`test:`)
+- [ ] Chore / build / manutenção (`chore:`)
 
-## Related issue
-Closes #<issue-number> (if applicable)
+## Issue relacionada
+Closes #<issue-number> (se aplicável)
 
-## Changes
-List the files and surfaces touched:
-- `skills/<name>/SKILL.md` — what changed
-- `scripts/<name>.py` — what changed
+## Mudanças
+Liste os arquivos e superfícies afetados:
+- `skills/<name>/SKILL.md` — o que mudou
+- `scripts/<name>.py` — o que mudou
 - ...
 
-## Safety self-review
-- [ ] Read every file before changing it
-- [ ] New identifiers named for the next reader
-- [ ] Smallest unit that works (no speculative abstraction)
-- [ ] Deletions kept up with additions where applicable
-- [ ] New behavior has hermetic test coverage
-- [ ] New failure modes have explicit handling + undo plan
-- [ ] Product code and mutable user-vault state remain separate
-- [ ] Knowledge writes use one recoverable transaction; workers only draft
-- [ ] Network/destructive/external actions have explicit consent
-- [ ] Claims and capability maturity are evidence-backed
+## Auto-revisão de segurança
+- [ ] Li cada arquivo antes de alterá-lo
+- [ ] Novos identificadores nomeados pensando no próximo leitor
+- [ ] Menor unidade que funciona (sem abstração especulativa)
+- [ ] Exclusões acompanhadas de adições quando aplicável
+- [ ] Novo comportamento tem cobertura de teste hermética
+- [ ] Novos modos de falha têm tratamento explícito + plano de desfazer
+- [ ] Código do produto e estado mutável do vault do usuário permanecem
+  separados
+- [ ] Gravações de conhecimento usam uma transação recuperável; trabalhadores
+  só fazem rascunho
+- [ ] Ações de rede/destrutivas/externas têm consentimento explícito
+- [ ] Alegações e maturidade de capacidade têm suporte em evidências
 
-## Testing
+## Testes
 ```
 make test
 ```
-Paste the tail of the output here (or a summary if too long):
+Cole o final da saída aqui (ou um resumo se for muito longo):
 
 ```
 All tests passed.
 ```
 
-## Verifier
-For non-trivial changes, dispatch `agents/verifier.md` on the declared worktree or path scope and paste its verdict:
+## Verificador
+Para mudanças não triviais, despache `agents/verifier.md` no worktree ou escopo
+de paths declarado e cole seu veredito:
 
-- Verdict: SHIP / HOLD-FIX-FIRST / NEEDS-REWORK
+- Veredito: SHIP / HOLD-FIX-FIRST / NEEDS-REWORK
 - BLOCKER: N / HIGH: N / MEDIUM: N / LOW: N
 
 ## CHANGELOG
-- [ ] Added an entry under `## [Unreleased]` in `CHANGELOG.md`
+- [ ] Adicionei uma entrada em `## [Unreleased]` no `CHANGELOG.md`
 
-## Screenshots / output
-If the change affects user-visible output, paste a before/after example.
+## Capturas de tela / saída
+Se a mudança afetar a saída visível ao usuário, cole um exemplo de
+antes/depois.
 
-## Notes for reviewer
-Anything specific the reviewer should focus on, or context that's not obvious from the diff.
+## Notas para o revisor
+Qualquer coisa específica que o revisor deva focar, ou contexto que não é
+óbvio no diff.

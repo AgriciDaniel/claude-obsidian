@@ -9,9 +9,10 @@ tags:
   - sample
 ---
 
-# What supports source-grounded notes?
+# O que sustenta notas com base na fonte?
 
-Within this synthetic fixture, [[Example Source]] supports the example concept
-[[Source-grounded notes]]. No external factual conclusion should be drawn.
+Dentro desta fixture sintética, [[Example Source]] sustenta o conceito de
+exemplo [[Source-grounded notes]]. Nenhuma conclusão factual externa deve ser
+tirada.
 
-See the [[index|Sample Wiki Index]].
+Veja o [[index|Sample Wiki Index]].

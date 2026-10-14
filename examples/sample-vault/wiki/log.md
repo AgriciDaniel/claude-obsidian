@@ -10,6 +10,6 @@ tags:
   - sample
 ---
 
-# Sample Wiki Log
+# Log do Wiki de Amostra
 
-- 2026-07-11 — fixture — Created the deterministic synthetic sample.
+- 2026-07-11 — fixture — Criada a amostra sintética determinística.

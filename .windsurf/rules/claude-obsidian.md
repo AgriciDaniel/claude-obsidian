@@ -1,15 +1,16 @@
-# claude-obsidian: Windsurf rules
+# claude-obsidian: regras do Windsurf
 
-Read `AGENTS.md` as the canonical host-neutral contract. Preview and then
-install Cascade skill links with
-`bash scripts/setup-multi-agent.sh --host windsurf --workspace "$PWD"` followed by
-the same command with `--apply`, and load the matching
-`skills/<name>/SKILL.md` when a request triggers it.
+Leia `AGENTS.md` como o contrato canônico neutro em relação ao host.
+Pré-visualize e depois instale os links de skill do Cascade com
+`bash scripts/setup-multi-agent.sh --host windsurf --workspace "$PWD"`
+seguido do mesmo comando com `--apply`, e carregue o
+`skills/<name>/SKILL.md` correspondente quando uma solicitação o disparar.
 
-The product clone and user vault are separate. Resolve the user vault before
-reading hot context or mutating knowledge. Raw payloads are create-only;
-parallel workers return drafts; one orchestrator inspects and applies one
-recoverable transaction. Queries and lint remain read-only. Network egress,
-destructive repair, and Git checkpoints require explicit user consent.
+O clone do produto e o vault do usuário são separados. Resolva o vault do
+usuário antes de ler o contexto quente ou mutar conhecimento. Payloads brutos
+são somente de criação; trabalhadores paralelos retornam rascunhos; um
+orquestrador inspeciona e aplica uma transação recuperável. Queries e lint
+permanecem somente-leitura. Egress de rede, reparo destrutivo e checkpoints do
+Git exigem consentimento explícito do usuário.
 
 Public canonical: https://github.com/AgriciDaniel/claude-obsidian

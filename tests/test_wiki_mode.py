@@ -794,9 +794,14 @@ def _documented_page_types() -> list[str]:
     wording rather than by the documentation it claimed to verify.
     """
     lines = (ROOT / "WIKI.md").read_text(encoding="utf-8").splitlines()
-    try:
-        start = lines.index("| Type | Purpose |")
-    except ValueError:  # pragma: no cover - asserted by the caller
+    start = -1
+    for candidate in ("| Type | Purpose |", "| Tipo | Propósito |"):
+        try:
+            start = lines.index(candidate)
+            break
+        except ValueError:
+            continue
+    if start < 0:  # pragma: no cover - asserted by the caller
         return []
     found = []
     for line in lines[start + 2 :]:  # skip the header and its `|---|---|`
