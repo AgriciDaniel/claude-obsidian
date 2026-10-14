@@ -34,6 +34,41 @@ def _description(path: Path) -> str:
     return match.group(1).strip().strip('"').casefold()
 
 
+def _assert_localized(
+    test: unittest.TestCase, text: str, *needles: str, msg: str = ""
+) -> None:
+    """Aceita o termo como escrito no upstream (EN) ou na traducao do fork.
+
+    Os contratos deste repositorio sao verificados por conteudo, nao por idioma.
+    Um fork traduzido precisa continuar falhando quando a garantia e removida,
+    entao o assert aceita qualquer uma das grafias em vez de fixar uma so.
+    """
+    haystack = text.casefold()
+    for needle in needles:
+        if needle.casefold() in haystack:
+            return
+    test.fail(f"{msg or text[:60]}: esperado um de {list(needles)!r}")
+
+
+def _assert_localized_regex(
+    test: unittest.TestCase, text: str, *patterns: str, msg: str = ""
+) -> None:
+    for pattern in patterns:
+        if re.search(pattern, text, re.IGNORECASE):
+            return
+    test.fail(f"{msg or text[:60]}: esperado casar um de {list(patterns)!r}")
+
+
+def _assert_localized_absent(
+    test: unittest.TestCase, text: str, *needles: str, msg: str = ""
+) -> None:
+    """Nenhuma das grafias pode aparecer: o contrato proibido vale em qualquer idioma."""
+    haystack = text.casefold()
+    for needle in needles:
+        if needle.casefold() in haystack:
+            test.fail(f"{msg or text[:60]}: {needle!r} nao deveria aparecer")
+
+
 class KnowledgeContractTests(unittest.TestCase):
     def test_persistent_content_has_an_explicit_trust_boundary(self) -> None:
         security = (ROOT / "SECURITY.md").read_text(encoding="utf-8").casefold()
@@ -49,8 +84,10 @@ class KnowledgeContractTests(unittest.TestCase):
         )
         for relative in consumers:
             text = (ROOT / relative).read_text(encoding="utf-8").casefold()
-            self.assertIn("untrusted", text, relative)
-            self.assertIn("embedded", text, relative)
+            _assert_localized(
+                self, text, "untrusted", "não confiável", "não-confiável", msg=relative
+            )
+            _assert_localized(self, text, "embedded", "embutid", msg=relative)
 
     def test_ambiguous_skill_routes_are_narrowed(self) -> None:
         descriptions = {
@@ -67,13 +104,42 @@ class KnowledgeContractTests(unittest.TestCase):
         }
         self.assertNotIn("add this to the wiki", descriptions["save"])
         self.assertNotIn("add this to the wiki", descriptions["wiki-ingest"])
-        self.assertIn("specific conversation content", descriptions["save"])
-        self.assertIn("source material", descriptions["wiki-ingest"])
-        self.assertIn("explicitly vault-scoped", descriptions["wiki-query"])
-        self.assertIn("not for general markdown", descriptions["obsidian-markdown"])
-        self.assertIn("not a deterministic vault health check", descriptions["think"])
-        self.assertIn("does not save content", descriptions["wiki-mode"])
-        self.assertIn("does not reason broadly or repair", descriptions["wiki-lint"])
+        _assert_localized(
+            self,
+            descriptions["save"],
+            "specific conversation content",
+            "conteúdo específico da conversa",
+        )
+        _assert_localized(
+            self, descriptions["wiki-ingest"], "source material", "material de fonte"
+        )
+        _assert_localized(
+            self,
+            descriptions["wiki-query"],
+            "explicitly vault-scoped",
+            "explicitamente delimitada ao vault",
+        )
+        _assert_localized(
+            self,
+            descriptions["obsidian-markdown"],
+            "not for general markdown",
+            "não para markdown em geral",
+        )
+        _assert_localized(
+            self,
+            descriptions["think"],
+            "not a deterministic vault health check",
+            "não uma verificação de saúde determinística",
+        )
+        _assert_localized(
+            self, descriptions["wiki-mode"], "does not save content", "não salva conteúdo"
+        )
+        _assert_localized(
+            self,
+            descriptions["wiki-lint"],
+            "does not reason broadly or repair",
+            "não raciocina de forma ampla nem repara",
+        )
 
     def test_methodology_templates_include_required_page_properties(self) -> None:
         required = {"type", "title", "status", "created", "updated", "tags"}
@@ -187,12 +253,29 @@ class KnowledgeContractTests(unittest.TestCase):
         reference = (ROOT / "skills/canvas/references/canvas-spec.md").read_text(
             encoding="utf-8"
         )
-        self.assertIn("render-time egress", skill)
-        self.assertIn("Opening or rendering it in", reference)
-        self.assertIn("Obsidian may contact", reference)
-        self.assertRegex(reference, r"16-character lowercase\s+hexadecimal")
-        self.assertIn("does not prescribe a length or character set", reference)
-        self.assertIn("file node may include the optional `color` field", reference)
+        _assert_localized(self, skill, "render-time egress", "egress em tempo de renderização")
+        _assert_localized(
+            self, reference, "Opening or rendering it in", "Abrir ou renderizá-lo"
+        )
+        _assert_localized(self, reference, "Obsidian may contact", "Obsidian pode contatar")
+        _assert_localized_regex(
+            self,
+            reference,
+            r"16-character lowercase\s+hexadecimal",
+            r"16 caracteres",
+        )
+        _assert_localized(
+            self,
+            reference,
+            "does not prescribe a length or character set",
+            "não prescribe comprimento nem conjunto de caracteres",
+        )
+        _assert_localized(
+            self,
+            reference,
+            "file node may include the optional `color` field",
+            "campo opcional `color`",
+        )
 
     def test_bases_date_arithmetic_uses_millisecond_conversion(self) -> None:
         skill = (ROOT / "skills/obsidian-bases/SKILL.md").read_text(encoding="utf-8")
@@ -201,9 +284,16 @@ class KnowledgeContractTests(unittest.TestCase):
 
     def test_defuddle_does_not_overstate_configured_runner_evidence(self) -> None:
         skill = (ROOT / "skills/defuddle/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("Never relabel `configured` as `verified`", skill)
-        self.assertIn("manual executable", skill)
-        self.assertNotIn("verified executable", skill)
+        _assert_localized(
+            self,
+            skill,
+            "Never relabel `configured` as `verified`",
+            "Nunca rotule `configured` como `verified`",
+        )
+        _assert_localized(self, skill, "manual executable", "revisão manual")
+        _assert_localized_absent(
+            self, skill, "verified executable", "executável verificado"
+        )
 
     def test_numeric_only_tags_remain_yaml_text(self) -> None:
         for relative in (
@@ -211,7 +301,14 @@ class KnowledgeContractTests(unittest.TestCase):
             "skills/wiki/references/frontmatter.md",
         ):
             text = (ROOT / relative).read_text(encoding="utf-8")
-            self.assertIn("numeric-only tag", text, relative)
+            _assert_localized(
+                self,
+                text,
+                "numeric-only tag",
+                "tag que são apenas numéricos",
+                "tag puramente numéricos",
+                msg=relative,
+            )
             self.assertIn('- "2026"', text, relative)
 
     def test_forward_evaluation_corpus_is_complete_and_lint_clean(self) -> None:

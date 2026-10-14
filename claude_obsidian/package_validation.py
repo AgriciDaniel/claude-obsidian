@@ -312,13 +312,18 @@ def _validate_wiki_reference_link_anchors(root: Path) -> list[dict[str, str]]:
 
     findings: list[dict[str, str]] = []
     link_pattern = re.compile(r"\.\./wiki/references/")
-    anchor_phrase = "relative to this skill's own directory under `$PRODUCT_ROOT`"
+    # A ancora e uma garantia de contrato, nao de idioma: forks traduzidos
+    # redactam a frase, mas precisam continuar declarando a mesma raiz.
+    anchor_phrases = (
+        "relative to this skill's own directory under `$PRODUCT_ROOT`",
+        "relativo ao diretório desta skill sob `$PRODUCT_ROOT`",
+    )
     for path in sorted((root / "skills").glob("*/SKILL.md")):
         text = path.read_text(encoding="utf-8")
         if not link_pattern.search(text):
             continue
         normalized = " ".join(text.split())
-        if anchor_phrase not in normalized:
+        if not any(phrase in normalized for phrase in anchor_phrases):
             findings.append(
                 _finding(
                     "unanchored_wiki_reference_link",
