@@ -1,47 +1,49 @@
-# Optional Obsidian integrations
+# Integrações opcionais do Obsidian
 
-claude-obsidian's baseline vault uses Markdown, JSON, and Obsidian core
-features. No community plugin, theme, or downloaded executable is required.
+O vault baseline do claude-obsidian usa Markdown, JSON e recursos nativos do
+Obsidian. Nenhum plugin, tema ou executável baixado da comunidade é necessário.
 
-## Install and open Obsidian
+## Instalar e abrir o Obsidian
 
-Use the current installation instructions at
-[Obsidian Help](https://help.obsidian.md/). Open the separate user-vault folder,
-not the claude-obsidian product checkout.
+Use as instruções de instalação atuais em
+[Obsidian Help](https://help.obsidian.md/). Abra a pasta separada do vault do
+usuário, e não o checkout do produto claude-obsidian.
 
-Built-in Properties, Backlinks, Outline, and Graph views can improve navigation.
-Use Bases only when the installed Obsidian version supports the `.base` syntax
-you need. The `obsidian-bases` skill can draft a file, but application rendering
-still requires verification in Obsidian.
+As views nativas de Properties, Backlinks, Outline e Graph podem melhorar a
+navegação. Use Bases somente quando a versão instalada do Obsidian suportar a
+sintaxe `.base` de que você precisa. A skill `obsidian-bases` pode redigir um
+arquivo, mas a renderização da aplicação ainda exige verificação no Obsidian.
 
-## Community plugins
+## Plugins da comunidade
 
-Community plugins are optional third-party code. Before recommending or
-installing one:
+Plugins da comunidade são código opcional de terceiros. Antes de recomendar ou
+instalar um:
 
-1. Confirm the user's actual need and obtain approval for the installation.
-2. Review the current publisher, source repository, requested permissions,
-   release provenance, and maintenance state.
-3. Install through Obsidian's supported interface. Do not copy an unverified
-   `main.js` or download a floating release from an agent workflow.
-4. Back up the vault and test in a non-critical copy when the plugin can rewrite
-   notes or properties.
-5. Record the plugin and version in user-vault documentation, not product code.
+1. Confirme a necessidade real do usuário e obtenha aprovação para a instalação.
+2. Revise o publisher atual, o repositório-fonte, as permissões solicitadas, a
+   proveniência da release e o estado de manutenção.
+3. Instale pela interface suportada do Obsidian. Não copie um `main.js` não
+   verificado nem baixe uma release flutuante a partir de um workflow de agente.
+4. Faça backup do vault e teste em uma cópia não crítica quando o plugin puder
+   reescrever notas ou propriedades.
+5. Registre o plugin e a versão na documentação do vault do usuário, e não no
+   código do produto.
 
-Templating, calendar, quick-capture, Git, Dataview, semantic-search, and theme
-plugins can be useful, but none are bundled or assumed by the baseline.
+Plugins de templates, calendário, captura rápida, Git, Dataview, busca semântica e
+temas podem ser úteis, mas nenhum é incluso nem assumido pela baseline.
 
-## Git and sync plugins
+## Plugins de Git e sync
 
-An Obsidian Git or sync plugin is a backup convenience, not claude-obsidian's
-transaction or checkpoint mechanism. Background commits can race with an agent
-operation and make exact-operation checkpoints ambiguous. Disable overlapping
-automatic commits while applying an operation, or use a separate backup method.
-Run `checkpoint` only when the user explicitly requests Git history.
+Um plugin de Git ou de sync do Obsidian é uma conveniência de backup, não o
+mecanismo de transação ou de checkpoint do claude-obsidian. Commits em background
+podem entrar em corrida com uma operação do agente e tornar ambíguos os
+checkpoints de operação exata. Desabilite commits automáticos sobrepostos enquanto
+aplica uma operação, ou use um método de backup separado. Rode `checkpoint` apenas
+quando o usuário pedir explicitamente histórico Git.
 
 ## Web Clipper
 
-Treat browser-clipped material as untrusted source input. Capture it into the
-configured inbox, preserve its locator and hash, and ingest it through the
-normal provenance workflow. A clip is not evidence of truth merely because it
-was successfully imported.
+Trate material capturado do navegador como entrada de fonte não confiável.
+Capture-o na inbox configurada, preserve seu localizador e hash, e ingira-o pelo
+workflow de proveniência normal. Um clip não é evidência de verdade apenas porque
+foi importado com sucesso.

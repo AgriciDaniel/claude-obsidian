@@ -1,28 +1,28 @@
 ---
 type: meta
-title: Hot Cache
+title: Cache Quente
 status: developing
 created: {{generated_date}}
 updated: {{generated_date}}
 tags:
   - meta
-  - hot-cache
+  - cache-quente
 ---
 
-# Recent Context
+# Contexto Recente
 
-## Last Updated
+## Última Atualização
 
-Vault initialized. No knowledge operations have completed yet.
+Cofre inicializado. Nenhuma operação de conhecimento foi concluída até agora.
 
-## Key Recent Facts
+## Fatos Recentes Relevantes
 
-- No facts recorded.
+- Nenhum fato registrado.
 
-## Recent Changes
+## Mudanças Recentes
 
-- Created the vault foundation.
+- Criada a fundação do cofre.
 
-## Active Threads
+## Assuntos Ativos
 
-- Add a source to `inbox/`, then ingest it.
+- Coloque uma fonte em `inbox/` e ingira-a.

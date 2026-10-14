@@ -7,26 +7,26 @@ updated: {{date}}
 deadline: ""
 outcome: ""
 tags:
-  - project
+  - projeto
 ---
 
 # {{title}}
 
-## Outcome
+## Resultado esperado
 
-(One sentence: what does "done" look like?)
+(Uma frase: como fica "pronto"?)
 
 ## Status
 
-- **Current state:** active
-- **Deadline:** {{deadline-or-tbd}}
-- **Next action:** (single concrete next step)
+- **Estado atual:** active
+- **Prazo:** {{deadline-or-tbd}}
+- **Próxima ação:** (um único passo concreto a seguir)
 
-## Notes
+## Notas
 
-(Working notes, decisions, blockers.)
+(notas de trabalho, decisões, impedimentos.)
 
-## Related
+## Relacionado
 
-- Areas: [[{{related-area}}]]
-- Resources: [[{{related-resource}}]]
+- Áreas: [[{{related-area}}]]
+- Recursos: [[{{related-resource}}]]

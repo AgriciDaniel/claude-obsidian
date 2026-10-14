@@ -1,17 +1,18 @@
 ---
 name: wiki-fold
-description: "Create a bounded, extractive, structurally idempotent rollup of recent Obsidian wiki log entries, with dry-run preview by default and one optional transaction apply. Use for manual log compression without modifying child pages. Triggers: fold the log, run a fold, run wiki-fold, log rollup, roll up log entries, commit the fold."
+description: "Crie um rollup delimitado, extrativo e estruturalmente idempotente de entradas recentes do log do wiki Obsidian, com pré-visualização dry-run por padrão e uma única aplicação opcional via transação. Use para compressão manual do log sem modificar as páginas filhas. Gatilhos: dobrar o log, rodar um fold, rodar wiki-fold, rollup do log, agregar entradas de log, commitar o fold."
 ---
 
-# Extractive log fold
+# Fold extrativo do log
 
-Create an additive rollup of raw `wiki/log.md` entries. Never modify, move, or
-delete child entries or their pages. Do not perform fold-of-folds or trigger a
-fold automatically.
+Crie um rollup aditivo de entradas brutas de `wiki/log.md`. Nunca modifique,
+mova ou apague entradas filhas ou suas páginas. Não faça fold de folds nem
+dispare um fold automaticamente.
 
-Resolve the portable core from this skill's installation. Resolve the user vault
-by explicit `--vault`, `CLAUDE_OBSIDIAN_VAULT`, workspace config, then
-current-directory discovery. Never treat the plugin/product root as a vault.
+Resolva o núcleo portátil a partir da instalação desta skill. Resolva o vault do
+usuário por `--vault` explícito, `CLAUDE_OBSIDIAN_VAULT`, config do workspace e
+então descoberta no diretório atual. Nunca trate a raiz do plugin/produto como
+um vault.
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -19,76 +20,77 @@ CORE="$PRODUCT_ROOT/scripts/claude-obsidian.py"
 test -f "$CORE"
 ```
 
-Every `../wiki/references/` link in this file resolves the same way, relative
-to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
-selected vault's `wiki/` directory.
+Todo link `../wiki/references/` neste arquivo resolve da mesma forma, relativo
+ao diretório desta skill sob `$PRODUCT_ROOT`, nunca relativo ao diretório
+`wiki/` do vault selecionado.
 
-This skill needs no network egress. Do not call external services.
+Esta skill não precisa de egress de rede. Não chame serviços externos.
 
-## Select a bounded range
+## Selecionar um intervalo delimitado
 
-Use batch exponent `k` with size `2^k`; default to `k=4`. An explicit entry range
-may override it. If fewer entries exist than requested, report the shortfall and
-stop rather than folding a partial batch.
+Use o expoente de lote `k` com tamanho `2^k`; por padrão `k=4`. Um intervalo de
+entradas explícito pode sobrescrevê-lo. Se existirem menos entradas do que as
+solicitadas, reporte a diferença e pare em vez de dobrar um lote parcial.
 
-Read the selected log entries completely. Read referenced child pages only when
-the log lacks enough context: target 0-10 reads, hard ceiling 15. Missing pages
-remain explicit `page_missing` records.
+Leia as entradas de log selecionadas por completo. Leia as páginas filhas
+referenciadas apenas quando o log não tiver contexto suficiente: mire em 0-10
+leituras, com teto rígido de 15. Páginas ausentes permanecem como registros
+explícitos `page_missing`.
 
-Derive the structural ID only from inputs:
+Derive o ID estrutural apenas a partir das entradas:
 
 ```text
 fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}
 ```
 
-If `wiki/folds/{FOLD_ID}.md` already exists, return a no-op. Replacing it requires
-an explicit force request and a separately reviewed `replace` proposal.
+Se `wiki/folds/{FOLD_ID}.md` já existir, retorne um no-op. Substituí-lo exige um
+pedido explícito de force e uma proposta `replace` revisada separadamente.
 
-## Draft extractively
+## Elabore de forma extrativa
 
-Follow [fold-template.md](references/fold-template.md). Every child log entry must
-have one deterministic `child_key` in frontmatter and exactly one matching row
-in the Child Entries table. Do not deduplicate children by page, although the
-final Child Pages link list may be deduplicated.
+Siga [fold-template.md](references/fold-template.md). Toda entrada filha do log
+precisa ter um `child_key` determinístico no frontmatter e exatamente uma linha
+correspondente na tabela Child Entries. Não deduplique os filhos por página,
+embora a lista final de links Child Pages possa ser deduplicada.
 
-Every outcome must name its source entry. Every number must be verifiable in the
-selected entry. A cross-entry theme must name at least two contributing entries.
-Prefer `ambiguous in source` or `source missing` to invention. When a child page
-and log entry disagree, preserve both and identify the mismatch; the log entry is
-the fold's primary source.
+Todo outcome deve nomear sua entrada de origem. Todo número deve ser verificável
+na entrada selecionada. Um tema entre entradas deve nomear pelo menos duas
+entradas que contribuam. Prefira `ambiguous in source` ou `source missing` a
+invenção. Quando uma página filha e a entrada de log divergirem, preserve ambas e
+identifique a inconsistência; a entrada de log é a fonte primária do fold.
 
-Run these checks before proposing any write:
+Rode estas verificações antes de propor qualquer escrita:
 
-- deterministic ID and exact entry count;
-- frontmatter/table bijection;
-- numeric traceability;
-- source citation for every outcome and theme;
-- no change to a child, source, source ledger, or claim ledger.
+- ID determinístico e contagem exata de entradas;
+- bijeção entre frontmatter e tabela;
+- rastreabilidade numérica;
+- citação de origem para todo outcome e tema;
+- nenhuma mudança em um filho, source, ledger de source ou ledger de claim.
 
-A fold adds no new factual evidence, so it does not upgrade claim assessments or
-create source records. Report discovered contradictions for later review instead
-of editing canonical claims.
+Um fold não adiciona nova evidência factual, então não promove avaliações de
+claim nem cria registros de source. Reporte contradições descobertas para revisão
+posterior em vez de editar claims canônicos.
 
-## Preview by default
+## Pré-visualize por padrão
 
-Return the complete fold draft, ID, child range, read budget, and proposed changed
-paths without modifying the vault. Parallel agents may check child entries and
-return extracts, but only the orchestrator assembles the fold; workers never
-write.
+Retorne o rascunho completo do fold, o ID, o intervalo de filhos, o orçamento de
+leituras e os caminhos alterados propostos sem modificar o vault. Agentes
+paralelos podem verificar entradas filhas e devolver extrações, mas apenas o
+orquestrador monta o fold; workers nunca escrevem.
 
-When the user explicitly says to apply or commit the fold, build one
-`claude-obsidian.transaction.v1` bundle with `operation_type: fold`. Read
-[the transaction contract](../wiki/references/operation-transactions.md). Couple:
+Quando o usuário disser explicitamente para aplicar ou commitar o fold, construa
+um bundle `claude-obsidian.transaction.v1` com `operation_type: fold`. Leia
+[o contrato de transação](../wiki/references/operation-transactions.md). Acople:
 
-- `wiki/folds/{FOLD_ID}.md` in `create` mode by default;
-- the fold catalog entry in `wiki/index.md`;
-- one new top-of-file fold entry in `wiki/log.md`.
+- `wiki/folds/{FOLD_ID}.md` em modo `create` por padrão;
+- a entrada de catálogo do fold em `wiki/index.md`;
+- uma nova entrada de fold no topo do arquivo em `wiki/log.md`.
 
-Do not update `wiki/hot.md`. Record SHA-256 preconditions for all three targets.
-Do not use host Write/Edit, Obsidian transport writes, deprecated locks, automatic
-commits, or one apply per file.
+Não atualize `wiki/hot.md`. Registre pré-condições SHA-256 para os três alvos.
+Não use Write/Edit do host, escritas de transporte do Obsidian, locks
+depreciados, commits automáticos, nem um apply por arquivo.
 
-Inspect before the single apply:
+Inspecione antes do único apply:
 
 ```bash
 python3 "$CORE" transaction inspect /path/to/fold-bundle.json --vault /path/to/vault
@@ -97,15 +99,16 @@ python3 "$CORE" transaction apply /path/to/fold-bundle.json --vault /path/to/vau
   --approved-plan-sha256 "$APPROVAL_SHA256"
 ```
 
-Report the operation ID and exact changed paths. The identical bundle and ID are
-idempotent. On exit 75, re-read and rebuild; after interruption, use
-`transaction recover`.
+Reporte o operation ID e os caminhos exatos alterados. O bundle e o ID
+idênticos são idempotentes. Em exit 75, releia e reconstrua; após interrupção,
+use `transaction recover`.
 
-Git history is a separate optional action:
+O histórico Git é uma ação separada e opcional:
 
 ```bash
 python3 "$CORE" checkpoint OPERATION_ID --vault /path/to/vault
 ```
 
-Observe all selected entries, verify traceability and counts, then grow the
-rollup only from what its children actually say.
+Observe todas as entradas selecionadas, verifique a rastreabilidade e as
+contagens e então cresça o rollup apenas a partir do que os filhos realmente
+dizem.

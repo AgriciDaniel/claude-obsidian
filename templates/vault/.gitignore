@@ -1,11 +1,11 @@
-# Vault-local runtime and recovery state may contain note text or source URLs.
+# O estado local do cofre e de recuperação pode conter texto de notas ou URLs de fontes.
 .vault-meta/
 
-# Local MCP launch configuration may contain commands or credentials. Share a
-# reviewed `.mcp.example.json` instead of committing the live file.
+# A configuração local do MCP pode conter comandos ou credenciais. Compartilhe
+# um `.mcp.example.json` revisado em vez de versionar o arquivo real.
 .mcp.json
 
-# Obsidian and operating-system session state.
+# Estado de sessão do Obsidian e do sistema operacional.
 .obsidian/workspace*.json
 .trash/
 .DS_Store

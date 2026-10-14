@@ -1,13 +1,13 @@
 ---
 type: overview
-title: Vault Overview
+title: Visão Geral do Cofre
 status: developing
 created: {{generated_date}}
 updated: {{generated_date}}
 tags:
-  - overview
+  - visão-geral
 ---
 
-# Vault Overview
+# Visão Geral do Cofre
 
-This local-first vault compounds source-backed knowledge over time.
+Este cofre local-first acumula conhecimento com fontes citadas ao longo do tempo.

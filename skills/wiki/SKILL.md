@@ -1,35 +1,36 @@
 ---
 name: wiki
-description: "Initialize, adopt, and route work for a separate Obsidian knowledge vault through the portable claude-obsidian core. Use for vault setup, scaffolding, workspace selection, cross-project configuration, or choosing the correct wiki sub-skill. Triggers: /wiki, set up wiki, scaffold vault, create knowledge base, adopt this vault, Obsidian vault, second brain setup, persistent wiki."
+description: "Inicialize, adote e roteie o trabalho em um vault de conhecimento Obsidian separado por meio do núcleo portátil do claude-obsidian. Use para setup do vault, scaffolding, seleção de workspace, configuração entre projetos, ou para escolher a sub-skill wiki correta. Gatilhos: /wiki, configurar o wiki, criar o scaffolding do vault, criar base de conhecimento, adotar este vault, vault Obsidian, setup de segundo cérebro, wiki persistente."
 ---
 
-# Wiki orchestration
+# Orquestração do wiki
 
-Treat the installed product as code and the selected user vault as data. Never use
-the plugin/product root as a vault, even when the current directory happens to be
-the product checkout.
+Trate o produto instalado como código e o vault do usuário selecionado como
+dados. Nunca use a raiz do plugin/produto como vault, mesmo quando o diretório
+atual for o checkout do produto.
 
-Resolve the portable core from this skill's installation and invoke it by absolute
-path:
+Resolva o núcleo portátil a partir da instalação desta skill e invoque-o por
+caminho absoluto:
 
 ```bash
 CORE=/absolute/product/root/scripts/claude-obsidian.py
 python3 "$CORE" --help
 ```
 
-Resolve a vault in this order: explicit `--vault`,
-`CLAUDE_OBSIDIAN_VAULT`, the nearest `.claude-obsidian.json`, then an
-unambiguous initialized vault at or above the current directory. Fail closed when
-selection is missing or ambiguous.
+Resolva o vault nesta ordem: `--vault` explícito, `CLAUDE_OBSIDIAN_VAULT`, o
+`.claude-obsidian.json` mais próximo e então um vault inicializado não ambíguo no
+diretório atual ou acima dele. Falhe de forma fechada quando a seleção estiver
+ausente ou ambígua.
 
-Baseline setup requires no network egress. Do not fetch templates, plugins, or
-remote content unless the user separately approves the destinations and budget.
+O setup de base não exige egress de rede. Não busque templates, plugins ou
+conteúdo remoto a menos que o usuário aprove separadamente os destinos e o
+orçamento.
 
-## Set up a vault
+## Configurar um vault
 
-Use the deterministic setup commands. Both are dry-run by default.
+Use os comandos de setup determinísticos. Ambos são dry-run por padrão.
 
-For a new, separate vault:
+Para um vault novo e separado:
 
 ```bash
 python3 "$CORE" init /absolute/path/to/vault \
@@ -39,7 +40,7 @@ python3 "$CORE" init /absolute/path/to/vault \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-For an existing Obsidian vault:
+Para um vault Obsidian existente:
 
 ```bash
 python3 "$CORE" adopt /absolute/path/to/vault \
@@ -49,85 +50,88 @@ python3 "$CORE" adopt /absolute/path/to/vault \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-Before `--apply`, show the selected path and changed-path preview, then pass
-the emitted `approved_plan_sha256` unchanged. Do not use
-`--force` unless the user has reviewed the conflicts and explicitly approved
-replacement. Setup is non-destructive by default and creates no upstream Git
-remote.
+Antes de `--apply`, mostre o caminho selecionado e a prévia de caminhos
+alterados, e então passe o `approved_plan_sha256` emitido sem alterações. Não
+use `--force` a menos que o usuário tenha revisado os conflitos e aprovado
+explicitamente a substituição. O setup é não destrutivo por padrão e não cria
+remote Git upstream.
 
-If the user asks for a domain-specific scaffold, establish the baseline first,
-then read [modes.md](references/modes.md). Draft the additional pages and
-configuration as one operation-level transaction. Never mutate vault files with
-host Write/Edit tools or an Obsidian transport.
+Se o usuário pedir um scaffolding específico de domínio, estabeleça a base
+primeiro e então leia [modes.md](references/modes.md). Elabore as páginas e a
+configuração adicionais como uma única transação de nível de operação. Nunca
+mute arquivos do vault com as ferramentas Write/Edit do host ou com um
+transporte Obsidian.
 
-## Route operations
+## Rotear operações
 
-Route the user's intent without silently broadening it:
+Rotele a intenção do usuário sem ampliá-la silenciosamente:
 
-| Intent | Skill |
+| Intenção | Skill |
 |---|---|
-| Ingest supplied sources | `wiki-ingest` |
-| Answer from existing vault knowledge | `wiki-query` |
-| Save a specific conversation result | `save` |
-| Research the public web under a budget | `autoresearch` |
-| Check vault health | `wiki-lint` |
-| Roll up log entries | `wiki-fold` |
-| Work with a canvas | `canvas` |
+| Ingerir fontes fornecidas | `wiki-ingest` |
+| Responder a partir do conhecimento existente no vault | `wiki-query` |
+| Salvar um resultado específico de conversa | `save` |
+| Pesquisar a web pública sob um orçamento | `autoresearch` |
+| Verificar a saúde do vault | `wiki-lint` |
+| Consolidar entradas de log | `wiki-fold` |
+| Trabalhar com um canvas | `canvas` |
 
-Query is read-only. Persistence from a query must be an explicit, separately
-scoped Save operation. Never capture a transcript or update the hot cache merely
-because a session ended.
+Query é somente leitura. A persistência a partir de uma query deve ser uma
+operação Save explícita e de escopo separado. Nunca capture uma transcrição nem
+atualize o cache quente apenas porque uma sessão terminou.
 
-## Mutation contract
+## Contrato de mutação
 
-Read [operation-transactions.md](references/operation-transactions.md) before
-any custom scaffold or mutation. One logical operation must produce one inspected
-and recoverable `claude-obsidian.transaction.v1` bundle. Parallel agents may
-return drafts and evidence only; the orchestrator merges them and applies once.
-Every canonical page create or removal includes an active index or MOC update
-in that bundle; update the overview only when the stable high-level picture
-changed. Raw source payloads are create-only. There are no automatic commits.
+Leia [operation-transactions.md](references/operation-transactions.md) antes de
+qualquer scaffolding customizado ou mutação. Uma operação lógica deve produzir
+um único bundle `claude-obsidian.transaction.v1` inspecionado e recuperável.
+Agentes paralelos podem retornar apenas rascunhos e evidências; o orquestrador
+os mescla e aplica uma vez. Toda criação ou remoção de página canônica inclui
+nesse bundle uma atualização de índice ativo ou MOC; atualize o overview apenas
+quando o quadro estável de alto nível mudou. Payloads de fonte raw são
+create-only. Não há commits automáticos.
 
-Use [provenance.md](references/provenance.md) when initializing or changing
-source and claim ledgers. Unsupported evidence stays unsupported; never invent a
-source, quote, date, locator, or confidence.
+Use [provenance.md](references/provenance.md) ao inicializar ou alterar os
+ledgers de source e claim. Evidência unsupported permanece unsupported; nunca
+invente uma source, citação, data, localizador ou confiança.
 
-After a successful apply, report the operation ID and exact changed paths. If the
-user explicitly wants a Git checkpoint, run it separately:
+Após um apply bem-sucedido, reporte o operation ID e os caminhos exatos
+alterados. Se o usuário quiser explicitamente um checkpoint Git, execute-o
+separadamente:
 
 ```bash
 python3 "$CORE" checkpoint OPERATION_ID --vault /absolute/path/to/vault
 ```
 
-On a conflict, re-read and rebuild. On interruption, use `transaction recover`.
-Reuse an operation ID only with the identical bundle.
+Em caso de conflito, releia e reconstrua. Em caso de interrupção, use
+`transaction recover`. Reutilize um operation ID apenas com o bundle idêntico.
 
-## Installation context
+## Contexto de instalação
 
-Read [install-modes.md](references/install-modes.md) when installation or host
-behavior matters. Hooks are optional adapters; portable behavior lives in the
-core and skills.
+Leia [install-modes.md](references/install-modes.md) quando a instalação ou o
+comportamento do host importar. Hooks são adaptadores opcionais; o
+comportamento portátil vive no core e nas skills.
 
-## Conditional references
+## Referências condicionais
 
-Read only the reference needed for the current request:
+Leia apenas a referência necessária para a solicitação atual:
 
-- [frontmatter.md](references/frontmatter.md) when defining or adopting a
-  property schema;
-- [css-snippets.md](references/css-snippets.md) for requested Obsidian visual
-  customization;
-- [git-setup.md](references/git-setup.md) for explicit local Git or checkpoint
-  setup;
-- [plugins.md](references/plugins.md) when evaluating optional Obsidian
-  integrations;
-- [mcp-setup.md](references/mcp-setup.md) when the user asks to evaluate an
-  external read transport;
-- [rest-api.md](references/rest-api.md) only when the user explicitly has or
-  requests the Local REST API adapter.
+- [frontmatter.md](references/frontmatter.md) ao definir ou adotar um schema de
+  propriedades;
+- [css-snippets.md](references/css-snippets.md) para customização visual do
+  Obsidian solicitada;
+- [git-setup.md](references/git-setup.md) para setup explícito de Git local ou de
+  checkpoint;
+- [plugins.md](references/plugins.md) ao avaliar integrações opcionais do
+  Obsidian;
+- [mcp-setup.md](references/mcp-setup.md) quando o usuário pede para avaliar um
+  transporte externo de leitura;
+- [rest-api.md](references/rest-api.md) somente quando o usuário tiver ou
+  solicitar explicitamente o adaptador Local REST API.
 
-## Think, verify, grow
+## Pense, verifique, cresça
 
-Before applying, pause once: observe existing state, verify the vault selection
-and evidence, then choose the smallest reversible operation that satisfies the
-request. Afterward, report uncertainty and the next useful improvement without
-performing it automatically.
+Antes de aplicar, pause uma vez: observe o estado existente, verifique a seleção
+do vault e a evidência, e então escolha a menor operação reversível que
+satisfaça a solicitação. Depois, reporte a incerteza e a próxima melhoria útil
+sem executá-la automaticamente.

@@ -6,24 +6,24 @@ topic: "{{topic}}"
 created: {{date}}
 updated: {{date}}
 tags:
-  - resource
+  - recurso
 ---
 
 # {{title}}
 
-## Summary
+## Resumo
 
-(2-3 sentences: what is this, why is it here, what is it useful for?)
+(2-3 frases: o que é isto, por que está aqui, para que serve?)
 
-## Key content
+## Conteúdo principal
 
-(The actual reference material — quotes, summaries, links, structured information.)
+(O material de referência propriamente dito — citações, resumos, links, informação estruturada.)
 
-## Sources
+## Fontes
 
-- (citations, links to external material)
+- (citações, links para material externo)
 
-## Related
+## Relacionado
 
-- Areas using this: [[{{area-1}}]]
-- Projects using this: [[{{project-1}}]]
+- Áreas que usam isto: [[{{area-1}}]]
+- Projetos que usam isto: [[{{project-1}}]]

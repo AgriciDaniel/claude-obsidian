@@ -1,12 +1,13 @@
-# Visual Customization
+# Personalização visual
 
-Apply during scaffold. This makes the file explorer color-coded by folder type and adds custom callout styles.
+Aplique durante o scaffold. Isso torna o explorador de arquivos com cores por
+tipo de pasta e adiciona estilos de callout personalizados.
 
 ---
 
-## CSS Snippet
+## CSS snippet
 
-Create this file at `.obsidian/snippets/vault-colors.css` inside the vault:
+Crie este arquivo em `.obsidian/snippets/vault-colors.css` dentro do vault:
 
 ```css
 :root {
@@ -50,41 +51,41 @@ Create this file at `.obsidian/snippets/vault-colors.css` inside the vault:
 
 ---
 
-## Enable the Snippet
+## Habilite o snippet
 
-Tell the user: Settings > Appearance > CSS Snippets > open folder > paste the file > click the refresh icon > toggle it on.
-
----
-
-## Graph View Groups
-
-Guide the user to set these in Graph View settings (click the settings icon in the graph view):
-
-| Query | Color |
-|-------|-------|
-| `path:wiki/domains` | Blue (`#4fc1ff`) |
-| `path:wiki/entities` | Purple (`#c586c0`) |
-| `path:wiki/concepts` | Yellow (`#dcdcaa`) |
-| `path:wiki/sources` | Orange (`#ce9178`) |
-| `path:wiki/questions` | Green (`#6a9955`) |
-| `path:.raw` | Gray (dimmed) |
+Diga ao usuário: Settings > Appearance > CSS Snippets > open folder > cole o arquivo > clique no ícone de refresh > ative-o.
 
 ---
 
-## Custom Callouts
+## Grupos no Graph View
 
-This vault defines **four custom callout types** beyond Obsidian's built-in set (`note`, `tip`, `warning`, `info`, `todo`, `success`, `question`, `failure`, `danger`, `bug`, `example`, `quote`). They render correctly **only when `vault-colors.css` is enabled**. Without the snippet, they fall back to default callout styling (still readable, just plain).
+Oriente o usuário a definir estes nas configurações do Graph View (clique no ícone de configurações na visualização de grafo):
 
-| Custom callout | Color | Icon | Use for |
+| Query | Cor |
+|-------|-----|
+| `path:wiki/domains` | Azul (`#4fc1ff`) |
+| `path:wiki/entities` | Roxo (`#c586c0`) |
+| `path:wiki/concepts` | Amarelo (`#dcdcaa`) |
+| `path:wiki/sources` | Laranja (`#ce9178`) |
+| `path:wiki/questions` | Verde (`#6a9955`) |
+| `path:.raw` | Cinza (esmaecido) |
+
+---
+
+## Callouts personalizados
+
+Este vault define **quatro tipos de callout personalizados** além do conjunto nativo do Obsidian (`note`, `tip`, `warning`, `info`, `todo`, `success`, `question`, `failure`, `danger`, `bug`, `example`, `quote`). Eles renderizam corretamente **somente quando `vault-colors.css` está habilitado**. Sem o snippet, caem no estilo de callout padrão (ainda legível, apenas sem formatação).
+
+| Callout personalizado | Cor | Ícone | Usar para |
 |---|---|---|---|
-| `contradiction` | reddish-brown (rgb 209,105,105) | `lucide-alert-triangle` | New source conflicts with existing claim |
-| `gap` | beige (rgb 220,220,170) | `lucide-help-circle` | Topic has no source yet |
-| `key-insight` | bright blue (rgb 79,193,255) | `lucide-lightbulb` | Important takeaway worth highlighting |
-| `stale` | gray (rgb 128,128,128) | `lucide-clock` | Claim may be outdated, source older than threshold |
+| `contradiction` | marrom-avermelhado (rgb 209,105,105) | `lucide-alert-triangle` | Nova fonte conflita com uma afirmação existente |
+| `gap` | bege (rgb 220,220,170) | `lucide-help-circle` | Tópico ainda não tem fonte |
+| `key-insight` | azul vivo (rgb 79,193,255) | `lucide-lightbulb` | Conclusão importante que vale destacar |
+| `stale` | cinza (rgb 128,128,128) | `lucide-clock` | A afirmação pode estar desatualizada, fonte mais antiga que o limite |
 
-### Usage
+### Uso
 
-Use these in wiki pages to flag important states:
+Use estes em páginas do wiki para sinalizar estados importantes:
 
 ```markdown
 > [!contradiction] Title
@@ -100,16 +101,17 @@ Use these in wiki pages to flag important states:
 > This claim may be outdated. Source was from 2022.
 ```
 
-### Why custom callouts (vs built-in)
+### Por que callouts personalizados (em vez de nativos)
 
-The four custom types map to wiki-specific concepts that don't fit cleanly into Obsidian's default set:
+Os quatro tipos personalizados mapeiam para conceitos específicos do wiki que não
+cabem de forma limpa no conjunto padrão do Obsidian:
 
-- `contradiction` is more specific than `warning`: it signals a **resolvable conflict** between two wiki pages, not a generic warning.
-- `gap` is more specific than `question`: it signals a **missing source**, an actionable improvement.
-- `key-insight` is more specific than `tip`: it marks **the** most important takeaway from a section, used sparingly.
-- `stale` has no built-in equivalent: it signals time-based decay of a claim.
+- `contradiction` é mais específico que `warning`: sinaliza um **conflito resolvível** entre duas páginas do wiki, não um aviso genérico.
+- `gap` é mais específico que `question`: sinaliza uma **fonte ausente**, uma melhoria acionável.
+- `key-insight` é mais específico que `tip`: marca **a** conclusão mais importante de uma seção, usado com parcimônia.
+- `stale` não tem equivalente nativo: sinaliza o decaimento temporal de uma afirmação.
 
-If you don't want custom callouts, replace them with built-ins:
+Se você não quiser callouts personalizados, substitua-os por nativos:
 - `[!contradiction]` → `[!warning] Contradiction`
 - `[!gap]` → `[!question] Gap`
 - `[!key-insight]` → `[!tip] Key insight`
@@ -117,9 +119,9 @@ If you don't want custom callouts, replace them with built-ins:
 
 ---
 
-## Theme compatibility
+## Compatibilidade de tema
 
-The snippet uses standard CSS variables and does not require a community theme.
-If the user chooses a theme, verify contrast and selector behavior in the
-installed Obsidian version before recommending it for accessibility-sensitive
-work.
+O snippet usa variáveis CSS padrão e não exige um tema da comunidade.
+Se o usuário escolher um tema, verifique o contraste e o comportamento dos
+seletores na versão instalada do Obsidian antes de recomendá-lo para trabalho
+sensível a acessibilidade.

@@ -5,20 +5,20 @@ status: seed
 created: {{date}}
 updated: {{date}}
 tags:
-  - note
+  - nota
 mocs:
   - "[[{{primary-moc}}]]"
 ---
 
 # {{title}}
 
-(One atomic idea, claim, or observation. Should fit on one screen; if it grows past that, split into two notes and link them.)
+(Uma ideia, afirmação ou observação atômica. Deve caber em uma tela; se crescer além disso, divida em duas notas e ligue as duas.)
 
-## Sources
+## Fontes
 
 - [[{{source-1}}]]
-- (external citation, if any)
+- (citação externa, se houver)
 
-## See also
+## Veja também
 
 - [[{{related-note}}]]

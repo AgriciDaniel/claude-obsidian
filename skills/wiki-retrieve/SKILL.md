@@ -1,15 +1,15 @@
 ---
 name: wiki-retrieve
-description: "Build and query a vault-local contextual BM25 retrieval index with optional multilingual Nomic cosine reranking; use for retrieve, hybrid retrieval, BM25, rerank, contextual retrieval, chunk search, vault search, semantic search, find relevant passages, or retrieval diagnostics. Derived caches stay under .vault-meta, remote egress requires explicit consent, and unavailable reranking falls back deterministically."
+description: "Construa e consulte um índice de recuperação BM25 contextual local do vault, com reranking cosine multilíngue opcional da Nomic; use para retrieve, recuperação híbrida, BM25, rerank, recuperação contextual, busca de chunks, busca no vault, busca semântica, encontrar passagens relevantes, ou diagnóstico de recuperação. Os caches derivados ficam sob .vault-meta, o egress remoto exige consentimento explícito, e um reranking indisponível cai de forma determinística."
 ---
 
-# Retrieve relevant passages
+# Recuperar passagens relevantes
 
-This extension derives search data from `wiki/` into `.vault-meta/`. It never
-changes canonical notes. Always pass the selected vault explicitly.
+Esta extensão deriva dados de busca de `wiki/` para `.vault-meta/`. Ela nunca
+altera notas canônicas. Passe sempre o vault selecionado de forma explícita.
 
-Resolve the installed product root from this skill's own location, not from the
-vault or current working directory:
+Resolva a raiz do produto instalado a partir da localização desta skill, e não
+do vault ou do diretório de trabalho atual:
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -22,18 +22,18 @@ test -f "$PREFIX" && test -f "$BM25" && test -f "$RETRIEVE" && test -f "$RERANK"
 
 ## Pipeline
 
-1. `contextual-prefix.py` splits pages on paragraph boundaries and stores the
-   raw chunk plus a short page-level prefix.
-2. `bm25-index.py` builds a local, standard-library BM25 index over the
-   contextualized text.
-3. `retrieve.py` selects BM25 candidates, optionally reranks them, rejects
-   invalid records, deduplicates by page, and returns paths and snippets.
-4. The caller reads the returned pages and performs synthesis; retrieval output
-   is not itself evidence.
+1. `contextual-prefix.py` divide páginas em fronteiras de parágrafo e armazena o
+   chunk bruto mais um prefixo curto em nível de página.
+2. `bm25-index.py` constrói um índice BM25 local, baseado apenas na biblioteca
+   padrão, sobre o texto contextualizado.
+3. `retrieve.py` seleciona candidatos do BM25, opcionalmente faz rerank deles,
+   rejeita registros inválidos, deduplica por página e retorna paths e snippets.
+4. O chamador lê as páginas retornadas e faz a síntese; a saída da recuperação,
+   por si só, não é evidência.
 
-## Provision locally
+## Provisionar localmente
 
-Preview first, then build synthetic prefixes without network egress:
+Pré-visualize primeiro, depois construa prefixes sintéticos sem egress de rede:
 
 ```bash
 python3 "$PREFIX" --vault "$VAULT" --all --no-llm --peek
@@ -42,52 +42,55 @@ python3 "$BM25" --vault "$VAULT" build
 python3 "$RETRIEVE" --vault "$VAULT" "wiki" --top 1 --no-rerank --explain
 ```
 
-Chunk and index files are disposable runtime state. Incremental prefixing skips
-records whose chunk and page hashes still match. A complete scan removes
-surplus records for deleted pages, and the prefixer invalidates the BM25 index
-before changing its chunk set so a mixed stale index is not served.
-Prefix and BM25 build operations share the vault-wide mutation lock with every
-other writer; a busy vault fails closed instead of publishing a partial index.
+Arquivos de chunk e de índice são estado de runtime descartável. O
+prefixamento incremental pula registros cujos hashes de chunk e de página ainda
+correspondem. Uma varredura completa remove os registros excedentes de páginas
+excluídas, e o prefixador invalida o índice BM25 antes de mudar seu conjunto de
+chunks, para que um índice misto e obsoleto não seja servido. Operações de
+build de prefix e de BM25 compartilham o lock de mutação de todo o vault com
+todos os outros escritores; um vault ocupado falha fechado em vez de publicar
+um índice parcial.
 
-## Contextual-prefix privacy
+## Privacidade do prefixo contextual
 
-Synthetic prefixes use only local frontmatter and page text. The Anthropic API
-and `claude` subprocess tiers can send page bodies off-machine and therefore
-require the user's explicit consent plus `--allow-egress`. Never infer consent
-from an API key or installed binary. Preview the scope first and state which
-provider will receive what data.
+Prefixos sintéticos usam apenas frontmatter local e o texto da página. A API da
+Anthropic e os níveis via subprocesso `claude` podem enviar o corpo das páginas
+para fora da máquina e portanto exigem o consentimento explícito do usuário mais
+`--allow-egress`. Nunca infira consentimento a partir de uma API key ou de um
+binário instalado. Pré-visualize o escopo primeiro e declare qual provider vai
+receber quais dados.
 
-Remote Ollama endpoints also require explicit approval and
-`--allow-remote-ollama`; the default reranker accepts localhost only.
+Endpoints remotos do Ollama também exigem aprovação explícita e
+`--allow-remote-ollama`; o reranker padrão aceita apenas localhost.
 
-## Query
+## Consultar
 
-For a strictly read-only lookup, use the prebuilt BM25 index:
+Para uma busca estritamente somente leitura, use o índice BM25 pré-construído:
 
 ```bash
 python3 "$RETRIEVE" --vault "$VAULT" "$QUERY" --top 5 --no-rerank --explain
 ```
 
-For an explicitly requested rerank, omit `--no-rerank`. The default is Ollama's
-multilingual `nomic-embed-text-v2-moe` model (approximately 958 MB); the product
-never pulls it automatically. To use an already-installed, smaller,
-English-oriented v1.5 model, pass `--model nomic-embed-text` explicitly.
-Nomic models use `search_query:` for the query and `search_document:` for
-candidate text. Nomic v2 has a 512-token input context and Ollama truncates
-longer embedding inputs by default; BM25 still scores the complete chunk.
-Embeddings are cached by exact model, input scheme, and hash of the exact
-prefixed input. A missing local Ollama service, missing selected
-model, unusable vector, or any candidate embedding failure falls back for the
-complete result set to the original BM25 order; it never mixes cosine and BM25
-score scales.
+Para um rerank explicitamente solicitado, omita `--no-rerank`. O padrão é o
+modelo multilíngue `nomic-embed-text-v2-moe` do Ollama (aproximadamente 958 MB);
+o produto nunca o baixa automaticamente. Para usar um modelo v1.5 menor e já
+instalado, orientado ao inglês, passe `--model nomic-embed-text` explicitamente.
+Modelos Nomic usam `search_query:` para a query e `search_document:` para o
+texto candidato. O Nomic v2 tem um contexto de entrada de 512 tokens e o Ollama
+trunca por padrão embeddings mais longos; o BM25 ainda pontua o chunk completo.
+Embeddings são cacheados por modelo exato, esquema de entrada e hash da entrada
+prefixada exata. Um serviço Ollama local ausente, um modelo selecionado ausente,
+um vetor inutilizável ou qualquer falha de embedding de candidato faz o
+conjunto completo de resultados cair para a ordem original do BM25; nunca se
+misturam escalas de score cosine e BM25.
 
-Query input is bounded at 8,000 normalized characters and result counts must be
-between 1 and 1,000. Oversized queries and invalid limits fail with an
-actionable usage error instead of looking like an empty successful search.
-An untagged model request matches only the installed untagged name or its
-`:latest` alias; select any other tag explicitly.
+A entrada da query é limitada a 8.000 caracteres normalizados, e as contagens de
+resultado devem ficar entre 1 e 1.000. Queries grandes demais e limites inválidos
+falham com um erro de uso acionável, em vez de parecerem uma busca bem-sucedida
+e vazia. Uma requisição de modelo sem tag casa apenas com o nome instalado sem
+tag ou com seu alias `:latest`; selecione explicitamente qualquer outra tag.
 
-Use direct diagnostics when needed:
+Use diagnósticos diretos quando necessário:
 
 ```bash
 python3 "$BM25" --vault "$VAULT" stats
@@ -96,23 +99,28 @@ python3 "$RERANK" --vault "$VAULT" "$QUERY" --peek
 python3 "$RERANK" --vault "$VAULT" "$QUERY" --model nomic-embed-text --peek
 ```
 
-## Integrity rules
+## Regras de integridade
 
-- Accept only relative chunk and page paths whose resolved targets remain under
-  `$VAULT/.vault-meta/chunks/` and `$VAULT/wiki/` respectively.
-- Reject hashless legacy chunk records and require chunk-body, page, and index
-  hashes to match before a cached record can be built or served.
-- Reject absolute paths, symlink escapes, missing pages, mismatched chunk IDs,
-  changed page hashes, and stale index/chunk hash pairs.
-- Rerank the full candidate set, then deduplicate by page, then apply `--top`.
-- An empty index is an honest no-result state. A missing or corrupt index makes
-  `retrieve.py` exit 10 with a stable rebuild command; callers fall back to the
-  standard vault query/text-search path and do not fabricate matches.
-- Do not cite benchmark percentages unless a reproducible vault-specific
-  benchmark produced them.
+- Aceite apenas paths relativos de chunk e de página cujos alvos resolvidos
+  permaneçam sob `$VAULT/.vault-meta/chunks/` e `$VAULT/wiki/`,
+  respectivamente.
+- Rejeite registros de chunk legados sem hash e exija que os hashes do corpo do
+  chunk, da página e do índice correspondam antes de um registro cacheado poder
+  ser construído ou servido.
+- Rejeite paths absolutos, fugas por symlink, páginas ausentes, IDs de chunk
+  divergentes, hashes de página alterados e pares de hash índice/chunk obsoletos.
+- Faça rerank do conjunto completo de candidatos, depois deduplique por página e
+  então aplique `--top`.
+- Um índice vazio é um estado honesto de "sem resultado". Um índice ausente ou
+  corrompido faz `retrieve.py` sair com código 10 junto de um comando de rebuild
+  estável; os chamadores caem para o caminho padrão de query/busca de texto do
+  vault e não fabricam correspondências.
+- Não cite percentuais de benchmark a menos que um benchmark reproduzível e
+  específico do vault os tenha produzido.
 
 ## Checkpoint
 
-Observe cache readiness and privacy boundaries, think about whether lexical or
-semantic ranking is needed, verify returned paths and source freshness, and
-grow by measuring retrieval misses against a maintained local query set.
+Observe a prontidão dos caches e os limites de privacidade, pense se o ranking
+precisa ser lexical ou semântico, verifique os paths retornados e a atualidade
+da fonte, e cresça medindo as falhas de recuperação contra um conjunto local de
+queries mantido.

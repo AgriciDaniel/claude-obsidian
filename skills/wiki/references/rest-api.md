@@ -1,31 +1,31 @@
-# REST adapter safety contract
+# Contrato de segurança do adaptador REST
 
-The Local REST API is an optional third-party Obsidian plugin. claude-obsidian
-does not install it, require it, or use it as a mutation transport.
+A Local REST API é um plugin opcional de terceiros do Obsidian. O claude-obsidian
+não a instala, não a exige e não a usa como transporte de mutação.
 
-## Before use
+## Antes do uso
 
-- Confirm the user installed and enabled the plugin intentionally.
-- Read the plugin's current primary documentation and verify the exact API
-  version and endpoints instead of relying on remembered examples.
-- Keep the listener on loopback by default and store its credential in a
-  protected environment or secret manager.
-- Never print the credential, embed it in a note, commit it, or place it in a
-  reusable command transcript.
-- Require normal TLS verification. Do not use `curl -k`,
-  `NODE_TLS_REJECT_UNAUTHORIZED=0`, or another process-wide bypass.
+- Confirme que o usuário instalou e habilitou o plugin intencionalmente.
+- Leia a documentação primária atual do plugin e verifique a versão exata da API
+  e os endpoints em vez de confiar em exemplos lembrados.
+- Mantenha o listener no loopback por padrão e armazene sua credencial em um
+  ambiente protegido ou gerenciador de segredos.
+- Nunca imprima a credencial, embuta-a em uma nota, faça commit dela ou a coloque
+  em uma transcrição de comando reutilizável.
+- Exija a verificação TLS normal. Não use `curl -k`,
+  `NODE_TLS_REJECT_UNAUTHORIZED=0` ou outro bypass de escopo de processo.
 
-## Allowed role
+## Papel permitido
 
-Use a configured REST adapter only for read and search operations that the user
-has placed in scope. Validate returned paths and reject traversal or symlink
-escapes. A successful HTTP response proves transport behavior, not the truth of
-the returned content.
+Use um adaptador REST configurado somente para operações de leitura e busca que o
+usuário colocou em escopo. Valide os caminhos retornados e rejeite travessia de
+diretórios ou escapes por symlink. Uma resposta HTTP bem-sucedida prova o
+comportamento do transporte, e não a verdade do conteúdo retornado.
 
-Create, replace, append, patch, move, and delete requests are outside this
-adapter contract. Express every vault change as one inspected
-`claude-obsidian.transaction.v1` operation so expected hashes, provenance,
-journaling, and recovery remain enforced.
+Requisições de create, replace, append, patch, move e delete estão fora deste
+contrato de adaptador. Expresse toda mudança no vault como uma única operação
+inspecionada `claude-obsidian.transaction.v1`, de modo que hashes esperados,
+proveniência, journaling e recuperação continuem garantidos.
 
-If secure TLS or least-privilege access cannot be configured, use direct
-filesystem reads or the verified official CLI read surface instead.
+Se não for possível configurar TLS seguro ou acesso de menor privilégio, use
+leituras diretas do filesystem ou a superfície de leitura do CLI oficial verificada.

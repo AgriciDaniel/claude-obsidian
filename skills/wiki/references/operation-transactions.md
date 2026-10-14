@@ -1,15 +1,15 @@
-# Operation transactions
+# Transações de operação
 
-Use this reference whenever a skill will change vault state.
+Use esta referência sempre que uma skill for mudar o estado do vault.
 
-## Contract
+## Contrato
 
-One logical operation produces one versioned transaction bundle and one
-recoverable apply. Parallel workers may read and draft, but only the
-orchestrator applies vault mutations.
+Uma operação lógica produz um transaction bundle versionado e um apply
+recuperável. Workers paralelos podem ler e redigir, mas somente o orquestrador
+aplica mutações no vault.
 
-Resolve the installed product root from the invoking skill's own location, not
-from the user-vault working directory:
+Resolva a raiz do produto instalado a partir da própria localização da skill
+invocadora, e não a partir do diretório de trabalho do vault do usuário:
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -17,29 +17,28 @@ CORE="$PRODUCT_ROOT/scripts/claude-obsidian.py"
 test -f "$CORE"
 ```
 
-Never use the deprecated per-file `wiki-lock.sh` helper for new work. Never
-commit from a generic lifecycle hook.
+Nunca use o helper `wiki-lock.sh` por arquivo, descontinuado, para trabalho novo.
+Nunca faça commit a partir de um hook de ciclo de vida genérico.
 
 ## Workflow
 
-1. Resolve a user vault. Prefer `--vault`, then `CLAUDE_OBSIDIAN_VAULT`, then
-   `.claude-obsidian.json`, then unambiguous current-directory discovery.
-2. Read every expected target and record its SHA-256, or `null` when it must be
-   absent.
-3. Have workers return drafts and evidence. Workers do not edit shared vault
-   state.
-4. Build one `claude-obsidian.transaction.v1` JSON bundle.
-5. Run `python3 "$CORE" transaction inspect BUNDLE --vault VAULT`.
-6. Show destructive, external, or canonical-merge proposals to the user before
-   applying them.
-7. Pass the inspect result's exact `approval_sha256`, which binds the expanded
-   plan to the canonical resolved vault root and cannot be reused for another
+1. Resolva um vault do usuário. Prefira `--vault`, depois `CLAUDE_OBSIDIAN_VAULT`, depois
+   `.claude-obsidian.json`, depois descoberta inequívoca do diretório atual.
+2. Leia cada alvo esperado e registre seu SHA-256, ou `null` quando ele precisa estar ausente.
+3. Faça os workers retornarem rascunhos e evidências. Workers não editam o estado
+   compartilhado do vault.
+4. Construa um bundle JSON `claude-obsidian.transaction.v1`.
+5. Rode `python3 "$CORE" transaction inspect BUNDLE --vault VAULT`.
+6. Mostre ao usuário as propostas destrutivas, externas ou de merge canônico antes
+   de aplicá-las.
+7. Passe o `approval_sha256` exato do resultado do inspect, que vincula o plano expandido
+   à raiz canônica resolvida do vault e não pode ser reutilizado para outro
    vault:
    `python3 "$CORE" transaction apply BUNDLE --vault VAULT --approved-plan-sha256 HASH`.
-8. Report the resulting operation ID and changed paths.
-9. If the user wants Git history, run the separate explicit checkpoint command.
+8. Relate o ID da operação resultante e as changed paths.
+9. Se o usuário quiser histórico Git, rode o comando de checkpoint explícito e separado.
 
-## Bundle shape
+## Formato do bundle
 
 ```json
 {
@@ -62,78 +61,82 @@ commit from a generic lifecycle hook.
 }
 ```
 
-`content` may replace `content_file` for small drafts. Use exactly one. Raw
-source payloads are create-only. `.raw/.manifest.json` and the address counter
-are expanded and journaled by the transaction engine when managed requests are
-present. Only `ingest` and `autoresearch` own non-empty managed requests;
-`setup` and `migration` may initialize the managed files directly. Other
-operation types cannot target them.
+`content` pode substituir `content_file` para rascunhos pequenos. Use exatamente um.
+Payloads brutos de fonte são apenas para create. `.raw/.manifest.json` e o contador
+de endereços são expandidos e journalados pelo motor de transação quando há
+requisições gerenciadas presentes. Somente `ingest` e `autoresearch` possuem
+requisições gerenciadas não vazias; `setup` e `migration` podem inicializar
+diretamente os arquivos gerenciados. Outros operation types não podem ter esses
+alvos.
 
-Operation types are enforced authorities, not labels: `base` writes only
-`wiki/**/*.base`; `canvas` writes canvases under `wiki/canvases/` and its
-optional `index.md`; `fold` writes exactly one `wiki/folds/*.md` page plus
-`wiki/index.md` and `wiki/log.md`; `configuration` writes only
-`.vault-meta/mode.json`; and `capture` creates only `.raw/captured/*` payloads.
-Save, Markdown, lint repair, and generic extension bundles remain confined to
-`wiki/`. `setup` and `migration` accept only the exact tracked vault-template,
-ledger, and DragonScale bootstrap paths declared by the product contract; they
-are not escape hatches for arbitrary root, plugin, snippet, metadata, or wiki
-files. Paths that collide by case are rejected for macOS portability.
+Os operation types são autoridades verificadas, não rótulos: `base` escreve apenas
+`wiki/**/*.base`; `canvas` escreve canvases em `wiki/canvases/` e seu `index.md`
+opcional; `fold` escreve exatamente uma página `wiki/folds/*.md` mais
+`wiki/index.md` e `wiki/log.md`; `configuration` escreve apenas
+`.vault-meta/mode.json`; e `capture` cria apenas payloads `.raw/captured/*`.
+Save, Markdown, reparo de lint e bundles de extensão genérica permanecem
+confinados a `wiki/`. `setup` e `migration` aceitam somente os caminhos exatos de
+vault-template, ledger e bootstrap DragonScale rastreados, declarados pelo contrato
+do produto; eles não são escotilhas de fuga para arquivos arbitrários de raiz,
+plugin, snippet, metadados ou wiki. Caminhos que colidem por caixa são rejeitados
+para portabilidade em macOS.
 
-One content or predecessor file may be at most 64 MiB, and one operation's new
-content or recovery backups may total at most 128 MiB. Split larger work at a
-logical boundary before inspection; the engine rejects an operation it could
-not roll back under the same limits.
+Um arquivo de conteúdo ou de predecessor pode ter no máximo 64 MiB, e o novo
+conteúdo ou os backups de recuperação de uma operação podem somar no máximo
+128 MiB. Divida um trabalho maior em um limite lógico antes da inspeção; o motor
+rejeita uma operação que não conseguiria desfazer sob os mesmos limites.
 
-One operation may contain at most 1,024 writes. Each canonical vault-relative
-path may use at most 1,024 UTF-8 bytes. File-backed transaction bundles must be
-no-follow regular files and may use at most 136 MiB; journals and completed
-results are preflighted against the same 8 MiB cap used by recovery. These
-limits ensure that every accepted operation remains readable and recoverable.
+Uma operação pode conter no máximo 1.024 writes. Cada caminho canônico relativo ao
+vault pode usar no máximo 1.024 bytes UTF-8. Transaction bundles em arquivo devem
+ser arquivos regulares no-follow e podem usar no máximo 136 MiB; journals e
+resultados concluídos são pré-verificados contra o mesmo teto de 8 MiB usado pela
+recuperação. Esses limites garantem que toda operação aceita permaneça legível e
+recuperável.
 
-The lock retains the selected vault and `.vault-meta` directory descriptors
-for the whole operation. Targets, journals, results, backups, capture queues,
-checkpoints, and derived retrieval publications use no-follow descriptor-based
-I/O, so replacing a public root, metadata, transaction, operation, or backup
-entry cannot redirect reads, writes, rollback, or cleanup outside the selected
-vault. This confinement requires POSIX directory descriptors and
-`fcntl.flock`; Windows users must run the skill under WSL rather than native
-Windows or Git Bash (setup and troubleshooting: `docs/windows-wsl.md`).
+O lock retém os descritores do vault selecionado e do diretório `.vault-meta` por
+toda a operação. Alvos, journals, resultados, backups, filas de captura,
+checkpoints e publicações de recuperação derivadas usam I/O baseado em descritor
+no-follow, então substituir uma entrada pública de raiz, metadados, transação,
+operação ou backup não pode redirecionar leituras, escritas, rollback ou limpeza
+para fora do vault selecionado.Esse confinamento requer descritores de diretório
+POSIX e `fcntl.flock`; usuários de Windows devem rodar a skill sob WSL em vez de
+Windows nativo ou Git Bash (setup e troubleshooting: `docs/windows-wsl.md`).
 
-## Required coupled writes
+## Writes acoplados obrigatórios
 
-- Save: note, index, log, hot cache.
-- Ingest: source capture when applicable, pages, ingestion/evidence records,
-  indexes or MOCs, log, hot cache, and optional overview.
-- Autoresearch: cited research pages and evidence records. Canonical merge is a
-  separate approved transaction.
-- Fold: fold page, index, log.
-- Canvas: canvas plus catalog metadata only when that metadata changes.
-- Lint repair: approved fixes plus regenerated report/index.
-- Query: read-only. Delegate persistence to Save.
+- Save: nota, index, log, hot cache.
+- Ingest: captura de fonte quando aplicável, páginas, registros de ingestão/evidência,
+  indexes ou MOCs, log, hot cache e overview opcional.
+- Autoresearch: páginas de pesquisa citadas e registros de evidência. O merge canônico
+  é uma transação aprovada separada.
+- Fold: página de fold, index, log.
+- Canvas: canvas mais somente os metadados de catálogo, quando esses metadados mudam.
+- Reparo de lint: correções aprovadas mais relatório/index regenerados.
+- Query: somente leitura. Delegue a persistência ao Save.
 
-## Failure behavior
+## Comportamento em falha
 
-- Exit 75 means the vault changed or another operation holds the mutation lock.
-  Re-read, rebuild, and inspect a new bundle.
-- Validation failure means no vault write occurred.
-- An interrupted apply is recovered or rolled back by the next apply, or by
+- Exit 75 significa que o vault mudou ou que outra operação detém o lock de mutação.
+  Releia, reconstrua e inspecione um novo bundle.
+- Falha de validação significa que nenhuma escrita no vault ocorreu.
+- Um apply interrompido é recuperado ou revertido pelo próximo apply, ou pelo
   `transaction recover`.
-- Recovery never steals an old lock merely because its age elapsed. After
-  independently confirming that no writer is active, an operator may use
-  `transaction recover --force-stale-lock`; the same explicit override exists
-  for `capture queue recover`. Do not automate either override.
-- Never paper over a transaction failure with `|| true`.
+- A recuperação nunca rouba um lock antigo só porque sua idade passou. Depois de
+  confirmar independentemente que nenhum writer está ativo, um operador pode usar
+  `transaction recover --force-stale-lock`; o mesmo override explícito existe para
+  `capture queue recover`. Não automatize nenhum dos dois overrides.
+- Nunca masque uma falha de transação com `|| true`.
 
-## Explicit checkpoint
+## Checkpoint explícito
 
 ```bash
 python3 "$CORE" checkpoint OPERATION_ID --vault VAULT \
   --as-of YYYY-MM-DD
 ```
 
-Checkpointing is never automatic. It refuses all pre-existing staged state,
-verifies the candidate tree's blob bytes against transaction hashes, runs
-deterministic lint by default, and excludes raw source payloads unless the user
-explicitly opts in. `--as-of` pins and records the UTC provenance audit date; a
-pending record resumes the same commit and pinned date after interruption.
+Fazer checkpoint nunca é automático. Ele recusa todo estado de stage pré-existente,
+verifica os bytes de blob da árvore candidata contra os hashes da transação, roda
+lint determinístico por padrão e exclui payloads brutos de fonte a menos que o
+usuário aceite explicitamente. `--as-of` fixa e registra a data de auditoria de
+proveniência em UTC; um registro pending retoma o mesmo commit e a mesma data fixa
+após uma interrupção.

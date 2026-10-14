@@ -1,16 +1,16 @@
 ---
 name: wiki-cli
-description: "Detect and use the official Obsidian command-line interface for read-only vault access; use for wiki-cli, Obsidian CLI, Obsidian read, Obsidian search, vault transport, which transport, transport detection, backlinks, tags, or Obsidian command line. Mutations always go through the claude-obsidian transaction core."
+description: "Detecte e use a interface de linha de comando oficial do Obsidian para acesso somente leitura ao vault; use para wiki-cli, Obsidian CLI, Obsidian read, Obsidian search, transporte do vault, qual transporte, detecção de transporte, backlinks, tags, ou linha de comando do Obsidian. Mutações sempre passam pelo núcleo de transações do claude-obsidian."
 ---
 
-# Obsidian CLI read transport
+# Transporte de leitura do Obsidian CLI
 
-Use this skill only to detect transport and read or search a selected vault.
-The official executable is `obsidian`; binary presence alone does not prove it
-is usable.
+Use esta skill apenas para detectar o transporte e ler ou buscar em um vault
+selecionado. O executável oficial é `obsidian`; a mera presença do binário não
+prova que ele está utilizável.
 
-Resolve the installed product root from this skill's own location, not from the
-vault or current working directory:
+Resolva a raiz do produto instalado a partir da localização desta skill, e não
+do vault ou do diretório de trabalho atual:
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -18,62 +18,64 @@ DETECT_TRANSPORT="$PRODUCT_ROOT/scripts/detect-transport.sh"
 test -f "$DETECT_TRANSPORT"
 ```
 
-Every `../wiki/references/` link in this file resolves the same way, relative
-to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
-selected vault's `wiki/` directory.
+Todo link `../wiki/references/` neste arquivo resolve da mesma forma, relativo
+ao diretório desta skill sob `$PRODUCT_ROOT`, nunca relativo ao diretório
+`wiki/` do vault selecionado.
 
-## Detect safely
+## Detectar com segurança
 
-Probe without persisting host state:
+Sondar sem persistir estado no host:
 
 ```bash
 bash "$DETECT_TRANSPORT" --peek --vault "$VAULT"
 ```
 
-Trust `available.cli.usable`, not merely `present` or exit status. A supported
-CLI can still be unavailable because the Obsidian app is not running, command
-line access is disabled, or its response is an error. Use filesystem reads as
-the portable fallback.
+Confie em `available.cli.usable`, e não apenas em `present` ou no status de
+saída. Uma CLI suportada ainda pode estar indisponível porque o app Obsidian não
+está rodando, o acesso por linha de comando está desabilitado, ou sua resposta é
+um erro. Use leituras do filesystem como fallback portátil.
 
-Persist a refreshed `.vault-meta/transport.json` only when the user or setup
-workflow asks for a transport snapshot:
+Persista um `.vault-meta/transport.json` atualizado somente quando o usuário ou o
+workflow de setup pedir um snapshot do transporte:
 
 ```bash
 bash "$DETECT_TRANSPORT" --force --vault "$VAULT"
 ```
 
-That file is derived runtime configuration, not knowledge content. Preserve a
-valid `manual_override` recorded by the detector.
+Esse arquivo é configuração de runtime derivada, não conteúdo de conhecimento.
+Preserve um `manual_override` válido registrado pelo detector.
 
-## Read and search
+## Ler e buscar
 
-Run official CLI commands from the selected vault so Obsidian resolves the
-correct workspace. Confirm supported syntax with the installed CLI before
-relying on optional commands. Typical read-only forms are:
+Execute comandos oficiais da CLI a partir do vault selecionado para que o
+Obsidian resolva o workspace correto. Confirme a sintaxe suportada com a CLI
+instalada antes de depender de comandos opcionais. Formas típicas somente
+leitura são:
 
 ```bash
 (cd "$VAULT" && obsidian read path="$NOTE")
 (cd "$VAULT" && obsidian search query="$QUERY")
 ```
 
-Use read-only commands for backlinks, tags, or Bases results only when the
-detector reports the CLI ready. Otherwise read files under `$VAULT` directly
-and use `rg` for search. Reject absolute note arguments, traversal, symlinks, or
-resolved paths outside the selected vault.
+Use comandos somente leitura para backlinks, tags ou resultados de Bases apenas
+quando o detector reportar a CLI pronta. Caso contrário, leia os arquivos sob
+`$VAULT` diretamente e use `rg` para busca. Rejeite argumentos absolutos de nota,
+travessia, symlinks ou paths resolvidos fora do vault selecionado.
 
-## Mutation boundary
+## Limite de mutação
 
-Do not use CLI create, write, append, property-set, daily-append, move, rename,
-or delete commands. Do not replace those commands with direct filesystem
-writes. Any knowledge or configuration change must be expressed as one
-reviewed transaction through the portable core; see
-[operation transactions](../wiki/references/operation-transactions.md).
+Não use comandos de create, write, append, property-set, daily-append, move,
+rename ou delete da CLI. Não substitua esses comandos por escritas diretas no
+filesystem. Qualquer mudança de conhecimento ou configuração deve ser expressa
+como uma única transação revisada através do núcleo portátil; veja
+[transações de operação](../wiki/references/operation-transactions.md).
 
-Transport choice never changes mutation semantics. The CLI is an optional read
-surface, not a lock manager, transaction engine, or Git checkpoint mechanism.
+A escolha do transporte nunca muda a semântica de mutação. A CLI é uma
+superfície de leitura opcional, não um gerenciador de lock, nem um motor de
+transações, nem um mecanismo de checkpoint do Git.
 
 ## Checkpoint
 
-Observe actual capability, think about the least complex read transport, verify
-that every resolved path stays in the vault, and accept filesystem fallback
-when the CLI is not ready.
+Observe a capacidade real, pense no transporte de leitura menos complexo,
+verifique se todo path resolvido permanece dentro do vault, e aceite o fallback
+de filesystem quando a CLI não estiver pronta.

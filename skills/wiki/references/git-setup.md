@@ -1,17 +1,17 @@
-# Optional Git history
+# Histórico Git opcional
 
-Git is optional. Vault correctness comes from operation transactions, expected
-hashes, recovery journals, and deterministic validation, not from background
-commits.
+O Git é opcional. A correção do vault vem das transações de operação, dos hashes
+esperados, dos journals de recuperação e da validação determinística, e não de
+commits em background.
 
-## Initialize only with approval
+## Inicialize apenas com aprovação
 
-Do not initialize a repository, add a remote, stage files, commit, or push merely
-because a vault was scaffolded. If the user requests local history, first show
-the selected vault and planned action, then initialize Git in that vault. Keep
-workspace state, caches, secrets, and trash excluded.
+Não inicialize um repositório, não adicione um remote, não faça stage, commit ou
+push só porque um vault foi scaffoldado. Se o usuário pedir histórico local,
+primeiro mostre o vault selecionado e a ação planejada, e então inicialize o Git
+nesse vault. Mantenha estado de workspace, caches, segredos e lixeira excluídos.
 
-A typical user-vault ignore policy includes:
+Uma política típica de ignore para o vault do usuário inclui:
 
 ```gitignore
 .obsidian/workspace.json
@@ -21,16 +21,17 @@ A typical user-vault ignore policy includes:
 .vault-meta/
 ```
 
-Transaction bundles, recovery journals, queues, and derived chunks may contain
-note text, local paths, or source URLs, so keep all `.vault-meta/` ignored by
-default. If the user deliberately wants to version a stable configuration file
-from that directory, add the narrowest reviewed exception while leaving runtime
-subtrees ignored. Adjust the remaining entries to actual plugins and privacy
-needs. Do not copy the product repository's ignore file blindly.
+Transaction bundles, journals de recuperação, filas e chunks derivados podem conter
+texto de nota, caminhos locais ou URLs de fonte, então mantenha todo `.vault-meta/`
+ignorado por padrão. Se o usuário quiser deliberadamente versionar um arquivo de
+configuração estável desse diretório, adicione a exceção revisada mais estreita
+enquanto deixa as subárvores de runtime ignoradas. Ajuste as entradas restantes aos
+plugins reais e às necessidades de privacidade. Não copie cegamente o arquivo de
+ignore do repositório do produto.
 
-`checkpoint` commits exactly one completed operation and therefore requires an
-existing parent commit. After `git init`, create a separate reviewed baseline
-before running any operation you intend to checkpoint:
+Commits de `checkpoint` confirmam exatamente uma operação concluída e portanto
+requerem um commit pai existente. Após `git init`, crie uma baseline revisada
+separada antes de rodar qualquer operação que você pretenda fazer checkpoint:
 
 ```bash
 git status --short
@@ -40,27 +41,27 @@ git diff --cached
 git commit -m "vault: reviewed baseline"
 ```
 
-Select baseline paths deliberately; do not stage ignored runtime state, secrets,
-or raw payloads merely to make the repository non-empty. The checkpoint command
-never creates this baseline or silently folds pre-existing files into an
-operation commit.
+Selecione os caminhos da baseline deliberadamente; não faça stage de estado de
+runtime ignorado, segredos ou payloads brutos apenas para tornar o repositório não
+vazio. O comando de checkpoint nunca cria essa baseline nem dobra arquivos
+pré-existentes em silêncio dentro de um commit de operação.
 
-## Exact-operation checkpoints
+## Checkpoints de operação exata
 
-After a successful claude-obsidian transaction, an explicitly requested
-checkpoint is:
+Após uma transação claude-obsidian bem-sucedida, um checkpoint explicitamente
+solicitado é:
 
 ```bash
 python3 "$CORE" checkpoint OPERATION_ID --vault "$VAULT"
 ```
 
-The command verifies recorded hashes, refuses any pre-existing staged state,
-runs deterministic lint by default, and excludes raw source payloads unless the
-user opts in. It builds and verifies the commit through a temporary index, then
-advances the ref by compare-and-swap. A durable pending record makes an
-interrupted finalization retry-safe. Review the returned commit with `git show`.
-Pushing or adding a remote is a separate external action that requires explicit
-user authorization.
+O comando verifica os hashes registrados, recusa qualquer estado de stage
+pré-existente, roda lint determinístico por padrão e exclui payloads brutos de
+fonte a menos que o usuário aceite. Ele constrói e verifica o commit através de um
+índice temporário e então avança a ref por compare-and-swap. Um registro pending
+durável torna uma finalização interrompida segura para retentativa. Revise o commit
+retornado com `git show`. Push ou adição de remote é uma ação externa separada que
+exige autorização explícita do usuário.
 
-Avoid automatic-commit plugins during agent operations because they can capture
-partial or unrelated state and invalidate exact-operation history.
+Evite plugins de commit automático durante operações do agente porque eles podem
+capturar estado parcial ou não relacionado e invalidar o histórico de operação exata.

@@ -1,30 +1,30 @@
 ---
 type: meta
-title: Wiki Index
+title: Índice da Wiki
 status: evergreen
 created: {{generated_date}}
 updated: {{generated_date}}
 tags:
   - meta
-  - index
+  - índice
 ---
 
-# Wiki Index
+# Índice da Wiki
 
-This catalog is updated by completed knowledge operations.
+Este catálogo é atualizado por operações de conhecimento concluídas.
 
-## Sources
+## Fontes
 
-- No sources indexed yet.
+- Nenhuma fonte indexada ainda.
 
-## Concepts
+## Conceitos
 
-- No concepts indexed yet.
+- Nenhum conceito indexado ainda.
 
-## Entities
+## Entidades
 
-- No entities indexed yet.
+- Nenhuma entidade indexada ainda.
 
-## Questions
+## Perguntas
 
-- No questions indexed yet.
+- Nenhuma pergunta indexada ainda.

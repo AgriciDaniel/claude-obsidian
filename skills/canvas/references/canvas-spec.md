@@ -1,20 +1,19 @@
-# Obsidian Canvas JSON Specification
+# Especificação JSON do Obsidian Canvas
 
-Canvas files are JSON with two top-level keys: `nodes` (array) and `edges` (array).
-Obsidian reads and writes them as UTF-8 JSON files with `.canvas` extension.
+Arquivos canvas são JSON com duas chaves de nível superior: `nodes` (array) e `edges` (array).
+O Obsidian lê e escreve esses arquivos como arquivos JSON UTF-8 com extensão `.canvas`.
 
-This reference aligns with the [JSON Canvas 1.0 open specification](https://jsoncanvas.org/spec/1.0/). All structures support arbitrary additional fields (`[key: string]: any`) for forward compatibility. Obsidian will preserve unknown fields when reading and writing canvas files.
+Esta referência está alinhada com a [especificação aberta JSON Canvas 1.0](https://jsoncanvas.org/spec/1.0/). Todas as estruturas suportam campos adicionais arbitrários (`[key: string]: any`) para compatibilidade futura. O Obsidian preserva campos desconhecidos ao ler e escrever arquivos canvas.
 
-**ID format**: JSON Canvas 1.0 requires each node and edge ID to be a unique
-string; it does not prescribe a length or character set. As a product
-convention, new mutations from this skill prefer random 16-character lowercase
-hexadecimal IDs (for example, `"a1b2c3d4e5f67890"`) and verify uniqueness.
-Descriptive IDs in the longer examples below are readability labels only, not
-the generation rule.
+**Formato de ID**: o JSON Canvas 1.0 exige que o ID de cada node e de cada edge seja uma string
+única; não prescribe comprimento nem conjunto de caracteres. Como convenção de produto,
+novas mutações desta skill preferem IDs hexadecimais minúsculos aleatórios de 16 caracteres
+(por exemplo, `"a1b2c3d4e5f67890"`) e verificam a unicidade.
+IDs descritivos nos exemplos mais longos abaixo são apenas rótulos de legibilidade, não a regra de geração.
 
 ---
 
-## Coordinate System
+## Sistema de coordenadas
 
 ```
         x increases →
@@ -26,19 +25,19 @@ y  │  (-920, 0)          (0, 0) ← origin
    │  (-920, 540)        (500, 540)
 ```
 
-- **Origin** (0, 0) is the center of the canvas viewport.
-- **x increases rightward.** Negative x = left of center.
-- **y increases downward.** Negative y = above center.
-- Node `x` and `y` are the **top-left corner** of the node, not the center.
-- Obsidian pans to fit all nodes on first open.
+- **Origem** (0, 0) é o centro da viewport do canvas.
+- **x aumenta para a direita.** x negativo = à esquerda do centro.
+- **y aumenta para baixo.** y negativo = acima do centro.
+- `x` e `y` do node são o **canto superior esquerdo** do node, não o centro.
+- O Obsidian faz pan para enquadrar todos os nodes na primeira abertura.
 
 ---
 
-## Node Types
+## Tipos de node
 
-### Text node
+### Node de texto
 
-Renders markdown content as a styled card.
+Renderiza conteúdo markdown como um cartão estilizado.
 
 ```json
 {
@@ -53,15 +52,15 @@ Renders markdown content as a styled card.
 }
 ```
 
-- `text`: markdown string. Use `\n` for newlines.
-- Minimum readable size: width ≥ 200, height ≥ 60.
-- `color` is optional. Omit for default (no color).
+- `text`: string markdown. Use `\n` para quebras de linha.
+- Tamanho mínimo legível: width ≥ 200, height ≥ 60.
+- `color` é opcional. Omita para o padrão (sem cor).
 
 ---
 
-### File node
+### Node de arquivo
 
-Renders an image, PDF, markdown note, or other vault file inline.
+Renderiza uma imagem, PDF, nota markdown ou outro arquivo do vault embutido.
 
 ```json
 {
@@ -75,19 +74,19 @@ Renders an image, PDF, markdown note, or other vault file inline.
 }
 ```
 
-- `file`: **vault-relative path** (not absolute, not `~/`).
-- Supported: `.png` `.jpg` `.webp` `.gif` `.pdf` `.md` `.canvas`
-- For `.md` files: renders as a preview card.
-- For `.pdf` files: renders the first page as preview.
-- Like every generic node, a file node may include the optional `color` field.
-  Omit it for the default appearance.
+- `file`: **caminho relativo ao vault** (não absoluto, não `~/`).
+- Suportados: `.png` `.jpg` `.webp` `.gif` `.pdf` `.md` `.canvas`
+- Para arquivos `.md`: renderiza como cartão de pré-visualização.
+- Para arquivos `.pdf`: renderiza a primeira página como pré-visualização.
+- Como todo node genérico, um node de arquivo pode incluir o campo opcional `color`.
+  Omita-o para a aparência padrão.
 
 ---
 
-### Group node (Zone)
+### Node de grupo (Zone)
 
-A labeled rectangular region. Does not clip or contain nodes. It's a visual guide.
-Nodes placed "inside" a group are just positioned within its bounding box.
+Uma região retangular rotulada. Não recorta nem contém nodes. É um guia visual.
+Nodes colocados "dentro" de um grupo apenas estão posicionados dentro de sua bounding box.
 
 ```json
 {
@@ -104,20 +103,20 @@ Nodes placed "inside" a group are just positioned within its bounding box.
 }
 ```
 
-- `label`: shown at the top of the group box.
-- `color`: colors the group border and label.
-- `background` *(optional)*: vault-relative path to a background image for the group.
-- `backgroundStyle` *(optional)*: how the background is rendered.
-  - `"cover"`: fills the group, cropping if needed (default-ish behavior)
-  - `"ratio"`: preserves aspect ratio, fits inside the group
-  - `"repeat"`: tiles the image
-- Groups do not affect auto-layout: they are purely visual containers.
+- `label`: exibido no topo da caixa do grupo.
+- `color`: colore a borda e o rótulo do grupo.
+- `background` *(opcional)*: caminho relativo ao vault de uma imagem de fundo para o grupo.
+- `backgroundStyle` *(opcional)*: como o fundo é renderizado.
+  - `"cover"`: preenche o grupo, cortando se necessário (comportamento padrão)
+  - `"ratio"`: preserva a proporção de aspecto, cabendo dentro do grupo
+  - `"repeat"`: repete a imagem em mosaico
+- Grupos não afetam o layout automático: são puramente contêineres visuais.
 
 ---
 
-### Link node
+### Node de link
 
-Renders a web URL as an embedded preview card.
+Renderiza uma URL da web como um cartão de pré-visualização embutido.
 
 ```json
 {
@@ -131,17 +130,17 @@ Renders a web URL as an embedded preview card.
 }
 ```
 
-- `url`: must be a valid `https://` URL.
-- Obsidian fetches the Open Graph preview (title, description, thumbnail).
-- Writing the node itself performs no fetch. Opening or rendering it in
-  Obsidian may contact the URL's host, so disclose that egress first and use a
-  text node when preview fetching is not acceptable.
+- `url`: deve ser uma URL `https://` válida.
+- O Obsidian busca a pré-visualização do Open Graph (título, descrição, miniatura).
+- Escrever o node em si não faz nenhum fetch. Abrir ou renderizá-lo no
+  Obsidian pode contatar o host da URL, então divulgue essa saída de rede antes e use
+  um node de texto quando a busca da pré-visualização não for aceitável.
 
 ---
 
 ## Edges
 
-Connections between nodes. Usually empty for mood boards.
+Conexões entre nodes. Normalmente vazias em canvases de humor.
 
 ```json
 {
@@ -157,37 +156,37 @@ Connections between nodes. Usually empty for mood boards.
 }
 ```
 
-**Required fields**: `id`, `fromNode`, `toNode`. Everything else is optional.
+**Campos obrigatórios**: `id`, `fromNode`, `toNode`. Todo o resto é opcional.
 
-- `fromNode` / `toNode`: IDs of the source and target nodes.
-- `fromSide` / `toSide` *(optional)*: `"top"` `"bottom"` `"left"` `"right"`. If omitted, Obsidian auto-calculates the best side based on relative node positions.
-- `fromEnd` *(optional)*: end-cap on the source side. Defaults to `"none"`. Values: `"none"` | `"arrow"`.
-- `toEnd` *(optional)*: end-cap on the target side. **Defaults to `"arrow"`**: note the asymmetric default vs `fromEnd`. Values: `"none"` | `"arrow"`.
-- `label` *(optional)*: text shown on the edge.
-- `color` *(optional)*: same color palette as nodes (`"1"`–`"6"` or hex).
+- `fromNode` / `toNode`: IDs dos nodes de origem e de destino.
+- `fromSide` / `toSide` *(opcional)*: `"top"` `"bottom"` `"left"` `"right"`. Se omitido, o Obsidian calcula automaticamente o melhor lado com base nas posições relativas dos nodes.
+- `fromEnd` *(opcional)*: terminação no lado de origem. O padrão é `"none"`. Valores: `"none"` | `"arrow"`.
+- `toEnd` *(opcional)*: terminação no lado de destino. **O padrão é `"arrow"`**: observe o padrão assimétrico em relação a `fromEnd`. Valores: `"none"` | `"arrow"`.
+- `label` *(opcional)*: texto exibido sobre o edge.
+- `color` *(opcional)*: a mesma paleta de cores dos nodes (`"1"`–`"6"` ou hex).
 
-Most edges represent directed relationships, so the asymmetric defaults (`fromEnd: "none"`, `toEnd: "arrow"`) produce a single arrow pointing from source to target without specifying anything explicitly.
-
----
-
-## Color Reference
-
-| Code | Color | Hex (approx) | Use case |
-|------|-------|-------------|----------|
-| `"1"` | Red / Tomato | #e03e3e | Warnings, archive |
-| `"2"` | Orange | #d09035 | Active work |
-| `"3"` | Yellow / Gold | #d0a023 | WIP, notes |
-| `"4"` | Green / Teal | #448361 | Content, sources |
-| `"5"` | Blue / Cyan | #3ea7d3 | Navigation, info |
-| `"6"` | Purple / Violet | #9063d2 | Title, identity |
-
-Omit `color` entirely for the default (no border color, transparent label).
+A maioria dos edges representa relações dirigidas, então os padrões assimétricos (`fromEnd: "none"`, `toEnd: "arrow"`) produzem uma única seta apontando da origem para o destino sem especificar nada explicitamente.
 
 ---
 
-## Image Sizing Guidelines
+## Referência de cores
 
-Calculate from actual image dimensions using PIL or `identify`:
+| Código | Cor | Hex (aprox.) | Caso de uso |
+|------|-------|-------------|-------------|
+| `"1"` | Vermelho / Tomate | #e03e3e | Avisos, arquivo |
+| `"2"` | Laranja | #d09035 | Trabalho em andamento |
+| `"3"` | Amarelo / Ouro | #d0a023 | WIP, notas |
+| `"4"` | Verde / Teal | #448361 | Conteúdo, fontes |
+| `"5"` | Azul / Ciano | #3ea7d3 | Navegação, informação |
+| `"6"` | Roxo / Violeta | #9063d2 | Título, identidade |
+
+Omita `color` inteiramente para o padrão (sem cor de borda, rótulo transparente).
+
+---
+
+## Diretrizes de dimensionamento de imagens
+
+Calcule a partir das dimensões reais da imagem usando PIL ou `identify`:
 
 ```bash
 python3 -c "from PIL import Image; img=Image.open('path.png'); print(img.width, img.height)"
@@ -195,20 +194,20 @@ python3 -c "from PIL import Image; img=Image.open('path.png'); print(img.width, 
 identify -format '%w %h' path.png
 ```
 
-| Aspect ratio | Condition | Canvas width | Canvas height |
-|-------------|-----------|-------------|--------------|
-| 16:9 (wide) | ratio 1.6–2.0 | 420 | 236 |
-| 2:1 (ultra wide) | ratio > 2.0 | 440 | 220 |
-| 4:3 | ratio 1.2–1.6 | 380 | 285 |
-| 1:1 (square) | ratio 0.9–1.1 | 280 | 280 |
-| 3:4 | ratio 0.6–0.9 | 240 | 320 |
-| 9:16 (portrait) | ratio < 0.6 | 200 | 356 |
-| PDF | any | 400 | 520 |
-| Unknown | fallback | 320 | 240 |
+| Proporção de aspecto | Condição | Largura no canvas | Altura no canvas |
+|----------------------|-----------|--------------------|-------------------|
+| 16:9 (panorâmico) | proporção 1.6–2.0 | 420 | 236 |
+| 2:1 (ultrapanorâmico) | proporção > 2.0 | 440 | 220 |
+| 4:3 | proporção 1.2–1.6 | 380 | 285 |
+| 1:1 (quadrado) | proporção 0.9–1.1 | 280 | 280 |
+| 3:4 | proporção 0.6–0.9 | 240 | 320 |
+| 9:16 (retrato) | proporção < 0.6 | 200 | 356 |
+| PDF | qualquer | 400 | 520 |
+| Desconhecida | fallback | 320 | 240 |
 
 ---
 
-## Auto-Positioning Pseudocode
+## Pseudocódigo de posicionamento automático
 
 ```
 function place_node(canvas, zone_label, new_w, new_h):
@@ -244,7 +243,7 @@ function place_node(canvas, zone_label, new_w, new_h):
 
 ---
 
-## Full Example: Two-Zone Canvas
+## Exemplo completo: canvas com duas zones
 
 ```json
 {
@@ -292,10 +291,10 @@ function place_node(canvas, zone_label, new_w, new_h):
 
 ---
 
-## Common Mistakes
+## Erros comuns
 
-- **Wrong path format**: use `_attachments/images/file.png`, not an absolute host path
-- **ID collision**: always read existing IDs before generating a new one
-- **Negative y confusion**: `y: -2400` is ABOVE `y: -1000` (more negative = higher up)
-- **Group does not clip**: placing a node "inside" a group is just positioning it within the group's bounding box: there is no parent-child relationship in the JSON
-- **Missing height on text nodes**: Obsidian will render the text but may clip it if height is too small. Use height ≥ content-lines × 24.
+- **Formato de caminho errado**: use `_attachments/images/file.png`, não um caminho absoluto do host
+- **Colisão de ID**: sempre leia os IDs existentes antes de gerar um novo
+- **Confusão com y negativo**: `y: -2400` está ACIMA de `y: -1000` (mais negativo = mais alto)
+- **Grupo não recorta**: colocar um node "dentro" de um grupo é apenas posicioná-lo dentro da bounding box do grupo: não há relação pai-filho no JSON
+- **height ausente em nodes de texto**: o Obsidian renderiza o texto mas pode cortá-lo se o height for pequeno demais. Use height ≥ linhas-de-conteúdo × 24.

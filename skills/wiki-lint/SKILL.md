@@ -1,15 +1,15 @@
 ---
 name: wiki-lint
-description: "Run a deterministic, read-only health check on an Obsidian wiki. Use for lint, vault health check, audit wiki health, find orphans, find dead links, frontmatter audit, provenance audit, or wiki audit. Reports graph, link, frontmatter, provenance-ledger, empty-section, and stale-index findings; it does not reason broadly or repair files."
+description: "Execute uma verificação de saúde determinística e somente leitura em um wiki Obsidian. Use para lint, verificação de saúde do vault, auditar a saúde do wiki, encontrar órfãs, encontrar links mortos, auditoria de frontmatter, auditoria de proveniência, ou auditoria do wiki. Reporta achados de grafo, links, frontmatter, ledger de proveniência, seções vazias e índices obsoletos; não raciocina de forma ampla nem repara arquivos (does not reason broadly or repair)."
 ---
 
-# Lint the wiki
+# Executar o lint do wiki
 
-Use the portable lint engine as the source of truth. Lint observes vault state;
-it does not create reports, dashboards, canvases, stubs, or fixes.
+Use o motor de lint portátil como fonte da verdade. O lint observa o estado do
+vault; não cria relatórios, dashboards, canvases, stubs, nem correções.
 
-Resolve the installed product root from this skill's own location, not from the
-vault or current working directory:
+Resolva a raiz do produto instalado a partir da localização desta skill, e não
+do vault ou do diretório de trabalho atual:
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -17,13 +17,13 @@ CORE="$PRODUCT_ROOT/scripts/claude-obsidian.py"
 test -f "$CORE"
 ```
 
-Every `../wiki/references/` link in this file resolves the same way, relative
-to this skill's own directory under `$PRODUCT_ROOT`, never relative to the
-selected vault's `wiki/` directory.
+Todo link `../wiki/references/` neste arquivo resolve da mesma forma, relativo
+ao diretório desta skill sob `$PRODUCT_ROOT`, nunca relativo ao diretório
+`wiki/` do vault selecionado.
 
-## Run
+## Executar
 
-Resolve the user vault, then run one of:
+Resolva o vault do usuário e então execute um destes:
 
 ```bash
 python3 "$CORE" lint --vault "$VAULT"
@@ -31,56 +31,59 @@ python3 "$CORE" lint --vault "$VAULT" --format markdown
 python3 "$CORE" lint --vault "$VAULT" --exclude "wiki/scratchpad/*"
 ```
 
-The repeatable `--exclude GLOB` flag scopes a path (for example a scratchpad
-folder) out of page, link-resolution, orphan, frontmatter, empty-section, and
-stale-index scanning.
+A flag repetível `--exclude GLOB` escopa um caminho (por exemplo uma pasta de
+scratch) para fora da varredura de páginas, resolução de links, órfãs,
+frontmatter, seções vazias e índices obsoletos.
 
-Use `--strict` only when a nonzero exit for findings is useful in automation.
-The command remains read-only either way.
+Use `--strict` apenas quando uma saída não zero por achados for útil em
+automação. O comando permanece somente leitura de qualquer forma.
 
-The deterministic parser understands Obsidian wikilinks and embeds, Markdown
-links, aliases, heading and block fragments, escaped aliases, and code fences.
-It skips dot-prefixed directories by default, mirroring Obsidian's own
-indexer. Link resolution honors `.gitignore` files inside the vault (no `git`
-subprocess): when a link is ambiguous between a page and a gitignored file
-such as a build artifact, the gitignored candidate is dropped.
-It reports such categories as dead or ambiguous links, orphan pages, required
-frontmatter gaps (including `title`), empty sections, stale index entries, and
-source/claim ledger contract violations. Report only the
-checks and counts present in its output; do not claim that it performed
-semantic, stylistic, or prose-level contradiction analysis when it did
-not.
+O parser determinístico entende wikilinks e embeds do Obsidian, links Markdown,
+aliases, fragmentos de heading e de bloco, aliases escapados e code fences. Ele
+pula diretórios com prefixo de ponto por padrão, espelhando o indexador do
+próprio Obsidian. A resolução de links respeita arquivos `.gitignore` dentro do
+vault (sem subprocesso `git`): quando um link é ambíguo entre uma página e um
+arquivo ignorado pelo git, como um artefato de build, o candidato ignorado pelo
+git é descartado. Ele reporta categorias como links mortos ou ambíguos, páginas
+órfãs, lacunas de frontmatter obrigatórias (incluindo `title`), seções vazias,
+entradas de índice obsoletas e violações de contrato nos ledgers de
+source/claim. Reporte apenas as verificações e contagens presentes na saída
+dele; não afirme que ele realizou análise semântica, estilística ou de
+contradições em nível de prosa quando não realizou.
 
-## Explain findings
+## Explicar os achados
 
-1. Preserve the engine's paths, line numbers, targets, categories, and counts.
-2. Group findings by likely impact: broken navigation, ambiguous resolution,
-   metadata quality, then maintainability.
-3. Explain that an orphan may be intentional and an ambiguous basename needs a
-   path-qualified link; do not infer intent from the finding alone.
-4. Treat allowlisted findings as policy, not as proof that the target exists.
-5. Separate deterministic facts from suggested remediation.
+1. Preserve os caminhos, números de linha, alvos, categorias e contagens do
+   motor.
+2. Agrupe os achados por impacto provável: navegação quebrada, resolução
+   ambígua, qualidade de metadados e então manutenibilidade.
+3. Explique que uma órfã pode ser intencional e que um basename ambíguo precisa
+   de um link qualificado por caminho; não infira intenção apenas a partir do
+   achado.
+4. Trate achados em allowlist como política, não como prova de que o alvo existe.
+5. Separe fatos determinísticos de remediações sugeridas.
 
-Do not write the Markdown rendering into the vault. Return it in chat or stdout.
+Não escreva a renderização Markdown dentro do vault. Retorne-a no chat ou no
+stdout.
 
-## Repair is a separate operation
+## O reparo é uma operação separada
 
-Never auto-fix a lint result. After the user chooses specific findings to
-repair:
+Nunca corrija automaticamente um resultado de lint. Depois que o usuário
+escolher achados específicos para reparar:
 
-1. Re-read each target and record its expected SHA-256.
-2. Draft only the selected changes; do not delete or merge pages without
-   explicit consent.
-3. Build one repair bundle with a new operation ID.
-4. Inspect the bundle and show exact changed paths.
-5. Apply only after that separate review.
-6. Re-run lint read-only and compare the relevant findings.
+1. Releia cada alvo e registre seu SHA-256 esperado.
+2. Elabore apenas as mudanças selecionadas; não exclua nem mescle páginas sem
+   consentimento explícito.
+3. Construa um bundle de reparo com um novo operation ID.
+4. Inspecione o bundle e mostre os caminhos exatos alterados.
+5. Aplique apenas após essa revisão separada.
+6. Reexecute o lint em modo somente leitura e compare os achados relevantes.
 
-Follow the [operation transaction contract](../wiki/references/operation-transactions.md).
-Lint itself never applies that transaction and never commits Git.
+Siga [o contrato de transação de operação](../wiki/references/operation-transactions.md).
+O lint em si nunca aplica essa transação e nunca faz commit no Git.
 
 ## Checkpoint
 
-Observe the deterministic report, think about root causes rather than finding
-count, verify proposed repairs against current hashes, and grow by improving the
-workflow that produced repeated findings.
+Observe o relatório determinístico, pense em causas raiz em vez de contagem de
+achados, verifique os reparos propostos contra os hashes atuais e cresça
+melhorando o workflow que produziu achados repetidos.

@@ -1,9 +1,10 @@
-# Evidence and provenance
+# Evidência e proveniência
 
-Keep ingestion state, source evidence, and claim assessment separate.
+Mantenha o estado de ingestão, a evidência de fonte e a avaliação de afirmações
+separados.
 
-Resolve the installed product root from the invoking skill's own location, not
-from the user-vault working directory:
+Resolva a raiz do produto instalado a partir da própria localização da skill
+invocadora, e não a partir do diretório de trabalho do vault do usuário:
 
 ```bash
 PRODUCT_ROOT=/absolute/path/to/installed/claude-obsidian
@@ -13,44 +14,44 @@ test -f "$CORE"
 
 ## Ledgers
 
-- `.raw/.manifest.json`: legacy-compatible ingestion hashes, generated pages,
-  address map, and last processing result.
-- `wiki/meta/ledgers/source-ledger.json`: stable source identities, authority,
-  SHA-256, retrieval/freshness, review state, and linked pages.
-- `wiki/meta/ledgers/claim-ledger.json`: falsifiable claims, note locations,
-  support, contradictions, confidence, risk, and review state.
+- `.raw/.manifest.json`: hashes de ingestão compatíveis com o legado, páginas
+  geradas, mapa de endereços e último resultado de processamento.
+- `wiki/meta/ledgers/source-ledger.json`: identidades estáveis de fonte, authority,
+  SHA-256, obtenção/atualidade, review_state e páginas vinculadas.
+- `wiki/meta/ledgers/claim-ledger.json`: afirmações falsificáveis, localizações de
+  nota, support, contradict, confidence, risk e review_state.
 
-Do not overload one ledger with all three jobs.
+Não sobrecarregue um único ledger com as três funções.
 
-## Source rules
+## Regras de fonte
 
-- Use SHA-256 for new source identity and delta checks.
-- File locators are vault-relative. Remote locators are absolute HTTPS URLs.
-- Source authority is one of `official`, `primary`, `secondary`, `community`,
-  `synthetic`, or `unknown`.
-- Review state is `unreviewed`, `active`, `superseded`, or `rejected`.
-- Compute staleness from `refresh_due`; do not store a second stale flag.
-- Sources sharing an `independence_key` do not count as independent
-  corroboration.
-- Sources that resolve to the same canonical URL origin do not count as
-  independent merely because IPv6, IDN, Unicode, dot-segment, default-port, or
-  percent-encoding spelling differs. Escaped reserved path/query bytes remain
-  distinct because they can identify a different resource.
+- Use SHA-256 para nova identidade de fonte e verificação de delta.
+- Localizadores de arquivo são relativos ao vault. Localizadores remotos são URLs
+  HTTPS absolutas.
+- A authority de fonte é uma entre `official`, `primary`, `secondary`, `community`,
+  `synthetic` ou `unknown`.
+- O review_state é `unreviewed`, `active`, `superseded` ou `rejected`.
+- Calcule a obsolescência a partir de `refresh_due`; não armazene uma segunda flag de stale.
+- Fontes que compartilham uma `independence_key` não contam como corroboração independente.
+- Fontes que resolvem para a mesma origem de URL canônica não contam como independentes
+  apenas porque a grafia difere em IPv6, IDN, Unicode, segmento de ponto, porta padrão
+  ou codificação percentual. Bytes reservados de path/query escapados permanecem
+  distintos porque podem identificar um recurso diferente.
 
-## Claim rules
+## Regras de afirmação
 
-- Assessment is `accepted`, `provisional`, `contested`, `unsupported`, or
+- A assessment é `accepted`, `provisional`, `contested`, `unsupported` ou
   `deprecated`.
-- Accepted claims need at least one fresh, active, non-synthetic source.
-- High-risk accepted claims need two independent sources.
-- Preserve contradictory evidence. Do not silently select a winner.
-- `unsupported` is the canonical no-data state. A grounded refusal is better
-  than confident invention.
-- Never fabricate quotations, page numbers, dates, or evidence locators.
+- Afirmações aceitas precisam de ao menos uma fonte nova, ativa e não sintética.
+- Afirmações aceitas de alto risco precisam de duas fontes independentes.
+- Preserve evidência contraditória. Não escolha um vencedor silenciosamente.
+- `unsupported` é o estado canônico de ausência de dados. Uma recusa fundamentada é
+  melhor que uma invenção confiante.
+- Nunca fabrique citações, números de página, datas ou localizadores de evidência.
 
-## Migration
+## Migração
 
-Run migration as a dry-run first:
+Rode a migração primeiro como dry-run:
 
 ```bash
 python3 "$CORE" migrate --vault VAULT \
@@ -60,15 +61,15 @@ python3 "$CORE" migrate --vault VAULT \
   --approved-plan-sha256 <reviewed-sha256> --apply
 ```
 
-Migration leaves `.raw/.manifest.json` byte-for-byte unchanged, creates missing
-ledgers, defaults unknown evidence fields honestly, and never extracts claims
-from legacy prose automatically. A legacy source key that resolves to a regular
-file remains a file source with its computed SHA-256. A valid key with no file
-is preserved as an unreviewed manual source with unknown authority and no
-verified payload hash. This unresolved record preserves the legacy identity,
-date, and page links; it does not prove a batch-to-file relationship. Migration
-never enumerates raw payloads to invent that relationship or promotes the
-legacy short hash to SHA-256.
-The reviewed migration bundle also pins each legacy locator's observed file
-state. Apply fails if an unresolved label appears, becomes unsafe, cannot be
-inspected, or if a file source changes after review.
+A migração deixa `.raw/.manifest.json` inalterado byte a byte, cria ledgers
+ausentes, preenche honestamente campos de evidência desconhecidos e nunca extrai
+afirmações automaticamente de prosa do legado. Uma source key legada que resolve
+para um arquivo regular permanece uma fonte de arquivo com seu SHA-256 computado.
+Uma key válida sem arquivo é preservada como uma fonte manual não revisada com
+authority desconhecida e sem hash de payload verificado. Esse registro não
+resolvido preserva a identidade, a data e os links de página legados; ele não prova
+uma relação entre lote e arquivo. A migração nunca enumera payloads brutos para
+inventar essa relação nem promove o hash curto legado para SHA-256.
+O bundle de migração revisado também fixa o estado de arquivo observado de cada
+localizador legado. O apply falha se um rótulo não resolvido aparecer, ficar
+inseguro, não puder ser inspecionado, ou se uma fonte de arquivo mudar após a revisão.

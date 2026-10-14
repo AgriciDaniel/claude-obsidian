@@ -1,14 +1,14 @@
 ---
 type: meta
-title: Wiki Log
+title: Registro da Wiki
 status: evergreen
 created: {{generated_date}}
 updated: {{generated_date}}
 tags:
   - meta
-  - log
+  - registro
 ---
 
-# Wiki Log
+# Registro da Wiki
 
-Newest completed operations appear first.
+As operações concluídas mais recentes aparecem primeiro.

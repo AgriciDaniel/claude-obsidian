@@ -1,107 +1,114 @@
 ---
 name: think
-description: Apply the Fable-derived 10-stage OBSERVE, OBSERVE, LISTEN, THINK, CONNECT, CONNECT, FEEL, ACCEPT, CREATE, GROW loop to consequential or ambiguous reasoning and decisions. Use for think this through, deep think, architecture review, postmortem, tradeoff analysis, or challenges to assumptions. This is a reasoning review, not a deterministic vault health check or repair workflow.
+description: Aplique o loop Fable derivado de 10 etapas OBSERVE, OBSERVE, LISTEN, THINK, CONNECT, CONNECT, FEEL, ACCEPT, CREATE, GROW a raciocínios e decisões consequentes ou ambíguos. Use para pensar bem nisso, pensar profundamente, revisão de arquitetura, postmortem, análise de tradeoffs, ou questionar premissas. Esta é uma revisão de raciocínio, não uma verificação de saúde determinística do vault nem um workflow de reparo.
 ---
 
 # Think
 
-Use the ten stages as a loop of attention, not a ceremonial transcript. Scale
-the depth to novelty, stakes, uncertainty, and irreversibility. Keep the final
-reasoning summary concise and evidence-bearing.
+Use as dez etapas como um loop de atenção, não como uma transcrição
+cerimonial. Ajuste a profundidade à novidade, ao risco, à incerteza e à
+irreversibilidade. Mantenha o resumo final do raciocínio conciso e ancorado em
+evidências.
 
-This skill is read-only. It may inspect available evidence, but it does not
-edit files, execute a vault mutation, commit Git, or publish anything. If the
-CREATE stage recommends a change, compose with the appropriate mutation skill
-after the user authorizes that operation.
+Esta skill é somente leitura. Ela pode inspecionar evidências disponíveis, mas
+não edita arquivos, não executa mutações no vault, não faz commit no Git e não
+publica nada. Se a etapa CREATE recomendar uma mudança, componha com a skill de
+mutação apropriada depois que o usuário autorizar essa operação.
 
-## Establish an evidence frame
+## Estabelecer um enquadramento de evidências
 
-Before the loop, separate:
+Antes do loop, separe:
 
-- **Observed:** directly supported by an input, source, test, or measurement.
-- **Inferred:** a conclusion drawn from observations; state the bridge.
-- **Unknown:** missing evidence that could change the decision.
-- **Preference:** a user or designer choice, not a factual claim.
+- **Observado:** diretamente sustentado por uma entrada, fonte, teste ou
+  medição.
+- **Inferido:** uma conclusão tirada das observações; declare a ponte.
+- **Desconhecido:** evidência ausente que poderia mudar a decisão.
+- **Preferência:** uma escolha do usuário ou do projetista, não um claim factual.
 
-Attach citations or concrete locators when sources exist. Never fabricate a
-quotation, locator, test result, consensus, or confidence level.
+Anexe citações ou localizadores concretos quando houver fontes. Nunca fabrique
+uma citação, um localizador, um resultado de teste, um consenso ou um nível de
+confiança.
 
-## The ten stages
+## As dez etapas
 
-### 1. OBSERVE — external
+### 1. OBSERVE — externo
 
-Read the actual inputs, current state, constraints, failures, and prior work.
-Distinguish what was inspected in full from what was sampled or assumed.
+Leia as entradas reais, o estado atual, as restrições, as falhas e o trabalho
+anterior. Distinga o que foi inspecionado por completo do que foi amostrado ou
+assumido.
 
-### 2. OBSERVE — internal
+### 2. OBSERVE — interno
 
-Name the biases most likely to distort this decision: anchoring, ownership,
-novelty, familiarity, urgency, sunk cost, confirmation, or a desired verdict.
-Recalibrate confidence to the evidence available.
+Nomeie os vieses mais prováveis de distorcer esta decisão: ancoragem, posse,
+novidade, familiaridade, urgência, custo afundado, confirmação, ou um veredicto
+desejado. Recalibre a confiança à evidência disponível.
 
 ### 3. LISTEN
 
-Recover the user's intent, success condition, constraints, and unstated stakes.
-Attend to error messages, dissent, edge cases, and affected voices. Ask only
-questions whose answers could materially change the outcome.
+Recupere a intenção do usuário, a condição de sucesso, as restrições e as
+participações não declaradas. Esteja atento a mensagens de erro, dissenso, casos
+de borda e vozes afetadas. Faça apenas perguntas cujas respostas possam mudar
+materialmente o resultado.
 
 ### 4. THINK
 
-Reduce the problem to invariants, alternatives, tradeoffs, and failure modes.
-Prefer the smallest reversible test that could disprove the leading hypothesis.
-Treat failure behavior as part of the specification.
+Reduza o problema a invariantes, alternativas, tradeoffs e modos de falha.
+Prefira o menor teste reversível que possa refutar a hipótese principal. Trate o
+comportamento de falha como parte da especificação.
 
 ### 5. CONNECT — lateral
 
-Look for the same structure in adjacent components or another domain. Use an
-analogy only when its mapped similarities and limits are explicit.
+Procure a mesma estrutura em componentes adjacentes ou em outro domínio. Use uma
+analogia apenas quando suas similaridades e limites mapeados forem explícitos.
 
-### 6. CONNECT — system
+### 6. CONNECT — sistema
 
-Trace upstream inputs, downstream consumers, ownership, state boundaries,
-interfaces, and recovery paths. Check whether a locally sound decision creates
-an integration failure elsewhere.
+Rastreie entradas a montante, consumidores a jusante, posse, limites de estado,
+interfaces e caminhos de recuperação. Verifique se uma decisão localmente
+sólida cria uma falha de integração em outro lugar.
 
 ### 7. FEEL
 
-Consider the user's cognitive load, emotional state, accessibility, trust, and
-error-recovery experience. Treat intuition as a signal to investigate, never as
-a substitute for evidence.
+Considere a carga cognitiva, o estado emocional, a acessibilidade, a confiança e
+a experiência de recuperação de erro do usuário. Trate a intuição como um sinal
+a investigar, nunca como substituto de evidência.
 
 ### 8. ACCEPT
 
-State constraints, uncertainty, contradictory evidence, and unfavorable
-findings plainly. Do not inflate a score, soften a material risk to please the
-user, or mistake agreement for correctness. Present the strongest reasonable
-counterargument to the preferred conclusion.
+Declare de forma direta restrições, incerteza, evidências contraditórias e
+achados desfavoráveis. Não infle uma pontuação, não suavize um risco material
+para agradar o usuário e não confunda concordância com correção. Apresente o
+contraargumento mais forte e razoável contra a conclusão preferida.
 
 ### 9. CREATE
 
-Produce the smallest useful artifact: a recommendation, decision record,
-experiment, draft, review, or handoff. Mark assumptions and unresolved risks.
-Do not mutate state under this skill.
+Produza o menor artefato útil: uma recomendação, um registro de decisão, um
+experimento, um rascunho, uma revisão ou um handoff. Marque as premissas e os
+riscos não resolvidos. Não mute estado nesta skill.
 
 ### 10. GROW
 
-Define what feedback or measurement should update the decision, when to revisit
-it, and what lesson is reusable. Saving the lesson is a separate explicit
-operation composed with `save`.
+Defina qual feedback ou medição deve atualizar a decisão, quando revisitá-la e
+qual lição é reutilizável. Salvar a lição é uma operação explícita separada,
+composta com `save`.
 
-## Verification discipline
+## Disciplina de verificação
 
-Before calling the work complete:
+Antes de chamar o trabalho de concluído:
 
-1. Test the highest-risk claim or clearly state why it remains untested.
-2. Seek disconfirming evidence, not only supporting examples.
-3. Match verification effort to blast radius and reversibility.
-4. Report actual commands, sources, artifacts, or observations used.
-5. Separate a passing check from broader correctness it does not establish.
-6. Give confidence as a calibrated qualitative judgment with reasons, not as a
-   decorative percentage.
+1. Teste o claim de maior risco ou declare claramente por que ele segue não
+   testado.
+2. Busque evidências que desconfirmem, não apenas exemplos de apoio.
+3. Ajuste o esforço de verificação ao raio de impacto e à reversibilidade.
+4. Reporte os comandos, fontes, artefatos ou observações realmente usados.
+5. Separe uma verificação aprovada de uma correção mais ampla que ela não
+   estabelece.
+6. Dê a confiança como um julgamento qualitativo calibrado com razões, não como
+   uma porcentagem decorativa.
 
-## Output shape
+## Formato da saída
 
-Adapt the headings to the task, but preserve these outcomes:
+Adapte os headings à tarefa, mas preserve estes resultados:
 
 ```markdown
 ## Decision
@@ -120,6 +127,6 @@ Adapt the headings to the task, but preserve these outcomes:
 <feedback signal, revisit condition, reusable lesson>
 ```
 
-For a trivial, reversible lookup or typo, skip the formal loop. For a
-consequential decision, loop back whenever a later stage exposes a missing
-observation or misunderstood requirement.
+Para uma busca trivial e reversível ou para um erro de digitação, pule o loop
+formal. Para uma decisão consequente, volte ao loop sempre que uma etapa
+posterior expor uma observação ausente ou um requisito mal compreendido.

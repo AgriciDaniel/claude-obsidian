@@ -1,10 +1,10 @@
-# Frontmatter conventions
+# Convenções de frontmatter
 
-Preserve an existing vault's valid property vocabulary. For a new generic
-claude-obsidian page, use flat YAML properties, block lists, and explicit
-evidence fields where they apply.
+Preserve o vocabulário de propriedades válido de um vault existente. Para uma nova
+página genérica do claude-obsidian, use propriedades YAML planas, listas em bloco e
+campos de evidência explícitos onde se aplicarem.
 
-## Common properties
+## Propriedades comuns
 
 ```yaml
 ---
@@ -24,16 +24,16 @@ claim_ids:
 ---
 ```
 
-Page types are declared once in `claude_obsidian/page_schema.py` and documented in
-[WIKI.md](../../../WIKI.md). This file previously restated a shorter list that
-omitted `session` and `fold`, which is how a vault ends up carrying values one
-document calls invalid. Statuses are still described in prose in both places and
-are out of this change's scope. A custom scaffold may add types when
-its schema is documented. `status` commonly progresses through `seed`,
-`developing`, `mature`, and `evergreen`; preserve other established values in an
-adopted vault.
+Os tipos de página são declarados uma vez em `claude_obsidian/page_schema.py` e
+documentados em [WIKI.md](../../../WIKI.md). Este arquivo antes repetia uma lista menor
+que omitia `session` e `fold`, e é assim que um vault acaba carregando valores que
+um documento chama de inválidos. Os status ainda são descritos em prosa nos dois
+lugares e estão fora do escopo desta mudança. Um scaffold personalizado pode
+adicionar tipos quando seu schema estiver documentado. `status` comummente progride
+por `seed`, `developing`, `mature` e `evergreen`; preserve outros valores estabelecidos
+em um vault adotado.
 
-## Source properties
+## Propriedades de fonte
 
 ```yaml
 source_type: article
@@ -49,11 +49,11 @@ key_claims:
   - "No claims extracted yet."
 ```
 
-Allowed authority values and evidence semantics are defined in
-[provenance.md](provenance.md). A missing value remains empty or `unknown`; do
-not manufacture metadata to complete a form.
+Os valores de authority permitidos e a semântica de evidência estão definidas em
+[provenance.md](provenance.md). Um valor ausente permanece vazio ou `unknown`; não
+fabrique metadados para completar um formulário.
 
-## Other type-specific properties
+## Outras propriedades específicas por tipo
 
 ```yaml
 # entity
@@ -83,17 +83,17 @@ assessment: unsupported
 risk: low
 ```
 
-## Rules
+## Regras
 
-1. Keep generated properties flat; do not introduce nested mappings.
-2. Write dates as `YYYY-MM-DD` unless an existing schema requires a timestamp.
-3. Use block lists for generated multi-value properties.
-4. Quote wikilinks in YAML.
-5. Keep external locators on source records; use wikilinks for internal
-   `related` and `sources` relationships.
-6. Update `updated` only when the page content or assessed state changes.
-7. Preserve unknown valid properties during an edit.
-8. Do not treat a frontmatter confidence label as evidence; the claim ledger
-   and linked active sources determine support.
-9. Quote numeric-only tag values, for example `- "2026"`, so their YAML type
-   remains text.
+1. Mantenha as propriedades geradas planas; não introduza mapeamentos aninhados.
+2. Escreva datas como `YYYY-MM-DD`, a menos que um schema existente exija um timestamp.
+3. Use listas em bloco para propriedades geradas de múltiplos valores.
+4. Coloque wikilinks entre aspas no YAML.
+5. Mantenha localizadores externos nos registros de fonte; use wikilinks para
+   relações internas de `related` e `sources`.
+6. Atualize `updated` somente quando o conteúdo da página ou o estado avaliado mudar.
+7. Preserve propriedades válidas desconhecidas durante uma edição.
+8. Não trate um rótulo de confiança do frontmatter como evidência; o claim ledger
+   e as fontes ativas vinculadas determinam o suporte.
+9. Coloque entre aspas valores de tag puramente numéricos, por exemplo `- "2026"`,
+   para que o tipo YAML deles continue sendo texto.

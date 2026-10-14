@@ -1,6 +1,6 @@
-# Fold page template
+# Template de página de fold
 
-Every fold is extractive, deterministic, and uses flat Obsidian properties.
+Todo fold é extrativo, determinístico e usa propriedades planas do Obsidian.
 
 ## Frontmatter
 
@@ -29,29 +29,30 @@ related:
 ---
 ```
 
-Generate each `child_key` from the entry date plus its one-based position in the
-selected oldest-to-newest range. The same key appears in exactly one body row.
-This avoids nested YAML objects while preserving a frontmatter/table bijection.
-The deterministic `fold_id` matches the filename. Missing any required property
-is a dry-run failure.
+Gere cada `child_key` a partir da data da entrada mais sua posição baseada em um
+dentro do intervalo selecionado, do mais antigo para o mais novo. A mesma chave
+aparece em exatamente uma linha do corpo. Isso evita objetos YAML aninhados
+preservando uma bijeção entre frontmatter e tabela. O `fold_id` determinístico
+corresponde ao nome do arquivo. A ausência de qualquer propriedade obrigatória
+é uma falha no dry-run.
 
-## Body
+## Corpo
 
-Use these sections in order.
+Use estas seções nesta ordem.
 
-### Scope
+### Escopo
 
-One paragraph stating the level, exact count, date range, and only those themes
-supported by at least two child entries.
+Um parágrafo que declare o nível, a contagem exata, o intervalo de datas e somente
+aqueles temas sustentados por ao menos duas entradas filhas.
 
 ```markdown
 Level-{K} fold of {COUNT} log entries spanning {FROM} through {TO}.
 ```
 
-### Child Entries
+### Entradas filhas
 
-One row per child key and log entry. Preserve entries even when multiple rows
-refer to the same page.
+Uma linha por child key e por entrada de log. Preserve as entradas mesmo quando
+várias linhas se referem à mesma página.
 
 ```markdown
 ## Child Entries
@@ -62,13 +63,13 @@ refer to the same page.
 | log-20260702-002 | 2026-07-02 | save | Example decision recorded | [[Example Decision]] | missing | Source page is missing; summary is limited to the log entry. |
 ```
 
-The summary is one sentence supported by the log entry. Use `ambiguous in
-source` or `source missing` instead of guessing.
+O resumo é uma frase sustentada pela entrada de log. Use `ambiguous in
+source` ou `source missing` em vez de adivinhar.
 
-### Key Outcomes
+### Resultados-chave
 
-Include three to seven extractive bullets when supported. Cite the child key for
-every bullet and verify each number against the source entry.
+Inclua de três a sete marcadores extrativos quando houver suporte. Cite a child
+key em cada marcador e verifique cada número contra a entrada de origem.
 
 ```markdown
 ## Key Outcomes
@@ -76,12 +77,12 @@ every bullet and verify each number against the source entry.
 - Added one source-backed example page. (child: log-20260701-001)
 ```
 
-If no outcome is supported, state that explicitly.
+Se nenhum resultado tiver suporte, declare isso explicitamente.
 
-### Cross-entry Themes
+### Temas entre entradas
 
-Include zero to four bullets. Each theme names at least two child keys. If no
-pattern is supported, write:
+Inclua de zero a quatro marcadores. Cada tema nomeia ao menos duas child keys.
+Se nenhum padrão tiver suporte, escreva:
 
 ```markdown
 ## Cross-entry Themes
@@ -89,15 +90,15 @@ pattern is supported, write:
 No cross-entry themes identified; the entries are independent within this range.
 ```
 
-### Contradictions or Corrections
+### Contradições ou correções
 
-Preserve disagreements and their status. Use `None detected` only after checking
-all selected entries.
+Preserve as divergências e seu status. Use `None detected` somente após verificar
+todas as entradas selecionadas.
 
-### Child Pages
+### Páginas filhas
 
-List each unique present target page once. This section is deduplicated by page;
-the Child Entries table is not.
+Liste cada página de destino presente e única uma vez. Esta seção é
+deduplicada por página; a tabela de Child Entries não é.
 
 ```markdown
 ## Child Pages
@@ -110,13 +111,13 @@ the Child Entries table is not.
 - [[index]] - vault catalog
 ```
 
-## Validation
+## Validação
 
-- `entry_count`, `child_keys`, and table rows have equal counts.
-- Every child key is unique and appears exactly twice: frontmatter and one row.
-- Every numeric statement is traceable to its cited child.
-- Every theme cites at least two children.
-- Missing pages remain explicit.
-- No child page or selected log entry is changed.
-- The fold body is a rollup, not a retelling; split an unusually large fold
-  instead of imposing an arbitrary line target.
+- `entry_count`, `child_keys` e as linhas da tabela têm contagens iguais.
+- Toda child key é única e aparece exatamente duas vezes: no frontmatter e em uma linha.
+- Toda afirmação numérica é rastreável até seu filho citado.
+- Cada tema cita pelo menos dois filhos.
+- Páginas ausentes permanecem explícitas.
+- Nenhuma página filha ou entrada de log selecionada é alterada.
+- O corpo do fold é um rollup, não uma recontação; divida um fold
+  excepcionalmente grande em vez de impor uma meta arbitrária de linhas.
