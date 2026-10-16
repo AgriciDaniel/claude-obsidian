@@ -7,6 +7,16 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Changed
+
+- The canvas catalog moves from `wiki/canvases/index.md` to
+  `wiki/canvases/_index.md`. The old name shared the `index` basename with
+  `wiki/index.md`, so every vault using canvases got a lint duplicate-basename
+  finding and an unqualified `[[index]]` depended on resolution order. New
+  canvas transactions reject the legacy path, while completed journals that
+  wrote it still validate during recovery; the canvas skill offers to move an
+  existing legacy catalog.
+
 ## [2.2.0] - 2026-09-10
 
 Backlog triage: lint scoping, lock recovery, host validation, the `bin/`

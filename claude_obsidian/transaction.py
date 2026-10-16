@@ -101,6 +101,10 @@ _MANAGED_METADATA_PATHS = {
     ".vault-meta/address-counter.txt",
 }
 _MANAGED_REQUEST_OPERATIONS = {"ingest", "autoresearch"}
+# `_index` keeps the catalog from sharing the `index` basename with
+# wiki/index.md, so an unqualified `[[index]]` stays unambiguous.
+_CANVAS_CATALOG_PATH = "wiki/canvases/_index.md"
+_LEGACY_CANVAS_CATALOG_PATH = "wiki/canvases/index.md"
 _DIRECT_MANAGED_METADATA_AUTHORITY = {
     ".raw/.manifest.json": {"setup", "migration"},
     ".vault-meta/address-counter.txt": {"setup"},
@@ -3174,6 +3178,7 @@ def _validate_operation_write_scope(
     relative: str,
     *,
     write_mode: Any,
+    journal_replay: bool = False,
 ) -> None:
     """Enforce the declared workflow's writable content domain."""
 
@@ -3232,12 +3237,14 @@ def _validate_operation_write_scope(
         )
     if operation_type == "canvas" and not (
         (relative.startswith("wiki/canvases/") and relative.endswith(".canvas"))
-        or relative == "wiki/canvases/index.md"
+        or relative == _CANVAS_CATALOG_PATH
+        # Journals written before the catalog rename must stay recoverable.
+        or (journal_replay and relative == _LEGACY_CANVAS_CATALOG_PATH)
     ):
         raise TransactionValidationError(
             "WRITE_SCOPE_VIOLATION",
             "canvas operations may write only wiki/canvases/*.canvas "
-            f"and wiki/canvases/index.md: {relative}",
+            f"and {_CANVAS_CATALOG_PATH}: {relative}",
         )
     if operation_type == "fold" and not (
         (
@@ -3955,7 +3962,7 @@ def _validated_recovery_writes(
             ) from exc
         try:
             _validate_operation_write_scope(
-                str(operation_type), relative, write_mode=mode
+                str(operation_type), relative, write_mode=mode, journal_replay=True
             )
         except TransactionError as exc:
             raise TransactionRecoveryError(

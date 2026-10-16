@@ -35,8 +35,11 @@ syntax skill is available.
 - Resolve the user vault before reading. Never derive it from plugin files.
 - Store boards under `wiki/canvases/`; use `wiki/canvases/main.canvas` only as
   the default when the user did not name a board.
-- Treat `wiki/canvases/index.md` as an optional catalog. Update it only when a
-  canvas is created, renamed, or removed.
+- Treat `wiki/canvases/_index.md` as an optional catalog. Update it only when a
+  canvas is created, renamed, or removed. Never write `wiki/canvases/index.md`:
+  it would share the `index` basename with `wiki/index.md`. If a legacy
+  `wiki/canvases/index.md` catalog exists, offer to move it to `_index.md`
+  and retarget `file` nodes that point at it.
 - Use vault-relative paths in `file` and `background`; reject absolute paths,
   `..` traversal, home shortcuts, and paths that escape through symlinks.
 - Reference only files already inside the vault. If an optional capture or

@@ -910,6 +910,50 @@ def test_operation_types_enforce_least_privilege_path_contracts() -> None:
             raise AssertionError("fold must couple the fold page, index, and log")
 
 
+def test_canvas_catalog_avoids_wiki_index_basename() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        catalog = bundle(
+            "canvas-catalog",
+            [
+                {
+                    "path": "wiki/canvases/_index.md",
+                    "mode": "create",
+                    "content": "# Canvases\n",
+                }
+            ],
+            operation_type="canvas",
+        )
+        assert inspect_bundle(vault, catalog)["valid"] is True
+
+        legacy = bundle(
+            "canvas-legacy-catalog",
+            [
+                {
+                    "path": "wiki/canvases/index.md",
+                    "mode": "create",
+                    "content": "# Canvases\n",
+                }
+            ],
+            operation_type="canvas",
+        )
+        try:
+            inspect_bundle(vault, legacy)
+        except TransactionValidationError as exc:
+            assert exc.code == "WRITE_SCOPE_VIOLATION"
+        else:
+            raise AssertionError("canvas catalog must not shadow wiki/index.md")
+
+        # Vaults keep completed journals that wrote the legacy catalog; they
+        # must still validate, or every later apply fails with CORRUPT_JOURNAL.
+        transaction_module._validate_operation_write_scope(
+            "canvas",
+            "wiki/canvases/index.md",
+            write_mode="create",
+            journal_replay=True,
+        )
+
+
 def test_casefold_aliases_and_bundle_collisions_fail_portably() -> None:
     with tempfile.TemporaryDirectory() as td:
         vault = make_vault(Path(td) / "vault")
@@ -2827,6 +2871,7 @@ def main() -> None:
     test_all_runtime_lock_cache_and_temp_paths_are_reserved()
     test_product_runtime_and_declared_operation_scopes_are_enforced()
     test_operation_types_enforce_least_privilege_path_contracts()
+    test_canvas_catalog_avoids_wiki_index_basename()
     test_casefold_aliases_and_bundle_collisions_fail_portably()
     test_transaction_size_limits_match_recovery_and_reject_nonregular_content()
     test_parent_swap_cannot_redirect_a_later_write()
