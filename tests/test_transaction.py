@@ -954,6 +954,82 @@ def test_canvas_catalog_avoids_wiki_index_basename() -> None:
         )
 
 
+def test_legacy_canvas_catalog_journals_stay_recoverable() -> None:
+    # A completed journal from a release that wrote the legacy catalog must
+    # not make every later apply fail with CORRUPT_JOURNAL.
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        legacy_catalog = bundle(
+            "canvas-legacy-release",
+            [
+                {
+                    "path": "wiki/canvases/index.md",
+                    "mode": "create",
+                    "content": "# Canvases\n",
+                }
+            ],
+            operation_type="canvas",
+        )
+        current = transaction_module._CANVAS_CATALOG_PATH
+        transaction_module._CANVAS_CATALOG_PATH = "wiki/canvases/index.md"
+        try:
+            apply_bundle(vault, legacy_catalog)
+        finally:
+            transaction_module._CANVAS_CATALOG_PATH = current
+
+        result = apply_bundle(
+            vault,
+            bundle(
+                "canvas-after-legacy",
+                [
+                    {
+                        "path": "wiki/canvases/_index.md",
+                        "mode": "create",
+                        "content": "# Canvases\n",
+                    }
+                ],
+                operation_type="canvas",
+            ),
+        )
+        assert result["changed_paths"] == ["wiki/canvases/_index.md"]
+
+    # An interrupted legacy journal must still roll back.
+    with tempfile.TemporaryDirectory() as td:
+        vault = make_vault(Path(td) / "vault")
+        catalog = vault / "wiki/canvases/index.md"
+        catalog.parent.mkdir()
+        catalog.write_text("old\n")
+        tx = vault / ".vault-meta/transactions/canvas-legacy-crashed"
+        backups = tx / "backups"
+        backups.mkdir(parents=True)
+        (backups / "0000.original").write_text("old\n")
+        catalog.write_text("new\n")
+        journal = {
+            "schema": "claude-obsidian.transaction-journal.v1",
+            "operation_id": "canvas-legacy-crashed",
+            "operation_type": "canvas",
+            "state": "applying",
+            "writes": [
+                {
+                    "path": "wiki/canvases/index.md",
+                    "mode": "replace",
+                    "new_sha256": sha256_file(catalog),
+                    "original_sha256": sha256_file(backups / "0000.original"),
+                    "original_mode": 0o644,
+                    "new_mode": 0o644,
+                    "backup": "0000.original",
+                }
+            ],
+            "applied": [],
+        }
+        (tx / "journal.json").write_text(json.dumps(journal))
+        with MutationLock(vault) as mutation_lock:
+            assert recover_incomplete(vault, mutation_lock=mutation_lock) == [
+                "canvas-legacy-crashed"
+            ]
+        assert catalog.read_text() == "old\n"
+
+
 def test_casefold_aliases_and_bundle_collisions_fail_portably() -> None:
     with tempfile.TemporaryDirectory() as td:
         vault = make_vault(Path(td) / "vault")
@@ -2872,6 +2948,7 @@ def main() -> None:
     test_product_runtime_and_declared_operation_scopes_are_enforced()
     test_operation_types_enforce_least_privilege_path_contracts()
     test_canvas_catalog_avoids_wiki_index_basename()
+    test_legacy_canvas_catalog_journals_stay_recoverable()
     test_casefold_aliases_and_bundle_collisions_fail_portably()
     test_transaction_size_limits_match_recovery_and_reject_nonregular_content()
     test_parent_swap_cannot_redirect_a_later_write()
