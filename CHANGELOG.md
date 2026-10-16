@@ -16,6 +16,11 @@ implementation record for older releases.
   canvas transactions reject the legacy path, while completed journals that
   wrote it still validate during recovery; the canvas skill offers to move an
   existing legacy catalog.
+- Generic-mode `wiki-mode.py route source` and `route question` now keep the
+  title's spaces and case (`wiki/sources/Cloudflare DNS proxy status.md`)
+  instead of a hyphenated slug, matching how those pages are actually named
+  and linked. Following the old suggestion created a duplicate beside an
+  existing page.
 
 ## [2.2.0] - 2026-09-10
 

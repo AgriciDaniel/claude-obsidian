@@ -116,13 +116,13 @@ def test_corrupted_config_fails_closed():
                 raise Fail("FAIL corrupt existing config must not select generic")
 
 
-# ─── Mode=generic routing matches v1.7 conventions ──────────────────────────
+# ─── Mode=generic routing ──────────────────────────
 def test_generic_routing():
     cfg = dict(wm.DEFAULT_CONFIG)
     cfg["mode"] = "generic"
     assert_eq(
-        "generic source",
-        "wiki/sources/Karpathy-2025-essay.md",
+        "generic source preserves spaces and case",
+        "wiki/sources/Karpathy 2025 essay.md",
         wm.route_path("generic", "source", "Karpathy 2025 essay", cfg),
     )
     assert_eq(
@@ -139,6 +139,11 @@ def test_generic_routing():
         "generic session",
         "wiki/sessions/v1-8-launch-prep.md",
         wm.route_path("generic", "session", "v1.8 launch prep", cfg),
+    )
+    assert_eq(
+        "generic question preserves spaces and case",
+        "wiki/questions/What is my ISPs CGNAT policy.md",
+        wm.route_path("generic", "question", "What is my ISPs CGNAT policy", cfg),
     )
 
 

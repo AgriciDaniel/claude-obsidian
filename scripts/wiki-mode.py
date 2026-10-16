@@ -192,7 +192,8 @@ def slugify(name):
 
 
 def safe_name(name):
-    """Sanitize a name that intentionally preserves case + spaces (entity/concept).
+    """Sanitize a name that intentionally preserves case + spaces
+    (entity/concept/source/question).
     Strips path separators, null bytes, control characters, and leading dots or
     hyphens so the returned string cannot escape its parent directory or be
     interpreted as a hidden file or flag. Spaces and case are preserved.
@@ -278,11 +279,13 @@ def route_path(mode, content_type, name, cfg):
     if mode == "generic":
         g = cfg["config"]["generic"]
         mapping = {
-            "source":   g["sources_folder"] + _markdown_filename(slug),
+            # Source and question pages are linked by title, so keep its
+            # spaces and case.
+            "source":   g["sources_folder"] + _markdown_filename(raw),
             "entity":   g["entities_folder"] + _markdown_filename(raw),
             "concept":  g["concepts_folder"] + _markdown_filename(raw),
             "session":  g["sessions_folder"] + _markdown_filename(slug),
-            "question": g["questions_folder"] + _markdown_filename(slug),
+            "question": g["questions_folder"] + _markdown_filename(raw),
             # Legacy alias of `concept`; its existing destination is preserved
             # rather than rewritten, so accepted calls keep their exact paths.
             "research": g["concepts_folder"] + _markdown_filename(raw),
