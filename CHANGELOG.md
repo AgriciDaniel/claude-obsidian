@@ -7,6 +7,52 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Added
+
+- **`deep-review` skill** (`skills/deep-review/`). Builds a cited, single-page HTML
+  reference document on a mechanism-heavy topic. Verifies each mechanistic claim against
+  primary literature by web search before writing it, keeps technical vocabulary while
+  glossing it inline, and researches until no further verifiable primary sources turn up
+  rather than stopping at a fixed length. Can start from an existing document, verify and
+  extend it, and add a fast-scan "Key Quotes" section. Registered in
+  `config/capabilities.json` as a `reference`-reading, `wiki/`-writing extension with
+  `network_egress: explicit`, and added to `RELEASE_MANIFEST.json`.
+- **Content-pipeline tooling** (`scripts/`, 23 new files). Turns vault research into
+  short-form decks:
+  - renderers — `render-slides.py`, `render-v2.py`, `render-v3.py`, `render-classic.py`,
+    `render-morph.py`: decks render straight to 1080x1920 PNG with no design tool, with
+    aspect-ratio support, eight morph palettes, semantic emphasis modes and configurable
+    image density
+  - diagram generators — `make-deck-images.py`, `make-deck-charts.py`, `make-v2-images.py`:
+    parameterised per-slide SVG generators for the recurring visuals (growth plate with
+    zones, split pathway, dip-and-overshoot curve, compared bars, blocked receptor) rather
+    than drawing hundreds of images by hand
+  - video — `render-video.py`, `make-video.py`, `assemble-video.py`, `extract-video-frames.py`
+  - source and figure handling — `extract-figures.py`, `triage-figures.py`,
+    `find-oa-figures.py`, `scan-figure-licences.py`, `inventory-images.py`,
+    `extract-study-headers.py`, `link-deck-sources.py`
+  - corpus and QA — `ocr-slides.py`, `transcribe-videos.py` (faster-whisper, resumable),
+    `build-creator-claims.py`, `verify-claims.py`, `coverage-gaps.py`
+
+### Changed
+
+- `scripts/check-deck.py`, `scripts/extract-study-quote.py`, `scripts/render-morph.py`.
+- `tests/test_contracts.py`: pinned skill count 15 -> 16 for the new skill.
+
+### Notes
+
+- **`mcp-obsidian` needs `mcp<2.0.0` pinned.** Version 0.2.2 declares `mcp>=1.1.0` but still
+  uses the pre-2.0 low-level `Server.list_tools()` decorator the `mcp` 2.0 SDK removed, so a
+  plain `uvx mcp-obsidian` resolves `mcp` 2.0.0 and dies with
+  `AttributeError: 'Server' object has no attribute 'list_tools'`. The working invocation is
+  `uvx --with "mcp<2.0.0" mcp-obsidian`. Recorded here rather than in
+  `skills/wiki/references/mcp-setup.md`, which is now a transport-selection policy that
+  deliberately ships no install recipes.
+- The 23 new `scripts/*.py` are standalone deck tooling and do not import `claude_obsidian`,
+  so they do not satisfy `test_every_python_launcher_disables_bytecode_before_local_imports`,
+  which treats every `scripts/*.py` as a plugin launcher. Relocating them out of the launcher
+  surface is the open follow-up.
+
 ## [2.2.0] - 2026-09-10
 
 Backlog triage: lint scoping, lock recovery, host validation, the `bin/`

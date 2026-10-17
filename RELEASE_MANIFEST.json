@@ -615,6 +615,18 @@
     },
     {
       "mode": "0644",
+      "path": "skills/deep-review/SKILL.md",
+      "sha256": "d5b3a3d3e0651b7f350845cbab0480c3b2736490825d6b2a64816ebb6df55144",
+      "size": 19187
+    },
+    {
+      "mode": "0644",
+      "path": "skills/deep-review/references/template.html",
+      "sha256": "8b0c199b403fee042e60fd3910ab3c1f035db6b4398e384ed31c16f7ade70b26",
+      "size": 19308
+    },
+    {
+      "mode": "0644",
       "path": "skills/defuddle/SKILL.md",
       "sha256": "f87f3ef756830d1cf1472af38ab3b47e67309d11638cd56e37a19c6ee15a7a96",
       "size": 4577
