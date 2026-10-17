@@ -15,6 +15,25 @@ import os
 import re
 import sys
 from difflib import SequenceMatcher
+from pathlib import Path
+
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+import argparse
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
 
 STUDIES = ".raw/Studies"
 VAULT_SOURCES = "wiki/sources"
@@ -65,6 +84,9 @@ def best_match(query, idx, floor=0.55):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Map each deck's cited sources to the actual PDF path in .raw/Studies")
+    parser.add_argument("paths", nargs="*", help="files or globs to act on")
+    args = parser.parse_args()
     idx = build_index()
     if not idx:
         sys.exit(f"no PDFs found under {STUDIES}")

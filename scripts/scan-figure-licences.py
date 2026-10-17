@@ -18,11 +18,40 @@ import os
 import re
 import sys
 from collections import Counter
+from pathlib import Path
 
-try:
-    import pymupdf
-except ImportError:
-    sys.exit("pymupdf not installed — see docstring")
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+import argparse
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
+
+pymupdf = None
+
+
+def require_deps():
+    """Import the optional dependencies on demand.
+
+    Kept out of module scope so that --help, and any other argument parsing,
+    works on a machine where these are not installed.
+    """
+    global pymupdf
+    try:
+        import pymupdf
+    except ImportError:
+        sys.exit('pymupdf not installed — see docstring')
 
 ROOT = ".raw/Studies"
 USABLE = ("CC-BY", "CC-BY-SA", "CC0/PD")
@@ -65,6 +94,10 @@ def scan():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Scan .raw/Studies PDFs for reuse licences and figure counts")
+    parser.add_argument("paths", nargs="*", help="files or globs to act on")
+    args = parser.parse_args()
+    require_deps()
     rows = scan()
     if "--json" in sys.argv:
         print(json.dumps(rows, indent=2))

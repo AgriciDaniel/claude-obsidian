@@ -17,11 +17,39 @@ import argparse
 import os
 import re
 import sys
+from pathlib import Path
 
-try:
-    import pymupdf
-except ImportError:
-    sys.exit("needs pymupdf")
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
+
+pymupdf = None
+
+
+def require_deps():
+    """Import the optional dependencies on demand.
+
+    Kept out of module scope so that --help, and any other argument parsing,
+    works on a machine where these are not installed.
+    """
+    global pymupdf
+    try:
+        import pymupdf
+    except ImportError:
+        sys.exit('needs pymupdf')
 
 
 def header_rect(page):
@@ -73,6 +101,7 @@ def main():
     ap.add_argument("out", nargs="?")
     ap.add_argument("--deck", help="read 06-sources.md and grab every paper")
     a = ap.parse_args()
+    require_deps()
 
     if a.deck:
         src = os.path.join(a.deck, "06-sources.md")

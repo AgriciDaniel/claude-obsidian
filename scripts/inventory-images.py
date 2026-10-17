@@ -14,11 +14,39 @@ import hashlib
 import os
 import sys
 from collections import defaultdict
+from pathlib import Path
 
-try:
-    import pymupdf  # reads png/jpg/webp dimensions without Pillow
-except ImportError:
-    sys.exit("needs pymupdf: python3 -m venv .venv && .venv/bin/pip install pymupdf")
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
+
+pymupdf = None
+
+
+def require_deps():
+    """Import the optional dependencies on demand.
+
+    Kept out of module scope so that --help, and any other argument parsing,
+    works on a machine where these are not installed.
+    """
+    global pymupdf
+    try:
+        import pymupdf
+    except ImportError:
+        sys.exit('needs pymupdf: python3 -m venv .venv && .venv/bin/pip install pymupdf')
 
 EXTS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
 
@@ -45,6 +73,7 @@ def main():
     ap.add_argument("--min-width", type=int, default=700,
                     help="below this, an image will look soft on a 1080px-wide slide")
     args = ap.parse_args()
+    require_deps()
 
     files = []
     for root, _, names in os.walk(args.folder):

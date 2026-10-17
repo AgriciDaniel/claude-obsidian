@@ -19,13 +19,43 @@ import glob
 import json
 import os
 import sys
+from pathlib import Path
 
-try:
-    import Vision
-    import Quartz
-    from Foundation import NSURL
-except ImportError:
-    sys.exit("needs pyobjc: .venv/bin/pip install pyobjc-framework-Vision")
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
+
+Vision = None
+Quartz = None
+NSURL = None
+
+
+def require_deps():
+    """Import the optional dependencies on demand.
+
+    Kept out of module scope so that --help, and any other argument parsing,
+    works on a machine where these are not installed.
+    """
+    global Vision, Quartz, NSURL
+    try:
+        import Vision
+        import Quartz
+        from Foundation import NSURL
+    except ImportError:
+        sys.exit('needs pyobjc: .venv/bin/pip install pyobjc-framework-Vision')
 
 
 def ocr(path):
@@ -73,6 +103,7 @@ def main():
     ap.add_argument("--out", default="/tmp/slides.jsonl")
     ap.add_argument("--limit", type=int)
     a = ap.parse_args()
+    require_deps()
 
     imgs = sorted(glob.glob(os.path.join(a.root, "*", "*", "*.jpg")))
     if a.limit:

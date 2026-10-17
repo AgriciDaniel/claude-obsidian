@@ -18,6 +18,25 @@ import xml.dom.minidom
 import glob
 import re
 import sys
+from pathlib import Path
+
+sys.dont_write_bytecode = True
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+if str(PLUGIN_ROOT) not in sys.path:
+    sys.path.insert(0, str(PLUGIN_ROOT))
+
+import argparse
+from claude_obsidian.paths import VaultSelectionError, resolve_vault_root
+
+
+def vault_root() -> Path:
+    """Resolve the vault to act on, failing closed when there is none.
+
+    Never derive paths from __file__: under the installed product tree that
+    resolves to the plugin directory, and writing there corrupts the install.
+    """
+    return resolve_vault_root(plugin_root=PLUGIN_ROOT).root
 
 COLUMNS = ["headline", "subhead", "body", "punch"]
 
@@ -97,8 +116,11 @@ def check(path):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Validate a slideshow CSV before it goes anywhere near Canva Bulk Create")
+    parser.add_argument("paths", nargs="*", help="files or globs to act on")
+    args = parser.parse_args()
     paths = []
-    for arg in sys.argv[1:]:
+    for arg in args.paths:
         paths.extend(glob.glob(arg))
     if not paths:
         sys.exit("usage: check-deck.py <csv> [csv ...]")
