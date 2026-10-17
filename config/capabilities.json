@@ -81,6 +81,40 @@
       "verification_reason": "no automated behavioral verifier is implemented for JSON Canvas authoring"
     },
     {
+      "id": "deep-review",
+      "tier": "extension",
+      "implementation_paths": [
+        "skills/deep-review/SKILL.md",
+        "skills/deep-review/references/template.html"
+      ],
+      "read_scope": [
+        "plugin:skills/**",
+        "vault:wiki/**"
+      ],
+      "write_scope": [
+        {
+          "pattern": "vault:wiki/**",
+          "access": "transactional"
+        }
+      ],
+      "needs": {
+        "shell": true,
+        "network": true
+      },
+      "transaction_type": "markdown",
+      "confirmation": {
+        "mutation": "operation_scope",
+        "network_egress": "explicit",
+        "destructive": "forbidden"
+      },
+      "configuration": {
+        "path_requirements": [],
+        "external_commands": []
+      },
+      "verification_command": [],
+      "verification_reason": "the skill's output is a prose-and-HTML reference document whose correctness is editorial; no deterministic behavioral verifier is implemented"
+    },
+    {
       "id": "defuddle",
       "tier": "extension",
       "implementation_paths": [

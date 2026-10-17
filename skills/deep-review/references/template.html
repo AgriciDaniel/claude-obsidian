@@ -1,0 +1,322 @@
+<!--
+  TEMPLATE — read CLAUDE.md in this folder first.
+
+  This is a starting skeleton, not a finished document. It demonstrates every
+  reusable pattern (masthead, nav, callout boxes, compound card, table, one SVG
+  figure, references) with placeholder content. Copy this file, rename it, and:
+
+    1. Replace <title> and the masthead content.
+    2. Swap --accent (search for "SWAP ACCENT") to a subject-grounded color.
+    3. Delete the example sections you don't need; duplicate the ones you do.
+    4. Keep everything else in the CSS as-is — consistency across documents is
+       the point.
+-->
+<title>Document Title Here</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #F4F6F3;
+    --surface: #FFFFFF;
+    --surface-2: #EBEFE9;
+    --line: #D8DFD6;
+    --ink: #1E2A22;
+    --ink-soft: #55655A;
+    --ink-faint: #8A9689;
+
+    /* SWAP ACCENT — pick something grounded in the subject's own material
+       (a histology stain, a real convention from the field), not a generic
+       brand color. This is the only color block you should need to touch. */
+    --accent: #1B6B5C;
+    --accent-ink: #0E4A3F;
+    --accent-tint: #E4F0EB;
+
+    /* Fixed roles — same meaning in every document in the series, don't reassign */
+    --coral: #C1472C;        /* active local signaling / key mechanism emphasis */
+    --coral-tint: #FBE9E3;
+    --violet: #5B4A8F;       /* receptor biology, nuclear/transcriptional machinery, corrections */
+    --violet-tint: #ECE8F6;
+    --focus: #2E7BDB;
+    --shadow: 0 1px 2px rgba(30,42,34,0.06), 0 6px 20px rgba(30,42,34,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #12160F; --surface: #191F17; --surface-2: #212920; --line: #313D31;
+      --ink: #EBEFE7; --ink-soft: #A9B4A3; --ink-faint: #6F7C6B;
+      --accent: #56B39F; --accent-ink: #8FD1C1; --accent-tint: #16261F;
+      --coral: #E38363; --coral-tint: #2A1B15;
+      --violet: #A896D6; --violet-tint: #211C30;
+      --focus: #6EA8F0;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #12160F; --surface: #191F17; --surface-2: #212920; --line: #313D31;
+    --ink: #EBEFE7; --ink-soft: #A9B4A3; --ink-faint: #6F7C6B;
+    --accent: #56B39F; --accent-ink: #8FD1C1; --accent-tint: #16261F;
+    --coral: #E38363; --coral-tint: #2A1B15;
+    --violet: #A896D6; --violet-tint: #211C30;
+    --focus: #6EA8F0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px rgba(0,0,0,0.35);
+  }
+
+  *{ box-sizing: border-box; }
+  body{ background: var(--bg); color: var(--ink); font-family: 'STIX Two Text', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.65; }
+  h1,h2,h3,h4,.mono,.eyebrow,nav,.pill{ font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; }
+  table{ font-variant-numeric: tabular-nums; }
+  .gene{ font-style: italic; }
+  a{ color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--focus); outline-offset: 2px; }
+  h1,h2,h3,h4{ text-wrap: balance; font-weight: 700; color: var(--ink); }
+
+  .shell{ max-width: 1180px; margin: 0 auto; padding: 0 24px 96px; display: grid; grid-template-columns: 232px minmax(0,1fr); gap: 48px; }
+  @media (max-width: 900px){ .shell{ grid-template-columns: 1fr; gap: 0; } }
+
+  .series-tag{ grid-column: 1/-1; display:flex; align-items:center; gap:8px; padding: 18px 0 0; font-size: 0.76rem; color: var(--ink-faint); }
+  .series-tag a{ color: var(--ink-soft); font-weight: 600; }
+
+  .masthead{ grid-column: 1 / -1; padding: 18px 0 40px; border-bottom: 1px solid var(--line); display: grid; gap: 22px; }
+  .eyebrow{ display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .eyebrow::before{ content:""; width: 18px; height: 2px; background: var(--coral); display:inline-block; }
+  h1.title{ font-size: clamp(2.1rem, 1.6rem + 2vw, 3.1rem); line-height: 1.08; letter-spacing: -0.01em; max-width: 16ch; }
+  .subtitle{ font-family: 'STIX Two Text', serif; font-style: italic; font-size: 1.2rem; color: var(--ink-soft); max-width: 46ch; }
+  .meta-row{ display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 0.8rem; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 16px; }
+  .meta-row b{ color: var(--ink-soft); font-weight: 600; }
+
+  .abstract{ background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 4px; padding: 22px 26px; box-shadow: var(--shadow); display: grid; gap: 10px; }
+  .abstract .label{ font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent-ink); }
+  .abstract p{ margin: 0; font-size: 0.98rem; color: var(--ink-soft); max-width: 74ch; }
+
+  .rail{ position: relative; }
+  .rail-inner{ position: sticky; top: 24px; display: grid; gap: 4px; padding-top: 40px; }
+  .rail-title{ font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .rail a{ display: flex; gap: 10px; align-items: baseline; padding: 7px 8px; border-radius: 5px; font-size: 0.86rem; color: var(--ink-soft); text-decoration: none; }
+  .rail a:hover{ background: var(--surface-2); color: var(--ink); }
+  .rail a .n{ font-family:'IBM Plex Mono',monospace; font-size: 0.72rem; color: var(--coral); min-width: 1.4em; }
+  .rail hr{ border: none; border-top: 1px solid var(--line); margin: 10px 4px; }
+  @media (max-width: 900px){
+    .rail-inner{ position: static; padding-top: 20px; display: flex; overflow-x: auto; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+    .rail-title{ display:none; } .rail a{ white-space: nowrap; } .rail hr{ display:none; }
+  }
+
+  main{ min-width: 0; padding-top: 40px; display: grid; gap: 4px; }
+  .lede{ max-width: 68ch; color: var(--ink-soft); font-size: 1.05rem; margin-bottom: 28px; }
+  .lede b{ color: var(--ink); font-weight: 600; }
+
+  section.pillar{ padding: 52px 0 8px; border-top: 1px solid var(--line); scroll-margin-top: 18px; }
+  section.pillar:first-of-type{ border-top: none; padding-top: 0; }
+  .pillar-head{ display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; margin-bottom: 22px; }
+  .pillar-num{ font-family: 'IBM Plex Mono', monospace; font-size: 2.6rem; font-weight: 500; color: transparent; -webkit-text-stroke: 1.3px var(--line); line-height: 1; padding-top: 6px; }
+  h2.pillar-title{ font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); line-height: 1.15; }
+  .pillar-kicker{ font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--coral); margin-bottom: 6px; }
+
+  h3{ font-size: 1.32rem; margin: 34px 0 10px; }
+  h4{ font-size: 1.03rem; margin: 22px 0 6px; color: var(--accent-ink); }
+  p{ margin: 0 0 14px; max-width: 70ch; }
+  ul, ol{ margin: 0 0 16px; padding-left: 1.3em; max-width: 68ch; }
+  li{ margin-bottom: 6px; }
+  strong{ font-weight: 600; color: var(--ink); }
+
+  /* Callout boxes — pick the one that matches what the box is doing, not by
+     aesthetic preference. See CLAUDE.md §6 for what each color means. */
+  .box{ max-width: 68ch; margin: 20px 0 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px 20px; box-shadow: var(--shadow); }
+  .box.mechanism{ border-left: 3px solid var(--coral); }         /* what's happening, mechanistically */
+  .box.evidence{ border-left: 3px solid var(--accent); }         /* a specific study's finding */
+  .box.update{ border-left: 3px solid var(--violet); }           /* a correction / newer complication */
+  .box.plain{ border-left: 3px solid var(--ink-faint); border-style: dashed; background: var(--surface-2); box-shadow: none; } /* plain-language recap, see CLAUDE.md §5 */
+  .box .tag{ font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; display:block; margin-bottom: 6px; }
+  .box.mechanism .tag{ color: var(--coral); }
+  .box.evidence .tag{ color: var(--accent-ink); }
+  .box.update .tag{ color: var(--violet); }
+  .box.plain .tag{ color: var(--ink-faint); }
+  .box p:last-child{ margin-bottom: 0; }
+  .box p{ font-size: 0.95rem; color: var(--ink-soft); }
+  .box.plain p{ color: var(--ink); }
+
+  figure{ margin: 24px 0 30px; max-width: 100%; }
+  figure svg{ width: 100%; height: auto; display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  figcaption{ font-size: 0.82rem; color: var(--ink-faint); margin-top: 8px; max-width: 68ch; }
+  figcaption b{ color: var(--ink-soft); }
+
+  .tablewrap{ overflow-x: auto; margin: 18px 0 26px; border: 1px solid var(--line); border-radius: 8px; }
+  table{ border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 560px; }
+  thead th{ text-align: left; font-family: 'Archivo', sans-serif; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); background: var(--surface-2); padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  tbody td{ padding: 11px 14px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: top; }
+  tbody tr:last-child td{ border-bottom: none; }
+  tbody td:first-child{ color: var(--ink); font-weight: 600; white-space: nowrap; }
+  tbody tr:hover{ background: var(--surface-2); }
+
+  .compound-card{ border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 18px 22px; margin: 18px 0; box-shadow: var(--shadow); max-width: 68ch; }
+  .compound-card h4{ margin: 0 0 4px; color: var(--ink); font-size: 1.05rem; display:flex; align-items:baseline; gap:10px; }
+  .compound-card .chem{ font-family:'IBM Plex Mono',monospace; font-size: 0.72rem; color: var(--ink-faint); font-weight: 400; }
+  .compound-card p{ font-size: 0.95rem; }
+
+  .pull{ max-width: 68ch; border-left: 3px solid var(--violet); background: var(--violet-tint); padding: 14px 20px; margin: 20px 0; border-radius: 0 6px 6px 0; font-size: 0.95rem; color: var(--ink); }
+
+  /* Key Quotes — optional fast-scan excerpt layer, placed directly before References */
+  .quotes{ padding: 52px 0 8px; border-top: 1px solid var(--line); }
+  .quotes-note{ font-size: 0.82rem; color: var(--ink-faint); max-width: 68ch; margin-bottom: 20px; }
+  .quotes-list{ display: grid; gap: 18px; max-width: 70ch; }
+  .quote-item{ border-left: 3px solid var(--ink-faint); padding-left: 18px; }
+  .quote-item blockquote{ margin: 0 0 6px; font-style: italic; font-size: 1.03rem; color: var(--ink); }
+  .quote-item .byline{ font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--ink-faint); }
+  .quote-item .byline a{ color: var(--accent-ink); text-decoration: none; }
+  .quote-item .byline a:hover{ text-decoration: underline; }
+
+  .refs{ padding: 52px 0 8px; border-top: 1px solid var(--line); }
+  .refs ol{ padding-left: 1.6em; max-width: 74ch; }
+  .refs li{ font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 9px; }
+  .refs li b{ color: var(--ink); font-weight: 600; }
+  .refs-note{ font-size: 0.82rem; color: var(--ink-faint); max-width: 68ch; margin-bottom: 20px; }
+  sup.cite{ font-size: 0.72em; color: var(--accent-ink); font-weight: 600; }
+
+  footer.colophon{ grid-column: 1/-1; border-top: 1px solid var(--line); padding: 30px 0 10px; display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.78rem; color: var(--ink-faint); }
+  @media (prefers-reduced-motion: no-preference){ html{ scroll-behavior: smooth; } }
+</style>
+
+<div class="shell">
+
+  <!-- Delete this line if this isn't part of a series -->
+  <div class="series-tag">Companion volume to <a href="#">Other Document Title</a></div>
+
+  <header class="masthead">
+    <span class="eyebrow">Mechanistic Review · Subject Area</span>
+    <h1 class="title">Document Title</h1>
+    <p class="subtitle">One sentence stating what this document actually explains and why it's structured the way it is.</p>
+    <div class="meta-row">
+      <span><b>Scope</b> — what's covered</span>
+      <span><b>Level</b> — intended reader (e.g. graduate pharmacology)</span>
+      <span><b>Reading time</b> — ≈ N min</span>
+    </div>
+    <div class="abstract">
+      <span class="label">Abstract</span>
+      <p>One paragraph summarizing the whole document's argument — someone who reads only this should know what the document claims, even if not why.</p>
+    </div>
+  </header>
+
+  <nav class="rail">
+    <div class="rail-inner">
+      <span class="rail-title">Contents</span>
+      <a href="#p1"><span class="n">01</span> First section</a>
+      <a href="#p2"><span class="n">02</span> Second section</a>
+      <hr>
+      <a href="#refs">References</a>
+    </div>
+  </nav>
+
+  <main>
+    <p class="lede">One sentence per numbered section: <b>(1)</b> what section one establishes; <b>(2)</b> what section two adds on top of it.</p>
+
+    <!-- ============ EXAMPLE SECTION — duplicate this block per pillar ============ -->
+    <section class="pillar" id="p1">
+      <div class="pillar-head">
+        <span class="pillar-num">01</span>
+        <div>
+          <div class="pillar-kicker">Category label</div>
+          <h2 class="pillar-title">Section title stated as a claim, not a topic label</h2>
+        </div>
+      </div>
+
+      <p>Opening paragraph. First use of a technical term gets glossed inline — see
+      the pattern below — rather than defined in a separate glossary.</p>
+
+      <p><b>IGF binding proteins (IGFBPs)</b> — a family of carrier proteins that
+      latch onto circulating IGF-1 and hold it in reserve rather than letting it act
+      immediately — sequester, transport, and protect IGF-1 in blood and tissue<sup class="cite">[1]</sup>.</p>
+
+      <div class="box mechanism">
+        <span class="tag">Mechanism</span>
+        <p>What is physically/biochemically happening — the causal chain, stated plainly.</p>
+      </div>
+
+      <div class="box evidence">
+        <span class="tag">Evidence</span>
+        <p>A specific study's finding, attributed to its authors, with the citation number.<sup class="cite">[2]</sup></p>
+      </div>
+
+      <div class="box plain">
+        <span class="tag">In plain terms</span>
+        <p>One or two sentences restating the mechanism above without the jargon — a handhold, not a rewrite. Use this when a whole paragraph needs simplifying, not just one term.</p>
+      </div>
+
+      <div class="box update">
+        <span class="tag">Deeper literature / correction</span>
+        <p>A newer finding that complicates or corrects an earlier claim in this document — name it as a correction, don't silently rewrite the original.<sup class="cite">[3]</sup></p>
+      </div>
+
+      <!-- Compound card: use for a side-by-side profile of one agent in a comparison -->
+      <div class="compound-card">
+        <h4>Compound Name <span class="chem">chemical class / common name</span></h4>
+        <p>Mechanism, receptor interactions, and what's specifically known about this agent — written as its own self-contained profile.</p>
+      </div>
+
+      <!-- Table: use for any comparison with more than ~3 rows/columns -->
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Column</th><th>Column</th><th>Column</th></tr></thead>
+          <tbody>
+            <tr><td>Row label</td><td>Value</td><td>Value</td></tr>
+            <tr><td>Row label</td><td>Value</td><td>Value</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Example figure — only include a diagram where CLAUDE.md §7's test is met -->
+      <figure>
+        <svg viewBox="0 0 600 220" role="img" aria-label="State the one claim this diagram shows, for readers who can't see it.">
+          <defs>
+            <marker id="arr-ex" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <g font-family="Archivo, sans-serif" font-size="12">
+            <rect x="30" y="80" width="160" height="60" rx="6" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.6"/>
+            <text x="110" y="115" text-anchor="middle" fill="var(--accent-ink)" font-weight="700">Input</text>
+            <path d="M190,110 L400,110" stroke="var(--coral)" stroke-width="2.2" marker-end="url(#arr-ex)"/>
+            <text x="295" y="100" text-anchor="middle" fill="var(--coral)" font-weight="600" font-size="11">labeled action, not just an arrow</text>
+            <rect x="400" y="80" width="170" height="60" rx="6" fill="var(--surface)" stroke="currentColor" stroke-width="1.4"/>
+            <text x="485" y="115" text-anchor="middle" font-weight="700">Output</text>
+          </g>
+        </svg>
+        <figcaption><b>Fig. 1</b> — Caption states the claim the figure makes, in one sentence.</figcaption>
+      </figure>
+
+      <div class="pull">One-sentence takeaway for this section — what a reader should walk away holding onto.</div>
+    </section>
+
+    <!-- Add more <section class="pillar" id="p2"> … blocks here, one per numbered item in the lede -->
+
+    <!-- OPTIONAL — only include when quick-reference lookup is the actual goal (see
+         CLAUDE.md/SKILL.md §4). Delete this whole <section> if not needed. Each
+         byline links to the matching numbered reference below by its id="refN". -->
+    <section class="quotes" id="quotes">
+      <h2 class="pillar-title" style="margin-bottom:14px;">Key Quotes</h2>
+      <p class="quotes-note">Short, verbatim excerpts for quick reference — each linked to its full citation below. Not a substitute for the reference list; an index into it.</p>
+      <div class="quotes-list">
+        <div class="quote-item">
+          <blockquote>"The exact wording from the source, verbatim — never paraphrased-then-quoted."</blockquote>
+          <div class="byline">Author A, Author B — <a href="#ref1">[1]</a></div>
+        </div>
+        <div class="quote-item">
+          <blockquote>"A second short excerpt, from a different source than the one above."</blockquote>
+          <div class="byline">Author A — <a href="#ref2">[2]</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="refs" id="refs">
+      <h2 class="pillar-title" style="margin-bottom:14px;">References</h2>
+      <p class="refs-note">Located through targeted literature search rather than recalled from general training knowledge, numbered in order of first citation.</p>
+      <ol>
+        <li id="ref1"><b>Author A, Author B, Author C.</b> Paper title. <i>Journal.</i> Year;Volume(Issue):Pages.</li>
+        <li id="ref2"><b>Author A.</b> Paper title. <i>Journal.</i> Year.</li>
+        <li id="ref3"><b>Author A, Author B.</b> Paper title. <i>Journal.</i> Year.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <span>Document Title — one-line description</span>
+    <span>Companion volume: Other Document Title (delete if standalone)</span>
+  </footer>
+</div>
