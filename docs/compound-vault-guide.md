@@ -148,7 +148,9 @@ Read [the provenance reference](../skills/wiki/references/provenance.md).
 Claude's SessionStart hook is silent by default. It emits bounded, sanitized hot
 context only when a user vault resolves and the user has explicitly exported
 `CLAUDE_OBSIDIAN_SESSION_CONTEXT=1`; hook stdout becomes model context, so this
-opt-in is an egress decision. The Stop hook reports incomplete transactions.
+opt-in is an egress decision. The Stop hook reports incomplete transactions and,
+advisory-only, a `wiki/log.md` backlog nearing the wiki-fold batch size. It
+never runs a fold itself, since wiki-fold stays human-invoked.
 Hooks do not update notes, capture conversations, stage files, or commit Git.
 Hosts without hooks use the same core workflows.
 

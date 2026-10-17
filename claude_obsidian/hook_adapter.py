@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import stat
@@ -27,9 +28,13 @@ MAX_CONTEXT_BYTES = 32 * 1024
 MAX_STATUS_BYTES = 4 * 1024
 MAX_STATUS_ITEMS = 8
 MAX_TRANSACTION_SCAN = 256
+MAX_LOG_SCAN_BYTES = 512 * 1024
+DEFAULT_FOLD_BATCH_EXPONENT = 4
+FOLD_BACKLOG_WARN_FRACTION = 0.85
 OPEN_TAG = '<claude-obsidian-context trust="local-data" instructions="never">'
 CLOSE_TAG = "</claude-obsidian-context>"
 _SAFE_OPERATION_ID = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
+_LOG_ENTRY_OP = re.compile(rb"^## \[\d{4}-\d{2}-\d{2}\] (\S+)", re.MULTILINE)
 
 
 def _bounded_regular_bytes(root: Path, path: Path, limit: int) -> bytes | None:
@@ -215,6 +220,72 @@ def session_start_context(
     return f"{header}\n{OPEN_TAG}\n{cleaned}{trailer}\n{CLOSE_TAG}"
 
 
+def _fold_batch_exponent(environ: Mapping[str, str]) -> int:
+    """Resolve the wiki-fold batch exponent k (batch size 2**k, default 4)."""
+
+    raw = environ.get("CLAUDE_OBSIDIAN_FOLD_BATCH_EXPONENT")
+    if raw is None:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    try:
+        value = int(raw)
+    except ValueError:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    if value < 1 or value > 10:
+        return DEFAULT_FOLD_BATCH_EXPONENT
+    return value
+
+
+def _fold_backlog_count(root: Path) -> int | None:
+    """Count wiki/log.md entries above the most recent fold marker.
+
+    wiki-fold rolls up the newest ``2**k`` entries and prepends one ``fold |``
+    marker entry to the top of the log. It never trims the entries it folded,
+    so the marker sits directly above the entries it covers, and every entry
+    logged since then sits above the marker. The unfolded backlog is therefore
+    the run of entries before the first ``fold`` op in the file. A vault that
+    has never been folded has no marker, so every entry counts.
+
+    The scan is bounded to ``MAX_LOG_SCAN_BYTES`` from the top of the file.
+    Because the log is newest-first, that window holds the most recent
+    entries, so a backlog longer than the window only ever undercounts, never
+    overcounts. An explicit-range fold of older entries also only undercounts.
+    """
+
+    data = _bounded_regular_bytes(root, root / "wiki" / "log.md", MAX_LOG_SCAN_BYTES)
+    if data is None:
+        return None
+    backlog = 0
+    for match in _LOG_ENTRY_OP.finditer(data[:MAX_LOG_SCAN_BYTES]):
+        if match.group(1) == b"fold":
+            break
+        backlog += 1
+    return backlog
+
+
+def _fold_backlog_warning(root: Path, environ: Mapping[str, str]) -> str | None:
+    """Advisory-only: never mutates the vault or triggers a fold itself.
+
+    wiki-fold is deliberately human-invoked (see skills/wiki-fold/SKILL.md:
+    "Do not perform fold-of-folds or trigger a fold automatically"). This only
+    reuses the bounded, silent-unless-needed Stop status channel, and never
+    sets ``recommend_recover``.
+    """
+
+    count = _fold_backlog_count(root)
+    if not count:
+        return None
+    batch_exponent = _fold_batch_exponent(environ)
+    batch_size = 1 << batch_exponent
+    threshold = math.ceil(batch_size * FOLD_BACKLOG_WARN_FRACTION)
+    if count < threshold:
+        return None
+    return (
+        f"{count} wiki log entries since the last fold, at or above "
+        f"{round(FOLD_BACKLOG_WARN_FRACTION * 100)}% of the k={batch_exponent} "
+        f"fold batch ({batch_size}); consider running wiki-fold"
+    )
+
+
 def stop_status(
     *,
     start: Path | str | None = None,
@@ -237,7 +308,8 @@ def stop_status(
     recommend_recover = False
     meta = root / ".vault-meta"
     if not meta.exists():
-        return ""
+        fold_warning = _fold_backlog_warning(root, env)
+        return _bounded_status([fold_warning]) if fold_warning else ""
     if not _safe_directory(root, meta):
         warnings.append("vault metadata path is unsafe")
         return _bounded_status(warnings)
@@ -315,6 +387,11 @@ def stop_status(
                 f"{unreadable_journals} unsafe or unreadable transaction "
                 "journal(s) detected; inspect manually"
             )
+    # Appended last so the advisory never displaces a recovery warning
+    # within MAX_STATUS_ITEMS.
+    fold_warning = _fold_backlog_warning(root, env)
+    if fold_warning:
+        warnings.append(fold_warning)
     if not warnings:
         return ""
     return _bounded_status(warnings, recommend_recover=recommend_recover)
