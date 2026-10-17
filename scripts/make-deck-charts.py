@@ -12,6 +12,7 @@ Usage:
     python3 scripts/make-deck-charts.py            # write all charts
     python3 scripts/make-deck-charts.py --list     # show what it makes
 """
+import argparse
 import sys
 from pathlib import Path
 
@@ -130,11 +131,35 @@ CHARTS = {
 
 
 def main():
-    if "--list" in sys.argv:
+    parser = argparse.ArgumentParser(
+        description="Generate brand-palette SVG charts for deck redraw slides"
+    )
+    parser.add_argument(
+        "--list", action="store_true", help="list the chart paths and exit"
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="content directory to write into (default: the vault's content/)",
+    )
+    args = parser.parse_args()
+
+    if args.list:
         for p in CHARTS:
             print(p)
         return
-    root = Path("content")
+
+    # Resolve through the vault rather than the working directory: a bare
+    # Path("content") wrote into whatever directory the tool happened to run
+    # from, including the installed plugin tree.
+    if args.out is not None:
+        root = args.out
+    else:
+        try:
+            root = vault_root() / "content"
+        except VaultSelectionError as exc:
+            sys.exit(f"{exc}\nPass --out to write somewhere explicit.")
     for rel, fn in CHARTS.items():
         out = root / rel
         out.parent.mkdir(parents=True, exist_ok=True)
