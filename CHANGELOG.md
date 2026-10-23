@@ -7,6 +7,14 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Fixed
+
+- Lint no longer reports false dead links when a file name and a link spell the
+  same accented text in different Unicode forms, such as decomposed names from
+  macOS or iCloud and composed links typed in Obsidian. Link resolution and
+  duplicate-basename detection compare names after NFC normalization; reported
+  paths keep their on-disk spelling.
+
 ## [3.0.1] - 2026-10-21
 
 Restores the Claude plugin name `claude-obsidian`, so commands are

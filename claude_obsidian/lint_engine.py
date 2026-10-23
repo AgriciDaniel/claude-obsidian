@@ -195,6 +195,12 @@ class _Link:
     markdown_relative: bool
 
 
+def _name_key(value: str) -> str:
+    # macOS and iCloud store names decomposed (NFD) while links typed in
+    # Obsidian are composed (NFC); Obsidian treats both spellings as one name.
+    return unicodedata.normalize("NFC", unicodedata.normalize("NFC", value).casefold())
+
+
 def _path_sort_key(value: str) -> tuple[str, str]:
     return value.casefold(), value
 
@@ -885,20 +891,20 @@ class _Resolver:
         self.by_basename: dict[str, list[_Target]] = {}
         self.by_alias: dict[str, list[_Target]] = {}
         for target in self.targets:
-            full = target._canonical_path.casefold()
+            full = _name_key(target._canonical_path)
             self.by_full.setdefault(full, []).append(target)
             name = PurePosixPath(target._canonical_path).name
-            self.by_basename.setdefault(name.casefold(), []).append(target)
+            self.by_basename.setdefault(_name_key(name), []).append(target)
             without_link_suffix = target.without_link_suffix
             if without_link_suffix is not None:
                 self.by_without_link_suffix.setdefault(
-                    without_link_suffix.casefold(), []
+                    _name_key(without_link_suffix), []
                 ).append(target)
                 stem = PurePosixPath(without_link_suffix).name
-                self.by_basename.setdefault(stem.casefold(), []).append(target)
+                self.by_basename.setdefault(_name_key(stem), []).append(target)
             if target.page:
                 for alias in target.page.frontmatter.aliases:
-                    self.by_alias.setdefault(alias.casefold(), []).append(target)
+                    self.by_alias.setdefault(_name_key(alias), []).append(target)
 
     @staticmethod
     def _deduplicate(candidates: Iterable[_Target]) -> list[_Target]:
@@ -915,8 +921,9 @@ class _Resolver:
         if normalized in {"", "."}:
             return []
         candidates: list[_Target] = []
-        candidates.extend(self.by_full.get(normalized.casefold(), ()))
-        candidates.extend(self.by_without_link_suffix.get(normalized.casefold(), ()))
+        key = _name_key(normalized)
+        candidates.extend(self.by_full.get(key, ()))
+        candidates.extend(self.by_without_link_suffix.get(key, ()))
         return self._deduplicate(candidates)
 
     def resolve(self, link: _Link) -> list[_Target]:
@@ -931,18 +938,19 @@ class _Resolver:
 
         if "/" not in raw:
             candidates: list[_Target] = []
-            candidates.extend(self.by_basename.get(raw.casefold(), ()))
-            candidates.extend(self.by_alias.get(raw.casefold(), ()))
+            key = _name_key(raw)
+            candidates.extend(self.by_basename.get(key, ()))
+            candidates.extend(self.by_alias.get(key, ()))
             return self._deduplicate(candidates)
 
-        suffix = posixpath.normpath(raw).casefold()
+        suffix = _name_key(posixpath.normpath(raw))
         candidates = [
             target
             for target in self.targets
-            if target._canonical_path.casefold().endswith(f"/{suffix}")
+            if _name_key(target._canonical_path).endswith(f"/{suffix}")
             or (
                 target.without_link_suffix is not None
-                and target.without_link_suffix.casefold().endswith(f"/{suffix}")
+                and _name_key(target.without_link_suffix).endswith(f"/{suffix}")
             )
         ]
         return self._deduplicate(candidates)
@@ -1822,7 +1830,7 @@ def lint_vault(
     duplicate_basenames: list[dict[str, Any]] = []
     basename_groups: dict[str, list[_Page]] = {}
     for page in wiki_pages:
-        basename_groups.setdefault(PurePosixPath(page.path).stem.casefold(), []).append(
+        basename_groups.setdefault(_name_key(PurePosixPath(page.path).stem), []).append(
             page
         )
     for group in basename_groups.values():
