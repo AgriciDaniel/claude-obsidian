@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import unicodedata
 import unittest
 import unittest.mock
 from datetime import date, datetime
@@ -227,6 +228,103 @@ tags:
         self.assertEqual([], report["duplicate_basenames"])
         self.assertEqual(1, len(report["ambiguous_targets"]))
         self.assertEqual("_index", report["ambiguous_targets"][0]["target"])
+
+    @staticmethod
+    def _write_unicode_page(root: Path, relative: str, body: str = "") -> None:
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            "---\ntitle: Page\ntype: concept\nstatus: evergreen\n"
+            "created: 2026-07-12\nupdated: 2026-07-12\ntags:\n  - concept\n---\n\n"
+            f"# Page\n\n{body}\n",
+            encoding="utf-8",
+        )
+
+    def test_nfc_and_nfd_spellings_resolve_to_the_same_note(self) -> None:
+        nfc_jeova = unicodedata.normalize("NFC", "Jeová")
+        nfd_jeova = unicodedata.normalize("NFD", "Jeová")
+        nfc_cafe = unicodedata.normalize("NFC", "Café")
+        nfd_cafe = unicodedata.normalize("NFD", "Café")
+        self.assertNotEqual(nfc_jeova, nfd_jeova)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            # Decomposed file names, as macOS and iCloud deliver them, linked
+            # with composed text; and the reverse.
+            self._write_unicode_page(root, f"wiki/concepts/Confiar em {nfd_jeova}.md")
+            self._write_unicode_page(root, f"wiki/entities/{nfc_cafe}.md")
+            self._write_unicode_page(
+                root,
+                "wiki/index.md",
+                f"- [[Confiar em {nfc_jeova}]]\n"
+                f"- [[concepts/Confiar em {nfc_jeova}]]\n"
+                f"- [[wiki/concepts/Confiar em {nfc_jeova}.md]]\n"
+                f"- [[{nfd_cafe}]]\n"
+                f"- [[entities/{nfd_cafe}]]\n",
+            )
+            on_disk = sorted(
+                path.relative_to(root).as_posix()
+                for path in (root / "wiki").rglob("*.md")
+                if path.name != "index.md"
+            )
+
+            report = lint_engine.lint_vault(root, as_of="2026-07-12")
+
+        self.assertEqual([], report["dead_links"])
+        self.assertEqual([], report["ambiguous_targets"])
+        self.assertEqual([], report["duplicate_basenames"])
+        self.assertEqual([], report["orphans"])
+        # Reported paths keep the on-disk spelling.
+        self.assertIn(f"wiki/concepts/Confiar em {nfd_jeova}.md", on_disk)
+        self.assertIn(f"wiki/entities/{nfc_cafe}.md", on_disk)
+
+    def test_unicode_normalization_keeps_real_duplicates_and_distinct_names(
+        self,
+    ) -> None:
+        nfc_jeova = unicodedata.normalize("NFC", "Jeová")
+        nfd_jeova = unicodedata.normalize("NFD", "Jeová")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            # One name spelled in both forms in two folders is a real duplicate.
+            self._write_unicode_page(root, f"wiki/concepts/{nfd_jeova}.md")
+            self._write_unicode_page(root, f"wiki/entities/{nfc_jeova}.md")
+            # An unaccented spelling is a different name and stays distinct.
+            self._write_unicode_page(root, "wiki/sources/Jeova.md")
+            self._write_unicode_page(
+                root,
+                "wiki/index.md",
+                f"- [[{nfc_jeova}]]\n- [[Jeova]]\n- [[Jeovà]]\n",
+            )
+
+            report = lint_engine.lint_vault(root, as_of="2026-07-12")
+
+        self.assertEqual(
+            [
+                {
+                    "basename": nfd_jeova,
+                    "paths": [
+                        f"wiki/concepts/{nfd_jeova}.md",
+                        f"wiki/entities/{nfc_jeova}.md",
+                    ],
+                }
+            ],
+            report["duplicate_basenames"],
+        )
+        self.assertEqual(
+            [
+                (
+                    nfc_jeova,
+                    [f"wiki/concepts/{nfd_jeova}.md", f"wiki/entities/{nfc_jeova}.md"],
+                )
+            ],
+            [
+                (item["target"], item["candidates"])
+                for item in report["ambiguous_targets"]
+            ],
+        )
+        self.assertEqual(
+            [("Jeovà", "target-not-found")],
+            [(item["target"], item["reason"]) for item in report["dead_links"]],
+        )
 
     def test_orphans_frontmatter_empty_sections_and_allowlist(self) -> None:
         self.assertEqual([{"path": "wiki/concepts/Orphan.md"}], self.report["orphans"])
