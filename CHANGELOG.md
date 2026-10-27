@@ -7,6 +7,10 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Fixed
+
+- `claude_obsidian/limits.py` postpones its annotations again, so importing the package under Python 3.9 no longer fails with `TypeError: unsupported operand type(s) for |: 'type' and 'type'`. The package still requires Python 3.11+ for its supported feature set.
+
 ## [3.0.1] - 2026-10-21
 
 Restores the Claude plugin name `claude-obsidian`, so commands are
