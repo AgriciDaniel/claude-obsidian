@@ -1,5 +1,7 @@
 """Shared byte envelopes without importing the mutation engine."""
 
+from __future__ import annotations
+
 MAX_TRANSACTION_RUNTIME_JSON_BYTES = 8 * 1024 * 1024
 MAX_CANONICAL_LEDGER_BYTES = 16 * 1024 * 1024
 CANONICAL_LEDGER_PATHS = (
