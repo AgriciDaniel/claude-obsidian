@@ -185,6 +185,30 @@ class PackageValidationTests(unittest.TestCase):
             self.assertIn("invalid_hook_type", codes)
             self.assertIn("version_drift", codes)
 
+    def test_codex_adapter_checks_metadata_and_referenced_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root, frontmatter="---\nname: sample\ndescription: Sample.\n---")
+            manifest = root / ".codex-plugin/plugin.json"
+            manifest.parent.mkdir()
+            plugin = {"name": "sample", "version": "1.0.0", "hooks": "./hooks/codex.json"}
+            manifest.write_text(json.dumps(plugin), encoding="utf-8")
+            commands = root / "hooks/codex.json"
+            self.assertIn("missing_file", {f["code"] for f in validate_package(root)["findings"]})
+            hook = {"type": "command", "command": "true", "commandWindows": "cmd /c exit 0"}
+            hooks = {"hooks": {"Stop": [{"hooks": [hook]}]}}
+            commands.write_text(json.dumps(hooks), encoding="utf-8")
+            self.assertTrue(validate_package(root)["ok"])
+            hooks["hooks"]["Stop"][0]["hooks"].append({"type": "http", "url": "https://example.invalid"})
+            manifest.write_text(
+                json.dumps({**plugin, "version": "2.0.0", "hooks": "../other.json"}), encoding="utf-8"
+            )
+            hook["args"] = ["stop"]
+            commands.write_text(json.dumps(hooks), encoding="utf-8")
+            codes = {f["code"] for f in validate_package(root)["findings"]}
+            self.assertTrue({"codex_manifest_drift", "invalid_codex_hooks_path", "invalid_codex_hook_command"} <= codes)
+            self.assertIn("invalid_hook_type", codes)
+
     def test_mcp_hook_fields_and_session_start_restrictions_match_official_schema(
         self,
     ) -> None:

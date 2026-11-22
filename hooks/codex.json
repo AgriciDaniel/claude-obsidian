@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"${PLUGIN_ROOT}/scripts/claude-obsidian.py\" hook session-start",
+            "timeout": 5,
+            "commandWindows": "python.exe -I -c \"import os, runpy, sys; sys.argv[0] = os.path.join(os.environ['PLUGIN_ROOT'], 'scripts', 'claude-obsidian.py'); runpy.run_path(sys.argv[0], run_name='__main__')\" hook session-start"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"${PLUGIN_ROOT}/scripts/claude-obsidian.py\" hook stop",
+            "timeout": 5,
+            "commandWindows": "python.exe -I -c \"import os, runpy, sys; sys.argv[0] = os.path.join(os.environ['PLUGIN_ROOT'], 'scripts', 'claude-obsidian.py'); runpy.run_path(sys.argv[0], run_name='__main__')\" hook stop"
+          }
+        ]
+      }
+    ]
+  }
+}

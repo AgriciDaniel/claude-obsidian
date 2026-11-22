@@ -2,7 +2,7 @@
 
 claude-obsidian has two independent parts:
 
-1. the product package (skills, portable core, Claude adapter, and templates);
+1. the product package (skills, portable core, hook adapters, and templates);
 2. a user-owned Obsidian vault containing mutable knowledge.
 
 Do not use an installed plugin cache as the vault. A source clone is suitable
@@ -11,7 +11,7 @@ for development, but a normal user vault should be a separate directory.
 ## Requirements
 
 - Python 3.11 or newer
-- an Agent Skills compatible host, or Claude Code for the plugin adapter
+- an Agent Skills compatible host, or Claude Code or Codex for the plugin adapter
 - Obsidian when you want its visual editor
 - Bash for installer and optional legacy-extension scripts
 - Git only for source development, release builds, or explicit checkpoints
@@ -53,6 +53,20 @@ claude --plugin-dir <product-repository>
 
 This mode is for testing uninstalled changes. Skills remain namespaced. It does
 not convert the product repository into a user vault.
+
+## Codex marketplace
+
+Use a Codex release that supports plugin lifecycle hooks. Install from the
+public marketplace:
+
+```sh
+codex plugin marketplace add AgriciDaniel/claude-obsidian
+codex plugin add claude-obsidian@agricidaniel-claude-obsidian
+```
+
+Start Codex and review the Obsidian hooks in `/hooks`. Native Windows needs
+`python.exe` on `PATH`; macOS, Linux and WSL use `python3`. The hooks read
+vault context only when you opt in, and report recovery status when needed.
 
 ## Portable Agent Skills hosts
 

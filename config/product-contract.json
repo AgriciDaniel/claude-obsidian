@@ -35,7 +35,9 @@
       "id": "codex-cli",
       "support_level": "compatible",
       "implementation_paths": [
+        ".codex-plugin/plugin.json",
         "AGENTS.md",
+        "hooks/codex.json",
         "skills"
       ]
     },
@@ -104,6 +106,15 @@
       "host": "codex-cli",
       "implementation_paths": [
         "scripts/setup-multi-agent.sh",
+        "skills"
+      ]
+    },
+    {
+      "id": "codex-local-plugin",
+      "host": "codex-cli",
+      "implementation_paths": [
+        ".codex-plugin/plugin.json",
+        "hooks/codex.json",
         "skills"
       ]
     },

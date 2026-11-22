@@ -95,7 +95,7 @@ Already have an Obsidian vault? `/claude-obsidian:wiki` can adopt it without mov
 <summary><b>Other AI tools: Codex, OpenCode, Gemini, ZCode, Cursor and Windsurf</b></summary>
 <br />
 
-claude-obsidian is a set of [Agent Skills](https://agentskills.io), so it also runs in other hosts. From a copy of this repo, preview the setup, then apply it:
+To use the lifecycle hooks, [install the plugin in Codex](docs/install-guide.md#codex-marketplace). You can also link the [Agent Skills](https://agentskills.io) in Codex and other hosts. From a copy of this repo, preview the setup, then apply it:
 
 ```bash
 git clone https://github.com/AgriciDaniel/claude-obsidian.git
@@ -340,7 +340,7 @@ Most AI note tools save text and stop. claude-obsidian keeps the original source
 <summary><b>Does it work with Codex, Gemini or Cursor?</b></summary>
 <br />
 
-Yes. The skills follow the open Agent Skills format. Claude Code gets the full plugin; Codex, OpenCode, Gemini, ZCode, Cursor and Windsurf link the same skills with one setup script. See [Install](#install).
+Yes. Claude Code and Codex can load the plugin. Codex, OpenCode, Gemini, ZCode, Cursor and Windsurf can also link the same Agent Skills. See [Install](#install).
 
 </details>
 

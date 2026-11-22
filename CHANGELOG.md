@@ -7,6 +7,10 @@ implementation record for older releases.
 
 ## [Unreleased]
 
+### Fixed
+
+- Run the Obsidian lifecycle hooks in Codex without passing event JSON to Python as code.
+
 ## [3.0.1] - 2026-10-21
 
 Restores the Claude plugin name `claude-obsidian`, so commands are

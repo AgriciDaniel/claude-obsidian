@@ -30,6 +30,7 @@
     "wiki/meta/**"
   ],
   "include_files": [
+    ".codex-plugin/plugin.json",
     ".gitattributes",
     ".gitignore",
     "AGENTS.md",

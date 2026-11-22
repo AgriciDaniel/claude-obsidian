@@ -1,4 +1,11 @@
-# Claude Code hooks
+# Lifecycle hooks
+
+Codex loads `codex.json` through the Codex plugin manifest. It uses `python3`
+on macOS, Linux, and WSL and `python.exe` on native Windows. Review new or
+updated hooks through `/hooks` in Codex before running them. The same opt-in
+and vault selection rules apply on both hosts.
+
+## Claude Code
 
 `hooks.json` is a thin Claude Code adapter around the portable core.
 

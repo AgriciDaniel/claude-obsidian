@@ -282,10 +282,12 @@ class BuildTests(ReleaseRepo):
         }
         required = {
             ".claude-plugin/plugin.json": json.dumps(plugin).encode(),
+            ".codex-plugin/plugin.json": json.dumps({**plugin, "hooks": "./hooks/codex.json"}).encode(),
             "claude_obsidian/__init__.py": b"\n",
             "config/capabilities.json": b"{}\n",
             "config/public-marketplace.json": json.dumps(marketplace).encode(),
             "hooks/hooks.json": b'{"hooks":{}}\n',
+            "hooks/codex.json": b'{"hooks":{}}\n',
             "scripts/claude-obsidian.py": b"#!/usr/bin/env python3\n",
             "skills/wiki/SKILL.md": b"---\nname: wiki\ndescription: Wiki.\n---\n",
             "templates/vault/.gitignore": b".vault-meta/\n",
@@ -301,6 +303,7 @@ class BuildTests(ReleaseRepo):
             set(self.config["include_roots"])
             | {
                 ".claude-plugin",
+                ".codex-plugin",
                 "claude_obsidian",
                 "hooks",
                 "scripts",
@@ -315,6 +318,8 @@ class BuildTests(ReleaseRepo):
         report = self.build()
         self.assertTrue(report["ok"], report)
         with zipfile.ZipFile(self.output) as archive:
+            for path in (".codex-plugin/plugin.json", "hooks/codex.json"):
+                self.assertEqual(archive.read(path), required[path])
             self.assertEqual(
                 archive.read("config/public-marketplace.json"),
                 archive.read(".claude-plugin/marketplace.json"),

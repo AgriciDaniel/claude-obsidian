@@ -87,6 +87,7 @@ jobs:
         run: |
           set -eu
           for test_file in \
+            tests/test_codex_hooks.py \
             tests/test_package_validation.py \
             tests/test_knowledge_contracts.py \
             tests/test_contracts.py \

@@ -27,6 +27,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Mapping, Sequence
 
 from .json_utils import parse_finite_json_float
+from .package_validation import CODEX_HOOKS, CODEX_MANIFEST, validate_codex_manifest
 
 SCHEMA_VERSION = 1
 CONFIG_PATH = PurePosixPath("config/release-allowlist.json")
@@ -1970,6 +1971,14 @@ def _validate_public_marketplace(
         "skills/wiki/SKILL.md",
         "templates/vault/.gitignore",
     }
+    if CODEX_MANIFEST in payload or CODEX_HOOKS in payload:
+        required.update((CODEX_MANIFEST, CODEX_HOOKS))
+        if CODEX_MANIFEST in payload:
+            try:
+                codex = _strict_json_loads(payload[CODEX_MANIFEST].decode("utf-8"))
+            except (UnicodeDecodeError, ValueError):
+                codex = None
+            errors.extend(validate_codex_manifest(codex, plugin))
     for missing in sorted(required.difference(payload)):
         errors.append(
             _error(

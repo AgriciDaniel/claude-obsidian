@@ -27,6 +27,7 @@ ALLOWED_HOOK_EVENTS = {
     "UserPromptSubmit",
 }
 ALLOWED_HOOK_TYPES = {"command", "prompt", "http", "mcp_tool", "agent"}
+CODEX_HOOK_TYPES = ALLOWED_HOOK_TYPES - {"http"}
 SESSION_START_HOOK_TYPES = {"command", "mcp_tool"}
 SESSION_START_MATCHERS = {"startup", "resume", "clear", "compact", "fork"}
 PORTABLE_SKILL_KEYS = ("name", "description")
@@ -43,6 +44,8 @@ RESERVED_OFFICIAL_WORDS = ("claude", "anthropic")
 OWNER_APPROVED_PLUGIN_NAMES = frozenset({"claude-obsidian"})
 MARKETPLACE_TEMPLATE = "config/public-marketplace.json"
 MARKETPLACE_PATH = ".claude-plugin/marketplace.json"
+CODEX_MANIFEST = ".codex-plugin/plugin.json"
+CODEX_HOOKS = "hooks/codex.json"
 YAML_PLAIN_FORBIDDEN_START = frozenset("-?:,[]{}#&*!|>'\"%@`")
 
 
@@ -354,28 +357,31 @@ def _validate_no_legacy_bin_directory(root: Path) -> list[dict[str, str]]:
     return []
 
 
-def _validate_hooks(root: Path) -> list[dict[str, str]]:
-    document, errors = _load_json(root, "hooks/hooks.json")
+def _validate_hooks(
+    root: Path, relative: str = "hooks/hooks.json"
+) -> list[dict[str, str]]:
+    document, errors = _load_json(root, relative)
     if errors:
         return errors
     if not isinstance(document, dict) or not isinstance(document.get("hooks"), dict):
         return [
-            _finding("invalid_hooks", "hooks/hooks.json", "hooks must be an object")
+            _finding("invalid_hooks", relative, "hooks must be an object")
         ]
 
     findings: list[dict[str, str]] = []
+    host_types = CODEX_HOOK_TYPES if relative == CODEX_HOOKS else ALLOWED_HOOK_TYPES
     for event, groups in document["hooks"].items():
         if event not in ALLOWED_HOOK_EVENTS:
-            findings.append(_finding("unknown_hook_event", "hooks/hooks.json", event))
+            findings.append(_finding("unknown_hook_event", relative, event))
         if not isinstance(groups, list):
-            findings.append(_finding("invalid_hook_groups", "hooks/hooks.json", event))
+            findings.append(_finding("invalid_hook_groups", relative, event))
             continue
         for group_index, group in enumerate(groups):
             if not isinstance(group, dict) or not isinstance(group.get("hooks"), list):
                 findings.append(
                     _finding(
                         "invalid_hook_group",
-                        "hooks/hooks.json",
+                        relative,
                         f"{event}[{group_index}]",
                     )
                 )
@@ -391,7 +397,7 @@ def _validate_hooks(root: Path) -> list[dict[str, str]]:
                     findings.append(
                         _finding(
                             "invalid_session_start_matcher",
-                            "hooks/hooks.json",
+                            relative,
                             f"{event}[{group_index}]",
                         )
                     )
@@ -399,10 +405,10 @@ def _validate_hooks(root: Path) -> list[dict[str, str]]:
                 location = f"{event}[{group_index}].hooks[{hook_index}]"
                 if (
                     not isinstance(hook, dict)
-                    or hook.get("type") not in ALLOWED_HOOK_TYPES
+                    or hook.get("type") not in host_types
                 ):
                     findings.append(
-                        _finding("invalid_hook_type", "hooks/hooks.json", location)
+                        _finding("invalid_hook_type", relative, location)
                     )
                     continue
                 hook_type = hook["type"]
@@ -413,7 +419,7 @@ def _validate_hooks(root: Path) -> list[dict[str, str]]:
                     findings.append(
                         _finding(
                             "unsupported_session_start_hook_type",
-                            "hooks/hooks.json",
+                            relative,
                             location,
                         )
                     )
@@ -421,8 +427,16 @@ def _validate_hooks(root: Path) -> list[dict[str, str]]:
                     if not isinstance(hook.get("command"), str) or not hook["command"]:
                         findings.append(
                             _finding(
-                                "missing_hook_command", "hooks/hooks.json", location
+                                "missing_hook_command", relative, location
                             )
+                        )
+                    if relative == CODEX_HOOKS and (
+                        "args" in hook
+                        or not isinstance(hook.get("commandWindows"), str)
+                        or not hook["commandWindows"].strip()
+                    ):
+                        findings.append(
+                            _finding("invalid_codex_hook_command", relative, location)
                         )
                     args = hook.get("args", [])
                     if "args" in hook and (
@@ -430,33 +444,33 @@ def _validate_hooks(root: Path) -> list[dict[str, str]]:
                         or not all(isinstance(value, str) for value in args)
                     ):
                         findings.append(
-                            _finding("invalid_hook_args", "hooks/hooks.json", location)
+                            _finding("invalid_hook_args", relative, location)
                         )
                 elif hook_type == "http":
                     if not isinstance(hook.get("url"), str) or not hook["url"]:
                         findings.append(
-                            _finding("missing_hook_url", "hooks/hooks.json", location)
+                            _finding("missing_hook_url", relative, location)
                         )
                 elif hook_type == "mcp_tool":
                     if not isinstance(hook.get("server"), str) or not hook["server"]:
                         findings.append(
                             _finding(
-                                "missing_hook_server", "hooks/hooks.json", location
+                                "missing_hook_server", relative, location
                             )
                         )
                     if not isinstance(hook.get("tool"), str) or not hook["tool"]:
                         findings.append(
-                            _finding("missing_hook_tool", "hooks/hooks.json", location)
+                            _finding("missing_hook_tool", relative, location)
                         )
                     if "input" in hook and not isinstance(hook.get("input"), dict):
                         findings.append(
-                            _finding("invalid_hook_input", "hooks/hooks.json", location)
+                            _finding("invalid_hook_input", relative, location)
                         )
                 elif hook_type in {"prompt", "agent"}:
                     if not isinstance(hook.get("prompt"), str) or not hook["prompt"]:
                         findings.append(
                             _finding(
-                                "missing_hook_prompt", "hooks/hooks.json", location
+                                "missing_hook_prompt", relative, location
                             )
                         )
     return findings
@@ -531,6 +545,21 @@ def _validate_renames(marketplace: dict[str, Any], entries: Any) -> list[dict[st
     return findings
 
 
+def validate_codex_manifest(codex: Any, claude: Any) -> list[dict[str, str]]:
+    if not isinstance(codex, dict) or not isinstance(claude, dict):
+        return [_finding("invalid_codex_manifest", CODEX_MANIFEST, "expected plugin objects")]
+    findings: list[dict[str, str]] = []
+    if any(codex.get(field) != claude.get(field) for field in ("name", "version", "description")):
+        findings.append(
+            _finding("codex_manifest_drift", CODEX_MANIFEST, "metadata must match the Claude manifest")
+        )
+    if codex.get("hooks") != f"./{CODEX_HOOKS}":
+        findings.append(
+            _finding("invalid_codex_hooks_path", CODEX_MANIFEST, f"hooks must point to ./{CODEX_HOOKS}")
+        )
+    return findings
+
+
 def _validate_versions(root: Path) -> list[dict[str, str]]:
     plugin, errors = _load_json(root, ".claude-plugin/plugin.json")
     marketplace, marketplace_errors = _load_json(root, MARKETPLACE_TEMPLATE)
@@ -601,6 +630,11 @@ def _validate_versions(root: Path) -> list[dict[str, str]]:
                     "plugin.json is the sole plugin-version authority",
                 )
             )
+
+    if (root / CODEX_MANIFEST).exists() or (root / CODEX_HOOKS).exists():
+        codex, codex_errors = _load_json(root, CODEX_MANIFEST)
+        findings.extend(codex_errors or validate_codex_manifest(codex, plugin))
+        findings.extend(_validate_hooks(root, CODEX_HOOKS))
 
     if isinstance(marketplace, dict):
         findings.extend(_validate_renames(marketplace, entries))
