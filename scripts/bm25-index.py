@@ -330,6 +330,18 @@ def _require_term_capacity(current_count, added_count):
         )
 
 
+
+ARABIC_DIACRITICS_RE = re.compile(r"[\u0640\u064B-\u065F\u0670\u06D6-\u06ED]")
+ARABIC_ALEF_MAP = str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا"})
+
+
+def _normalize_arabic_for_bm25(text: str) -> str:
+    if not any("\u0600" <= ch <= "\u06FF" for ch in text):
+        return text
+    cleaned = ARABIC_DIACRITICS_RE.sub("", text)
+    return cleaned.translate(ARABIC_ALEF_MAP)
+
+
 def tokenize(text):
     """NFKC-normalize and segment text within input and term growth ceilings."""
     if not isinstance(text, str):
@@ -339,7 +351,7 @@ def tokenize(text):
             f"tokenizer input exceeds the {MAX_TOKEN_INPUT_CHARS}-character limit"
         )
     terms: list[str] = []
-    normalized = unicodedata.normalize("NFKC", text)
+    normalized = _normalize_arabic_for_bm25(unicodedata.normalize("NFKC", text))
     if len(normalized) > MAX_TOKEN_INPUT_CHARS:
         raise TokenGrowthLimitError(
             "NFKC-normalized tokenizer input exceeds the "
